@@ -1,0 +1,39 @@
+# yaml-language-server: $schema=https://schema.buildwithfern.dev/generators-yml.json
+api:
+  specs:
+    - openapi: ../../sanka-sdks/openapi.json
+default-group: python-local
+groups:
+  python-local:
+    generators:
+      - name: fernapi/fern-python-sdk
+        version: 4.34.0
+        output:
+          location: local-file-system
+          path: ../src/sanka_sdk
+        config:
+          package_name: sanka_sdk
+          client:
+            class_name: SankaClient
+            filename: client.py
+          exclude_types_from_init_exports: true
+          pydantic_config:
+            skip_validation: true
+  python-sdk:
+    generators:
+      - name: fernapi/fern-python-sdk
+        version: 4.34.0
+        output:
+          location: pypi
+          package-name: sanka-sdk
+        github:
+          repository: sankaHQ/sanka-python
+        config:
+          package_name: sanka_sdk
+          client:
+            class_name: SankaClient
+            filename: client.py
+          exclude_types_from_init_exports: true
+          pydantic_config:
+            skip_validation: true
+
