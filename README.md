@@ -37,5 +37,4 @@ Configure a Trusted Publisher on PyPI for:
 - workflow: `.github/workflows/publish.yml`
 - environment: `pypi`
 
-Then publish by pushing a tag like `v0.1.0` or running the workflow manually.
-
+Then publish by pushing a tag like `vX.Y.Z` or running the workflow manually.
