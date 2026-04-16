@@ -31,6 +31,14 @@ class RawItemsClient:
         workspace_id: typing.Optional[str] = None,
         lang: typing.Optional[str] = None,
         language: typing.Optional[str] = None,
+        page: typing.Optional[int] = None,
+        limit: typing.Optional[int] = None,
+        created_at_from: typing.Optional[str] = None,
+        created_at_to: typing.Optional[str] = None,
+        updated_at_from: typing.Optional[str] = None,
+        updated_at_to: typing.Optional[str] = None,
+        sort_by: typing.Optional[str] = None,
+        sort_order: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[typing.List[ShopTurboItemSchema]]:
@@ -42,6 +50,22 @@ class RawItemsClient:
         lang : typing.Optional[str]
 
         language : typing.Optional[str]
+
+        page : typing.Optional[int]
+
+        limit : typing.Optional[int]
+
+        created_at_from : typing.Optional[str]
+
+        created_at_to : typing.Optional[str]
+
+        updated_at_from : typing.Optional[str]
+
+        updated_at_to : typing.Optional[str]
+
+        sort_by : typing.Optional[str]
+
+        sort_order : typing.Optional[str]
 
         accept_language : typing.Optional[str]
 
@@ -60,6 +84,14 @@ class RawItemsClient:
                 "workspace_id": workspace_id,
                 "lang": lang,
                 "language": language,
+                "page": page,
+                "limit": limit,
+                "created_at_from": created_at_from,
+                "created_at_to": created_at_to,
+                "updated_at_from": updated_at_from,
+                "updated_at_to": updated_at_to,
+                "sort_by": sort_by,
+                "sort_order": sort_order,
             },
             headers={
                 "Accept-Language": str(accept_language) if accept_language is not None else None,
@@ -76,6 +108,50 @@ class RawItemsClient:
                     ),
                 )
                 return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 400:
+                raise BadRequestError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Optional[typing.Any],
+                        construct_type(
+                            type_=typing.Optional[typing.Any],  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Optional[typing.Any],
+                        construct_type(
+                            type_=typing.Optional[typing.Any],  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 404:
+                raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Optional[typing.Any],
+                        construct_type(
+                            type_=typing.Optional[typing.Any],  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 500:
+                raise InternalServerError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Optional[typing.Any],
+                        construct_type(
+                            type_=typing.Optional[typing.Any],  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
             _response_json = _response.json()
         except JSONDecodeError:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
@@ -520,6 +596,14 @@ class AsyncRawItemsClient:
         workspace_id: typing.Optional[str] = None,
         lang: typing.Optional[str] = None,
         language: typing.Optional[str] = None,
+        page: typing.Optional[int] = None,
+        limit: typing.Optional[int] = None,
+        created_at_from: typing.Optional[str] = None,
+        created_at_to: typing.Optional[str] = None,
+        updated_at_from: typing.Optional[str] = None,
+        updated_at_to: typing.Optional[str] = None,
+        sort_by: typing.Optional[str] = None,
+        sort_order: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[typing.List[ShopTurboItemSchema]]:
@@ -531,6 +615,22 @@ class AsyncRawItemsClient:
         lang : typing.Optional[str]
 
         language : typing.Optional[str]
+
+        page : typing.Optional[int]
+
+        limit : typing.Optional[int]
+
+        created_at_from : typing.Optional[str]
+
+        created_at_to : typing.Optional[str]
+
+        updated_at_from : typing.Optional[str]
+
+        updated_at_to : typing.Optional[str]
+
+        sort_by : typing.Optional[str]
+
+        sort_order : typing.Optional[str]
 
         accept_language : typing.Optional[str]
 
@@ -549,6 +649,14 @@ class AsyncRawItemsClient:
                 "workspace_id": workspace_id,
                 "lang": lang,
                 "language": language,
+                "page": page,
+                "limit": limit,
+                "created_at_from": created_at_from,
+                "created_at_to": created_at_to,
+                "updated_at_from": updated_at_from,
+                "updated_at_to": updated_at_to,
+                "sort_by": sort_by,
+                "sort_order": sort_order,
             },
             headers={
                 "Accept-Language": str(accept_language) if accept_language is not None else None,
@@ -565,6 +673,50 @@ class AsyncRawItemsClient:
                     ),
                 )
                 return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 400:
+                raise BadRequestError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Optional[typing.Any],
+                        construct_type(
+                            type_=typing.Optional[typing.Any],  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Optional[typing.Any],
+                        construct_type(
+                            type_=typing.Optional[typing.Any],  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 404:
+                raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Optional[typing.Any],
+                        construct_type(
+                            type_=typing.Optional[typing.Any],  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 500:
+                raise InternalServerError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Optional[typing.Any],
+                        construct_type(
+                            type_=typing.Optional[typing.Any],  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
             _response_json = _response.json()
         except JSONDecodeError:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)

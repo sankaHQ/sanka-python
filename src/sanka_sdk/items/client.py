@@ -33,6 +33,14 @@ class ItemsClient:
         workspace_id: typing.Optional[str] = None,
         lang: typing.Optional[str] = None,
         language: typing.Optional[str] = None,
+        page: typing.Optional[int] = None,
+        limit: typing.Optional[int] = None,
+        created_at_from: typing.Optional[str] = None,
+        created_at_to: typing.Optional[str] = None,
+        updated_at_from: typing.Optional[str] = None,
+        updated_at_to: typing.Optional[str] = None,
+        sort_by: typing.Optional[str] = None,
+        sort_order: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> typing.List[ShopTurboItemSchema]:
@@ -44,6 +52,22 @@ class ItemsClient:
         lang : typing.Optional[str]
 
         language : typing.Optional[str]
+
+        page : typing.Optional[int]
+
+        limit : typing.Optional[int]
+
+        created_at_from : typing.Optional[str]
+
+        created_at_to : typing.Optional[str]
+
+        updated_at_from : typing.Optional[str]
+
+        updated_at_to : typing.Optional[str]
+
+        sort_by : typing.Optional[str]
+
+        sort_order : typing.Optional[str]
 
         accept_language : typing.Optional[str]
 
@@ -68,6 +92,14 @@ class ItemsClient:
             workspace_id=workspace_id,
             lang=lang,
             language=language,
+            page=page,
+            limit=limit,
+            created_at_from=created_at_from,
+            created_at_to=created_at_to,
+            updated_at_from=updated_at_from,
+            updated_at_to=updated_at_to,
+            sort_by=sort_by,
+            sort_order=sort_order,
             accept_language=accept_language,
             request_options=request_options,
         )
@@ -304,6 +336,14 @@ class AsyncItemsClient:
         workspace_id: typing.Optional[str] = None,
         lang: typing.Optional[str] = None,
         language: typing.Optional[str] = None,
+        page: typing.Optional[int] = None,
+        limit: typing.Optional[int] = None,
+        created_at_from: typing.Optional[str] = None,
+        created_at_to: typing.Optional[str] = None,
+        updated_at_from: typing.Optional[str] = None,
+        updated_at_to: typing.Optional[str] = None,
+        sort_by: typing.Optional[str] = None,
+        sort_order: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> typing.List[ShopTurboItemSchema]:
@@ -315,6 +355,22 @@ class AsyncItemsClient:
         lang : typing.Optional[str]
 
         language : typing.Optional[str]
+
+        page : typing.Optional[int]
+
+        limit : typing.Optional[int]
+
+        created_at_from : typing.Optional[str]
+
+        created_at_to : typing.Optional[str]
+
+        updated_at_from : typing.Optional[str]
+
+        updated_at_to : typing.Optional[str]
+
+        sort_by : typing.Optional[str]
+
+        sort_order : typing.Optional[str]
 
         accept_language : typing.Optional[str]
 
@@ -347,6 +403,14 @@ class AsyncItemsClient:
             workspace_id=workspace_id,
             lang=lang,
             language=language,
+            page=page,
+            limit=limit,
+            created_at_from=created_at_from,
+            created_at_to=created_at_to,
+            updated_at_from=updated_at_from,
+            updated_at_to=updated_at_to,
+            sort_by=sort_by,
+            sort_order=sort_order,
             accept_language=accept_language,
             request_options=request_options,
         )
