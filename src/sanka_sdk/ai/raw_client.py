@@ -9,17 +9,15 @@ from ..core.http_response import AsyncHttpResponse, HttpResponse
 from ..core.request_options import RequestOptions
 from ..core.serialization import convert_and_respect_annotation_metadata
 from ..core.unchecked_base_model import construct_type
-from ..errors.bad_gateway_error import BadGatewayError
-from ..errors.bad_request_error import BadRequestError
-from ..errors.forbidden_error import ForbiddenError
-from ..errors.internal_server_error import InternalServerError
-from ..errors.not_found_error import NotFoundError
-from ..errors.service_unavailable_error import ServiceUnavailableError
 from ..errors.unauthorized_error import UnauthorizedError
-from ..types.ai_error_response import AiErrorResponse
+from ..errors.unprocessable_entity_error import UnprocessableEntityError
 from ..types.enrich_company_seed import EnrichCompanySeed
-from ..types.enrich_response import EnrichResponse
-from ..types.score_response import ScoreResponse
+from ..types.enrich_record_api_v_2_enrich_post_200_envelope import EnrichRecordApiV2EnrichPost200Envelope
+from ..types.error_envelope import ErrorEnvelope
+from ..types.prospect_companies_api_v_2_prospect_companies_post_200_envelope import (
+    ProspectCompaniesApiV2ProspectCompaniesPost200Envelope,
+)
+from ..types.score_record_api_v_2_score_post_200_envelope import ScoreRecordApiV2ScorePost200Envelope
 
 # this is used as the default value for optional parameters
 OMIT = typing.cast(typing.Any, ...)
@@ -29,21 +27,24 @@ class RawAiClient:
     def __init__(self, *, client_wrapper: SyncClientWrapper):
         self._client_wrapper = client_wrapper
 
-    def api_routers_v_1_ai_api_enrich_record(
+    def enrich_record_api(
         self,
         *,
         object_type: str,
+        workspace_id: typing.Optional[str] = None,
         record_id: typing.Optional[str] = OMIT,
         seed: typing.Optional[EnrichCompanySeed] = OMIT,
         custom_field_map: typing.Optional[typing.Dict[str, str]] = OMIT,
         dry_run: typing.Optional[bool] = OMIT,
         force_refresh: typing.Optional[bool] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> HttpResponse[EnrichResponse]:
+    ) -> HttpResponse[EnrichRecordApiV2EnrichPost200Envelope]:
         """
         Parameters
         ----------
         object_type : str
+
+        workspace_id : typing.Optional[str]
 
         record_id : typing.Optional[str]
 
@@ -60,17 +61,20 @@ class RawAiClient:
 
         Returns
         -------
-        HttpResponse[EnrichResponse]
-            OK
+        HttpResponse[EnrichRecordApiV2EnrichPost200Envelope]
+            Successful Response
         """
         _response = self._client_wrapper.httpx_client.request(
-            "v1/enrich",
+            "v2/enrich",
             method="POST",
+            params={
+                "workspace_id": workspace_id,
+            },
             json={
                 "object_type": object_type,
                 "record_id": record_id,
                 "seed": convert_and_respect_annotation_metadata(
-                    object_=seed, annotation=EnrichCompanySeed, direction="write"
+                    object_=seed, annotation=typing.Optional[EnrichCompanySeed], direction="write"
                 ),
                 "custom_field_map": custom_field_map,
                 "dry_run": dry_run,
@@ -85,86 +89,31 @@ class RawAiClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    EnrichResponse,
+                    EnrichRecordApiV2EnrichPost200Envelope,
                     construct_type(
-                        type_=EnrichResponse,  # type: ignore
+                        type_=EnrichRecordApiV2EnrichPost200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return HttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
             if _response.status_code == 401:
                 raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 403:
-                raise ForbiddenError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 502:
-                raise BadGatewayError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        AiErrorResponse,
-                        construct_type(
-                            type_=AiErrorResponse,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 503:
-                raise ServiceUnavailableError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        AiErrorResponse,
-                        construct_type(
-                            type_=AiErrorResponse,  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -174,20 +123,121 @@ class RawAiClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    def api_routers_v_1_ai_api_score_record(
+    def prospect_companies_api(
+        self,
+        *,
+        workspace_id: typing.Optional[str] = None,
+        query: typing.Optional[str] = OMIT,
+        location: typing.Optional[str] = OMIT,
+        industry: typing.Optional[str] = OMIT,
+        min_employee_count: typing.Optional[int] = OMIT,
+        max_employee_count: typing.Optional[int] = OMIT,
+        limit: typing.Optional[int] = OMIT,
+        sources: typing.Optional[typing.Sequence[str]] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> HttpResponse[ProspectCompaniesApiV2ProspectCompaniesPost200Envelope]:
+        """
+        Parameters
+        ----------
+        workspace_id : typing.Optional[str]
+
+        query : typing.Optional[str]
+
+        location : typing.Optional[str]
+
+        industry : typing.Optional[str]
+
+        min_employee_count : typing.Optional[int]
+
+        max_employee_count : typing.Optional[int]
+
+        limit : typing.Optional[int]
+
+        sources : typing.Optional[typing.Sequence[str]]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[ProspectCompaniesApiV2ProspectCompaniesPost200Envelope]
+            Successful Response
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            "v2/prospect/companies",
+            method="POST",
+            params={
+                "workspace_id": workspace_id,
+            },
+            json={
+                "query": query,
+                "location": location,
+                "industry": industry,
+                "min_employee_count": min_employee_count,
+                "max_employee_count": max_employee_count,
+                "limit": limit,
+                "sources": sources,
+            },
+            headers={
+                "content-type": "application/json",
+            },
+            request_options=request_options,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    ProspectCompaniesApiV2ProspectCompaniesPost200Envelope,
+                    construct_type(
+                        type_=ProspectCompaniesApiV2ProspectCompaniesPost200Envelope,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    def score_record_api(
         self,
         *,
         object_type: str,
         record_id: str,
+        workspace_id: typing.Optional[str] = None,
         score_model_id: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> HttpResponse[ScoreResponse]:
+    ) -> HttpResponse[ScoreRecordApiV2ScorePost200Envelope]:
         """
         Parameters
         ----------
         object_type : str
 
         record_id : str
+
+        workspace_id : typing.Optional[str]
 
         score_model_id : typing.Optional[str]
 
@@ -196,12 +246,15 @@ class RawAiClient:
 
         Returns
         -------
-        HttpResponse[ScoreResponse]
-            OK
+        HttpResponse[ScoreRecordApiV2ScorePost200Envelope]
+            Successful Response
         """
         _response = self._client_wrapper.httpx_client.request(
-            "v1/score",
+            "v2/score",
             method="POST",
+            params={
+                "workspace_id": workspace_id,
+            },
             json={
                 "object_type": object_type,
                 "record_id": record_id,
@@ -216,64 +269,31 @@ class RawAiClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    ScoreResponse,
+                    ScoreRecordApiV2ScorePost200Envelope,
                     construct_type(
-                        type_=ScoreResponse,  # type: ignore
+                        type_=ScoreRecordApiV2ScorePost200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return HttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
             if _response.status_code == 401:
                 raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 403:
-                raise ForbiddenError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -288,21 +308,24 @@ class AsyncRawAiClient:
     def __init__(self, *, client_wrapper: AsyncClientWrapper):
         self._client_wrapper = client_wrapper
 
-    async def api_routers_v_1_ai_api_enrich_record(
+    async def enrich_record_api(
         self,
         *,
         object_type: str,
+        workspace_id: typing.Optional[str] = None,
         record_id: typing.Optional[str] = OMIT,
         seed: typing.Optional[EnrichCompanySeed] = OMIT,
         custom_field_map: typing.Optional[typing.Dict[str, str]] = OMIT,
         dry_run: typing.Optional[bool] = OMIT,
         force_refresh: typing.Optional[bool] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> AsyncHttpResponse[EnrichResponse]:
+    ) -> AsyncHttpResponse[EnrichRecordApiV2EnrichPost200Envelope]:
         """
         Parameters
         ----------
         object_type : str
+
+        workspace_id : typing.Optional[str]
 
         record_id : typing.Optional[str]
 
@@ -319,17 +342,20 @@ class AsyncRawAiClient:
 
         Returns
         -------
-        AsyncHttpResponse[EnrichResponse]
-            OK
+        AsyncHttpResponse[EnrichRecordApiV2EnrichPost200Envelope]
+            Successful Response
         """
         _response = await self._client_wrapper.httpx_client.request(
-            "v1/enrich",
+            "v2/enrich",
             method="POST",
+            params={
+                "workspace_id": workspace_id,
+            },
             json={
                 "object_type": object_type,
                 "record_id": record_id,
                 "seed": convert_and_respect_annotation_metadata(
-                    object_=seed, annotation=EnrichCompanySeed, direction="write"
+                    object_=seed, annotation=typing.Optional[EnrichCompanySeed], direction="write"
                 ),
                 "custom_field_map": custom_field_map,
                 "dry_run": dry_run,
@@ -344,86 +370,31 @@ class AsyncRawAiClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    EnrichResponse,
+                    EnrichRecordApiV2EnrichPost200Envelope,
                     construct_type(
-                        type_=EnrichResponse,  # type: ignore
+                        type_=EnrichRecordApiV2EnrichPost200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return AsyncHttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
             if _response.status_code == 401:
                 raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 403:
-                raise ForbiddenError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 502:
-                raise BadGatewayError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        AiErrorResponse,
-                        construct_type(
-                            type_=AiErrorResponse,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 503:
-                raise ServiceUnavailableError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        AiErrorResponse,
-                        construct_type(
-                            type_=AiErrorResponse,  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -433,20 +404,121 @@ class AsyncRawAiClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    async def api_routers_v_1_ai_api_score_record(
+    async def prospect_companies_api(
+        self,
+        *,
+        workspace_id: typing.Optional[str] = None,
+        query: typing.Optional[str] = OMIT,
+        location: typing.Optional[str] = OMIT,
+        industry: typing.Optional[str] = OMIT,
+        min_employee_count: typing.Optional[int] = OMIT,
+        max_employee_count: typing.Optional[int] = OMIT,
+        limit: typing.Optional[int] = OMIT,
+        sources: typing.Optional[typing.Sequence[str]] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> AsyncHttpResponse[ProspectCompaniesApiV2ProspectCompaniesPost200Envelope]:
+        """
+        Parameters
+        ----------
+        workspace_id : typing.Optional[str]
+
+        query : typing.Optional[str]
+
+        location : typing.Optional[str]
+
+        industry : typing.Optional[str]
+
+        min_employee_count : typing.Optional[int]
+
+        max_employee_count : typing.Optional[int]
+
+        limit : typing.Optional[int]
+
+        sources : typing.Optional[typing.Sequence[str]]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[ProspectCompaniesApiV2ProspectCompaniesPost200Envelope]
+            Successful Response
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            "v2/prospect/companies",
+            method="POST",
+            params={
+                "workspace_id": workspace_id,
+            },
+            json={
+                "query": query,
+                "location": location,
+                "industry": industry,
+                "min_employee_count": min_employee_count,
+                "max_employee_count": max_employee_count,
+                "limit": limit,
+                "sources": sources,
+            },
+            headers={
+                "content-type": "application/json",
+            },
+            request_options=request_options,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    ProspectCompaniesApiV2ProspectCompaniesPost200Envelope,
+                    construct_type(
+                        type_=ProspectCompaniesApiV2ProspectCompaniesPost200Envelope,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    async def score_record_api(
         self,
         *,
         object_type: str,
         record_id: str,
+        workspace_id: typing.Optional[str] = None,
         score_model_id: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> AsyncHttpResponse[ScoreResponse]:
+    ) -> AsyncHttpResponse[ScoreRecordApiV2ScorePost200Envelope]:
         """
         Parameters
         ----------
         object_type : str
 
         record_id : str
+
+        workspace_id : typing.Optional[str]
 
         score_model_id : typing.Optional[str]
 
@@ -455,12 +527,15 @@ class AsyncRawAiClient:
 
         Returns
         -------
-        AsyncHttpResponse[ScoreResponse]
-            OK
+        AsyncHttpResponse[ScoreRecordApiV2ScorePost200Envelope]
+            Successful Response
         """
         _response = await self._client_wrapper.httpx_client.request(
-            "v1/score",
+            "v2/score",
             method="POST",
+            params={
+                "workspace_id": workspace_id,
+            },
             json={
                 "object_type": object_type,
                 "record_id": record_id,
@@ -475,64 +550,31 @@ class AsyncRawAiClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    ScoreResponse,
+                    ScoreRecordApiV2ScorePost200Envelope,
                     construct_type(
-                        type_=ScoreResponse,  # type: ignore
+                        type_=ScoreRecordApiV2ScorePost200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return AsyncHttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
             if _response.status_code == 401:
                 raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 403:
-                raise ForbiddenError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),

@@ -4,12 +4,22 @@ import typing
 
 from ..core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ..core.request_options import RequestOptions
-from ..types.public_workflow_actions_response import PublicWorkflowActionsResponse
-from ..types.public_workflow_detail_response import PublicWorkflowDetailResponse
-from ..types.public_workflow_list_response import PublicWorkflowListResponse
-from ..types.public_workflow_response import PublicWorkflowResponse
-from ..types.public_workflow_run_response import PublicWorkflowRunResponse
-from ..types.workflow_node_input import WorkflowNodeInput
+from ..types.create_public_workflow_api_v_2_public_workflows_post_200_envelope import (
+    CreatePublicWorkflowApiV2PublicWorkflowsPost200Envelope,
+)
+from ..types.get_public_workflow_api_v_2_public_workflows_workflow_id_get_200_envelope import (
+    GetPublicWorkflowApiV2PublicWorkflowsWorkflowIdGet200Envelope,
+)
+from ..types.list_public_workflows_api_v_2_public_workflows_get_200_envelope import (
+    ListPublicWorkflowsApiV2PublicWorkflowsGet200Envelope,
+)
+from ..types.public_workflow_run_request import PublicWorkflowRunRequest
+from ..types.run_public_workflow_api_v_2_public_workflows_workflow_id_run_post_200_envelope import (
+    RunPublicWorkflowApiV2PublicWorkflowsWorkflowIdRunPost200Envelope,
+)
+from ..types.update_public_workflow_api_v_2_public_workflows_workflow_id_patch_200_envelope import (
+    UpdatePublicWorkflowApiV2PublicWorkflowsWorkflowIdPatch200Envelope,
+)
 from .raw_client import AsyncRawWorkflowsClient, RawWorkflowsClient
 
 # this is used as the default value for optional parameters
@@ -31,13 +41,16 @@ class WorkflowsClient:
         """
         return self._raw_client
 
-    def api_routers_v_1_workflows_public_api_list_workflows(
+    def list_public_workflows_api(
         self,
         *,
         page: typing.Optional[int] = None,
         limit: typing.Optional[int] = None,
+        q: typing.Optional[str] = None,
+        status: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> PublicWorkflowListResponse:
+    ) -> ListPublicWorkflowsApiV2PublicWorkflowsGet200Envelope:
         """
         Parameters
         ----------
@@ -45,31 +58,41 @@ class WorkflowsClient:
 
         limit : typing.Optional[int]
 
+        q : typing.Optional[str]
+
+        status : typing.Optional[str]
+
+        workspace_id : typing.Optional[str]
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        PublicWorkflowListResponse
-            OK
+        ListPublicWorkflowsApiV2PublicWorkflowsGet200Envelope
+            Successful Response
 
         Examples
         --------
         from sanka_sdk import SankaClient
 
         client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
-        client.workflows.api_routers_v_1_workflows_public_api_list_workflows()
+        client.workflows.list_public_workflows_api()
         """
-        _response = self._raw_client.api_routers_v_1_workflows_public_api_list_workflows(
-            page=page, limit=limit, request_options=request_options
+        _response = self._raw_client.list_public_workflows_api(
+            page=page, limit=limit, q=q, status=status, workspace_id=workspace_id, request_options=request_options
         )
         return _response.data
 
-    def api_routers_v_1_workflows_public_api_create_public_workflow(
+    def create_public_workflow_api(
         self,
         *,
+        workspace_id: typing.Optional[str] = None,
+        provider: typing.Optional[str] = OMIT,
+        channel_id: typing.Optional[str] = OMIT,
         external_id: typing.Optional[str] = OMIT,
         title: typing.Optional[str] = OMIT,
         description: typing.Optional[str] = OMIT,
@@ -77,14 +100,26 @@ class WorkflowsClient:
         trigger_type: typing.Optional[str] = OMIT,
         trigger_every: typing.Optional[int] = OMIT,
         is_trigger_active: typing.Optional[bool] = OMIT,
-        nodes: typing.Optional[typing.Sequence[WorkflowNodeInput]] = OMIT,
+        object_type: typing.Optional[str] = OMIT,
+        trigger: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
+        actions: typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]] = OMIT,
+        nodes: typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]] = OMIT,
         config: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
-        type: typing.Optional[str] = OMIT,
+        platform_payload: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
+        dry_run: typing.Optional[bool] = OMIT,
+        confirm: typing.Optional[bool] = OMIT,
+        revision_id: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> PublicWorkflowResponse:
+    ) -> CreatePublicWorkflowApiV2PublicWorkflowsPost200Envelope:
         """
         Parameters
         ----------
+        workspace_id : typing.Optional[str]
+
+        provider : typing.Optional[str]
+
+        channel_id : typing.Optional[str]
+
         external_id : typing.Optional[str]
 
         title : typing.Optional[str]
@@ -99,30 +134,46 @@ class WorkflowsClient:
 
         is_trigger_active : typing.Optional[bool]
 
-        nodes : typing.Optional[typing.Sequence[WorkflowNodeInput]]
+        object_type : typing.Optional[str]
+
+        trigger : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
+
+        actions : typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]]
+
+        nodes : typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]]
 
         config : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
 
-        type : typing.Optional[str]
+        platform_payload : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
+
+        dry_run : typing.Optional[bool]
+
+        confirm : typing.Optional[bool]
+
+        revision_id : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        PublicWorkflowResponse
-            OK
+        CreatePublicWorkflowApiV2PublicWorkflowsPost200Envelope
+            Successful Response
 
         Examples
         --------
         from sanka_sdk import SankaClient
 
         client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
-        client.workflows.api_routers_v_1_workflows_public_api_create_public_workflow()
+        client.workflows.create_public_workflow_api()
         """
-        _response = self._raw_client.api_routers_v_1_workflows_public_api_create_public_workflow(
+        _response = self._raw_client.create_public_workflow_api(
+            workspace_id=workspace_id,
+            provider=provider,
+            channel_id=channel_id,
             external_id=external_id,
             title=title,
             description=description,
@@ -130,134 +181,211 @@ class WorkflowsClient:
             trigger_type=trigger_type,
             trigger_every=trigger_every,
             is_trigger_active=is_trigger_active,
+            object_type=object_type,
+            trigger=trigger,
+            actions=actions,
             nodes=nodes,
             config=config,
-            type=type,
+            platform_payload=platform_payload,
+            dry_run=dry_run,
+            confirm=confirm,
+            revision_id=revision_id,
             request_options=request_options,
         )
         return _response.data
 
-    def api_routers_v_1_workflows_public_api_list_public_workflow_actions(
-        self, *, request_options: typing.Optional[RequestOptions] = None
-    ) -> PublicWorkflowActionsResponse:
+    def get_public_workflow_api(
+        self,
+        workflow_id: str,
+        *,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> GetPublicWorkflowApiV2PublicWorkflowsWorkflowIdGet200Envelope:
         """
         Parameters
         ----------
+        workflow_id : str
+
+        workspace_id : typing.Optional[str]
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        PublicWorkflowActionsResponse
-            OK
+        GetPublicWorkflowApiV2PublicWorkflowsWorkflowIdGet200Envelope
+            Successful Response
 
         Examples
         --------
         from sanka_sdk import SankaClient
 
         client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
-        client.workflows.api_routers_v_1_workflows_public_api_list_public_workflow_actions()
+        client.workflows.get_public_workflow_api(
+            workflow_id="workflow_id",
+        )
         """
-        _response = self._raw_client.api_routers_v_1_workflows_public_api_list_public_workflow_actions(
-            request_options=request_options
+        _response = self._raw_client.get_public_workflow_api(
+            workflow_id, workspace_id=workspace_id, request_options=request_options
         )
         return _response.data
 
-    def api_routers_v_1_workflows_public_api_run_public_workflow_by_ref(
-        self, workflow_ref: str, *, request_options: typing.Optional[RequestOptions] = None
-    ) -> PublicWorkflowRunResponse:
+    def update_public_workflow_api(
+        self,
+        workflow_id: str,
+        *,
+        workspace_id: typing.Optional[str] = None,
+        provider: typing.Optional[str] = OMIT,
+        channel_id: typing.Optional[str] = OMIT,
+        external_id: typing.Optional[str] = OMIT,
+        title: typing.Optional[str] = OMIT,
+        description: typing.Optional[str] = OMIT,
+        status: typing.Optional[str] = OMIT,
+        trigger_type: typing.Optional[str] = OMIT,
+        trigger_every: typing.Optional[int] = OMIT,
+        is_trigger_active: typing.Optional[bool] = OMIT,
+        object_type: typing.Optional[str] = OMIT,
+        trigger: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
+        actions: typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]] = OMIT,
+        nodes: typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]] = OMIT,
+        config: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
+        platform_payload: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
+        dry_run: typing.Optional[bool] = OMIT,
+        confirm: typing.Optional[bool] = OMIT,
+        revision_id: typing.Optional[str] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> UpdatePublicWorkflowApiV2PublicWorkflowsWorkflowIdPatch200Envelope:
         """
         Parameters
         ----------
-        workflow_ref : str
+        workflow_id : str
+
+        workspace_id : typing.Optional[str]
+
+        provider : typing.Optional[str]
+
+        channel_id : typing.Optional[str]
+
+        external_id : typing.Optional[str]
+
+        title : typing.Optional[str]
+
+        description : typing.Optional[str]
+
+        status : typing.Optional[str]
+
+        trigger_type : typing.Optional[str]
+
+        trigger_every : typing.Optional[int]
+
+        is_trigger_active : typing.Optional[bool]
+
+        object_type : typing.Optional[str]
+
+        trigger : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
+
+        actions : typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]]
+
+        nodes : typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]]
+
+        config : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
+
+        platform_payload : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
+
+        dry_run : typing.Optional[bool]
+
+        confirm : typing.Optional[bool]
+
+        revision_id : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        PublicWorkflowRunResponse
-            OK
+        UpdatePublicWorkflowApiV2PublicWorkflowsWorkflowIdPatch200Envelope
+            Successful Response
 
         Examples
         --------
         from sanka_sdk import SankaClient
 
         client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
-        client.workflows.api_routers_v_1_workflows_public_api_run_public_workflow_by_ref(
-            workflow_ref="workflow_ref",
+        client.workflows.update_public_workflow_api(
+            workflow_id="workflow_id",
         )
         """
-        _response = self._raw_client.api_routers_v_1_workflows_public_api_run_public_workflow_by_ref(
-            workflow_ref, request_options=request_options
+        _response = self._raw_client.update_public_workflow_api(
+            workflow_id,
+            workspace_id=workspace_id,
+            provider=provider,
+            channel_id=channel_id,
+            external_id=external_id,
+            title=title,
+            description=description,
+            status=status,
+            trigger_type=trigger_type,
+            trigger_every=trigger_every,
+            is_trigger_active=is_trigger_active,
+            object_type=object_type,
+            trigger=trigger,
+            actions=actions,
+            nodes=nodes,
+            config=config,
+            platform_payload=platform_payload,
+            dry_run=dry_run,
+            confirm=confirm,
+            revision_id=revision_id,
+            request_options=request_options,
         )
         return _response.data
 
-    def api_routers_v_1_workflows_public_api_get_public_workflow_run_by_id(
-        self, run_id: str, *, request_options: typing.Optional[RequestOptions] = None
-    ) -> PublicWorkflowRunResponse:
+    def run_public_workflow_api(
+        self,
+        workflow_id: str,
+        *,
+        workspace_id: typing.Optional[str] = None,
+        request: typing.Optional[PublicWorkflowRunRequest] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> RunPublicWorkflowApiV2PublicWorkflowsWorkflowIdRunPost200Envelope:
         """
         Parameters
         ----------
-        run_id : str
+        workflow_id : str
+
+        workspace_id : typing.Optional[str]
+
+        request : typing.Optional[PublicWorkflowRunRequest]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        PublicWorkflowRunResponse
-            OK
+        RunPublicWorkflowApiV2PublicWorkflowsWorkflowIdRunPost200Envelope
+            Successful Response
 
         Examples
         --------
-        from sanka_sdk import SankaClient
+        from sanka_sdk import PublicWorkflowRunRequest, SankaClient
 
         client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
-        client.workflows.api_routers_v_1_workflows_public_api_get_public_workflow_run_by_id(
-            run_id="run_id",
+        client.workflows.run_public_workflow_api(
+            workflow_id="workflow_id",
+            request=PublicWorkflowRunRequest(),
         )
         """
-        _response = self._raw_client.api_routers_v_1_workflows_public_api_get_public_workflow_run_by_id(
-            run_id, request_options=request_options
-        )
-        return _response.data
-
-    def api_routers_v_1_workflows_public_api_get_public_workflow_by_ref(
-        self, workflow_ref: str, *, request_options: typing.Optional[RequestOptions] = None
-    ) -> PublicWorkflowDetailResponse:
-        """
-        Parameters
-        ----------
-        workflow_ref : str
-
-        request_options : typing.Optional[RequestOptions]
-            Request-specific configuration.
-
-        Returns
-        -------
-        PublicWorkflowDetailResponse
-            OK
-
-        Examples
-        --------
-        from sanka_sdk import SankaClient
-
-        client = SankaClient(
-            token="YOUR_TOKEN",
-        )
-        client.workflows.api_routers_v_1_workflows_public_api_get_public_workflow_by_ref(
-            workflow_ref="workflow_ref",
-        )
-        """
-        _response = self._raw_client.api_routers_v_1_workflows_public_api_get_public_workflow_by_ref(
-            workflow_ref, request_options=request_options
+        _response = self._raw_client.run_public_workflow_api(
+            workflow_id, workspace_id=workspace_id, request=request, request_options=request_options
         )
         return _response.data
 
@@ -277,13 +405,16 @@ class AsyncWorkflowsClient:
         """
         return self._raw_client
 
-    async def api_routers_v_1_workflows_public_api_list_workflows(
+    async def list_public_workflows_api(
         self,
         *,
         page: typing.Optional[int] = None,
         limit: typing.Optional[int] = None,
+        q: typing.Optional[str] = None,
+        status: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> PublicWorkflowListResponse:
+    ) -> ListPublicWorkflowsApiV2PublicWorkflowsGet200Envelope:
         """
         Parameters
         ----------
@@ -291,13 +422,19 @@ class AsyncWorkflowsClient:
 
         limit : typing.Optional[int]
 
+        q : typing.Optional[str]
+
+        status : typing.Optional[str]
+
+        workspace_id : typing.Optional[str]
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        PublicWorkflowListResponse
-            OK
+        ListPublicWorkflowsApiV2PublicWorkflowsGet200Envelope
+            Successful Response
 
         Examples
         --------
@@ -306,24 +443,28 @@ class AsyncWorkflowsClient:
         from sanka_sdk import AsyncSankaClient
 
         client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
 
 
         async def main() -> None:
-            await client.workflows.api_routers_v_1_workflows_public_api_list_workflows()
+            await client.workflows.list_public_workflows_api()
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.api_routers_v_1_workflows_public_api_list_workflows(
-            page=page, limit=limit, request_options=request_options
+        _response = await self._raw_client.list_public_workflows_api(
+            page=page, limit=limit, q=q, status=status, workspace_id=workspace_id, request_options=request_options
         )
         return _response.data
 
-    async def api_routers_v_1_workflows_public_api_create_public_workflow(
+    async def create_public_workflow_api(
         self,
         *,
+        workspace_id: typing.Optional[str] = None,
+        provider: typing.Optional[str] = OMIT,
+        channel_id: typing.Optional[str] = OMIT,
         external_id: typing.Optional[str] = OMIT,
         title: typing.Optional[str] = OMIT,
         description: typing.Optional[str] = OMIT,
@@ -331,14 +472,26 @@ class AsyncWorkflowsClient:
         trigger_type: typing.Optional[str] = OMIT,
         trigger_every: typing.Optional[int] = OMIT,
         is_trigger_active: typing.Optional[bool] = OMIT,
-        nodes: typing.Optional[typing.Sequence[WorkflowNodeInput]] = OMIT,
+        object_type: typing.Optional[str] = OMIT,
+        trigger: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
+        actions: typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]] = OMIT,
+        nodes: typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]] = OMIT,
         config: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
-        type: typing.Optional[str] = OMIT,
+        platform_payload: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
+        dry_run: typing.Optional[bool] = OMIT,
+        confirm: typing.Optional[bool] = OMIT,
+        revision_id: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> PublicWorkflowResponse:
+    ) -> CreatePublicWorkflowApiV2PublicWorkflowsPost200Envelope:
         """
         Parameters
         ----------
+        workspace_id : typing.Optional[str]
+
+        provider : typing.Optional[str]
+
+        channel_id : typing.Optional[str]
+
         external_id : typing.Optional[str]
 
         title : typing.Optional[str]
@@ -353,19 +506,31 @@ class AsyncWorkflowsClient:
 
         is_trigger_active : typing.Optional[bool]
 
-        nodes : typing.Optional[typing.Sequence[WorkflowNodeInput]]
+        object_type : typing.Optional[str]
+
+        trigger : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
+
+        actions : typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]]
+
+        nodes : typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]]
 
         config : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
 
-        type : typing.Optional[str]
+        platform_payload : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
+
+        dry_run : typing.Optional[bool]
+
+        confirm : typing.Optional[bool]
+
+        revision_id : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        PublicWorkflowResponse
-            OK
+        CreatePublicWorkflowApiV2PublicWorkflowsPost200Envelope
+            Successful Response
 
         Examples
         --------
@@ -374,17 +539,21 @@ class AsyncWorkflowsClient:
         from sanka_sdk import AsyncSankaClient
 
         client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
 
 
         async def main() -> None:
-            await client.workflows.api_routers_v_1_workflows_public_api_create_public_workflow()
+            await client.workflows.create_public_workflow_api()
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.api_routers_v_1_workflows_public_api_create_public_workflow(
+        _response = await self._raw_client.create_public_workflow_api(
+            workspace_id=workspace_id,
+            provider=provider,
+            channel_id=channel_id,
             external_id=external_id,
             title=title,
             description=description,
@@ -392,26 +561,40 @@ class AsyncWorkflowsClient:
             trigger_type=trigger_type,
             trigger_every=trigger_every,
             is_trigger_active=is_trigger_active,
+            object_type=object_type,
+            trigger=trigger,
+            actions=actions,
             nodes=nodes,
             config=config,
-            type=type,
+            platform_payload=platform_payload,
+            dry_run=dry_run,
+            confirm=confirm,
+            revision_id=revision_id,
             request_options=request_options,
         )
         return _response.data
 
-    async def api_routers_v_1_workflows_public_api_list_public_workflow_actions(
-        self, *, request_options: typing.Optional[RequestOptions] = None
-    ) -> PublicWorkflowActionsResponse:
+    async def get_public_workflow_api(
+        self,
+        workflow_id: str,
+        *,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> GetPublicWorkflowApiV2PublicWorkflowsWorkflowIdGet200Envelope:
         """
         Parameters
         ----------
+        workflow_id : str
+
+        workspace_id : typing.Optional[str]
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        PublicWorkflowActionsResponse
-            OK
+        GetPublicWorkflowApiV2PublicWorkflowsWorkflowIdGet200Envelope
+            Successful Response
 
         Examples
         --------
@@ -420,76 +603,99 @@ class AsyncWorkflowsClient:
         from sanka_sdk import AsyncSankaClient
 
         client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
 
 
         async def main() -> None:
-            await client.workflows.api_routers_v_1_workflows_public_api_list_public_workflow_actions()
-
-
-        asyncio.run(main())
-        """
-        _response = await self._raw_client.api_routers_v_1_workflows_public_api_list_public_workflow_actions(
-            request_options=request_options
-        )
-        return _response.data
-
-    async def api_routers_v_1_workflows_public_api_run_public_workflow_by_ref(
-        self, workflow_ref: str, *, request_options: typing.Optional[RequestOptions] = None
-    ) -> PublicWorkflowRunResponse:
-        """
-        Parameters
-        ----------
-        workflow_ref : str
-
-        request_options : typing.Optional[RequestOptions]
-            Request-specific configuration.
-
-        Returns
-        -------
-        PublicWorkflowRunResponse
-            OK
-
-        Examples
-        --------
-        import asyncio
-
-        from sanka_sdk import AsyncSankaClient
-
-        client = AsyncSankaClient(
-            token="YOUR_TOKEN",
-        )
-
-
-        async def main() -> None:
-            await client.workflows.api_routers_v_1_workflows_public_api_run_public_workflow_by_ref(
-                workflow_ref="workflow_ref",
+            await client.workflows.get_public_workflow_api(
+                workflow_id="workflow_id",
             )
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.api_routers_v_1_workflows_public_api_run_public_workflow_by_ref(
-            workflow_ref, request_options=request_options
+        _response = await self._raw_client.get_public_workflow_api(
+            workflow_id, workspace_id=workspace_id, request_options=request_options
         )
         return _response.data
 
-    async def api_routers_v_1_workflows_public_api_get_public_workflow_run_by_id(
-        self, run_id: str, *, request_options: typing.Optional[RequestOptions] = None
-    ) -> PublicWorkflowRunResponse:
+    async def update_public_workflow_api(
+        self,
+        workflow_id: str,
+        *,
+        workspace_id: typing.Optional[str] = None,
+        provider: typing.Optional[str] = OMIT,
+        channel_id: typing.Optional[str] = OMIT,
+        external_id: typing.Optional[str] = OMIT,
+        title: typing.Optional[str] = OMIT,
+        description: typing.Optional[str] = OMIT,
+        status: typing.Optional[str] = OMIT,
+        trigger_type: typing.Optional[str] = OMIT,
+        trigger_every: typing.Optional[int] = OMIT,
+        is_trigger_active: typing.Optional[bool] = OMIT,
+        object_type: typing.Optional[str] = OMIT,
+        trigger: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
+        actions: typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]] = OMIT,
+        nodes: typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]] = OMIT,
+        config: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
+        platform_payload: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
+        dry_run: typing.Optional[bool] = OMIT,
+        confirm: typing.Optional[bool] = OMIT,
+        revision_id: typing.Optional[str] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> UpdatePublicWorkflowApiV2PublicWorkflowsWorkflowIdPatch200Envelope:
         """
         Parameters
         ----------
-        run_id : str
+        workflow_id : str
+
+        workspace_id : typing.Optional[str]
+
+        provider : typing.Optional[str]
+
+        channel_id : typing.Optional[str]
+
+        external_id : typing.Optional[str]
+
+        title : typing.Optional[str]
+
+        description : typing.Optional[str]
+
+        status : typing.Optional[str]
+
+        trigger_type : typing.Optional[str]
+
+        trigger_every : typing.Optional[int]
+
+        is_trigger_active : typing.Optional[bool]
+
+        object_type : typing.Optional[str]
+
+        trigger : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
+
+        actions : typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]]
+
+        nodes : typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]]
+
+        config : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
+
+        platform_payload : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
+
+        dry_run : typing.Optional[bool]
+
+        confirm : typing.Optional[bool]
+
+        revision_id : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        PublicWorkflowRunResponse
-            OK
+        UpdatePublicWorkflowApiV2PublicWorkflowsWorkflowIdPatch200Envelope
+            Successful Response
 
         Examples
         --------
@@ -498,59 +704,91 @@ class AsyncWorkflowsClient:
         from sanka_sdk import AsyncSankaClient
 
         client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
 
 
         async def main() -> None:
-            await client.workflows.api_routers_v_1_workflows_public_api_get_public_workflow_run_by_id(
-                run_id="run_id",
+            await client.workflows.update_public_workflow_api(
+                workflow_id="workflow_id",
             )
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.api_routers_v_1_workflows_public_api_get_public_workflow_run_by_id(
-            run_id, request_options=request_options
+        _response = await self._raw_client.update_public_workflow_api(
+            workflow_id,
+            workspace_id=workspace_id,
+            provider=provider,
+            channel_id=channel_id,
+            external_id=external_id,
+            title=title,
+            description=description,
+            status=status,
+            trigger_type=trigger_type,
+            trigger_every=trigger_every,
+            is_trigger_active=is_trigger_active,
+            object_type=object_type,
+            trigger=trigger,
+            actions=actions,
+            nodes=nodes,
+            config=config,
+            platform_payload=platform_payload,
+            dry_run=dry_run,
+            confirm=confirm,
+            revision_id=revision_id,
+            request_options=request_options,
         )
         return _response.data
 
-    async def api_routers_v_1_workflows_public_api_get_public_workflow_by_ref(
-        self, workflow_ref: str, *, request_options: typing.Optional[RequestOptions] = None
-    ) -> PublicWorkflowDetailResponse:
+    async def run_public_workflow_api(
+        self,
+        workflow_id: str,
+        *,
+        workspace_id: typing.Optional[str] = None,
+        request: typing.Optional[PublicWorkflowRunRequest] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> RunPublicWorkflowApiV2PublicWorkflowsWorkflowIdRunPost200Envelope:
         """
         Parameters
         ----------
-        workflow_ref : str
+        workflow_id : str
+
+        workspace_id : typing.Optional[str]
+
+        request : typing.Optional[PublicWorkflowRunRequest]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        PublicWorkflowDetailResponse
-            OK
+        RunPublicWorkflowApiV2PublicWorkflowsWorkflowIdRunPost200Envelope
+            Successful Response
 
         Examples
         --------
         import asyncio
 
-        from sanka_sdk import AsyncSankaClient
+        from sanka_sdk import AsyncSankaClient, PublicWorkflowRunRequest
 
         client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
 
 
         async def main() -> None:
-            await client.workflows.api_routers_v_1_workflows_public_api_get_public_workflow_by_ref(
-                workflow_ref="workflow_ref",
+            await client.workflows.run_public_workflow_api(
+                workflow_id="workflow_id",
+                request=PublicWorkflowRunRequest(),
             )
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.api_routers_v_1_workflows_public_api_get_public_workflow_by_ref(
-            workflow_ref, request_options=request_options
+        _response = await self._raw_client.run_public_workflow_api(
+            workflow_id, workspace_id=workspace_id, request=request, request_options=request_options
         )
         return _response.data

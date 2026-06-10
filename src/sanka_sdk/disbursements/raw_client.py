@@ -9,13 +9,36 @@ from ..core.http_response import AsyncHttpResponse, HttpResponse
 from ..core.jsonable_encoder import jsonable_encoder
 from ..core.request_options import RequestOptions
 from ..core.unchecked_base_model import construct_type
-from ..errors.bad_request_error import BadRequestError
-from ..errors.conflict_error import ConflictError
-from ..errors.forbidden_error import ForbiddenError
-from ..errors.internal_server_error import InternalServerError
-from ..errors.not_found_error import NotFoundError
-from ..types.disbursement_schema import DisbursementSchema
-from ..types.public_disbursement_response import PublicDisbursementResponse
+from ..errors.unauthorized_error import UnauthorizedError
+from ..errors.unprocessable_entity_error import UnprocessableEntityError
+from ..types.create_public_disbursement_allocation_api_v_2_public_disbursements_disbursement_id_allocations_post_200_envelope import (
+    CreatePublicDisbursementAllocationApiV2PublicDisbursementsDisbursementIdAllocationsPost200Envelope,
+)
+from ..types.create_public_disbursement_api_v_2_public_disbursements_post_200_envelope import (
+    CreatePublicDisbursementApiV2PublicDisbursementsPost200Envelope,
+)
+from ..types.delete_public_disbursement_allocation_api_v_2_public_disbursements_disbursement_id_allocations_allocation_id_delete_200_envelope import (
+    DeletePublicDisbursementAllocationApiV2PublicDisbursementsDisbursementIdAllocationsAllocationIdDelete200Envelope,
+)
+from ..types.delete_public_disbursement_api_v_2_public_disbursements_disbursement_id_delete_200_envelope import (
+    DeletePublicDisbursementApiV2PublicDisbursementsDisbursementIdDelete200Envelope,
+)
+from ..types.error_envelope import ErrorEnvelope
+from ..types.get_public_disbursement_api_v_2_public_disbursements_disbursement_id_get_200_envelope import (
+    GetPublicDisbursementApiV2PublicDisbursementsDisbursementIdGet200Envelope,
+)
+from ..types.list_public_disbursement_allocations_api_v_2_public_disbursements_disbursement_id_allocations_get_200_envelope import (
+    ListPublicDisbursementAllocationsApiV2PublicDisbursementsDisbursementIdAllocationsGet200Envelope,
+)
+from ..types.list_public_disbursements_api_v_2_public_disbursements_get_200_envelope import (
+    ListPublicDisbursementsApiV2PublicDisbursementsGet200Envelope,
+)
+from ..types.update_public_disbursement_allocation_api_v_2_public_disbursements_disbursement_id_allocations_allocation_id_patch_200_envelope import (
+    UpdatePublicDisbursementAllocationApiV2PublicDisbursementsDisbursementIdAllocationsAllocationIdPatch200Envelope,
+)
+from ..types.update_public_disbursement_api_v_2_public_disbursements_disbursement_id_put_200_envelope import (
+    UpdatePublicDisbursementApiV2PublicDisbursementsDisbursementIdPut200Envelope,
+)
 
 # this is used as the default value for optional parameters
 OMIT = typing.cast(typing.Any, ...)
@@ -25,23 +48,44 @@ class RawDisbursementsClient:
     def __init__(self, *, client_wrapper: SyncClientWrapper):
         self._client_wrapper = client_wrapper
 
-    def api_routers_v_1_disbursements_public_api_list_workspace_disbursements(
+    def list_public_disbursements_api(
         self,
         *,
         workspace_id: typing.Optional[str] = None,
-        lang: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = None,
+        search: typing.Optional[str] = None,
         language: typing.Optional[str] = None,
+        status: typing.Optional[str] = None,
+        usage_status: typing.Optional[str] = None,
+        page: typing.Optional[int] = None,
+        limit: typing.Optional[int] = None,
+        sort: typing.Optional[str] = None,
+        x_language: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> HttpResponse[typing.List[DisbursementSchema]]:
+    ) -> HttpResponse[ListPublicDisbursementsApiV2PublicDisbursementsGet200Envelope]:
         """
         Parameters
         ----------
         workspace_id : typing.Optional[str]
 
-        lang : typing.Optional[str]
+        view_id : typing.Optional[str]
+
+        search : typing.Optional[str]
 
         language : typing.Optional[str]
+
+        status : typing.Optional[str]
+
+        usage_status : typing.Optional[str]
+
+        page : typing.Optional[int]
+
+        limit : typing.Optional[int]
+
+        sort : typing.Optional[str]
+
+        x_language : typing.Optional[str]
 
         accept_language : typing.Optional[str]
 
@@ -50,18 +94,25 @@ class RawDisbursementsClient:
 
         Returns
         -------
-        HttpResponse[typing.List[DisbursementSchema]]
-            OK
+        HttpResponse[ListPublicDisbursementsApiV2PublicDisbursementsGet200Envelope]
+            Object record list response
         """
         _response = self._client_wrapper.httpx_client.request(
-            "v1/public/disbursements",
+            "v2/public/disbursements",
             method="GET",
             params={
                 "workspace_id": workspace_id,
-                "lang": lang,
+                "view_id": view_id,
+                "search": search,
                 "language": language,
+                "status": status,
+                "usage_status": usage_status,
+                "page": page,
+                "limit": limit,
+                "sort": sort,
             },
             headers={
+                "X-Language": str(x_language) if x_language is not None else None,
                 "Accept-Language": str(accept_language) if accept_language is not None else None,
             },
             request_options=request_options,
@@ -69,42 +120,31 @@ class RawDisbursementsClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    typing.List[DisbursementSchema],
+                    ListPublicDisbursementsApiV2PublicDisbursementsGet200Envelope,
                     construct_type(
-                        type_=typing.List[DisbursementSchema],  # type: ignore
+                        type_=ListPublicDisbursementsApiV2PublicDisbursementsGet200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return HttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 403:
-                raise ForbiddenError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -114,86 +154,44 @@ class RawDisbursementsClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    def api_routers_v_1_disbursements_public_api_create_public_disbursement(
+    def create_public_disbursement_api(
         self,
         *,
-        external_id: typing.Optional[str] = OMIT,
-        contact_id: typing.Optional[str] = OMIT,
-        contact_external_id: typing.Optional[str] = OMIT,
-        company_id: typing.Optional[str] = OMIT,
-        company_external_id: typing.Optional[str] = OMIT,
-        start_date: typing.Optional[str] = OMIT,
-        status: typing.Optional[str] = OMIT,
-        currency: typing.Optional[str] = OMIT,
-        notes: typing.Optional[str] = OMIT,
-        tax_rate: typing.Optional[float] = OMIT,
-        tax_inclusive: typing.Optional[bool] = OMIT,
-        tax_option: typing.Optional[str] = OMIT,
-        total_price: typing.Optional[float] = OMIT,
-        total_price_without_tax: typing.Optional[float] = OMIT,
-        fee: typing.Optional[float] = OMIT,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = OMIT,
+        form_view_id: typing.Optional[str] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> HttpResponse[PublicDisbursementResponse]:
+    ) -> HttpResponse[CreatePublicDisbursementApiV2PublicDisbursementsPost200Envelope]:
         """
         Parameters
         ----------
-        external_id : typing.Optional[str]
+        workspace_id : typing.Optional[str]
 
-        contact_id : typing.Optional[str]
+        view_id : typing.Optional[str]
 
-        contact_external_id : typing.Optional[str]
+        form_view_id : typing.Optional[str]
 
-        company_id : typing.Optional[str]
-
-        company_external_id : typing.Optional[str]
-
-        start_date : typing.Optional[str]
-
-        status : typing.Optional[str]
-
-        currency : typing.Optional[str]
-
-        notes : typing.Optional[str]
-
-        tax_rate : typing.Optional[float]
-
-        tax_inclusive : typing.Optional[bool]
-
-        tax_option : typing.Optional[str]
-
-        total_price : typing.Optional[float]
-
-        total_price_without_tax : typing.Optional[float]
-
-        fee : typing.Optional[float]
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        HttpResponse[PublicDisbursementResponse]
-            OK
+        HttpResponse[CreatePublicDisbursementApiV2PublicDisbursementsPost200Envelope]
+            Successful Response
         """
         _response = self._client_wrapper.httpx_client.request(
-            "v1/public/disbursements",
+            "v2/public/disbursements",
             method="POST",
+            params={
+                "workspace_id": workspace_id,
+            },
             json={
-                "external_id": external_id,
-                "contact_id": contact_id,
-                "contact_external_id": contact_external_id,
-                "company_id": company_id,
-                "company_external_id": company_external_id,
-                "start_date": start_date,
-                "status": status,
-                "currency": currency,
-                "notes": notes,
-                "tax_rate": tax_rate,
-                "tax_inclusive": tax_inclusive,
-                "tax_option": tax_option,
-                "total_price": total_price,
-                "total_price_without_tax": total_price_without_tax,
-                "fee": fee,
+                "view_id": view_id,
+                "form_view_id": form_view_id,
+                "properties": properties,
             },
             headers={
                 "content-type": "application/json",
@@ -204,53 +202,31 @@ class RawDisbursementsClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    PublicDisbursementResponse,
+                    CreatePublicDisbursementApiV2PublicDisbursementsPost200Envelope,
                     construct_type(
-                        type_=PublicDisbursementResponse,  # type: ignore
+                        type_=CreatePublicDisbursementApiV2PublicDisbursementsPost200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return HttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 403:
-                raise ForbiddenError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -260,16 +236,255 @@ class RawDisbursementsClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    def api_routers_v_1_disbursements_public_api_get_public_disbursement(
+    def get_public_disbursement_api(
+        self,
+        disbursement_id: str,
+        *,
+        external_id: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = None,
+        form_view_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> HttpResponse[GetPublicDisbursementApiV2PublicDisbursementsDisbursementIdGet200Envelope]:
+        """
+        Parameters
+        ----------
+        disbursement_id : str
+
+        external_id : typing.Optional[str]
+
+        workspace_id : typing.Optional[str]
+
+        view_id : typing.Optional[str]
+
+        form_view_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[GetPublicDisbursementApiV2PublicDisbursementsDisbursementIdGet200Envelope]
+            Object record detail response. The base detail payload is intentionally thin; drawer sections load through scoped endpoints.
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            f"v2/public/disbursements/{jsonable_encoder(disbursement_id)}",
+            method="GET",
+            params={
+                "external_id": external_id,
+                "workspace_id": workspace_id,
+                "view_id": view_id,
+                "form_view_id": form_view_id,
+            },
+            request_options=request_options,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    GetPublicDisbursementApiV2PublicDisbursementsDisbursementIdGet200Envelope,
+                    construct_type(
+                        type_=GetPublicDisbursementApiV2PublicDisbursementsDisbursementIdGet200Envelope,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    def update_public_disbursement_api(
+        self,
+        disbursement_id: str,
+        *,
+        external_id: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = OMIT,
+        form_view_id: typing.Optional[str] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> HttpResponse[UpdatePublicDisbursementApiV2PublicDisbursementsDisbursementIdPut200Envelope]:
+        """
+        Parameters
+        ----------
+        disbursement_id : str
+
+        external_id : typing.Optional[str]
+
+        workspace_id : typing.Optional[str]
+
+        view_id : typing.Optional[str]
+
+        form_view_id : typing.Optional[str]
+
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[UpdatePublicDisbursementApiV2PublicDisbursementsDisbursementIdPut200Envelope]
+            Successful Response
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            f"v2/public/disbursements/{jsonable_encoder(disbursement_id)}",
+            method="PUT",
+            params={
+                "external_id": external_id,
+                "workspace_id": workspace_id,
+            },
+            json={
+                "view_id": view_id,
+                "form_view_id": form_view_id,
+                "properties": properties,
+            },
+            headers={
+                "content-type": "application/json",
+            },
+            request_options=request_options,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    UpdatePublicDisbursementApiV2PublicDisbursementsDisbursementIdPut200Envelope,
+                    construct_type(
+                        type_=UpdatePublicDisbursementApiV2PublicDisbursementsDisbursementIdPut200Envelope,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    def delete_public_disbursement_api(
+        self,
+        disbursement_id: str,
+        *,
+        external_id: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> HttpResponse[DeletePublicDisbursementApiV2PublicDisbursementsDisbursementIdDelete200Envelope]:
+        """
+        Parameters
+        ----------
+        disbursement_id : str
+
+        external_id : typing.Optional[str]
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[DeletePublicDisbursementApiV2PublicDisbursementsDisbursementIdDelete200Envelope]
+            Successful Response
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            f"v2/public/disbursements/{jsonable_encoder(disbursement_id)}",
+            method="DELETE",
+            params={
+                "external_id": external_id,
+                "workspace_id": workspace_id,
+            },
+            request_options=request_options,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    DeletePublicDisbursementApiV2PublicDisbursementsDisbursementIdDelete200Envelope,
+                    construct_type(
+                        type_=DeletePublicDisbursementApiV2PublicDisbursementsDisbursementIdDelete200Envelope,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    def list_public_disbursement_allocations_api(
         self,
         disbursement_id: str,
         *,
         external_id: typing.Optional[str] = None,
         lang: typing.Optional[str] = None,
         language: typing.Optional[str] = None,
-        accept_language: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> HttpResponse[DisbursementSchema]:
+    ) -> HttpResponse[ListPublicDisbursementAllocationsApiV2PublicDisbursementsDisbursementIdAllocationsGet200Envelope]:
         """
         Parameters
         ----------
@@ -281,79 +496,55 @@ class RawDisbursementsClient:
 
         language : typing.Optional[str]
 
-        accept_language : typing.Optional[str]
+        workspace_id : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        HttpResponse[DisbursementSchema]
-            OK
+        HttpResponse[ListPublicDisbursementAllocationsApiV2PublicDisbursementsDisbursementIdAllocationsGet200Envelope]
+            Successful Response
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"v1/public/disbursements/{jsonable_encoder(disbursement_id)}",
+            f"v2/public/disbursements/{jsonable_encoder(disbursement_id)}/allocations",
             method="GET",
             params={
                 "external_id": external_id,
                 "lang": lang,
                 "language": language,
-            },
-            headers={
-                "Accept-Language": str(accept_language) if accept_language is not None else None,
+                "workspace_id": workspace_id,
             },
             request_options=request_options,
         )
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    DisbursementSchema,
+                    ListPublicDisbursementAllocationsApiV2PublicDisbursementsDisbursementIdAllocationsGet200Envelope,
                     construct_type(
-                        type_=DisbursementSchema,  # type: ignore
+                        type_=ListPublicDisbursementAllocationsApiV2PublicDisbursementsDisbursementIdAllocationsGet200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return HttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 403:
-                raise ForbiddenError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -363,90 +554,52 @@ class RawDisbursementsClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    def api_routers_v_1_disbursements_public_api_update_public_disbursement(
+    def create_public_disbursement_allocation_api(
         self,
         disbursement_id: str,
         *,
-        external_id: typing.Optional[str] = OMIT,
-        contact_id: typing.Optional[str] = OMIT,
-        contact_external_id: typing.Optional[str] = OMIT,
-        company_id: typing.Optional[str] = OMIT,
-        company_external_id: typing.Optional[str] = OMIT,
-        start_date: typing.Optional[str] = OMIT,
-        status: typing.Optional[str] = OMIT,
-        currency: typing.Optional[str] = OMIT,
-        notes: typing.Optional[str] = OMIT,
-        tax_rate: typing.Optional[float] = OMIT,
-        tax_inclusive: typing.Optional[bool] = OMIT,
-        tax_option: typing.Optional[str] = OMIT,
-        total_price: typing.Optional[float] = OMIT,
-        total_price_without_tax: typing.Optional[float] = OMIT,
-        fee: typing.Optional[float] = OMIT,
+        request: typing.Dict[str, typing.Optional[typing.Any]],
+        external_id: typing.Optional[str] = None,
+        lang: typing.Optional[str] = None,
+        language: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> HttpResponse[PublicDisbursementResponse]:
+    ) -> HttpResponse[
+        CreatePublicDisbursementAllocationApiV2PublicDisbursementsDisbursementIdAllocationsPost200Envelope
+    ]:
         """
         Parameters
         ----------
         disbursement_id : str
 
+        request : typing.Dict[str, typing.Optional[typing.Any]]
+
         external_id : typing.Optional[str]
 
-        contact_id : typing.Optional[str]
+        lang : typing.Optional[str]
 
-        contact_external_id : typing.Optional[str]
+        language : typing.Optional[str]
 
-        company_id : typing.Optional[str]
-
-        company_external_id : typing.Optional[str]
-
-        start_date : typing.Optional[str]
-
-        status : typing.Optional[str]
-
-        currency : typing.Optional[str]
-
-        notes : typing.Optional[str]
-
-        tax_rate : typing.Optional[float]
-
-        tax_inclusive : typing.Optional[bool]
-
-        tax_option : typing.Optional[str]
-
-        total_price : typing.Optional[float]
-
-        total_price_without_tax : typing.Optional[float]
-
-        fee : typing.Optional[float]
+        workspace_id : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        HttpResponse[PublicDisbursementResponse]
-            OK
+        HttpResponse[CreatePublicDisbursementAllocationApiV2PublicDisbursementsDisbursementIdAllocationsPost200Envelope]
+            Successful Response
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"v1/public/disbursements/{jsonable_encoder(disbursement_id)}",
-            method="PUT",
-            json={
+            f"v2/public/disbursements/{jsonable_encoder(disbursement_id)}/allocations",
+            method="POST",
+            params={
                 "external_id": external_id,
-                "contact_id": contact_id,
-                "contact_external_id": contact_external_id,
-                "company_id": company_id,
-                "company_external_id": company_external_id,
-                "start_date": start_date,
-                "status": status,
-                "currency": currency,
-                "notes": notes,
-                "tax_rate": tax_rate,
-                "tax_inclusive": tax_inclusive,
-                "tax_option": tax_option,
-                "total_price": total_price,
-                "total_price_without_tax": total_price_without_tax,
-                "fee": fee,
+                "lang": lang,
+                "language": language,
+                "workspace_id": workspace_id,
             },
+            json=request,
             headers={
                 "content-type": "application/json",
             },
@@ -456,64 +609,31 @@ class RawDisbursementsClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    PublicDisbursementResponse,
+                    CreatePublicDisbursementAllocationApiV2PublicDisbursementsDisbursementIdAllocationsPost200Envelope,
                     construct_type(
-                        type_=PublicDisbursementResponse,  # type: ignore
+                        type_=CreatePublicDisbursementAllocationApiV2PublicDisbursementsDisbursementIdAllocationsPost200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return HttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 403:
-                raise ForbiddenError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 409:
-                raise ConflictError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -523,86 +643,173 @@ class RawDisbursementsClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    def api_routers_v_1_disbursements_public_api_delete_public_disbursement(
+    def delete_public_disbursement_allocation_api(
         self,
         disbursement_id: str,
+        allocation_id: str,
         *,
         external_id: typing.Optional[str] = None,
+        lang: typing.Optional[str] = None,
+        language: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> HttpResponse[PublicDisbursementResponse]:
+    ) -> HttpResponse[
+        DeletePublicDisbursementAllocationApiV2PublicDisbursementsDisbursementIdAllocationsAllocationIdDelete200Envelope
+    ]:
         """
         Parameters
         ----------
         disbursement_id : str
 
+        allocation_id : str
+
         external_id : typing.Optional[str]
+
+        lang : typing.Optional[str]
+
+        language : typing.Optional[str]
+
+        workspace_id : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        HttpResponse[PublicDisbursementResponse]
-            OK
+        HttpResponse[DeletePublicDisbursementAllocationApiV2PublicDisbursementsDisbursementIdAllocationsAllocationIdDelete200Envelope]
+            Successful Response
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"v1/public/disbursements/{jsonable_encoder(disbursement_id)}",
+            f"v2/public/disbursements/{jsonable_encoder(disbursement_id)}/allocations/{jsonable_encoder(allocation_id)}",
             method="DELETE",
             params={
                 "external_id": external_id,
+                "lang": lang,
+                "language": language,
+                "workspace_id": workspace_id,
             },
             request_options=request_options,
         )
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    PublicDisbursementResponse,
+                    DeletePublicDisbursementAllocationApiV2PublicDisbursementsDisbursementIdAllocationsAllocationIdDelete200Envelope,
                     construct_type(
-                        type_=PublicDisbursementResponse,  # type: ignore
+                        type_=DeletePublicDisbursementAllocationApiV2PublicDisbursementsDisbursementIdAllocationsAllocationIdDelete200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return HttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 403:
-                raise ForbiddenError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 404:
-                raise NotFoundError(
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    def update_public_disbursement_allocation_api(
+        self,
+        disbursement_id: str,
+        allocation_id: str,
+        *,
+        request: typing.Dict[str, typing.Optional[typing.Any]],
+        external_id: typing.Optional[str] = None,
+        lang: typing.Optional[str] = None,
+        language: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> HttpResponse[
+        UpdatePublicDisbursementAllocationApiV2PublicDisbursementsDisbursementIdAllocationsAllocationIdPatch200Envelope
+    ]:
+        """
+        Parameters
+        ----------
+        disbursement_id : str
+
+        allocation_id : str
+
+        request : typing.Dict[str, typing.Optional[typing.Any]]
+
+        external_id : typing.Optional[str]
+
+        lang : typing.Optional[str]
+
+        language : typing.Optional[str]
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[UpdatePublicDisbursementAllocationApiV2PublicDisbursementsDisbursementIdAllocationsAllocationIdPatch200Envelope]
+            Successful Response
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            f"v2/public/disbursements/{jsonable_encoder(disbursement_id)}/allocations/{jsonable_encoder(allocation_id)}",
+            method="PATCH",
+            params={
+                "external_id": external_id,
+                "lang": lang,
+                "language": language,
+                "workspace_id": workspace_id,
+            },
+            json=request,
+            headers={
+                "content-type": "application/json",
+            },
+            request_options=request_options,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    UpdatePublicDisbursementAllocationApiV2PublicDisbursementsDisbursementIdAllocationsAllocationIdPatch200Envelope,
+                    construct_type(
+                        type_=UpdatePublicDisbursementAllocationApiV2PublicDisbursementsDisbursementIdAllocationsAllocationIdPatch200Envelope,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 500:
-                raise InternalServerError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -617,23 +824,44 @@ class AsyncRawDisbursementsClient:
     def __init__(self, *, client_wrapper: AsyncClientWrapper):
         self._client_wrapper = client_wrapper
 
-    async def api_routers_v_1_disbursements_public_api_list_workspace_disbursements(
+    async def list_public_disbursements_api(
         self,
         *,
         workspace_id: typing.Optional[str] = None,
-        lang: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = None,
+        search: typing.Optional[str] = None,
         language: typing.Optional[str] = None,
+        status: typing.Optional[str] = None,
+        usage_status: typing.Optional[str] = None,
+        page: typing.Optional[int] = None,
+        limit: typing.Optional[int] = None,
+        sort: typing.Optional[str] = None,
+        x_language: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> AsyncHttpResponse[typing.List[DisbursementSchema]]:
+    ) -> AsyncHttpResponse[ListPublicDisbursementsApiV2PublicDisbursementsGet200Envelope]:
         """
         Parameters
         ----------
         workspace_id : typing.Optional[str]
 
-        lang : typing.Optional[str]
+        view_id : typing.Optional[str]
+
+        search : typing.Optional[str]
 
         language : typing.Optional[str]
+
+        status : typing.Optional[str]
+
+        usage_status : typing.Optional[str]
+
+        page : typing.Optional[int]
+
+        limit : typing.Optional[int]
+
+        sort : typing.Optional[str]
+
+        x_language : typing.Optional[str]
 
         accept_language : typing.Optional[str]
 
@@ -642,18 +870,25 @@ class AsyncRawDisbursementsClient:
 
         Returns
         -------
-        AsyncHttpResponse[typing.List[DisbursementSchema]]
-            OK
+        AsyncHttpResponse[ListPublicDisbursementsApiV2PublicDisbursementsGet200Envelope]
+            Object record list response
         """
         _response = await self._client_wrapper.httpx_client.request(
-            "v1/public/disbursements",
+            "v2/public/disbursements",
             method="GET",
             params={
                 "workspace_id": workspace_id,
-                "lang": lang,
+                "view_id": view_id,
+                "search": search,
                 "language": language,
+                "status": status,
+                "usage_status": usage_status,
+                "page": page,
+                "limit": limit,
+                "sort": sort,
             },
             headers={
+                "X-Language": str(x_language) if x_language is not None else None,
                 "Accept-Language": str(accept_language) if accept_language is not None else None,
             },
             request_options=request_options,
@@ -661,42 +896,31 @@ class AsyncRawDisbursementsClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    typing.List[DisbursementSchema],
+                    ListPublicDisbursementsApiV2PublicDisbursementsGet200Envelope,
                     construct_type(
-                        type_=typing.List[DisbursementSchema],  # type: ignore
+                        type_=ListPublicDisbursementsApiV2PublicDisbursementsGet200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return AsyncHttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 403:
-                raise ForbiddenError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -706,86 +930,44 @@ class AsyncRawDisbursementsClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    async def api_routers_v_1_disbursements_public_api_create_public_disbursement(
+    async def create_public_disbursement_api(
         self,
         *,
-        external_id: typing.Optional[str] = OMIT,
-        contact_id: typing.Optional[str] = OMIT,
-        contact_external_id: typing.Optional[str] = OMIT,
-        company_id: typing.Optional[str] = OMIT,
-        company_external_id: typing.Optional[str] = OMIT,
-        start_date: typing.Optional[str] = OMIT,
-        status: typing.Optional[str] = OMIT,
-        currency: typing.Optional[str] = OMIT,
-        notes: typing.Optional[str] = OMIT,
-        tax_rate: typing.Optional[float] = OMIT,
-        tax_inclusive: typing.Optional[bool] = OMIT,
-        tax_option: typing.Optional[str] = OMIT,
-        total_price: typing.Optional[float] = OMIT,
-        total_price_without_tax: typing.Optional[float] = OMIT,
-        fee: typing.Optional[float] = OMIT,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = OMIT,
+        form_view_id: typing.Optional[str] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> AsyncHttpResponse[PublicDisbursementResponse]:
+    ) -> AsyncHttpResponse[CreatePublicDisbursementApiV2PublicDisbursementsPost200Envelope]:
         """
         Parameters
         ----------
-        external_id : typing.Optional[str]
+        workspace_id : typing.Optional[str]
 
-        contact_id : typing.Optional[str]
+        view_id : typing.Optional[str]
 
-        contact_external_id : typing.Optional[str]
+        form_view_id : typing.Optional[str]
 
-        company_id : typing.Optional[str]
-
-        company_external_id : typing.Optional[str]
-
-        start_date : typing.Optional[str]
-
-        status : typing.Optional[str]
-
-        currency : typing.Optional[str]
-
-        notes : typing.Optional[str]
-
-        tax_rate : typing.Optional[float]
-
-        tax_inclusive : typing.Optional[bool]
-
-        tax_option : typing.Optional[str]
-
-        total_price : typing.Optional[float]
-
-        total_price_without_tax : typing.Optional[float]
-
-        fee : typing.Optional[float]
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        AsyncHttpResponse[PublicDisbursementResponse]
-            OK
+        AsyncHttpResponse[CreatePublicDisbursementApiV2PublicDisbursementsPost200Envelope]
+            Successful Response
         """
         _response = await self._client_wrapper.httpx_client.request(
-            "v1/public/disbursements",
+            "v2/public/disbursements",
             method="POST",
+            params={
+                "workspace_id": workspace_id,
+            },
             json={
-                "external_id": external_id,
-                "contact_id": contact_id,
-                "contact_external_id": contact_external_id,
-                "company_id": company_id,
-                "company_external_id": company_external_id,
-                "start_date": start_date,
-                "status": status,
-                "currency": currency,
-                "notes": notes,
-                "tax_rate": tax_rate,
-                "tax_inclusive": tax_inclusive,
-                "tax_option": tax_option,
-                "total_price": total_price,
-                "total_price_without_tax": total_price_without_tax,
-                "fee": fee,
+                "view_id": view_id,
+                "form_view_id": form_view_id,
+                "properties": properties,
             },
             headers={
                 "content-type": "application/json",
@@ -796,53 +978,31 @@ class AsyncRawDisbursementsClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    PublicDisbursementResponse,
+                    CreatePublicDisbursementApiV2PublicDisbursementsPost200Envelope,
                     construct_type(
-                        type_=PublicDisbursementResponse,  # type: ignore
+                        type_=CreatePublicDisbursementApiV2PublicDisbursementsPost200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return AsyncHttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 403:
-                raise ForbiddenError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -852,16 +1012,257 @@ class AsyncRawDisbursementsClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    async def api_routers_v_1_disbursements_public_api_get_public_disbursement(
+    async def get_public_disbursement_api(
+        self,
+        disbursement_id: str,
+        *,
+        external_id: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = None,
+        form_view_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> AsyncHttpResponse[GetPublicDisbursementApiV2PublicDisbursementsDisbursementIdGet200Envelope]:
+        """
+        Parameters
+        ----------
+        disbursement_id : str
+
+        external_id : typing.Optional[str]
+
+        workspace_id : typing.Optional[str]
+
+        view_id : typing.Optional[str]
+
+        form_view_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[GetPublicDisbursementApiV2PublicDisbursementsDisbursementIdGet200Envelope]
+            Object record detail response. The base detail payload is intentionally thin; drawer sections load through scoped endpoints.
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            f"v2/public/disbursements/{jsonable_encoder(disbursement_id)}",
+            method="GET",
+            params={
+                "external_id": external_id,
+                "workspace_id": workspace_id,
+                "view_id": view_id,
+                "form_view_id": form_view_id,
+            },
+            request_options=request_options,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    GetPublicDisbursementApiV2PublicDisbursementsDisbursementIdGet200Envelope,
+                    construct_type(
+                        type_=GetPublicDisbursementApiV2PublicDisbursementsDisbursementIdGet200Envelope,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    async def update_public_disbursement_api(
+        self,
+        disbursement_id: str,
+        *,
+        external_id: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = OMIT,
+        form_view_id: typing.Optional[str] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> AsyncHttpResponse[UpdatePublicDisbursementApiV2PublicDisbursementsDisbursementIdPut200Envelope]:
+        """
+        Parameters
+        ----------
+        disbursement_id : str
+
+        external_id : typing.Optional[str]
+
+        workspace_id : typing.Optional[str]
+
+        view_id : typing.Optional[str]
+
+        form_view_id : typing.Optional[str]
+
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[UpdatePublicDisbursementApiV2PublicDisbursementsDisbursementIdPut200Envelope]
+            Successful Response
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            f"v2/public/disbursements/{jsonable_encoder(disbursement_id)}",
+            method="PUT",
+            params={
+                "external_id": external_id,
+                "workspace_id": workspace_id,
+            },
+            json={
+                "view_id": view_id,
+                "form_view_id": form_view_id,
+                "properties": properties,
+            },
+            headers={
+                "content-type": "application/json",
+            },
+            request_options=request_options,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    UpdatePublicDisbursementApiV2PublicDisbursementsDisbursementIdPut200Envelope,
+                    construct_type(
+                        type_=UpdatePublicDisbursementApiV2PublicDisbursementsDisbursementIdPut200Envelope,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    async def delete_public_disbursement_api(
+        self,
+        disbursement_id: str,
+        *,
+        external_id: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> AsyncHttpResponse[DeletePublicDisbursementApiV2PublicDisbursementsDisbursementIdDelete200Envelope]:
+        """
+        Parameters
+        ----------
+        disbursement_id : str
+
+        external_id : typing.Optional[str]
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[DeletePublicDisbursementApiV2PublicDisbursementsDisbursementIdDelete200Envelope]
+            Successful Response
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            f"v2/public/disbursements/{jsonable_encoder(disbursement_id)}",
+            method="DELETE",
+            params={
+                "external_id": external_id,
+                "workspace_id": workspace_id,
+            },
+            request_options=request_options,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    DeletePublicDisbursementApiV2PublicDisbursementsDisbursementIdDelete200Envelope,
+                    construct_type(
+                        type_=DeletePublicDisbursementApiV2PublicDisbursementsDisbursementIdDelete200Envelope,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    async def list_public_disbursement_allocations_api(
         self,
         disbursement_id: str,
         *,
         external_id: typing.Optional[str] = None,
         lang: typing.Optional[str] = None,
         language: typing.Optional[str] = None,
-        accept_language: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> AsyncHttpResponse[DisbursementSchema]:
+    ) -> AsyncHttpResponse[
+        ListPublicDisbursementAllocationsApiV2PublicDisbursementsDisbursementIdAllocationsGet200Envelope
+    ]:
         """
         Parameters
         ----------
@@ -873,79 +1274,55 @@ class AsyncRawDisbursementsClient:
 
         language : typing.Optional[str]
 
-        accept_language : typing.Optional[str]
+        workspace_id : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        AsyncHttpResponse[DisbursementSchema]
-            OK
+        AsyncHttpResponse[ListPublicDisbursementAllocationsApiV2PublicDisbursementsDisbursementIdAllocationsGet200Envelope]
+            Successful Response
         """
         _response = await self._client_wrapper.httpx_client.request(
-            f"v1/public/disbursements/{jsonable_encoder(disbursement_id)}",
+            f"v2/public/disbursements/{jsonable_encoder(disbursement_id)}/allocations",
             method="GET",
             params={
                 "external_id": external_id,
                 "lang": lang,
                 "language": language,
-            },
-            headers={
-                "Accept-Language": str(accept_language) if accept_language is not None else None,
+                "workspace_id": workspace_id,
             },
             request_options=request_options,
         )
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    DisbursementSchema,
+                    ListPublicDisbursementAllocationsApiV2PublicDisbursementsDisbursementIdAllocationsGet200Envelope,
                     construct_type(
-                        type_=DisbursementSchema,  # type: ignore
+                        type_=ListPublicDisbursementAllocationsApiV2PublicDisbursementsDisbursementIdAllocationsGet200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return AsyncHttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 403:
-                raise ForbiddenError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -955,90 +1332,52 @@ class AsyncRawDisbursementsClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    async def api_routers_v_1_disbursements_public_api_update_public_disbursement(
+    async def create_public_disbursement_allocation_api(
         self,
         disbursement_id: str,
         *,
-        external_id: typing.Optional[str] = OMIT,
-        contact_id: typing.Optional[str] = OMIT,
-        contact_external_id: typing.Optional[str] = OMIT,
-        company_id: typing.Optional[str] = OMIT,
-        company_external_id: typing.Optional[str] = OMIT,
-        start_date: typing.Optional[str] = OMIT,
-        status: typing.Optional[str] = OMIT,
-        currency: typing.Optional[str] = OMIT,
-        notes: typing.Optional[str] = OMIT,
-        tax_rate: typing.Optional[float] = OMIT,
-        tax_inclusive: typing.Optional[bool] = OMIT,
-        tax_option: typing.Optional[str] = OMIT,
-        total_price: typing.Optional[float] = OMIT,
-        total_price_without_tax: typing.Optional[float] = OMIT,
-        fee: typing.Optional[float] = OMIT,
+        request: typing.Dict[str, typing.Optional[typing.Any]],
+        external_id: typing.Optional[str] = None,
+        lang: typing.Optional[str] = None,
+        language: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> AsyncHttpResponse[PublicDisbursementResponse]:
+    ) -> AsyncHttpResponse[
+        CreatePublicDisbursementAllocationApiV2PublicDisbursementsDisbursementIdAllocationsPost200Envelope
+    ]:
         """
         Parameters
         ----------
         disbursement_id : str
 
+        request : typing.Dict[str, typing.Optional[typing.Any]]
+
         external_id : typing.Optional[str]
 
-        contact_id : typing.Optional[str]
+        lang : typing.Optional[str]
 
-        contact_external_id : typing.Optional[str]
+        language : typing.Optional[str]
 
-        company_id : typing.Optional[str]
-
-        company_external_id : typing.Optional[str]
-
-        start_date : typing.Optional[str]
-
-        status : typing.Optional[str]
-
-        currency : typing.Optional[str]
-
-        notes : typing.Optional[str]
-
-        tax_rate : typing.Optional[float]
-
-        tax_inclusive : typing.Optional[bool]
-
-        tax_option : typing.Optional[str]
-
-        total_price : typing.Optional[float]
-
-        total_price_without_tax : typing.Optional[float]
-
-        fee : typing.Optional[float]
+        workspace_id : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        AsyncHttpResponse[PublicDisbursementResponse]
-            OK
+        AsyncHttpResponse[CreatePublicDisbursementAllocationApiV2PublicDisbursementsDisbursementIdAllocationsPost200Envelope]
+            Successful Response
         """
         _response = await self._client_wrapper.httpx_client.request(
-            f"v1/public/disbursements/{jsonable_encoder(disbursement_id)}",
-            method="PUT",
-            json={
+            f"v2/public/disbursements/{jsonable_encoder(disbursement_id)}/allocations",
+            method="POST",
+            params={
                 "external_id": external_id,
-                "contact_id": contact_id,
-                "contact_external_id": contact_external_id,
-                "company_id": company_id,
-                "company_external_id": company_external_id,
-                "start_date": start_date,
-                "status": status,
-                "currency": currency,
-                "notes": notes,
-                "tax_rate": tax_rate,
-                "tax_inclusive": tax_inclusive,
-                "tax_option": tax_option,
-                "total_price": total_price,
-                "total_price_without_tax": total_price_without_tax,
-                "fee": fee,
+                "lang": lang,
+                "language": language,
+                "workspace_id": workspace_id,
             },
+            json=request,
             headers={
                 "content-type": "application/json",
             },
@@ -1048,64 +1387,31 @@ class AsyncRawDisbursementsClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    PublicDisbursementResponse,
+                    CreatePublicDisbursementAllocationApiV2PublicDisbursementsDisbursementIdAllocationsPost200Envelope,
                     construct_type(
-                        type_=PublicDisbursementResponse,  # type: ignore
+                        type_=CreatePublicDisbursementAllocationApiV2PublicDisbursementsDisbursementIdAllocationsPost200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return AsyncHttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 403:
-                raise ForbiddenError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 409:
-                raise ConflictError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -1115,86 +1421,173 @@ class AsyncRawDisbursementsClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    async def api_routers_v_1_disbursements_public_api_delete_public_disbursement(
+    async def delete_public_disbursement_allocation_api(
         self,
         disbursement_id: str,
+        allocation_id: str,
         *,
         external_id: typing.Optional[str] = None,
+        lang: typing.Optional[str] = None,
+        language: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> AsyncHttpResponse[PublicDisbursementResponse]:
+    ) -> AsyncHttpResponse[
+        DeletePublicDisbursementAllocationApiV2PublicDisbursementsDisbursementIdAllocationsAllocationIdDelete200Envelope
+    ]:
         """
         Parameters
         ----------
         disbursement_id : str
 
+        allocation_id : str
+
         external_id : typing.Optional[str]
+
+        lang : typing.Optional[str]
+
+        language : typing.Optional[str]
+
+        workspace_id : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        AsyncHttpResponse[PublicDisbursementResponse]
-            OK
+        AsyncHttpResponse[DeletePublicDisbursementAllocationApiV2PublicDisbursementsDisbursementIdAllocationsAllocationIdDelete200Envelope]
+            Successful Response
         """
         _response = await self._client_wrapper.httpx_client.request(
-            f"v1/public/disbursements/{jsonable_encoder(disbursement_id)}",
+            f"v2/public/disbursements/{jsonable_encoder(disbursement_id)}/allocations/{jsonable_encoder(allocation_id)}",
             method="DELETE",
             params={
                 "external_id": external_id,
+                "lang": lang,
+                "language": language,
+                "workspace_id": workspace_id,
             },
             request_options=request_options,
         )
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    PublicDisbursementResponse,
+                    DeletePublicDisbursementAllocationApiV2PublicDisbursementsDisbursementIdAllocationsAllocationIdDelete200Envelope,
                     construct_type(
-                        type_=PublicDisbursementResponse,  # type: ignore
+                        type_=DeletePublicDisbursementAllocationApiV2PublicDisbursementsDisbursementIdAllocationsAllocationIdDelete200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return AsyncHttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 403:
-                raise ForbiddenError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 404:
-                raise NotFoundError(
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    async def update_public_disbursement_allocation_api(
+        self,
+        disbursement_id: str,
+        allocation_id: str,
+        *,
+        request: typing.Dict[str, typing.Optional[typing.Any]],
+        external_id: typing.Optional[str] = None,
+        lang: typing.Optional[str] = None,
+        language: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> AsyncHttpResponse[
+        UpdatePublicDisbursementAllocationApiV2PublicDisbursementsDisbursementIdAllocationsAllocationIdPatch200Envelope
+    ]:
+        """
+        Parameters
+        ----------
+        disbursement_id : str
+
+        allocation_id : str
+
+        request : typing.Dict[str, typing.Optional[typing.Any]]
+
+        external_id : typing.Optional[str]
+
+        lang : typing.Optional[str]
+
+        language : typing.Optional[str]
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[UpdatePublicDisbursementAllocationApiV2PublicDisbursementsDisbursementIdAllocationsAllocationIdPatch200Envelope]
+            Successful Response
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            f"v2/public/disbursements/{jsonable_encoder(disbursement_id)}/allocations/{jsonable_encoder(allocation_id)}",
+            method="PATCH",
+            params={
+                "external_id": external_id,
+                "lang": lang,
+                "language": language,
+                "workspace_id": workspace_id,
+            },
+            json=request,
+            headers={
+                "content-type": "application/json",
+            },
+            request_options=request_options,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    UpdatePublicDisbursementAllocationApiV2PublicDisbursementsDisbursementIdAllocationsAllocationIdPatch200Envelope,
+                    construct_type(
+                        type_=UpdatePublicDisbursementAllocationApiV2PublicDisbursementsDisbursementIdAllocationsAllocationIdPatch200Envelope,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 500:
-                raise InternalServerError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),

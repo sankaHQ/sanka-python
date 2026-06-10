@@ -3,19 +3,34 @@
 import typing
 from json.decoder import JSONDecodeError
 
+from .. import core
 from ..core.api_error import ApiError
 from ..core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ..core.http_response import AsyncHttpResponse, HttpResponse
 from ..core.jsonable_encoder import jsonable_encoder
 from ..core.request_options import RequestOptions
 from ..core.unchecked_base_model import construct_type
-from ..errors.bad_request_error import BadRequestError
-from ..errors.conflict_error import ConflictError
-from ..errors.forbidden_error import ForbiddenError
-from ..errors.internal_server_error import InternalServerError
-from ..errors.not_found_error import NotFoundError
-from ..types.bill_schema import BillSchema
-from ..types.public_bill_response import PublicBillResponse
+from ..errors.unauthorized_error import UnauthorizedError
+from ..errors.unprocessable_entity_error import UnprocessableEntityError
+from ..types.create_public_bill_api_v_2_public_bills_post_200_envelope import (
+    CreatePublicBillApiV2PublicBillsPost200Envelope,
+)
+from ..types.delete_public_bill_api_v_2_public_bills_bill_id_delete_200_envelope import (
+    DeletePublicBillApiV2PublicBillsBillIdDelete200Envelope,
+)
+from ..types.error_envelope import ErrorEnvelope
+from ..types.get_public_bill_api_v_2_public_bills_bill_id_get_200_envelope import (
+    GetPublicBillApiV2PublicBillsBillIdGet200Envelope,
+)
+from ..types.list_public_bills_api_v_2_public_bills_get_200_envelope import (
+    ListPublicBillsApiV2PublicBillsGet200Envelope,
+)
+from ..types.update_public_bill_api_v_2_public_bills_bill_id_put_200_envelope import (
+    UpdatePublicBillApiV2PublicBillsBillIdPut200Envelope,
+)
+from ..types.upload_public_bill_file_api_v_2_public_bills_files_post_200_envelope import (
+    UploadPublicBillFileApiV2PublicBillsFilesPost200Envelope,
+)
 
 # this is used as the default value for optional parameters
 OMIT = typing.cast(typing.Any, ...)
@@ -25,23 +40,44 @@ class RawBillsClient:
     def __init__(self, *, client_wrapper: SyncClientWrapper):
         self._client_wrapper = client_wrapper
 
-    def api_routers_v_1_bills_public_api_list_workspace_bills(
+    def list_public_bills_api(
         self,
         *,
         workspace_id: typing.Optional[str] = None,
-        lang: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = None,
+        search: typing.Optional[str] = None,
         language: typing.Optional[str] = None,
+        status: typing.Optional[str] = None,
+        usage_status: typing.Optional[str] = None,
+        page: typing.Optional[int] = None,
+        limit: typing.Optional[int] = None,
+        sort: typing.Optional[str] = None,
+        x_language: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> HttpResponse[typing.List[BillSchema]]:
+    ) -> HttpResponse[ListPublicBillsApiV2PublicBillsGet200Envelope]:
         """
         Parameters
         ----------
         workspace_id : typing.Optional[str]
 
-        lang : typing.Optional[str]
+        view_id : typing.Optional[str]
+
+        search : typing.Optional[str]
 
         language : typing.Optional[str]
+
+        status : typing.Optional[str]
+
+        usage_status : typing.Optional[str]
+
+        page : typing.Optional[int]
+
+        limit : typing.Optional[int]
+
+        sort : typing.Optional[str]
+
+        x_language : typing.Optional[str]
 
         accept_language : typing.Optional[str]
 
@@ -50,18 +86,25 @@ class RawBillsClient:
 
         Returns
         -------
-        HttpResponse[typing.List[BillSchema]]
-            OK
+        HttpResponse[ListPublicBillsApiV2PublicBillsGet200Envelope]
+            Object record list response
         """
         _response = self._client_wrapper.httpx_client.request(
-            "v1/public/bills",
+            "v2/public/bills",
             method="GET",
             params={
                 "workspace_id": workspace_id,
-                "lang": lang,
+                "view_id": view_id,
+                "search": search,
                 "language": language,
+                "status": status,
+                "usage_status": usage_status,
+                "page": page,
+                "limit": limit,
+                "sort": sort,
             },
             headers={
+                "X-Language": str(x_language) if x_language is not None else None,
                 "Accept-Language": str(accept_language) if accept_language is not None else None,
             },
             request_options=request_options,
@@ -69,42 +112,31 @@ class RawBillsClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    typing.List[BillSchema],
+                    ListPublicBillsApiV2PublicBillsGet200Envelope,
                     construct_type(
-                        type_=typing.List[BillSchema],  # type: ignore
+                        type_=ListPublicBillsApiV2PublicBillsGet200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return HttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 403:
-                raise ForbiddenError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -114,94 +146,44 @@ class RawBillsClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    def api_routers_v_1_bills_public_api_create_public_bill(
+    def create_public_bill_api(
         self,
         *,
-        external_id: typing.Optional[str] = OMIT,
-        contact_id: typing.Optional[str] = OMIT,
-        contact_external_id: typing.Optional[str] = OMIT,
-        company_id: typing.Optional[str] = OMIT,
-        company_external_id: typing.Optional[str] = OMIT,
-        issued_date: typing.Optional[str] = OMIT,
-        due_date: typing.Optional[str] = OMIT,
-        payment_date: typing.Optional[str] = OMIT,
-        status: typing.Optional[str] = OMIT,
-        currency: typing.Optional[str] = OMIT,
-        description: typing.Optional[str] = OMIT,
-        amount: typing.Optional[float] = OMIT,
-        amount_without_tax: typing.Optional[float] = OMIT,
-        notes: typing.Optional[str] = OMIT,
-        tax_rate: typing.Optional[float] = OMIT,
-        tax_inclusive: typing.Optional[bool] = OMIT,
-        tax_option: typing.Optional[str] = OMIT,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = OMIT,
+        form_view_id: typing.Optional[str] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> HttpResponse[PublicBillResponse]:
+    ) -> HttpResponse[CreatePublicBillApiV2PublicBillsPost200Envelope]:
         """
         Parameters
         ----------
-        external_id : typing.Optional[str]
+        workspace_id : typing.Optional[str]
 
-        contact_id : typing.Optional[str]
+        view_id : typing.Optional[str]
 
-        contact_external_id : typing.Optional[str]
+        form_view_id : typing.Optional[str]
 
-        company_id : typing.Optional[str]
-
-        company_external_id : typing.Optional[str]
-
-        issued_date : typing.Optional[str]
-
-        due_date : typing.Optional[str]
-
-        payment_date : typing.Optional[str]
-
-        status : typing.Optional[str]
-
-        currency : typing.Optional[str]
-
-        description : typing.Optional[str]
-
-        amount : typing.Optional[float]
-
-        amount_without_tax : typing.Optional[float]
-
-        notes : typing.Optional[str]
-
-        tax_rate : typing.Optional[float]
-
-        tax_inclusive : typing.Optional[bool]
-
-        tax_option : typing.Optional[str]
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        HttpResponse[PublicBillResponse]
-            OK
+        HttpResponse[CreatePublicBillApiV2PublicBillsPost200Envelope]
+            Successful Response
         """
         _response = self._client_wrapper.httpx_client.request(
-            "v1/public/bills",
+            "v2/public/bills",
             method="POST",
+            params={
+                "workspace_id": workspace_id,
+            },
             json={
-                "external_id": external_id,
-                "contact_id": contact_id,
-                "contact_external_id": contact_external_id,
-                "company_id": company_id,
-                "company_external_id": company_external_id,
-                "issued_date": issued_date,
-                "due_date": due_date,
-                "payment_date": payment_date,
-                "status": status,
-                "currency": currency,
-                "description": description,
-                "amount": amount,
-                "amount_without_tax": amount_without_tax,
-                "notes": notes,
-                "tax_rate": tax_rate,
-                "tax_inclusive": tax_inclusive,
-                "tax_option": tax_option,
+                "view_id": view_id,
+                "form_view_id": form_view_id,
+                "properties": properties,
             },
             headers={
                 "content-type": "application/json",
@@ -212,53 +194,31 @@ class RawBillsClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    PublicBillResponse,
+                    CreatePublicBillApiV2PublicBillsPost200Envelope,
                     construct_type(
-                        type_=PublicBillResponse,  # type: ignore
+                        type_=CreatePublicBillApiV2PublicBillsPost200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return HttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 403:
-                raise ForbiddenError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -268,16 +228,90 @@ class RawBillsClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    def api_routers_v_1_bills_public_api_get_public_bill(
+    def upload_public_bill_file_api(
+        self,
+        *,
+        file: core.File,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> HttpResponse[UploadPublicBillFileApiV2PublicBillsFilesPost200Envelope]:
+        """
+        Parameters
+        ----------
+        file : core.File
+            See core.File for more documentation
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[UploadPublicBillFileApiV2PublicBillsFilesPost200Envelope]
+            Successful Response
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            "v2/public/bills/files",
+            method="POST",
+            params={
+                "workspace_id": workspace_id,
+            },
+            data={},
+            files={
+                "file": file,
+            },
+            request_options=request_options,
+            omit=OMIT,
+            force_multipart=True,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    UploadPublicBillFileApiV2PublicBillsFilesPost200Envelope,
+                    construct_type(
+                        type_=UploadPublicBillFileApiV2PublicBillsFilesPost200Envelope,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    def get_public_bill_api(
         self,
         bill_id: str,
         *,
         external_id: typing.Optional[str] = None,
-        lang: typing.Optional[str] = None,
-        language: typing.Optional[str] = None,
-        accept_language: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = None,
+        form_view_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> HttpResponse[BillSchema]:
+    ) -> HttpResponse[GetPublicBillApiV2PublicBillsBillIdGet200Envelope]:
         """
         Parameters
         ----------
@@ -285,83 +319,59 @@ class RawBillsClient:
 
         external_id : typing.Optional[str]
 
-        lang : typing.Optional[str]
+        workspace_id : typing.Optional[str]
 
-        language : typing.Optional[str]
+        view_id : typing.Optional[str]
 
-        accept_language : typing.Optional[str]
+        form_view_id : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        HttpResponse[BillSchema]
-            OK
+        HttpResponse[GetPublicBillApiV2PublicBillsBillIdGet200Envelope]
+            Object record detail response. The base detail payload is intentionally thin; drawer sections load through scoped endpoints.
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"v1/public/bills/{jsonable_encoder(bill_id)}",
+            f"v2/public/bills/{jsonable_encoder(bill_id)}",
             method="GET",
             params={
                 "external_id": external_id,
-                "lang": lang,
-                "language": language,
-            },
-            headers={
-                "Accept-Language": str(accept_language) if accept_language is not None else None,
+                "workspace_id": workspace_id,
+                "view_id": view_id,
+                "form_view_id": form_view_id,
             },
             request_options=request_options,
         )
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    BillSchema,
+                    GetPublicBillApiV2PublicBillsBillIdGet200Envelope,
                     construct_type(
-                        type_=BillSchema,  # type: ignore
+                        type_=GetPublicBillApiV2PublicBillsBillIdGet200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return HttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 403:
-                raise ForbiddenError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -371,29 +381,17 @@ class RawBillsClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    def api_routers_v_1_bills_public_api_update_public_bill(
+    def update_public_bill_api(
         self,
         bill_id: str,
         *,
-        external_id: typing.Optional[str] = OMIT,
-        contact_id: typing.Optional[str] = OMIT,
-        contact_external_id: typing.Optional[str] = OMIT,
-        company_id: typing.Optional[str] = OMIT,
-        company_external_id: typing.Optional[str] = OMIT,
-        issued_date: typing.Optional[str] = OMIT,
-        due_date: typing.Optional[str] = OMIT,
-        payment_date: typing.Optional[str] = OMIT,
-        status: typing.Optional[str] = OMIT,
-        currency: typing.Optional[str] = OMIT,
-        description: typing.Optional[str] = OMIT,
-        amount: typing.Optional[float] = OMIT,
-        amount_without_tax: typing.Optional[float] = OMIT,
-        notes: typing.Optional[str] = OMIT,
-        tax_rate: typing.Optional[float] = OMIT,
-        tax_inclusive: typing.Optional[bool] = OMIT,
-        tax_option: typing.Optional[str] = OMIT,
+        external_id: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = OMIT,
+        form_view_id: typing.Optional[str] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> HttpResponse[PublicBillResponse]:
+    ) -> HttpResponse[UpdatePublicBillApiV2PublicBillsBillIdPut200Envelope]:
         """
         Parameters
         ----------
@@ -401,67 +399,33 @@ class RawBillsClient:
 
         external_id : typing.Optional[str]
 
-        contact_id : typing.Optional[str]
+        workspace_id : typing.Optional[str]
 
-        contact_external_id : typing.Optional[str]
+        view_id : typing.Optional[str]
 
-        company_id : typing.Optional[str]
+        form_view_id : typing.Optional[str]
 
-        company_external_id : typing.Optional[str]
-
-        issued_date : typing.Optional[str]
-
-        due_date : typing.Optional[str]
-
-        payment_date : typing.Optional[str]
-
-        status : typing.Optional[str]
-
-        currency : typing.Optional[str]
-
-        description : typing.Optional[str]
-
-        amount : typing.Optional[float]
-
-        amount_without_tax : typing.Optional[float]
-
-        notes : typing.Optional[str]
-
-        tax_rate : typing.Optional[float]
-
-        tax_inclusive : typing.Optional[bool]
-
-        tax_option : typing.Optional[str]
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        HttpResponse[PublicBillResponse]
-            OK
+        HttpResponse[UpdatePublicBillApiV2PublicBillsBillIdPut200Envelope]
+            Successful Response
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"v1/public/bills/{jsonable_encoder(bill_id)}",
+            f"v2/public/bills/{jsonable_encoder(bill_id)}",
             method="PUT",
-            json={
+            params={
                 "external_id": external_id,
-                "contact_id": contact_id,
-                "contact_external_id": contact_external_id,
-                "company_id": company_id,
-                "company_external_id": company_external_id,
-                "issued_date": issued_date,
-                "due_date": due_date,
-                "payment_date": payment_date,
-                "status": status,
-                "currency": currency,
-                "description": description,
-                "amount": amount,
-                "amount_without_tax": amount_without_tax,
-                "notes": notes,
-                "tax_rate": tax_rate,
-                "tax_inclusive": tax_inclusive,
-                "tax_option": tax_option,
+                "workspace_id": workspace_id,
+            },
+            json={
+                "view_id": view_id,
+                "form_view_id": form_view_id,
+                "properties": properties,
             },
             headers={
                 "content-type": "application/json",
@@ -472,64 +436,31 @@ class RawBillsClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    PublicBillResponse,
+                    UpdatePublicBillApiV2PublicBillsBillIdPut200Envelope,
                     construct_type(
-                        type_=PublicBillResponse,  # type: ignore
+                        type_=UpdatePublicBillApiV2PublicBillsBillIdPut200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return HttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 403:
-                raise ForbiddenError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 409:
-                raise ConflictError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -539,13 +470,14 @@ class RawBillsClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    def api_routers_v_1_bills_public_api_delete_public_bill(
+    def delete_public_bill_api(
         self,
         bill_id: str,
         *,
         external_id: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> HttpResponse[PublicBillResponse]:
+    ) -> HttpResponse[DeletePublicBillApiV2PublicBillsBillIdDelete200Envelope]:
         """
         Parameters
         ----------
@@ -553,72 +485,53 @@ class RawBillsClient:
 
         external_id : typing.Optional[str]
 
+        workspace_id : typing.Optional[str]
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        HttpResponse[PublicBillResponse]
-            OK
+        HttpResponse[DeletePublicBillApiV2PublicBillsBillIdDelete200Envelope]
+            Successful Response
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"v1/public/bills/{jsonable_encoder(bill_id)}",
+            f"v2/public/bills/{jsonable_encoder(bill_id)}",
             method="DELETE",
             params={
                 "external_id": external_id,
+                "workspace_id": workspace_id,
             },
             request_options=request_options,
         )
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    PublicBillResponse,
+                    DeletePublicBillApiV2PublicBillsBillIdDelete200Envelope,
                     construct_type(
-                        type_=PublicBillResponse,  # type: ignore
+                        type_=DeletePublicBillApiV2PublicBillsBillIdDelete200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return HttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 403:
-                raise ForbiddenError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -633,23 +546,44 @@ class AsyncRawBillsClient:
     def __init__(self, *, client_wrapper: AsyncClientWrapper):
         self._client_wrapper = client_wrapper
 
-    async def api_routers_v_1_bills_public_api_list_workspace_bills(
+    async def list_public_bills_api(
         self,
         *,
         workspace_id: typing.Optional[str] = None,
-        lang: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = None,
+        search: typing.Optional[str] = None,
         language: typing.Optional[str] = None,
+        status: typing.Optional[str] = None,
+        usage_status: typing.Optional[str] = None,
+        page: typing.Optional[int] = None,
+        limit: typing.Optional[int] = None,
+        sort: typing.Optional[str] = None,
+        x_language: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> AsyncHttpResponse[typing.List[BillSchema]]:
+    ) -> AsyncHttpResponse[ListPublicBillsApiV2PublicBillsGet200Envelope]:
         """
         Parameters
         ----------
         workspace_id : typing.Optional[str]
 
-        lang : typing.Optional[str]
+        view_id : typing.Optional[str]
+
+        search : typing.Optional[str]
 
         language : typing.Optional[str]
+
+        status : typing.Optional[str]
+
+        usage_status : typing.Optional[str]
+
+        page : typing.Optional[int]
+
+        limit : typing.Optional[int]
+
+        sort : typing.Optional[str]
+
+        x_language : typing.Optional[str]
 
         accept_language : typing.Optional[str]
 
@@ -658,18 +592,25 @@ class AsyncRawBillsClient:
 
         Returns
         -------
-        AsyncHttpResponse[typing.List[BillSchema]]
-            OK
+        AsyncHttpResponse[ListPublicBillsApiV2PublicBillsGet200Envelope]
+            Object record list response
         """
         _response = await self._client_wrapper.httpx_client.request(
-            "v1/public/bills",
+            "v2/public/bills",
             method="GET",
             params={
                 "workspace_id": workspace_id,
-                "lang": lang,
+                "view_id": view_id,
+                "search": search,
                 "language": language,
+                "status": status,
+                "usage_status": usage_status,
+                "page": page,
+                "limit": limit,
+                "sort": sort,
             },
             headers={
+                "X-Language": str(x_language) if x_language is not None else None,
                 "Accept-Language": str(accept_language) if accept_language is not None else None,
             },
             request_options=request_options,
@@ -677,42 +618,31 @@ class AsyncRawBillsClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    typing.List[BillSchema],
+                    ListPublicBillsApiV2PublicBillsGet200Envelope,
                     construct_type(
-                        type_=typing.List[BillSchema],  # type: ignore
+                        type_=ListPublicBillsApiV2PublicBillsGet200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return AsyncHttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 403:
-                raise ForbiddenError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -722,94 +652,44 @@ class AsyncRawBillsClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    async def api_routers_v_1_bills_public_api_create_public_bill(
+    async def create_public_bill_api(
         self,
         *,
-        external_id: typing.Optional[str] = OMIT,
-        contact_id: typing.Optional[str] = OMIT,
-        contact_external_id: typing.Optional[str] = OMIT,
-        company_id: typing.Optional[str] = OMIT,
-        company_external_id: typing.Optional[str] = OMIT,
-        issued_date: typing.Optional[str] = OMIT,
-        due_date: typing.Optional[str] = OMIT,
-        payment_date: typing.Optional[str] = OMIT,
-        status: typing.Optional[str] = OMIT,
-        currency: typing.Optional[str] = OMIT,
-        description: typing.Optional[str] = OMIT,
-        amount: typing.Optional[float] = OMIT,
-        amount_without_tax: typing.Optional[float] = OMIT,
-        notes: typing.Optional[str] = OMIT,
-        tax_rate: typing.Optional[float] = OMIT,
-        tax_inclusive: typing.Optional[bool] = OMIT,
-        tax_option: typing.Optional[str] = OMIT,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = OMIT,
+        form_view_id: typing.Optional[str] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> AsyncHttpResponse[PublicBillResponse]:
+    ) -> AsyncHttpResponse[CreatePublicBillApiV2PublicBillsPost200Envelope]:
         """
         Parameters
         ----------
-        external_id : typing.Optional[str]
+        workspace_id : typing.Optional[str]
 
-        contact_id : typing.Optional[str]
+        view_id : typing.Optional[str]
 
-        contact_external_id : typing.Optional[str]
+        form_view_id : typing.Optional[str]
 
-        company_id : typing.Optional[str]
-
-        company_external_id : typing.Optional[str]
-
-        issued_date : typing.Optional[str]
-
-        due_date : typing.Optional[str]
-
-        payment_date : typing.Optional[str]
-
-        status : typing.Optional[str]
-
-        currency : typing.Optional[str]
-
-        description : typing.Optional[str]
-
-        amount : typing.Optional[float]
-
-        amount_without_tax : typing.Optional[float]
-
-        notes : typing.Optional[str]
-
-        tax_rate : typing.Optional[float]
-
-        tax_inclusive : typing.Optional[bool]
-
-        tax_option : typing.Optional[str]
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        AsyncHttpResponse[PublicBillResponse]
-            OK
+        AsyncHttpResponse[CreatePublicBillApiV2PublicBillsPost200Envelope]
+            Successful Response
         """
         _response = await self._client_wrapper.httpx_client.request(
-            "v1/public/bills",
+            "v2/public/bills",
             method="POST",
+            params={
+                "workspace_id": workspace_id,
+            },
             json={
-                "external_id": external_id,
-                "contact_id": contact_id,
-                "contact_external_id": contact_external_id,
-                "company_id": company_id,
-                "company_external_id": company_external_id,
-                "issued_date": issued_date,
-                "due_date": due_date,
-                "payment_date": payment_date,
-                "status": status,
-                "currency": currency,
-                "description": description,
-                "amount": amount,
-                "amount_without_tax": amount_without_tax,
-                "notes": notes,
-                "tax_rate": tax_rate,
-                "tax_inclusive": tax_inclusive,
-                "tax_option": tax_option,
+                "view_id": view_id,
+                "form_view_id": form_view_id,
+                "properties": properties,
             },
             headers={
                 "content-type": "application/json",
@@ -820,53 +700,31 @@ class AsyncRawBillsClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    PublicBillResponse,
+                    CreatePublicBillApiV2PublicBillsPost200Envelope,
                     construct_type(
-                        type_=PublicBillResponse,  # type: ignore
+                        type_=CreatePublicBillApiV2PublicBillsPost200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return AsyncHttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 403:
-                raise ForbiddenError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -876,16 +734,90 @@ class AsyncRawBillsClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    async def api_routers_v_1_bills_public_api_get_public_bill(
+    async def upload_public_bill_file_api(
+        self,
+        *,
+        file: core.File,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> AsyncHttpResponse[UploadPublicBillFileApiV2PublicBillsFilesPost200Envelope]:
+        """
+        Parameters
+        ----------
+        file : core.File
+            See core.File for more documentation
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[UploadPublicBillFileApiV2PublicBillsFilesPost200Envelope]
+            Successful Response
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            "v2/public/bills/files",
+            method="POST",
+            params={
+                "workspace_id": workspace_id,
+            },
+            data={},
+            files={
+                "file": file,
+            },
+            request_options=request_options,
+            omit=OMIT,
+            force_multipart=True,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    UploadPublicBillFileApiV2PublicBillsFilesPost200Envelope,
+                    construct_type(
+                        type_=UploadPublicBillFileApiV2PublicBillsFilesPost200Envelope,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    async def get_public_bill_api(
         self,
         bill_id: str,
         *,
         external_id: typing.Optional[str] = None,
-        lang: typing.Optional[str] = None,
-        language: typing.Optional[str] = None,
-        accept_language: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = None,
+        form_view_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> AsyncHttpResponse[BillSchema]:
+    ) -> AsyncHttpResponse[GetPublicBillApiV2PublicBillsBillIdGet200Envelope]:
         """
         Parameters
         ----------
@@ -893,83 +825,59 @@ class AsyncRawBillsClient:
 
         external_id : typing.Optional[str]
 
-        lang : typing.Optional[str]
+        workspace_id : typing.Optional[str]
 
-        language : typing.Optional[str]
+        view_id : typing.Optional[str]
 
-        accept_language : typing.Optional[str]
+        form_view_id : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        AsyncHttpResponse[BillSchema]
-            OK
+        AsyncHttpResponse[GetPublicBillApiV2PublicBillsBillIdGet200Envelope]
+            Object record detail response. The base detail payload is intentionally thin; drawer sections load through scoped endpoints.
         """
         _response = await self._client_wrapper.httpx_client.request(
-            f"v1/public/bills/{jsonable_encoder(bill_id)}",
+            f"v2/public/bills/{jsonable_encoder(bill_id)}",
             method="GET",
             params={
                 "external_id": external_id,
-                "lang": lang,
-                "language": language,
-            },
-            headers={
-                "Accept-Language": str(accept_language) if accept_language is not None else None,
+                "workspace_id": workspace_id,
+                "view_id": view_id,
+                "form_view_id": form_view_id,
             },
             request_options=request_options,
         )
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    BillSchema,
+                    GetPublicBillApiV2PublicBillsBillIdGet200Envelope,
                     construct_type(
-                        type_=BillSchema,  # type: ignore
+                        type_=GetPublicBillApiV2PublicBillsBillIdGet200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return AsyncHttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 403:
-                raise ForbiddenError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -979,29 +887,17 @@ class AsyncRawBillsClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    async def api_routers_v_1_bills_public_api_update_public_bill(
+    async def update_public_bill_api(
         self,
         bill_id: str,
         *,
-        external_id: typing.Optional[str] = OMIT,
-        contact_id: typing.Optional[str] = OMIT,
-        contact_external_id: typing.Optional[str] = OMIT,
-        company_id: typing.Optional[str] = OMIT,
-        company_external_id: typing.Optional[str] = OMIT,
-        issued_date: typing.Optional[str] = OMIT,
-        due_date: typing.Optional[str] = OMIT,
-        payment_date: typing.Optional[str] = OMIT,
-        status: typing.Optional[str] = OMIT,
-        currency: typing.Optional[str] = OMIT,
-        description: typing.Optional[str] = OMIT,
-        amount: typing.Optional[float] = OMIT,
-        amount_without_tax: typing.Optional[float] = OMIT,
-        notes: typing.Optional[str] = OMIT,
-        tax_rate: typing.Optional[float] = OMIT,
-        tax_inclusive: typing.Optional[bool] = OMIT,
-        tax_option: typing.Optional[str] = OMIT,
+        external_id: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = OMIT,
+        form_view_id: typing.Optional[str] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> AsyncHttpResponse[PublicBillResponse]:
+    ) -> AsyncHttpResponse[UpdatePublicBillApiV2PublicBillsBillIdPut200Envelope]:
         """
         Parameters
         ----------
@@ -1009,67 +905,33 @@ class AsyncRawBillsClient:
 
         external_id : typing.Optional[str]
 
-        contact_id : typing.Optional[str]
+        workspace_id : typing.Optional[str]
 
-        contact_external_id : typing.Optional[str]
+        view_id : typing.Optional[str]
 
-        company_id : typing.Optional[str]
+        form_view_id : typing.Optional[str]
 
-        company_external_id : typing.Optional[str]
-
-        issued_date : typing.Optional[str]
-
-        due_date : typing.Optional[str]
-
-        payment_date : typing.Optional[str]
-
-        status : typing.Optional[str]
-
-        currency : typing.Optional[str]
-
-        description : typing.Optional[str]
-
-        amount : typing.Optional[float]
-
-        amount_without_tax : typing.Optional[float]
-
-        notes : typing.Optional[str]
-
-        tax_rate : typing.Optional[float]
-
-        tax_inclusive : typing.Optional[bool]
-
-        tax_option : typing.Optional[str]
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        AsyncHttpResponse[PublicBillResponse]
-            OK
+        AsyncHttpResponse[UpdatePublicBillApiV2PublicBillsBillIdPut200Envelope]
+            Successful Response
         """
         _response = await self._client_wrapper.httpx_client.request(
-            f"v1/public/bills/{jsonable_encoder(bill_id)}",
+            f"v2/public/bills/{jsonable_encoder(bill_id)}",
             method="PUT",
-            json={
+            params={
                 "external_id": external_id,
-                "contact_id": contact_id,
-                "contact_external_id": contact_external_id,
-                "company_id": company_id,
-                "company_external_id": company_external_id,
-                "issued_date": issued_date,
-                "due_date": due_date,
-                "payment_date": payment_date,
-                "status": status,
-                "currency": currency,
-                "description": description,
-                "amount": amount,
-                "amount_without_tax": amount_without_tax,
-                "notes": notes,
-                "tax_rate": tax_rate,
-                "tax_inclusive": tax_inclusive,
-                "tax_option": tax_option,
+                "workspace_id": workspace_id,
+            },
+            json={
+                "view_id": view_id,
+                "form_view_id": form_view_id,
+                "properties": properties,
             },
             headers={
                 "content-type": "application/json",
@@ -1080,64 +942,31 @@ class AsyncRawBillsClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    PublicBillResponse,
+                    UpdatePublicBillApiV2PublicBillsBillIdPut200Envelope,
                     construct_type(
-                        type_=PublicBillResponse,  # type: ignore
+                        type_=UpdatePublicBillApiV2PublicBillsBillIdPut200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return AsyncHttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 403:
-                raise ForbiddenError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 409:
-                raise ConflictError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -1147,13 +976,14 @@ class AsyncRawBillsClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    async def api_routers_v_1_bills_public_api_delete_public_bill(
+    async def delete_public_bill_api(
         self,
         bill_id: str,
         *,
         external_id: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> AsyncHttpResponse[PublicBillResponse]:
+    ) -> AsyncHttpResponse[DeletePublicBillApiV2PublicBillsBillIdDelete200Envelope]:
         """
         Parameters
         ----------
@@ -1161,72 +991,53 @@ class AsyncRawBillsClient:
 
         external_id : typing.Optional[str]
 
+        workspace_id : typing.Optional[str]
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        AsyncHttpResponse[PublicBillResponse]
-            OK
+        AsyncHttpResponse[DeletePublicBillApiV2PublicBillsBillIdDelete200Envelope]
+            Successful Response
         """
         _response = await self._client_wrapper.httpx_client.request(
-            f"v1/public/bills/{jsonable_encoder(bill_id)}",
+            f"v2/public/bills/{jsonable_encoder(bill_id)}",
             method="DELETE",
             params={
                 "external_id": external_id,
+                "workspace_id": workspace_id,
             },
             request_options=request_options,
         )
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    PublicBillResponse,
+                    DeletePublicBillApiV2PublicBillsBillIdDelete200Envelope,
                     construct_type(
-                        type_=PublicBillResponse,  # type: ignore
+                        type_=DeletePublicBillApiV2PublicBillsBillIdDelete200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return AsyncHttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 403:
-                raise ForbiddenError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),

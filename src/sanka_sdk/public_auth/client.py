@@ -4,8 +4,28 @@ import typing
 
 from ..core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ..core.request_options import RequestOptions
-from ..types.public_auth_whoami_response import PublicAuthWhoamiResponse
+from ..types.get_public_auth_session_api_v_2_public_auth_session_get_200_envelope import (
+    GetPublicAuthSessionApiV2PublicAuthSessionGet200Envelope,
+)
+from ..types.get_public_auth_whoami_api_v_2_public_auth_whoami_get_200_envelope import (
+    GetPublicAuthWhoamiApiV2PublicAuthWhoamiGet200Envelope,
+)
+from ..types.record_public_auth_mcp_tool_call_api_v_2_public_auth_mcp_session_tool_call_log_post_200_envelope import (
+    RecordPublicAuthMcpToolCallApiV2PublicAuthMcpSessionToolCallLogPost200Envelope,
+)
+from ..types.revoke_public_auth_session_api_v_2_public_auth_session_revoke_post_200_envelope import (
+    RevokePublicAuthSessionApiV2PublicAuthSessionRevokePost200Envelope,
+)
+from ..types.switch_public_auth_mcp_session_workspace_api_v_2_public_auth_mcp_session_switch_workspace_post_200_envelope import (
+    SwitchPublicAuthMcpSessionWorkspaceApiV2PublicAuthMcpSessionSwitchWorkspacePost200Envelope,
+)
+from ..types.switch_public_auth_session_workspace_api_v_2_public_auth_session_switch_workspace_post_200_envelope import (
+    SwitchPublicAuthSessionWorkspaceApiV2PublicAuthSessionSwitchWorkspacePost200Envelope,
+)
 from .raw_client import AsyncRawPublicAuthClient, RawPublicAuthClient
+
+# this is used as the default value for optional parameters
+OMIT = typing.cast(typing.Any, ...)
 
 
 class PublicAuthClient:
@@ -23,31 +43,259 @@ class PublicAuthClient:
         """
         return self._raw_client
 
-    def api_routers_v_1_public_auth_api_get_public_auth_whoami(
-        self, *, request_options: typing.Optional[RequestOptions] = None
-    ) -> PublicAuthWhoamiResponse:
+    def get_public_auth_whoami_api(
+        self, *, workspace_id: typing.Optional[str] = None, request_options: typing.Optional[RequestOptions] = None
+    ) -> GetPublicAuthWhoamiApiV2PublicAuthWhoamiGet200Envelope:
         """
         Parameters
         ----------
+        workspace_id : typing.Optional[str]
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        PublicAuthWhoamiResponse
-            OK
+        GetPublicAuthWhoamiApiV2PublicAuthWhoamiGet200Envelope
+            Authenticated public developer identity.
 
         Examples
         --------
         from sanka_sdk import SankaClient
 
         client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
-        client.public_auth.api_routers_v_1_public_auth_api_get_public_auth_whoami()
+        client.public_auth.get_public_auth_whoami_api()
         """
-        _response = self._raw_client.api_routers_v_1_public_auth_api_get_public_auth_whoami(
-            request_options=request_options
+        _response = self._raw_client.get_public_auth_whoami_api(
+            workspace_id=workspace_id, request_options=request_options
+        )
+        return _response.data
+
+    def get_public_auth_session_api(
+        self, *, workspace_id: typing.Optional[str] = None, request_options: typing.Optional[RequestOptions] = None
+    ) -> GetPublicAuthSessionApiV2PublicAuthSessionGet200Envelope:
+        """
+        Parameters
+        ----------
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        GetPublicAuthSessionApiV2PublicAuthSessionGet200Envelope
+            Successful Response
+
+        Examples
+        --------
+        from sanka_sdk import SankaClient
+
+        client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+        client.public_auth.get_public_auth_session_api()
+        """
+        _response = self._raw_client.get_public_auth_session_api(
+            workspace_id=workspace_id, request_options=request_options
+        )
+        return _response.data
+
+    def switch_public_auth_session_workspace_api(
+        self,
+        *,
+        auth_workspace_switch_request_workspace_id: str,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> SwitchPublicAuthSessionWorkspaceApiV2PublicAuthSessionSwitchWorkspacePost200Envelope:
+        """
+        Parameters
+        ----------
+        auth_workspace_switch_request_workspace_id : str
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        SwitchPublicAuthSessionWorkspaceApiV2PublicAuthSessionSwitchWorkspacePost200Envelope
+            Successful Response
+
+        Examples
+        --------
+        from sanka_sdk import SankaClient
+
+        client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+        client.public_auth.switch_public_auth_session_workspace_api(
+            auth_workspace_switch_request_workspace_id="workspace_id",
+        )
+        """
+        _response = self._raw_client.switch_public_auth_session_workspace_api(
+            auth_workspace_switch_request_workspace_id=auth_workspace_switch_request_workspace_id,
+            workspace_id=workspace_id,
+            request_options=request_options,
+        )
+        return _response.data
+
+    def switch_public_auth_mcp_session_workspace_api(
+        self,
+        *,
+        auth_workspace_switch_request_workspace_id: str,
+        workspace_id: typing.Optional[str] = None,
+        sanka_mcp_session_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> SwitchPublicAuthMcpSessionWorkspaceApiV2PublicAuthMcpSessionSwitchWorkspacePost200Envelope:
+        """
+        Parameters
+        ----------
+        auth_workspace_switch_request_workspace_id : str
+
+        workspace_id : typing.Optional[str]
+
+        sanka_mcp_session_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        SwitchPublicAuthMcpSessionWorkspaceApiV2PublicAuthMcpSessionSwitchWorkspacePost200Envelope
+            Successful Response
+
+        Examples
+        --------
+        from sanka_sdk import SankaClient
+
+        client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+        client.public_auth.switch_public_auth_mcp_session_workspace_api(
+            auth_workspace_switch_request_workspace_id="workspace_id",
+        )
+        """
+        _response = self._raw_client.switch_public_auth_mcp_session_workspace_api(
+            auth_workspace_switch_request_workspace_id=auth_workspace_switch_request_workspace_id,
+            workspace_id=workspace_id,
+            sanka_mcp_session_id=sanka_mcp_session_id,
+            request_options=request_options,
+        )
+        return _response.data
+
+    def record_public_auth_mcp_tool_call_api(
+        self,
+        *,
+        tool_name: str,
+        workspace_id: typing.Optional[str] = None,
+        sanka_mcp_session_id: typing.Optional[str] = None,
+        tool_title: typing.Optional[str] = OMIT,
+        resource: typing.Optional[str] = OMIT,
+        operation: typing.Optional[str] = OMIT,
+        success: typing.Optional[bool] = OMIT,
+        duration_ms: typing.Optional[float] = OMIT,
+        client_name: typing.Optional[str] = OMIT,
+        client_version: typing.Optional[str] = OMIT,
+        error: typing.Optional[str] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> RecordPublicAuthMcpToolCallApiV2PublicAuthMcpSessionToolCallLogPost200Envelope:
+        """
+        Parameters
+        ----------
+        tool_name : str
+
+        workspace_id : typing.Optional[str]
+
+        sanka_mcp_session_id : typing.Optional[str]
+
+        tool_title : typing.Optional[str]
+
+        resource : typing.Optional[str]
+
+        operation : typing.Optional[str]
+
+        success : typing.Optional[bool]
+
+        duration_ms : typing.Optional[float]
+
+        client_name : typing.Optional[str]
+
+        client_version : typing.Optional[str]
+
+        error : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        RecordPublicAuthMcpToolCallApiV2PublicAuthMcpSessionToolCallLogPost200Envelope
+            Successful Response
+
+        Examples
+        --------
+        from sanka_sdk import SankaClient
+
+        client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+        client.public_auth.record_public_auth_mcp_tool_call_api(
+            tool_name="tool_name",
+        )
+        """
+        _response = self._raw_client.record_public_auth_mcp_tool_call_api(
+            tool_name=tool_name,
+            workspace_id=workspace_id,
+            sanka_mcp_session_id=sanka_mcp_session_id,
+            tool_title=tool_title,
+            resource=resource,
+            operation=operation,
+            success=success,
+            duration_ms=duration_ms,
+            client_name=client_name,
+            client_version=client_version,
+            error=error,
+            request_options=request_options,
+        )
+        return _response.data
+
+    def revoke_public_auth_session_api(
+        self, *, workspace_id: typing.Optional[str] = None, request_options: typing.Optional[RequestOptions] = None
+    ) -> RevokePublicAuthSessionApiV2PublicAuthSessionRevokePost200Envelope:
+        """
+        Parameters
+        ----------
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        RevokePublicAuthSessionApiV2PublicAuthSessionRevokePost200Envelope
+            Successful Response
+
+        Examples
+        --------
+        from sanka_sdk import SankaClient
+
+        client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+        client.public_auth.revoke_public_auth_session_api()
+        """
+        _response = self._raw_client.revoke_public_auth_session_api(
+            workspace_id=workspace_id, request_options=request_options
         )
         return _response.data
 
@@ -67,19 +315,21 @@ class AsyncPublicAuthClient:
         """
         return self._raw_client
 
-    async def api_routers_v_1_public_auth_api_get_public_auth_whoami(
-        self, *, request_options: typing.Optional[RequestOptions] = None
-    ) -> PublicAuthWhoamiResponse:
+    async def get_public_auth_whoami_api(
+        self, *, workspace_id: typing.Optional[str] = None, request_options: typing.Optional[RequestOptions] = None
+    ) -> GetPublicAuthWhoamiApiV2PublicAuthWhoamiGet200Envelope:
         """
         Parameters
         ----------
+        workspace_id : typing.Optional[str]
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        PublicAuthWhoamiResponse
-            OK
+        GetPublicAuthWhoamiApiV2PublicAuthWhoamiGet200Envelope
+            Authenticated public developer identity.
 
         Examples
         --------
@@ -88,17 +338,283 @@ class AsyncPublicAuthClient:
         from sanka_sdk import AsyncSankaClient
 
         client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
 
 
         async def main() -> None:
-            await client.public_auth.api_routers_v_1_public_auth_api_get_public_auth_whoami()
+            await client.public_auth.get_public_auth_whoami_api()
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.api_routers_v_1_public_auth_api_get_public_auth_whoami(
-            request_options=request_options
+        _response = await self._raw_client.get_public_auth_whoami_api(
+            workspace_id=workspace_id, request_options=request_options
+        )
+        return _response.data
+
+    async def get_public_auth_session_api(
+        self, *, workspace_id: typing.Optional[str] = None, request_options: typing.Optional[RequestOptions] = None
+    ) -> GetPublicAuthSessionApiV2PublicAuthSessionGet200Envelope:
+        """
+        Parameters
+        ----------
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        GetPublicAuthSessionApiV2PublicAuthSessionGet200Envelope
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sanka_sdk import AsyncSankaClient
+
+        client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.public_auth.get_public_auth_session_api()
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.get_public_auth_session_api(
+            workspace_id=workspace_id, request_options=request_options
+        )
+        return _response.data
+
+    async def switch_public_auth_session_workspace_api(
+        self,
+        *,
+        auth_workspace_switch_request_workspace_id: str,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> SwitchPublicAuthSessionWorkspaceApiV2PublicAuthSessionSwitchWorkspacePost200Envelope:
+        """
+        Parameters
+        ----------
+        auth_workspace_switch_request_workspace_id : str
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        SwitchPublicAuthSessionWorkspaceApiV2PublicAuthSessionSwitchWorkspacePost200Envelope
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sanka_sdk import AsyncSankaClient
+
+        client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.public_auth.switch_public_auth_session_workspace_api(
+                auth_workspace_switch_request_workspace_id="workspace_id",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.switch_public_auth_session_workspace_api(
+            auth_workspace_switch_request_workspace_id=auth_workspace_switch_request_workspace_id,
+            workspace_id=workspace_id,
+            request_options=request_options,
+        )
+        return _response.data
+
+    async def switch_public_auth_mcp_session_workspace_api(
+        self,
+        *,
+        auth_workspace_switch_request_workspace_id: str,
+        workspace_id: typing.Optional[str] = None,
+        sanka_mcp_session_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> SwitchPublicAuthMcpSessionWorkspaceApiV2PublicAuthMcpSessionSwitchWorkspacePost200Envelope:
+        """
+        Parameters
+        ----------
+        auth_workspace_switch_request_workspace_id : str
+
+        workspace_id : typing.Optional[str]
+
+        sanka_mcp_session_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        SwitchPublicAuthMcpSessionWorkspaceApiV2PublicAuthMcpSessionSwitchWorkspacePost200Envelope
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sanka_sdk import AsyncSankaClient
+
+        client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.public_auth.switch_public_auth_mcp_session_workspace_api(
+                auth_workspace_switch_request_workspace_id="workspace_id",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.switch_public_auth_mcp_session_workspace_api(
+            auth_workspace_switch_request_workspace_id=auth_workspace_switch_request_workspace_id,
+            workspace_id=workspace_id,
+            sanka_mcp_session_id=sanka_mcp_session_id,
+            request_options=request_options,
+        )
+        return _response.data
+
+    async def record_public_auth_mcp_tool_call_api(
+        self,
+        *,
+        tool_name: str,
+        workspace_id: typing.Optional[str] = None,
+        sanka_mcp_session_id: typing.Optional[str] = None,
+        tool_title: typing.Optional[str] = OMIT,
+        resource: typing.Optional[str] = OMIT,
+        operation: typing.Optional[str] = OMIT,
+        success: typing.Optional[bool] = OMIT,
+        duration_ms: typing.Optional[float] = OMIT,
+        client_name: typing.Optional[str] = OMIT,
+        client_version: typing.Optional[str] = OMIT,
+        error: typing.Optional[str] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> RecordPublicAuthMcpToolCallApiV2PublicAuthMcpSessionToolCallLogPost200Envelope:
+        """
+        Parameters
+        ----------
+        tool_name : str
+
+        workspace_id : typing.Optional[str]
+
+        sanka_mcp_session_id : typing.Optional[str]
+
+        tool_title : typing.Optional[str]
+
+        resource : typing.Optional[str]
+
+        operation : typing.Optional[str]
+
+        success : typing.Optional[bool]
+
+        duration_ms : typing.Optional[float]
+
+        client_name : typing.Optional[str]
+
+        client_version : typing.Optional[str]
+
+        error : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        RecordPublicAuthMcpToolCallApiV2PublicAuthMcpSessionToolCallLogPost200Envelope
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sanka_sdk import AsyncSankaClient
+
+        client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.public_auth.record_public_auth_mcp_tool_call_api(
+                tool_name="tool_name",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.record_public_auth_mcp_tool_call_api(
+            tool_name=tool_name,
+            workspace_id=workspace_id,
+            sanka_mcp_session_id=sanka_mcp_session_id,
+            tool_title=tool_title,
+            resource=resource,
+            operation=operation,
+            success=success,
+            duration_ms=duration_ms,
+            client_name=client_name,
+            client_version=client_version,
+            error=error,
+            request_options=request_options,
+        )
+        return _response.data
+
+    async def revoke_public_auth_session_api(
+        self, *, workspace_id: typing.Optional[str] = None, request_options: typing.Optional[RequestOptions] = None
+    ) -> RevokePublicAuthSessionApiV2PublicAuthSessionRevokePost200Envelope:
+        """
+        Parameters
+        ----------
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        RevokePublicAuthSessionApiV2PublicAuthSessionRevokePost200Envelope
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sanka_sdk import AsyncSankaClient
+
+        client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.public_auth.revoke_public_auth_session_api()
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.revoke_public_auth_session_api(
+            workspace_id=workspace_id, request_options=request_options
         )
         return _response.data

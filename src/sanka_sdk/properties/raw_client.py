@@ -10,13 +10,25 @@ from ..core.jsonable_encoder import jsonable_encoder
 from ..core.request_options import RequestOptions
 from ..core.serialization import convert_and_respect_annotation_metadata
 from ..core.unchecked_base_model import construct_type
-from ..errors.bad_request_error import BadRequestError
-from ..errors.forbidden_error import ForbiddenError
-from ..errors.internal_server_error import InternalServerError
-from ..errors.not_found_error import NotFoundError
-from ..types.public_property_mutation_response import PublicPropertyMutationResponse
-from ..types.public_property_schema import PublicPropertySchema
-from ..types.public_property_upsert_request_choice_values import PublicPropertyUpsertRequestChoiceValues
+from ..errors.unauthorized_error import UnauthorizedError
+from ..errors.unprocessable_entity_error import UnprocessableEntityError
+from ..types.create_public_developer_property_api_v_2_public_properties_object_name_post_200_envelope import (
+    CreatePublicDeveloperPropertyApiV2PublicPropertiesObjectNamePost200Envelope,
+)
+from ..types.delete_public_developer_property_api_v_2_public_properties_object_name_property_ref_delete_200_envelope import (
+    DeletePublicDeveloperPropertyApiV2PublicPropertiesObjectNamePropertyRefDelete200Envelope,
+)
+from ..types.error_envelope import ErrorEnvelope
+from ..types.list_public_developer_properties_api_v_2_public_properties_object_name_get_200_envelope import (
+    ListPublicDeveloperPropertiesApiV2PublicPropertiesObjectNameGet200Envelope,
+)
+from ..types.public_property_mutation_request_choice_values import PublicPropertyMutationRequestChoiceValues
+from ..types.retrieve_public_developer_property_api_v_2_public_properties_object_name_property_ref_get_200_envelope import (
+    RetrievePublicDeveloperPropertyApiV2PublicPropertiesObjectNamePropertyRefGet200Envelope,
+)
+from ..types.update_public_developer_property_api_v_2_public_properties_object_name_property_ref_put_200_envelope import (
+    UpdatePublicDeveloperPropertyApiV2PublicPropertiesObjectNamePropertyRefPut200Envelope,
+)
 
 # this is used as the default value for optional parameters
 OMIT = typing.cast(typing.Any, ...)
@@ -26,104 +38,112 @@ class RawPropertiesClient:
     def __init__(self, *, client_wrapper: SyncClientWrapper):
         self._client_wrapper = client_wrapper
 
-    def api_routers_v_1_properties_public_api_list_public_properties(
+    def list_public_developer_properties_api(
         self,
         object_name: str,
         *,
-        workspace_id: typing.Optional[str] = None,
-        custom_only: typing.Optional[bool] = None,
-        lang: typing.Optional[str] = None,
+        custom_object_id: typing.Optional[str] = None,
+        q: typing.Optional[str] = None,
+        search: typing.Optional[str] = None,
+        page: typing.Optional[int] = None,
+        limit: typing.Optional[int] = None,
         language: typing.Optional[str] = None,
-        accept_language: typing.Optional[str] = None,
+        lang: typing.Optional[str] = None,
+        scope: typing.Optional[str] = None,
+        source: typing.Optional[str] = None,
+        provider: typing.Optional[str] = None,
+        channel_id: typing.Optional[str] = None,
+        external_object_type: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> HttpResponse[typing.List[PublicPropertySchema]]:
+    ) -> HttpResponse[ListPublicDeveloperPropertiesApiV2PublicPropertiesObjectNameGet200Envelope]:
         """
         Parameters
         ----------
         object_name : str
 
-        workspace_id : typing.Optional[str]
+        custom_object_id : typing.Optional[str]
 
-        custom_only : typing.Optional[bool]
+        q : typing.Optional[str]
 
-        lang : typing.Optional[str]
+        search : typing.Optional[str]
+
+        page : typing.Optional[int]
+
+        limit : typing.Optional[int]
 
         language : typing.Optional[str]
 
-        accept_language : typing.Optional[str]
+        lang : typing.Optional[str]
+
+        scope : typing.Optional[str]
+
+        source : typing.Optional[str]
+
+        provider : typing.Optional[str]
+
+        channel_id : typing.Optional[str]
+
+        external_object_type : typing.Optional[str]
+
+        workspace_id : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        HttpResponse[typing.List[PublicPropertySchema]]
-            OK
+        HttpResponse[ListPublicDeveloperPropertiesApiV2PublicPropertiesObjectNameGet200Envelope]
+            Successful Response
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"v1/public/properties/{jsonable_encoder(object_name)}",
+            f"v2/public/properties/{jsonable_encoder(object_name)}",
             method="GET",
             params={
-                "workspace_id": workspace_id,
-                "custom_only": custom_only,
-                "lang": lang,
+                "custom_object_id": custom_object_id,
+                "q": q,
+                "search": search,
+                "page": page,
+                "limit": limit,
                 "language": language,
-            },
-            headers={
-                "Accept-Language": str(accept_language) if accept_language is not None else None,
+                "lang": lang,
+                "scope": scope,
+                "source": source,
+                "provider": provider,
+                "channel_id": channel_id,
+                "external_object_type": external_object_type,
+                "workspace_id": workspace_id,
             },
             request_options=request_options,
         )
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    typing.List[PublicPropertySchema],
+                    ListPublicDeveloperPropertiesApiV2PublicPropertiesObjectNameGet200Envelope,
                     construct_type(
-                        type_=typing.List[PublicPropertySchema],  # type: ignore
+                        type_=ListPublicDeveloperPropertiesApiV2PublicPropertiesObjectNameGet200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return HttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 403:
-                raise ForbiddenError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -133,89 +153,123 @@ class RawPropertiesClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    def api_routers_v_1_properties_public_api_create_public_property(
+    def create_public_developer_property_api(
         self,
         object_name: str,
         *,
+        workspace_id: typing.Optional[str] = None,
         name: typing.Optional[str] = OMIT,
-        internal_name: typing.Optional[str] = OMIT,
         type: typing.Optional[str] = OMIT,
-        description: typing.Optional[str] = OMIT,
-        number_format: typing.Optional[str] = OMIT,
-        choice_values: typing.Optional[PublicPropertyUpsertRequestChoiceValues] = OMIT,
-        conditional_choice_mapping: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
-        tag_values: typing.Optional[typing.Sequence[str]] = OMIT,
-        unique: typing.Optional[bool] = OMIT,
-        required_field: typing.Optional[bool] = OMIT,
-        multiple_select: typing.Optional[bool] = OMIT,
-        show_badge: typing.Optional[bool] = OMIT,
-        badge_color: typing.Optional[str] = OMIT,
-        order: typing.Optional[int] = OMIT,
+        internal_name: typing.Optional[str] = OMIT,
+        choice_values: typing.Optional[PublicPropertyMutationRequestChoiceValues] = OMIT,
+        choice_labels: typing.Optional[typing.Sequence[str]] = OMIT,
+        choice_colors: typing.Optional[typing.Sequence[str]] = OMIT,
+        target: typing.Optional[str] = OMIT,
+        language: typing.Optional[str] = OMIT,
+        custom_object_id: typing.Optional[str] = OMIT,
+        editor_variant: typing.Optional[str] = OMIT,
+        source: typing.Optional[str] = OMIT,
+        scope: typing.Optional[str] = OMIT,
+        provider: typing.Optional[str] = OMIT,
+        channel_id: typing.Optional[str] = OMIT,
+        external_object_type: typing.Optional[str] = OMIT,
+        external_id: typing.Optional[str] = OMIT,
+        field_type: typing.Optional[str] = OMIT,
+        group_name: typing.Optional[str] = OMIT,
+        options: typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]] = OMIT,
+        dry_run: typing.Optional[bool] = OMIT,
+        confirm: typing.Optional[bool] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> HttpResponse[PublicPropertyMutationResponse]:
+    ) -> HttpResponse[CreatePublicDeveloperPropertyApiV2PublicPropertiesObjectNamePost200Envelope]:
         """
         Parameters
         ----------
         object_name : str
 
-        name : typing.Optional[str]
+        workspace_id : typing.Optional[str]
 
-        internal_name : typing.Optional[str]
+        name : typing.Optional[str]
 
         type : typing.Optional[str]
 
-        description : typing.Optional[str]
+        internal_name : typing.Optional[str]
 
-        number_format : typing.Optional[str]
+        choice_values : typing.Optional[PublicPropertyMutationRequestChoiceValues]
 
-        choice_values : typing.Optional[PublicPropertyUpsertRequestChoiceValues]
+        choice_labels : typing.Optional[typing.Sequence[str]]
 
-        conditional_choice_mapping : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
+        choice_colors : typing.Optional[typing.Sequence[str]]
 
-        tag_values : typing.Optional[typing.Sequence[str]]
+        target : typing.Optional[str]
 
-        unique : typing.Optional[bool]
+        language : typing.Optional[str]
 
-        required_field : typing.Optional[bool]
+        custom_object_id : typing.Optional[str]
 
-        multiple_select : typing.Optional[bool]
+        editor_variant : typing.Optional[str]
 
-        show_badge : typing.Optional[bool]
+        source : typing.Optional[str]
 
-        badge_color : typing.Optional[str]
+        scope : typing.Optional[str]
 
-        order : typing.Optional[int]
+        provider : typing.Optional[str]
+
+        channel_id : typing.Optional[str]
+
+        external_object_type : typing.Optional[str]
+
+        external_id : typing.Optional[str]
+
+        field_type : typing.Optional[str]
+
+        group_name : typing.Optional[str]
+
+        options : typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]]
+
+        dry_run : typing.Optional[bool]
+
+        confirm : typing.Optional[bool]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        HttpResponse[PublicPropertyMutationResponse]
-            OK
+        HttpResponse[CreatePublicDeveloperPropertyApiV2PublicPropertiesObjectNamePost200Envelope]
+            Successful Response
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"v1/public/properties/{jsonable_encoder(object_name)}",
+            f"v2/public/properties/{jsonable_encoder(object_name)}",
             method="POST",
+            params={
+                "workspace_id": workspace_id,
+            },
             json={
                 "name": name,
-                "internal_name": internal_name,
                 "type": type,
-                "description": description,
-                "number_format": number_format,
+                "internal_name": internal_name,
                 "choice_values": convert_and_respect_annotation_metadata(
                     object_=choice_values,
-                    annotation=typing.Optional[PublicPropertyUpsertRequestChoiceValues],
+                    annotation=typing.Optional[PublicPropertyMutationRequestChoiceValues],
                     direction="write",
                 ),
-                "conditional_choice_mapping": conditional_choice_mapping,
-                "tag_values": tag_values,
-                "unique": unique,
-                "required_field": required_field,
-                "multiple_select": multiple_select,
-                "show_badge": show_badge,
-                "badge_color": badge_color,
-                "order": order,
+                "choice_labels": choice_labels,
+                "choice_colors": choice_colors,
+                "target": target,
+                "language": language,
+                "custom_object_id": custom_object_id,
+                "editor_variant": editor_variant,
+                "source": source,
+                "scope": scope,
+                "provider": provider,
+                "channel_id": channel_id,
+                "external_object_type": external_object_type,
+                "external_id": external_id,
+                "field_type": field_type,
+                "group_name": group_name,
+                "options": options,
+                "dry_run": dry_run,
+                "confirm": confirm,
             },
             headers={
                 "content-type": "application/json",
@@ -226,53 +280,31 @@ class RawPropertiesClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    PublicPropertyMutationResponse,
+                    CreatePublicDeveloperPropertyApiV2PublicPropertiesObjectNamePost200Envelope,
                     construct_type(
-                        type_=PublicPropertyMutationResponse,  # type: ignore
+                        type_=CreatePublicDeveloperPropertyApiV2PublicPropertiesObjectNamePost200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return HttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 403:
-                raise ForbiddenError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -282,17 +314,137 @@ class RawPropertiesClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    def api_routers_v_1_properties_public_api_retrieve_public_property(
+    def retrieve_public_developer_property_api(
+        self,
+        object_name: str,
+        property_ref: str,
+        *,
+        custom_object_id: typing.Optional[str] = None,
+        language: typing.Optional[str] = None,
+        lang: typing.Optional[str] = None,
+        scope: typing.Optional[str] = None,
+        source: typing.Optional[str] = None,
+        provider: typing.Optional[str] = None,
+        channel_id: typing.Optional[str] = None,
+        external_object_type: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> HttpResponse[RetrievePublicDeveloperPropertyApiV2PublicPropertiesObjectNamePropertyRefGet200Envelope]:
+        """
+        Parameters
+        ----------
+        object_name : str
+
+        property_ref : str
+
+        custom_object_id : typing.Optional[str]
+
+        language : typing.Optional[str]
+
+        lang : typing.Optional[str]
+
+        scope : typing.Optional[str]
+
+        source : typing.Optional[str]
+
+        provider : typing.Optional[str]
+
+        channel_id : typing.Optional[str]
+
+        external_object_type : typing.Optional[str]
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[RetrievePublicDeveloperPropertyApiV2PublicPropertiesObjectNamePropertyRefGet200Envelope]
+            Successful Response
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            f"v2/public/properties/{jsonable_encoder(object_name)}/{jsonable_encoder(property_ref)}",
+            method="GET",
+            params={
+                "custom_object_id": custom_object_id,
+                "language": language,
+                "lang": lang,
+                "scope": scope,
+                "source": source,
+                "provider": provider,
+                "channel_id": channel_id,
+                "external_object_type": external_object_type,
+                "workspace_id": workspace_id,
+            },
+            request_options=request_options,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    RetrievePublicDeveloperPropertyApiV2PublicPropertiesObjectNamePropertyRefGet200Envelope,
+                    construct_type(
+                        type_=RetrievePublicDeveloperPropertyApiV2PublicPropertiesObjectNamePropertyRefGet200Envelope,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    def update_public_developer_property_api(
         self,
         object_name: str,
         property_ref: str,
         *,
         workspace_id: typing.Optional[str] = None,
-        lang: typing.Optional[str] = None,
-        language: typing.Optional[str] = None,
-        accept_language: typing.Optional[str] = None,
+        name: typing.Optional[str] = OMIT,
+        type: typing.Optional[str] = OMIT,
+        internal_name: typing.Optional[str] = OMIT,
+        choice_values: typing.Optional[PublicPropertyMutationRequestChoiceValues] = OMIT,
+        choice_labels: typing.Optional[typing.Sequence[str]] = OMIT,
+        choice_colors: typing.Optional[typing.Sequence[str]] = OMIT,
+        target: typing.Optional[str] = OMIT,
+        language: typing.Optional[str] = OMIT,
+        custom_object_id: typing.Optional[str] = OMIT,
+        editor_variant: typing.Optional[str] = OMIT,
+        source: typing.Optional[str] = OMIT,
+        scope: typing.Optional[str] = OMIT,
+        provider: typing.Optional[str] = OMIT,
+        channel_id: typing.Optional[str] = OMIT,
+        external_object_type: typing.Optional[str] = OMIT,
+        external_id: typing.Optional[str] = OMIT,
+        field_type: typing.Optional[str] = OMIT,
+        group_name: typing.Optional[str] = OMIT,
+        options: typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]] = OMIT,
+        dry_run: typing.Optional[bool] = OMIT,
+        confirm: typing.Optional[bool] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> HttpResponse[PublicPropertySchema]:
+    ) -> HttpResponse[UpdatePublicDeveloperPropertyApiV2PublicPropertiesObjectNamePropertyRefPut200Envelope]:
         """
         Parameters
         ----------
@@ -302,178 +454,88 @@ class RawPropertiesClient:
 
         workspace_id : typing.Optional[str]
 
-        lang : typing.Optional[str]
-
-        language : typing.Optional[str]
-
-        accept_language : typing.Optional[str]
-
-        request_options : typing.Optional[RequestOptions]
-            Request-specific configuration.
-
-        Returns
-        -------
-        HttpResponse[PublicPropertySchema]
-            OK
-        """
-        _response = self._client_wrapper.httpx_client.request(
-            f"v1/public/properties/{jsonable_encoder(object_name)}/{jsonable_encoder(property_ref)}",
-            method="GET",
-            params={
-                "workspace_id": workspace_id,
-                "lang": lang,
-                "language": language,
-            },
-            headers={
-                "Accept-Language": str(accept_language) if accept_language is not None else None,
-            },
-            request_options=request_options,
-        )
-        try:
-            if 200 <= _response.status_code < 300:
-                _data = typing.cast(
-                    PublicPropertySchema,
-                    construct_type(
-                        type_=PublicPropertySchema,  # type: ignore
-                        object_=_response.json(),
-                    ),
-                )
-                return HttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 403:
-                raise ForbiddenError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
-        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
-
-    def api_routers_v_1_properties_public_api_update_public_property(
-        self,
-        object_name: str,
-        property_ref: str,
-        *,
-        name: typing.Optional[str] = OMIT,
-        internal_name: typing.Optional[str] = OMIT,
-        type: typing.Optional[str] = OMIT,
-        description: typing.Optional[str] = OMIT,
-        number_format: typing.Optional[str] = OMIT,
-        choice_values: typing.Optional[PublicPropertyUpsertRequestChoiceValues] = OMIT,
-        conditional_choice_mapping: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
-        tag_values: typing.Optional[typing.Sequence[str]] = OMIT,
-        unique: typing.Optional[bool] = OMIT,
-        required_field: typing.Optional[bool] = OMIT,
-        multiple_select: typing.Optional[bool] = OMIT,
-        show_badge: typing.Optional[bool] = OMIT,
-        badge_color: typing.Optional[str] = OMIT,
-        order: typing.Optional[int] = OMIT,
-        request_options: typing.Optional[RequestOptions] = None,
-    ) -> HttpResponse[PublicPropertyMutationResponse]:
-        """
-        Parameters
-        ----------
-        object_name : str
-
-        property_ref : str
-
         name : typing.Optional[str]
-
-        internal_name : typing.Optional[str]
 
         type : typing.Optional[str]
 
-        description : typing.Optional[str]
+        internal_name : typing.Optional[str]
 
-        number_format : typing.Optional[str]
+        choice_values : typing.Optional[PublicPropertyMutationRequestChoiceValues]
 
-        choice_values : typing.Optional[PublicPropertyUpsertRequestChoiceValues]
+        choice_labels : typing.Optional[typing.Sequence[str]]
 
-        conditional_choice_mapping : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
+        choice_colors : typing.Optional[typing.Sequence[str]]
 
-        tag_values : typing.Optional[typing.Sequence[str]]
+        target : typing.Optional[str]
 
-        unique : typing.Optional[bool]
+        language : typing.Optional[str]
 
-        required_field : typing.Optional[bool]
+        custom_object_id : typing.Optional[str]
 
-        multiple_select : typing.Optional[bool]
+        editor_variant : typing.Optional[str]
 
-        show_badge : typing.Optional[bool]
+        source : typing.Optional[str]
 
-        badge_color : typing.Optional[str]
+        scope : typing.Optional[str]
 
-        order : typing.Optional[int]
+        provider : typing.Optional[str]
+
+        channel_id : typing.Optional[str]
+
+        external_object_type : typing.Optional[str]
+
+        external_id : typing.Optional[str]
+
+        field_type : typing.Optional[str]
+
+        group_name : typing.Optional[str]
+
+        options : typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]]
+
+        dry_run : typing.Optional[bool]
+
+        confirm : typing.Optional[bool]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        HttpResponse[PublicPropertyMutationResponse]
-            OK
+        HttpResponse[UpdatePublicDeveloperPropertyApiV2PublicPropertiesObjectNamePropertyRefPut200Envelope]
+            Successful Response
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"v1/public/properties/{jsonable_encoder(object_name)}/{jsonable_encoder(property_ref)}",
+            f"v2/public/properties/{jsonable_encoder(object_name)}/{jsonable_encoder(property_ref)}",
             method="PUT",
+            params={
+                "workspace_id": workspace_id,
+            },
             json={
                 "name": name,
-                "internal_name": internal_name,
                 "type": type,
-                "description": description,
-                "number_format": number_format,
+                "internal_name": internal_name,
                 "choice_values": convert_and_respect_annotation_metadata(
                     object_=choice_values,
-                    annotation=typing.Optional[PublicPropertyUpsertRequestChoiceValues],
+                    annotation=typing.Optional[PublicPropertyMutationRequestChoiceValues],
                     direction="write",
                 ),
-                "conditional_choice_mapping": conditional_choice_mapping,
-                "tag_values": tag_values,
-                "unique": unique,
-                "required_field": required_field,
-                "multiple_select": multiple_select,
-                "show_badge": show_badge,
-                "badge_color": badge_color,
-                "order": order,
+                "choice_labels": choice_labels,
+                "choice_colors": choice_colors,
+                "target": target,
+                "language": language,
+                "custom_object_id": custom_object_id,
+                "editor_variant": editor_variant,
+                "source": source,
+                "scope": scope,
+                "provider": provider,
+                "channel_id": channel_id,
+                "external_object_type": external_object_type,
+                "external_id": external_id,
+                "field_type": field_type,
+                "group_name": group_name,
+                "options": options,
+                "dry_run": dry_run,
+                "confirm": confirm,
             },
             headers={
                 "content-type": "application/json",
@@ -484,53 +546,31 @@ class RawPropertiesClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    PublicPropertyMutationResponse,
+                    UpdatePublicDeveloperPropertyApiV2PublicPropertiesObjectNamePropertyRefPut200Envelope,
                     construct_type(
-                        type_=PublicPropertyMutationResponse,  # type: ignore
+                        type_=UpdatePublicDeveloperPropertyApiV2PublicPropertiesObjectNamePropertyRefPut200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return HttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 403:
-                raise ForbiddenError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -540,9 +580,24 @@ class RawPropertiesClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    def api_routers_v_1_properties_public_api_delete_public_property(
-        self, object_name: str, property_ref: str, *, request_options: typing.Optional[RequestOptions] = None
-    ) -> HttpResponse[PublicPropertyMutationResponse]:
+    def delete_public_developer_property_api(
+        self,
+        object_name: str,
+        property_ref: str,
+        *,
+        custom_object_id: typing.Optional[str] = None,
+        target: typing.Optional[str] = None,
+        source: typing.Optional[str] = None,
+        scope: typing.Optional[str] = None,
+        provider: typing.Optional[str] = None,
+        channel_id: typing.Optional[str] = None,
+        external_object_type: typing.Optional[str] = None,
+        dry_run: typing.Optional[bool] = None,
+        confirm: typing.Optional[bool] = None,
+        language: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> HttpResponse[DeletePublicDeveloperPropertyApiV2PublicPropertiesObjectNamePropertyRefDelete200Envelope]:
         """
         Parameters
         ----------
@@ -550,69 +605,82 @@ class RawPropertiesClient:
 
         property_ref : str
 
+        custom_object_id : typing.Optional[str]
+
+        target : typing.Optional[str]
+
+        source : typing.Optional[str]
+
+        scope : typing.Optional[str]
+
+        provider : typing.Optional[str]
+
+        channel_id : typing.Optional[str]
+
+        external_object_type : typing.Optional[str]
+
+        dry_run : typing.Optional[bool]
+
+        confirm : typing.Optional[bool]
+
+        language : typing.Optional[str]
+
+        workspace_id : typing.Optional[str]
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        HttpResponse[PublicPropertyMutationResponse]
-            OK
+        HttpResponse[DeletePublicDeveloperPropertyApiV2PublicPropertiesObjectNamePropertyRefDelete200Envelope]
+            Successful Response
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"v1/public/properties/{jsonable_encoder(object_name)}/{jsonable_encoder(property_ref)}",
+            f"v2/public/properties/{jsonable_encoder(object_name)}/{jsonable_encoder(property_ref)}",
             method="DELETE",
+            params={
+                "custom_object_id": custom_object_id,
+                "target": target,
+                "source": source,
+                "scope": scope,
+                "provider": provider,
+                "channel_id": channel_id,
+                "external_object_type": external_object_type,
+                "dry_run": dry_run,
+                "confirm": confirm,
+                "language": language,
+                "workspace_id": workspace_id,
+            },
             request_options=request_options,
         )
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    PublicPropertyMutationResponse,
+                    DeletePublicDeveloperPropertyApiV2PublicPropertiesObjectNamePropertyRefDelete200Envelope,
                     construct_type(
-                        type_=PublicPropertyMutationResponse,  # type: ignore
+                        type_=DeletePublicDeveloperPropertyApiV2PublicPropertiesObjectNamePropertyRefDelete200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return HttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 403:
-                raise ForbiddenError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -627,104 +695,112 @@ class AsyncRawPropertiesClient:
     def __init__(self, *, client_wrapper: AsyncClientWrapper):
         self._client_wrapper = client_wrapper
 
-    async def api_routers_v_1_properties_public_api_list_public_properties(
+    async def list_public_developer_properties_api(
         self,
         object_name: str,
         *,
-        workspace_id: typing.Optional[str] = None,
-        custom_only: typing.Optional[bool] = None,
-        lang: typing.Optional[str] = None,
+        custom_object_id: typing.Optional[str] = None,
+        q: typing.Optional[str] = None,
+        search: typing.Optional[str] = None,
+        page: typing.Optional[int] = None,
+        limit: typing.Optional[int] = None,
         language: typing.Optional[str] = None,
-        accept_language: typing.Optional[str] = None,
+        lang: typing.Optional[str] = None,
+        scope: typing.Optional[str] = None,
+        source: typing.Optional[str] = None,
+        provider: typing.Optional[str] = None,
+        channel_id: typing.Optional[str] = None,
+        external_object_type: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> AsyncHttpResponse[typing.List[PublicPropertySchema]]:
+    ) -> AsyncHttpResponse[ListPublicDeveloperPropertiesApiV2PublicPropertiesObjectNameGet200Envelope]:
         """
         Parameters
         ----------
         object_name : str
 
-        workspace_id : typing.Optional[str]
+        custom_object_id : typing.Optional[str]
 
-        custom_only : typing.Optional[bool]
+        q : typing.Optional[str]
 
-        lang : typing.Optional[str]
+        search : typing.Optional[str]
+
+        page : typing.Optional[int]
+
+        limit : typing.Optional[int]
 
         language : typing.Optional[str]
 
-        accept_language : typing.Optional[str]
+        lang : typing.Optional[str]
+
+        scope : typing.Optional[str]
+
+        source : typing.Optional[str]
+
+        provider : typing.Optional[str]
+
+        channel_id : typing.Optional[str]
+
+        external_object_type : typing.Optional[str]
+
+        workspace_id : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        AsyncHttpResponse[typing.List[PublicPropertySchema]]
-            OK
+        AsyncHttpResponse[ListPublicDeveloperPropertiesApiV2PublicPropertiesObjectNameGet200Envelope]
+            Successful Response
         """
         _response = await self._client_wrapper.httpx_client.request(
-            f"v1/public/properties/{jsonable_encoder(object_name)}",
+            f"v2/public/properties/{jsonable_encoder(object_name)}",
             method="GET",
             params={
-                "workspace_id": workspace_id,
-                "custom_only": custom_only,
-                "lang": lang,
+                "custom_object_id": custom_object_id,
+                "q": q,
+                "search": search,
+                "page": page,
+                "limit": limit,
                 "language": language,
-            },
-            headers={
-                "Accept-Language": str(accept_language) if accept_language is not None else None,
+                "lang": lang,
+                "scope": scope,
+                "source": source,
+                "provider": provider,
+                "channel_id": channel_id,
+                "external_object_type": external_object_type,
+                "workspace_id": workspace_id,
             },
             request_options=request_options,
         )
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    typing.List[PublicPropertySchema],
+                    ListPublicDeveloperPropertiesApiV2PublicPropertiesObjectNameGet200Envelope,
                     construct_type(
-                        type_=typing.List[PublicPropertySchema],  # type: ignore
+                        type_=ListPublicDeveloperPropertiesApiV2PublicPropertiesObjectNameGet200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return AsyncHttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 403:
-                raise ForbiddenError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -734,89 +810,123 @@ class AsyncRawPropertiesClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    async def api_routers_v_1_properties_public_api_create_public_property(
+    async def create_public_developer_property_api(
         self,
         object_name: str,
         *,
+        workspace_id: typing.Optional[str] = None,
         name: typing.Optional[str] = OMIT,
-        internal_name: typing.Optional[str] = OMIT,
         type: typing.Optional[str] = OMIT,
-        description: typing.Optional[str] = OMIT,
-        number_format: typing.Optional[str] = OMIT,
-        choice_values: typing.Optional[PublicPropertyUpsertRequestChoiceValues] = OMIT,
-        conditional_choice_mapping: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
-        tag_values: typing.Optional[typing.Sequence[str]] = OMIT,
-        unique: typing.Optional[bool] = OMIT,
-        required_field: typing.Optional[bool] = OMIT,
-        multiple_select: typing.Optional[bool] = OMIT,
-        show_badge: typing.Optional[bool] = OMIT,
-        badge_color: typing.Optional[str] = OMIT,
-        order: typing.Optional[int] = OMIT,
+        internal_name: typing.Optional[str] = OMIT,
+        choice_values: typing.Optional[PublicPropertyMutationRequestChoiceValues] = OMIT,
+        choice_labels: typing.Optional[typing.Sequence[str]] = OMIT,
+        choice_colors: typing.Optional[typing.Sequence[str]] = OMIT,
+        target: typing.Optional[str] = OMIT,
+        language: typing.Optional[str] = OMIT,
+        custom_object_id: typing.Optional[str] = OMIT,
+        editor_variant: typing.Optional[str] = OMIT,
+        source: typing.Optional[str] = OMIT,
+        scope: typing.Optional[str] = OMIT,
+        provider: typing.Optional[str] = OMIT,
+        channel_id: typing.Optional[str] = OMIT,
+        external_object_type: typing.Optional[str] = OMIT,
+        external_id: typing.Optional[str] = OMIT,
+        field_type: typing.Optional[str] = OMIT,
+        group_name: typing.Optional[str] = OMIT,
+        options: typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]] = OMIT,
+        dry_run: typing.Optional[bool] = OMIT,
+        confirm: typing.Optional[bool] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> AsyncHttpResponse[PublicPropertyMutationResponse]:
+    ) -> AsyncHttpResponse[CreatePublicDeveloperPropertyApiV2PublicPropertiesObjectNamePost200Envelope]:
         """
         Parameters
         ----------
         object_name : str
 
-        name : typing.Optional[str]
+        workspace_id : typing.Optional[str]
 
-        internal_name : typing.Optional[str]
+        name : typing.Optional[str]
 
         type : typing.Optional[str]
 
-        description : typing.Optional[str]
+        internal_name : typing.Optional[str]
 
-        number_format : typing.Optional[str]
+        choice_values : typing.Optional[PublicPropertyMutationRequestChoiceValues]
 
-        choice_values : typing.Optional[PublicPropertyUpsertRequestChoiceValues]
+        choice_labels : typing.Optional[typing.Sequence[str]]
 
-        conditional_choice_mapping : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
+        choice_colors : typing.Optional[typing.Sequence[str]]
 
-        tag_values : typing.Optional[typing.Sequence[str]]
+        target : typing.Optional[str]
 
-        unique : typing.Optional[bool]
+        language : typing.Optional[str]
 
-        required_field : typing.Optional[bool]
+        custom_object_id : typing.Optional[str]
 
-        multiple_select : typing.Optional[bool]
+        editor_variant : typing.Optional[str]
 
-        show_badge : typing.Optional[bool]
+        source : typing.Optional[str]
 
-        badge_color : typing.Optional[str]
+        scope : typing.Optional[str]
 
-        order : typing.Optional[int]
+        provider : typing.Optional[str]
+
+        channel_id : typing.Optional[str]
+
+        external_object_type : typing.Optional[str]
+
+        external_id : typing.Optional[str]
+
+        field_type : typing.Optional[str]
+
+        group_name : typing.Optional[str]
+
+        options : typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]]
+
+        dry_run : typing.Optional[bool]
+
+        confirm : typing.Optional[bool]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        AsyncHttpResponse[PublicPropertyMutationResponse]
-            OK
+        AsyncHttpResponse[CreatePublicDeveloperPropertyApiV2PublicPropertiesObjectNamePost200Envelope]
+            Successful Response
         """
         _response = await self._client_wrapper.httpx_client.request(
-            f"v1/public/properties/{jsonable_encoder(object_name)}",
+            f"v2/public/properties/{jsonable_encoder(object_name)}",
             method="POST",
+            params={
+                "workspace_id": workspace_id,
+            },
             json={
                 "name": name,
-                "internal_name": internal_name,
                 "type": type,
-                "description": description,
-                "number_format": number_format,
+                "internal_name": internal_name,
                 "choice_values": convert_and_respect_annotation_metadata(
                     object_=choice_values,
-                    annotation=typing.Optional[PublicPropertyUpsertRequestChoiceValues],
+                    annotation=typing.Optional[PublicPropertyMutationRequestChoiceValues],
                     direction="write",
                 ),
-                "conditional_choice_mapping": conditional_choice_mapping,
-                "tag_values": tag_values,
-                "unique": unique,
-                "required_field": required_field,
-                "multiple_select": multiple_select,
-                "show_badge": show_badge,
-                "badge_color": badge_color,
-                "order": order,
+                "choice_labels": choice_labels,
+                "choice_colors": choice_colors,
+                "target": target,
+                "language": language,
+                "custom_object_id": custom_object_id,
+                "editor_variant": editor_variant,
+                "source": source,
+                "scope": scope,
+                "provider": provider,
+                "channel_id": channel_id,
+                "external_object_type": external_object_type,
+                "external_id": external_id,
+                "field_type": field_type,
+                "group_name": group_name,
+                "options": options,
+                "dry_run": dry_run,
+                "confirm": confirm,
             },
             headers={
                 "content-type": "application/json",
@@ -827,53 +937,31 @@ class AsyncRawPropertiesClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    PublicPropertyMutationResponse,
+                    CreatePublicDeveloperPropertyApiV2PublicPropertiesObjectNamePost200Envelope,
                     construct_type(
-                        type_=PublicPropertyMutationResponse,  # type: ignore
+                        type_=CreatePublicDeveloperPropertyApiV2PublicPropertiesObjectNamePost200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return AsyncHttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 403:
-                raise ForbiddenError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -883,17 +971,137 @@ class AsyncRawPropertiesClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    async def api_routers_v_1_properties_public_api_retrieve_public_property(
+    async def retrieve_public_developer_property_api(
+        self,
+        object_name: str,
+        property_ref: str,
+        *,
+        custom_object_id: typing.Optional[str] = None,
+        language: typing.Optional[str] = None,
+        lang: typing.Optional[str] = None,
+        scope: typing.Optional[str] = None,
+        source: typing.Optional[str] = None,
+        provider: typing.Optional[str] = None,
+        channel_id: typing.Optional[str] = None,
+        external_object_type: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> AsyncHttpResponse[RetrievePublicDeveloperPropertyApiV2PublicPropertiesObjectNamePropertyRefGet200Envelope]:
+        """
+        Parameters
+        ----------
+        object_name : str
+
+        property_ref : str
+
+        custom_object_id : typing.Optional[str]
+
+        language : typing.Optional[str]
+
+        lang : typing.Optional[str]
+
+        scope : typing.Optional[str]
+
+        source : typing.Optional[str]
+
+        provider : typing.Optional[str]
+
+        channel_id : typing.Optional[str]
+
+        external_object_type : typing.Optional[str]
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[RetrievePublicDeveloperPropertyApiV2PublicPropertiesObjectNamePropertyRefGet200Envelope]
+            Successful Response
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            f"v2/public/properties/{jsonable_encoder(object_name)}/{jsonable_encoder(property_ref)}",
+            method="GET",
+            params={
+                "custom_object_id": custom_object_id,
+                "language": language,
+                "lang": lang,
+                "scope": scope,
+                "source": source,
+                "provider": provider,
+                "channel_id": channel_id,
+                "external_object_type": external_object_type,
+                "workspace_id": workspace_id,
+            },
+            request_options=request_options,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    RetrievePublicDeveloperPropertyApiV2PublicPropertiesObjectNamePropertyRefGet200Envelope,
+                    construct_type(
+                        type_=RetrievePublicDeveloperPropertyApiV2PublicPropertiesObjectNamePropertyRefGet200Envelope,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    async def update_public_developer_property_api(
         self,
         object_name: str,
         property_ref: str,
         *,
         workspace_id: typing.Optional[str] = None,
-        lang: typing.Optional[str] = None,
-        language: typing.Optional[str] = None,
-        accept_language: typing.Optional[str] = None,
+        name: typing.Optional[str] = OMIT,
+        type: typing.Optional[str] = OMIT,
+        internal_name: typing.Optional[str] = OMIT,
+        choice_values: typing.Optional[PublicPropertyMutationRequestChoiceValues] = OMIT,
+        choice_labels: typing.Optional[typing.Sequence[str]] = OMIT,
+        choice_colors: typing.Optional[typing.Sequence[str]] = OMIT,
+        target: typing.Optional[str] = OMIT,
+        language: typing.Optional[str] = OMIT,
+        custom_object_id: typing.Optional[str] = OMIT,
+        editor_variant: typing.Optional[str] = OMIT,
+        source: typing.Optional[str] = OMIT,
+        scope: typing.Optional[str] = OMIT,
+        provider: typing.Optional[str] = OMIT,
+        channel_id: typing.Optional[str] = OMIT,
+        external_object_type: typing.Optional[str] = OMIT,
+        external_id: typing.Optional[str] = OMIT,
+        field_type: typing.Optional[str] = OMIT,
+        group_name: typing.Optional[str] = OMIT,
+        options: typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]] = OMIT,
+        dry_run: typing.Optional[bool] = OMIT,
+        confirm: typing.Optional[bool] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> AsyncHttpResponse[PublicPropertySchema]:
+    ) -> AsyncHttpResponse[UpdatePublicDeveloperPropertyApiV2PublicPropertiesObjectNamePropertyRefPut200Envelope]:
         """
         Parameters
         ----------
@@ -903,178 +1111,88 @@ class AsyncRawPropertiesClient:
 
         workspace_id : typing.Optional[str]
 
-        lang : typing.Optional[str]
-
-        language : typing.Optional[str]
-
-        accept_language : typing.Optional[str]
-
-        request_options : typing.Optional[RequestOptions]
-            Request-specific configuration.
-
-        Returns
-        -------
-        AsyncHttpResponse[PublicPropertySchema]
-            OK
-        """
-        _response = await self._client_wrapper.httpx_client.request(
-            f"v1/public/properties/{jsonable_encoder(object_name)}/{jsonable_encoder(property_ref)}",
-            method="GET",
-            params={
-                "workspace_id": workspace_id,
-                "lang": lang,
-                "language": language,
-            },
-            headers={
-                "Accept-Language": str(accept_language) if accept_language is not None else None,
-            },
-            request_options=request_options,
-        )
-        try:
-            if 200 <= _response.status_code < 300:
-                _data = typing.cast(
-                    PublicPropertySchema,
-                    construct_type(
-                        type_=PublicPropertySchema,  # type: ignore
-                        object_=_response.json(),
-                    ),
-                )
-                return AsyncHttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 403:
-                raise ForbiddenError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
-        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
-
-    async def api_routers_v_1_properties_public_api_update_public_property(
-        self,
-        object_name: str,
-        property_ref: str,
-        *,
-        name: typing.Optional[str] = OMIT,
-        internal_name: typing.Optional[str] = OMIT,
-        type: typing.Optional[str] = OMIT,
-        description: typing.Optional[str] = OMIT,
-        number_format: typing.Optional[str] = OMIT,
-        choice_values: typing.Optional[PublicPropertyUpsertRequestChoiceValues] = OMIT,
-        conditional_choice_mapping: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
-        tag_values: typing.Optional[typing.Sequence[str]] = OMIT,
-        unique: typing.Optional[bool] = OMIT,
-        required_field: typing.Optional[bool] = OMIT,
-        multiple_select: typing.Optional[bool] = OMIT,
-        show_badge: typing.Optional[bool] = OMIT,
-        badge_color: typing.Optional[str] = OMIT,
-        order: typing.Optional[int] = OMIT,
-        request_options: typing.Optional[RequestOptions] = None,
-    ) -> AsyncHttpResponse[PublicPropertyMutationResponse]:
-        """
-        Parameters
-        ----------
-        object_name : str
-
-        property_ref : str
-
         name : typing.Optional[str]
-
-        internal_name : typing.Optional[str]
 
         type : typing.Optional[str]
 
-        description : typing.Optional[str]
+        internal_name : typing.Optional[str]
 
-        number_format : typing.Optional[str]
+        choice_values : typing.Optional[PublicPropertyMutationRequestChoiceValues]
 
-        choice_values : typing.Optional[PublicPropertyUpsertRequestChoiceValues]
+        choice_labels : typing.Optional[typing.Sequence[str]]
 
-        conditional_choice_mapping : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
+        choice_colors : typing.Optional[typing.Sequence[str]]
 
-        tag_values : typing.Optional[typing.Sequence[str]]
+        target : typing.Optional[str]
 
-        unique : typing.Optional[bool]
+        language : typing.Optional[str]
 
-        required_field : typing.Optional[bool]
+        custom_object_id : typing.Optional[str]
 
-        multiple_select : typing.Optional[bool]
+        editor_variant : typing.Optional[str]
 
-        show_badge : typing.Optional[bool]
+        source : typing.Optional[str]
 
-        badge_color : typing.Optional[str]
+        scope : typing.Optional[str]
 
-        order : typing.Optional[int]
+        provider : typing.Optional[str]
+
+        channel_id : typing.Optional[str]
+
+        external_object_type : typing.Optional[str]
+
+        external_id : typing.Optional[str]
+
+        field_type : typing.Optional[str]
+
+        group_name : typing.Optional[str]
+
+        options : typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]]
+
+        dry_run : typing.Optional[bool]
+
+        confirm : typing.Optional[bool]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        AsyncHttpResponse[PublicPropertyMutationResponse]
-            OK
+        AsyncHttpResponse[UpdatePublicDeveloperPropertyApiV2PublicPropertiesObjectNamePropertyRefPut200Envelope]
+            Successful Response
         """
         _response = await self._client_wrapper.httpx_client.request(
-            f"v1/public/properties/{jsonable_encoder(object_name)}/{jsonable_encoder(property_ref)}",
+            f"v2/public/properties/{jsonable_encoder(object_name)}/{jsonable_encoder(property_ref)}",
             method="PUT",
+            params={
+                "workspace_id": workspace_id,
+            },
             json={
                 "name": name,
-                "internal_name": internal_name,
                 "type": type,
-                "description": description,
-                "number_format": number_format,
+                "internal_name": internal_name,
                 "choice_values": convert_and_respect_annotation_metadata(
                     object_=choice_values,
-                    annotation=typing.Optional[PublicPropertyUpsertRequestChoiceValues],
+                    annotation=typing.Optional[PublicPropertyMutationRequestChoiceValues],
                     direction="write",
                 ),
-                "conditional_choice_mapping": conditional_choice_mapping,
-                "tag_values": tag_values,
-                "unique": unique,
-                "required_field": required_field,
-                "multiple_select": multiple_select,
-                "show_badge": show_badge,
-                "badge_color": badge_color,
-                "order": order,
+                "choice_labels": choice_labels,
+                "choice_colors": choice_colors,
+                "target": target,
+                "language": language,
+                "custom_object_id": custom_object_id,
+                "editor_variant": editor_variant,
+                "source": source,
+                "scope": scope,
+                "provider": provider,
+                "channel_id": channel_id,
+                "external_object_type": external_object_type,
+                "external_id": external_id,
+                "field_type": field_type,
+                "group_name": group_name,
+                "options": options,
+                "dry_run": dry_run,
+                "confirm": confirm,
             },
             headers={
                 "content-type": "application/json",
@@ -1085,53 +1203,31 @@ class AsyncRawPropertiesClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    PublicPropertyMutationResponse,
+                    UpdatePublicDeveloperPropertyApiV2PublicPropertiesObjectNamePropertyRefPut200Envelope,
                     construct_type(
-                        type_=PublicPropertyMutationResponse,  # type: ignore
+                        type_=UpdatePublicDeveloperPropertyApiV2PublicPropertiesObjectNamePropertyRefPut200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return AsyncHttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 403:
-                raise ForbiddenError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -1141,9 +1237,24 @@ class AsyncRawPropertiesClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    async def api_routers_v_1_properties_public_api_delete_public_property(
-        self, object_name: str, property_ref: str, *, request_options: typing.Optional[RequestOptions] = None
-    ) -> AsyncHttpResponse[PublicPropertyMutationResponse]:
+    async def delete_public_developer_property_api(
+        self,
+        object_name: str,
+        property_ref: str,
+        *,
+        custom_object_id: typing.Optional[str] = None,
+        target: typing.Optional[str] = None,
+        source: typing.Optional[str] = None,
+        scope: typing.Optional[str] = None,
+        provider: typing.Optional[str] = None,
+        channel_id: typing.Optional[str] = None,
+        external_object_type: typing.Optional[str] = None,
+        dry_run: typing.Optional[bool] = None,
+        confirm: typing.Optional[bool] = None,
+        language: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> AsyncHttpResponse[DeletePublicDeveloperPropertyApiV2PublicPropertiesObjectNamePropertyRefDelete200Envelope]:
         """
         Parameters
         ----------
@@ -1151,69 +1262,82 @@ class AsyncRawPropertiesClient:
 
         property_ref : str
 
+        custom_object_id : typing.Optional[str]
+
+        target : typing.Optional[str]
+
+        source : typing.Optional[str]
+
+        scope : typing.Optional[str]
+
+        provider : typing.Optional[str]
+
+        channel_id : typing.Optional[str]
+
+        external_object_type : typing.Optional[str]
+
+        dry_run : typing.Optional[bool]
+
+        confirm : typing.Optional[bool]
+
+        language : typing.Optional[str]
+
+        workspace_id : typing.Optional[str]
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        AsyncHttpResponse[PublicPropertyMutationResponse]
-            OK
+        AsyncHttpResponse[DeletePublicDeveloperPropertyApiV2PublicPropertiesObjectNamePropertyRefDelete200Envelope]
+            Successful Response
         """
         _response = await self._client_wrapper.httpx_client.request(
-            f"v1/public/properties/{jsonable_encoder(object_name)}/{jsonable_encoder(property_ref)}",
+            f"v2/public/properties/{jsonable_encoder(object_name)}/{jsonable_encoder(property_ref)}",
             method="DELETE",
+            params={
+                "custom_object_id": custom_object_id,
+                "target": target,
+                "source": source,
+                "scope": scope,
+                "provider": provider,
+                "channel_id": channel_id,
+                "external_object_type": external_object_type,
+                "dry_run": dry_run,
+                "confirm": confirm,
+                "language": language,
+                "workspace_id": workspace_id,
+            },
             request_options=request_options,
         )
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    PublicPropertyMutationResponse,
+                    DeletePublicDeveloperPropertyApiV2PublicPropertiesObjectNamePropertyRefDelete200Envelope,
                     construct_type(
-                        type_=PublicPropertyMutationResponse,  # type: ignore
+                        type_=DeletePublicDeveloperPropertyApiV2PublicPropertiesObjectNamePropertyRefDelete200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return AsyncHttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 403:
-                raise ForbiddenError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),

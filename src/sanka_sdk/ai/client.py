@@ -5,8 +5,11 @@ import typing
 from ..core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ..core.request_options import RequestOptions
 from ..types.enrich_company_seed import EnrichCompanySeed
-from ..types.enrich_response import EnrichResponse
-from ..types.score_response import ScoreResponse
+from ..types.enrich_record_api_v_2_enrich_post_200_envelope import EnrichRecordApiV2EnrichPost200Envelope
+from ..types.prospect_companies_api_v_2_prospect_companies_post_200_envelope import (
+    ProspectCompaniesApiV2ProspectCompaniesPost200Envelope,
+)
+from ..types.score_record_api_v_2_score_post_200_envelope import ScoreRecordApiV2ScorePost200Envelope
 from .raw_client import AsyncRawAiClient, RawAiClient
 
 # this is used as the default value for optional parameters
@@ -28,21 +31,24 @@ class AiClient:
         """
         return self._raw_client
 
-    def api_routers_v_1_ai_api_enrich_record(
+    def enrich_record_api(
         self,
         *,
         object_type: str,
+        workspace_id: typing.Optional[str] = None,
         record_id: typing.Optional[str] = OMIT,
         seed: typing.Optional[EnrichCompanySeed] = OMIT,
         custom_field_map: typing.Optional[typing.Dict[str, str]] = OMIT,
         dry_run: typing.Optional[bool] = OMIT,
         force_refresh: typing.Optional[bool] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> EnrichResponse:
+    ) -> EnrichRecordApiV2EnrichPost200Envelope:
         """
         Parameters
         ----------
         object_type : str
+
+        workspace_id : typing.Optional[str]
 
         record_id : typing.Optional[str]
 
@@ -59,22 +65,24 @@ class AiClient:
 
         Returns
         -------
-        EnrichResponse
-            OK
+        EnrichRecordApiV2EnrichPost200Envelope
+            Successful Response
 
         Examples
         --------
         from sanka_sdk import SankaClient
 
         client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
-        client.ai.api_routers_v_1_ai_api_enrich_record(
+        client.ai.enrich_record_api(
             object_type="object_type",
         )
         """
-        _response = self._raw_client.api_routers_v_1_ai_api_enrich_record(
+        _response = self._raw_client.enrich_record_api(
             object_type=object_type,
+            workspace_id=workspace_id,
             record_id=record_id,
             seed=seed,
             custom_field_map=custom_field_map,
@@ -84,20 +92,86 @@ class AiClient:
         )
         return _response.data
 
-    def api_routers_v_1_ai_api_score_record(
+    def prospect_companies_api(
+        self,
+        *,
+        workspace_id: typing.Optional[str] = None,
+        query: typing.Optional[str] = OMIT,
+        location: typing.Optional[str] = OMIT,
+        industry: typing.Optional[str] = OMIT,
+        min_employee_count: typing.Optional[int] = OMIT,
+        max_employee_count: typing.Optional[int] = OMIT,
+        limit: typing.Optional[int] = OMIT,
+        sources: typing.Optional[typing.Sequence[str]] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> ProspectCompaniesApiV2ProspectCompaniesPost200Envelope:
+        """
+        Parameters
+        ----------
+        workspace_id : typing.Optional[str]
+
+        query : typing.Optional[str]
+
+        location : typing.Optional[str]
+
+        industry : typing.Optional[str]
+
+        min_employee_count : typing.Optional[int]
+
+        max_employee_count : typing.Optional[int]
+
+        limit : typing.Optional[int]
+
+        sources : typing.Optional[typing.Sequence[str]]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        ProspectCompaniesApiV2ProspectCompaniesPost200Envelope
+            Successful Response
+
+        Examples
+        --------
+        from sanka_sdk import SankaClient
+
+        client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+        client.ai.prospect_companies_api()
+        """
+        _response = self._raw_client.prospect_companies_api(
+            workspace_id=workspace_id,
+            query=query,
+            location=location,
+            industry=industry,
+            min_employee_count=min_employee_count,
+            max_employee_count=max_employee_count,
+            limit=limit,
+            sources=sources,
+            request_options=request_options,
+        )
+        return _response.data
+
+    def score_record_api(
         self,
         *,
         object_type: str,
         record_id: str,
+        workspace_id: typing.Optional[str] = None,
         score_model_id: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> ScoreResponse:
+    ) -> ScoreRecordApiV2ScorePost200Envelope:
         """
         Parameters
         ----------
         object_type : str
 
         record_id : str
+
+        workspace_id : typing.Optional[str]
 
         score_model_id : typing.Optional[str]
 
@@ -106,23 +180,28 @@ class AiClient:
 
         Returns
         -------
-        ScoreResponse
-            OK
+        ScoreRecordApiV2ScorePost200Envelope
+            Successful Response
 
         Examples
         --------
         from sanka_sdk import SankaClient
 
         client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
-        client.ai.api_routers_v_1_ai_api_score_record(
+        client.ai.score_record_api(
             object_type="object_type",
             record_id="record_id",
         )
         """
-        _response = self._raw_client.api_routers_v_1_ai_api_score_record(
-            object_type=object_type, record_id=record_id, score_model_id=score_model_id, request_options=request_options
+        _response = self._raw_client.score_record_api(
+            object_type=object_type,
+            record_id=record_id,
+            workspace_id=workspace_id,
+            score_model_id=score_model_id,
+            request_options=request_options,
         )
         return _response.data
 
@@ -142,21 +221,24 @@ class AsyncAiClient:
         """
         return self._raw_client
 
-    async def api_routers_v_1_ai_api_enrich_record(
+    async def enrich_record_api(
         self,
         *,
         object_type: str,
+        workspace_id: typing.Optional[str] = None,
         record_id: typing.Optional[str] = OMIT,
         seed: typing.Optional[EnrichCompanySeed] = OMIT,
         custom_field_map: typing.Optional[typing.Dict[str, str]] = OMIT,
         dry_run: typing.Optional[bool] = OMIT,
         force_refresh: typing.Optional[bool] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> EnrichResponse:
+    ) -> EnrichRecordApiV2EnrichPost200Envelope:
         """
         Parameters
         ----------
         object_type : str
+
+        workspace_id : typing.Optional[str]
 
         record_id : typing.Optional[str]
 
@@ -173,8 +255,8 @@ class AsyncAiClient:
 
         Returns
         -------
-        EnrichResponse
-            OK
+        EnrichRecordApiV2EnrichPost200Envelope
+            Successful Response
 
         Examples
         --------
@@ -183,20 +265,22 @@ class AsyncAiClient:
         from sanka_sdk import AsyncSankaClient
 
         client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
 
 
         async def main() -> None:
-            await client.ai.api_routers_v_1_ai_api_enrich_record(
+            await client.ai.enrich_record_api(
                 object_type="object_type",
             )
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.api_routers_v_1_ai_api_enrich_record(
+        _response = await self._raw_client.enrich_record_api(
             object_type=object_type,
+            workspace_id=workspace_id,
             record_id=record_id,
             seed=seed,
             custom_field_map=custom_field_map,
@@ -206,30 +290,45 @@ class AsyncAiClient:
         )
         return _response.data
 
-    async def api_routers_v_1_ai_api_score_record(
+    async def prospect_companies_api(
         self,
         *,
-        object_type: str,
-        record_id: str,
-        score_model_id: typing.Optional[str] = OMIT,
+        workspace_id: typing.Optional[str] = None,
+        query: typing.Optional[str] = OMIT,
+        location: typing.Optional[str] = OMIT,
+        industry: typing.Optional[str] = OMIT,
+        min_employee_count: typing.Optional[int] = OMIT,
+        max_employee_count: typing.Optional[int] = OMIT,
+        limit: typing.Optional[int] = OMIT,
+        sources: typing.Optional[typing.Sequence[str]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> ScoreResponse:
+    ) -> ProspectCompaniesApiV2ProspectCompaniesPost200Envelope:
         """
         Parameters
         ----------
-        object_type : str
+        workspace_id : typing.Optional[str]
 
-        record_id : str
+        query : typing.Optional[str]
 
-        score_model_id : typing.Optional[str]
+        location : typing.Optional[str]
+
+        industry : typing.Optional[str]
+
+        min_employee_count : typing.Optional[int]
+
+        max_employee_count : typing.Optional[int]
+
+        limit : typing.Optional[int]
+
+        sources : typing.Optional[typing.Sequence[str]]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        ScoreResponse
-            OK
+        ProspectCompaniesApiV2ProspectCompaniesPost200Envelope
+            Successful Response
 
         Examples
         --------
@@ -238,12 +337,72 @@ class AsyncAiClient:
         from sanka_sdk import AsyncSankaClient
 
         client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
 
 
         async def main() -> None:
-            await client.ai.api_routers_v_1_ai_api_score_record(
+            await client.ai.prospect_companies_api()
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.prospect_companies_api(
+            workspace_id=workspace_id,
+            query=query,
+            location=location,
+            industry=industry,
+            min_employee_count=min_employee_count,
+            max_employee_count=max_employee_count,
+            limit=limit,
+            sources=sources,
+            request_options=request_options,
+        )
+        return _response.data
+
+    async def score_record_api(
+        self,
+        *,
+        object_type: str,
+        record_id: str,
+        workspace_id: typing.Optional[str] = None,
+        score_model_id: typing.Optional[str] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> ScoreRecordApiV2ScorePost200Envelope:
+        """
+        Parameters
+        ----------
+        object_type : str
+
+        record_id : str
+
+        workspace_id : typing.Optional[str]
+
+        score_model_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        ScoreRecordApiV2ScorePost200Envelope
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sanka_sdk import AsyncSankaClient
+
+        client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.ai.score_record_api(
                 object_type="object_type",
                 record_id="record_id",
             )
@@ -251,7 +410,11 @@ class AsyncAiClient:
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.api_routers_v_1_ai_api_score_record(
-            object_type=object_type, record_id=record_id, score_model_id=score_model_id, request_options=request_options
+        _response = await self._raw_client.score_record_api(
+            object_type=object_type,
+            record_id=record_id,
+            workspace_id=workspace_id,
+            score_model_id=score_model_id,
+            request_options=request_options,
         )
         return _response.data

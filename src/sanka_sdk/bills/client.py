@@ -2,10 +2,27 @@
 
 import typing
 
+from .. import core
 from ..core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ..core.request_options import RequestOptions
-from ..types.bill_schema import BillSchema
-from ..types.public_bill_response import PublicBillResponse
+from ..types.create_public_bill_api_v_2_public_bills_post_200_envelope import (
+    CreatePublicBillApiV2PublicBillsPost200Envelope,
+)
+from ..types.delete_public_bill_api_v_2_public_bills_bill_id_delete_200_envelope import (
+    DeletePublicBillApiV2PublicBillsBillIdDelete200Envelope,
+)
+from ..types.get_public_bill_api_v_2_public_bills_bill_id_get_200_envelope import (
+    GetPublicBillApiV2PublicBillsBillIdGet200Envelope,
+)
+from ..types.list_public_bills_api_v_2_public_bills_get_200_envelope import (
+    ListPublicBillsApiV2PublicBillsGet200Envelope,
+)
+from ..types.update_public_bill_api_v_2_public_bills_bill_id_put_200_envelope import (
+    UpdatePublicBillApiV2PublicBillsBillIdPut200Envelope,
+)
+from ..types.upload_public_bill_file_api_v_2_public_bills_files_post_200_envelope import (
+    UploadPublicBillFileApiV2PublicBillsFilesPost200Envelope,
+)
 from .raw_client import AsyncRawBillsClient, RawBillsClient
 
 # this is used as the default value for optional parameters
@@ -27,23 +44,44 @@ class BillsClient:
         """
         return self._raw_client
 
-    def api_routers_v_1_bills_public_api_list_workspace_bills(
+    def list_public_bills_api(
         self,
         *,
         workspace_id: typing.Optional[str] = None,
-        lang: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = None,
+        search: typing.Optional[str] = None,
         language: typing.Optional[str] = None,
+        status: typing.Optional[str] = None,
+        usage_status: typing.Optional[str] = None,
+        page: typing.Optional[int] = None,
+        limit: typing.Optional[int] = None,
+        sort: typing.Optional[str] = None,
+        x_language: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> typing.List[BillSchema]:
+    ) -> ListPublicBillsApiV2PublicBillsGet200Envelope:
         """
         Parameters
         ----------
         workspace_id : typing.Optional[str]
 
-        lang : typing.Optional[str]
+        view_id : typing.Optional[str]
+
+        search : typing.Optional[str]
 
         language : typing.Optional[str]
+
+        status : typing.Optional[str]
+
+        usage_status : typing.Optional[str]
+
+        page : typing.Optional[int]
+
+        limit : typing.Optional[int]
+
+        sort : typing.Optional[str]
+
+        x_language : typing.Optional[str]
 
         accept_language : typing.Optional[str]
 
@@ -52,135 +90,130 @@ class BillsClient:
 
         Returns
         -------
-        typing.List[BillSchema]
-            OK
+        ListPublicBillsApiV2PublicBillsGet200Envelope
+            Object record list response
 
         Examples
         --------
         from sanka_sdk import SankaClient
 
         client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
-        client.bills.api_routers_v_1_bills_public_api_list_workspace_bills()
+        client.bills.list_public_bills_api()
         """
-        _response = self._raw_client.api_routers_v_1_bills_public_api_list_workspace_bills(
+        _response = self._raw_client.list_public_bills_api(
             workspace_id=workspace_id,
-            lang=lang,
+            view_id=view_id,
+            search=search,
             language=language,
+            status=status,
+            usage_status=usage_status,
+            page=page,
+            limit=limit,
+            sort=sort,
+            x_language=x_language,
             accept_language=accept_language,
             request_options=request_options,
         )
         return _response.data
 
-    def api_routers_v_1_bills_public_api_create_public_bill(
+    def create_public_bill_api(
         self,
         *,
-        external_id: typing.Optional[str] = OMIT,
-        contact_id: typing.Optional[str] = OMIT,
-        contact_external_id: typing.Optional[str] = OMIT,
-        company_id: typing.Optional[str] = OMIT,
-        company_external_id: typing.Optional[str] = OMIT,
-        issued_date: typing.Optional[str] = OMIT,
-        due_date: typing.Optional[str] = OMIT,
-        payment_date: typing.Optional[str] = OMIT,
-        status: typing.Optional[str] = OMIT,
-        currency: typing.Optional[str] = OMIT,
-        description: typing.Optional[str] = OMIT,
-        amount: typing.Optional[float] = OMIT,
-        amount_without_tax: typing.Optional[float] = OMIT,
-        notes: typing.Optional[str] = OMIT,
-        tax_rate: typing.Optional[float] = OMIT,
-        tax_inclusive: typing.Optional[bool] = OMIT,
-        tax_option: typing.Optional[str] = OMIT,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = OMIT,
+        form_view_id: typing.Optional[str] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> PublicBillResponse:
+    ) -> CreatePublicBillApiV2PublicBillsPost200Envelope:
         """
         Parameters
         ----------
-        external_id : typing.Optional[str]
+        workspace_id : typing.Optional[str]
 
-        contact_id : typing.Optional[str]
+        view_id : typing.Optional[str]
 
-        contact_external_id : typing.Optional[str]
+        form_view_id : typing.Optional[str]
 
-        company_id : typing.Optional[str]
-
-        company_external_id : typing.Optional[str]
-
-        issued_date : typing.Optional[str]
-
-        due_date : typing.Optional[str]
-
-        payment_date : typing.Optional[str]
-
-        status : typing.Optional[str]
-
-        currency : typing.Optional[str]
-
-        description : typing.Optional[str]
-
-        amount : typing.Optional[float]
-
-        amount_without_tax : typing.Optional[float]
-
-        notes : typing.Optional[str]
-
-        tax_rate : typing.Optional[float]
-
-        tax_inclusive : typing.Optional[bool]
-
-        tax_option : typing.Optional[str]
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        PublicBillResponse
-            OK
+        CreatePublicBillApiV2PublicBillsPost200Envelope
+            Successful Response
 
         Examples
         --------
         from sanka_sdk import SankaClient
 
         client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
-        client.bills.api_routers_v_1_bills_public_api_create_public_bill()
+        client.bills.create_public_bill_api()
         """
-        _response = self._raw_client.api_routers_v_1_bills_public_api_create_public_bill(
-            external_id=external_id,
-            contact_id=contact_id,
-            contact_external_id=contact_external_id,
-            company_id=company_id,
-            company_external_id=company_external_id,
-            issued_date=issued_date,
-            due_date=due_date,
-            payment_date=payment_date,
-            status=status,
-            currency=currency,
-            description=description,
-            amount=amount,
-            amount_without_tax=amount_without_tax,
-            notes=notes,
-            tax_rate=tax_rate,
-            tax_inclusive=tax_inclusive,
-            tax_option=tax_option,
+        _response = self._raw_client.create_public_bill_api(
+            workspace_id=workspace_id,
+            view_id=view_id,
+            form_view_id=form_view_id,
+            properties=properties,
             request_options=request_options,
         )
         return _response.data
 
-    def api_routers_v_1_bills_public_api_get_public_bill(
+    def upload_public_bill_file_api(
+        self,
+        *,
+        file: core.File,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> UploadPublicBillFileApiV2PublicBillsFilesPost200Envelope:
+        """
+        Parameters
+        ----------
+        file : core.File
+            See core.File for more documentation
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        UploadPublicBillFileApiV2PublicBillsFilesPost200Envelope
+            Successful Response
+
+        Examples
+        --------
+        from sanka_sdk import SankaClient
+
+        client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+        client.bills.upload_public_bill_file_api()
+        """
+        _response = self._raw_client.upload_public_bill_file_api(
+            file=file, workspace_id=workspace_id, request_options=request_options
+        )
+        return _response.data
+
+    def get_public_bill_api(
         self,
         bill_id: str,
         *,
         external_id: typing.Optional[str] = None,
-        lang: typing.Optional[str] = None,
-        language: typing.Optional[str] = None,
-        accept_language: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = None,
+        form_view_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> BillSchema:
+    ) -> GetPublicBillApiV2PublicBillsBillIdGet200Envelope:
         """
         Parameters
         ----------
@@ -188,152 +221,53 @@ class BillsClient:
 
         external_id : typing.Optional[str]
 
-        lang : typing.Optional[str]
+        workspace_id : typing.Optional[str]
 
-        language : typing.Optional[str]
+        view_id : typing.Optional[str]
 
-        accept_language : typing.Optional[str]
-
-        request_options : typing.Optional[RequestOptions]
-            Request-specific configuration.
-
-        Returns
-        -------
-        BillSchema
-            OK
-
-        Examples
-        --------
-        from sanka_sdk import SankaClient
-
-        client = SankaClient(
-            token="YOUR_TOKEN",
-        )
-        client.bills.api_routers_v_1_bills_public_api_get_public_bill(
-            bill_id="bill_id",
-        )
-        """
-        _response = self._raw_client.api_routers_v_1_bills_public_api_get_public_bill(
-            bill_id,
-            external_id=external_id,
-            lang=lang,
-            language=language,
-            accept_language=accept_language,
-            request_options=request_options,
-        )
-        return _response.data
-
-    def api_routers_v_1_bills_public_api_update_public_bill(
-        self,
-        bill_id: str,
-        *,
-        external_id: typing.Optional[str] = OMIT,
-        contact_id: typing.Optional[str] = OMIT,
-        contact_external_id: typing.Optional[str] = OMIT,
-        company_id: typing.Optional[str] = OMIT,
-        company_external_id: typing.Optional[str] = OMIT,
-        issued_date: typing.Optional[str] = OMIT,
-        due_date: typing.Optional[str] = OMIT,
-        payment_date: typing.Optional[str] = OMIT,
-        status: typing.Optional[str] = OMIT,
-        currency: typing.Optional[str] = OMIT,
-        description: typing.Optional[str] = OMIT,
-        amount: typing.Optional[float] = OMIT,
-        amount_without_tax: typing.Optional[float] = OMIT,
-        notes: typing.Optional[str] = OMIT,
-        tax_rate: typing.Optional[float] = OMIT,
-        tax_inclusive: typing.Optional[bool] = OMIT,
-        tax_option: typing.Optional[str] = OMIT,
-        request_options: typing.Optional[RequestOptions] = None,
-    ) -> PublicBillResponse:
-        """
-        Parameters
-        ----------
-        bill_id : str
-
-        external_id : typing.Optional[str]
-
-        contact_id : typing.Optional[str]
-
-        contact_external_id : typing.Optional[str]
-
-        company_id : typing.Optional[str]
-
-        company_external_id : typing.Optional[str]
-
-        issued_date : typing.Optional[str]
-
-        due_date : typing.Optional[str]
-
-        payment_date : typing.Optional[str]
-
-        status : typing.Optional[str]
-
-        currency : typing.Optional[str]
-
-        description : typing.Optional[str]
-
-        amount : typing.Optional[float]
-
-        amount_without_tax : typing.Optional[float]
-
-        notes : typing.Optional[str]
-
-        tax_rate : typing.Optional[float]
-
-        tax_inclusive : typing.Optional[bool]
-
-        tax_option : typing.Optional[str]
+        form_view_id : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        PublicBillResponse
-            OK
+        GetPublicBillApiV2PublicBillsBillIdGet200Envelope
+            Object record detail response. The base detail payload is intentionally thin; drawer sections load through scoped endpoints.
 
         Examples
         --------
         from sanka_sdk import SankaClient
 
         client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
-        client.bills.api_routers_v_1_bills_public_api_update_public_bill(
+        client.bills.get_public_bill_api(
             bill_id="bill_id",
         )
         """
-        _response = self._raw_client.api_routers_v_1_bills_public_api_update_public_bill(
+        _response = self._raw_client.get_public_bill_api(
             bill_id,
             external_id=external_id,
-            contact_id=contact_id,
-            contact_external_id=contact_external_id,
-            company_id=company_id,
-            company_external_id=company_external_id,
-            issued_date=issued_date,
-            due_date=due_date,
-            payment_date=payment_date,
-            status=status,
-            currency=currency,
-            description=description,
-            amount=amount,
-            amount_without_tax=amount_without_tax,
-            notes=notes,
-            tax_rate=tax_rate,
-            tax_inclusive=tax_inclusive,
-            tax_option=tax_option,
+            workspace_id=workspace_id,
+            view_id=view_id,
+            form_view_id=form_view_id,
             request_options=request_options,
         )
         return _response.data
 
-    def api_routers_v_1_bills_public_api_delete_public_bill(
+    def update_public_bill_api(
         self,
         bill_id: str,
         *,
         external_id: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = OMIT,
+        form_view_id: typing.Optional[str] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> PublicBillResponse:
+    ) -> UpdatePublicBillApiV2PublicBillsBillIdPut200Envelope:
         """
         Parameters
         ----------
@@ -341,27 +275,84 @@ class BillsClient:
 
         external_id : typing.Optional[str]
 
+        workspace_id : typing.Optional[str]
+
+        view_id : typing.Optional[str]
+
+        form_view_id : typing.Optional[str]
+
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        PublicBillResponse
-            OK
+        UpdatePublicBillApiV2PublicBillsBillIdPut200Envelope
+            Successful Response
 
         Examples
         --------
         from sanka_sdk import SankaClient
 
         client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
-        client.bills.api_routers_v_1_bills_public_api_delete_public_bill(
+        client.bills.update_public_bill_api(
             bill_id="bill_id",
         )
         """
-        _response = self._raw_client.api_routers_v_1_bills_public_api_delete_public_bill(
-            bill_id, external_id=external_id, request_options=request_options
+        _response = self._raw_client.update_public_bill_api(
+            bill_id,
+            external_id=external_id,
+            workspace_id=workspace_id,
+            view_id=view_id,
+            form_view_id=form_view_id,
+            properties=properties,
+            request_options=request_options,
+        )
+        return _response.data
+
+    def delete_public_bill_api(
+        self,
+        bill_id: str,
+        *,
+        external_id: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> DeletePublicBillApiV2PublicBillsBillIdDelete200Envelope:
+        """
+        Parameters
+        ----------
+        bill_id : str
+
+        external_id : typing.Optional[str]
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        DeletePublicBillApiV2PublicBillsBillIdDelete200Envelope
+            Successful Response
+
+        Examples
+        --------
+        from sanka_sdk import SankaClient
+
+        client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+        client.bills.delete_public_bill_api(
+            bill_id="bill_id",
+        )
+        """
+        _response = self._raw_client.delete_public_bill_api(
+            bill_id, external_id=external_id, workspace_id=workspace_id, request_options=request_options
         )
         return _response.data
 
@@ -381,23 +372,44 @@ class AsyncBillsClient:
         """
         return self._raw_client
 
-    async def api_routers_v_1_bills_public_api_list_workspace_bills(
+    async def list_public_bills_api(
         self,
         *,
         workspace_id: typing.Optional[str] = None,
-        lang: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = None,
+        search: typing.Optional[str] = None,
         language: typing.Optional[str] = None,
+        status: typing.Optional[str] = None,
+        usage_status: typing.Optional[str] = None,
+        page: typing.Optional[int] = None,
+        limit: typing.Optional[int] = None,
+        sort: typing.Optional[str] = None,
+        x_language: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> typing.List[BillSchema]:
+    ) -> ListPublicBillsApiV2PublicBillsGet200Envelope:
         """
         Parameters
         ----------
         workspace_id : typing.Optional[str]
 
-        lang : typing.Optional[str]
+        view_id : typing.Optional[str]
+
+        search : typing.Optional[str]
 
         language : typing.Optional[str]
+
+        status : typing.Optional[str]
+
+        usage_status : typing.Optional[str]
+
+        page : typing.Optional[int]
+
+        limit : typing.Optional[int]
+
+        sort : typing.Optional[str]
+
+        x_language : typing.Optional[str]
 
         accept_language : typing.Optional[str]
 
@@ -406,8 +418,8 @@ class AsyncBillsClient:
 
         Returns
         -------
-        typing.List[BillSchema]
-            OK
+        ListPublicBillsApiV2PublicBillsGet200Envelope
+            Object record list response
 
         Examples
         --------
@@ -416,91 +428,60 @@ class AsyncBillsClient:
         from sanka_sdk import AsyncSankaClient
 
         client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
 
 
         async def main() -> None:
-            await client.bills.api_routers_v_1_bills_public_api_list_workspace_bills()
+            await client.bills.list_public_bills_api()
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.api_routers_v_1_bills_public_api_list_workspace_bills(
+        _response = await self._raw_client.list_public_bills_api(
             workspace_id=workspace_id,
-            lang=lang,
+            view_id=view_id,
+            search=search,
             language=language,
+            status=status,
+            usage_status=usage_status,
+            page=page,
+            limit=limit,
+            sort=sort,
+            x_language=x_language,
             accept_language=accept_language,
             request_options=request_options,
         )
         return _response.data
 
-    async def api_routers_v_1_bills_public_api_create_public_bill(
+    async def create_public_bill_api(
         self,
         *,
-        external_id: typing.Optional[str] = OMIT,
-        contact_id: typing.Optional[str] = OMIT,
-        contact_external_id: typing.Optional[str] = OMIT,
-        company_id: typing.Optional[str] = OMIT,
-        company_external_id: typing.Optional[str] = OMIT,
-        issued_date: typing.Optional[str] = OMIT,
-        due_date: typing.Optional[str] = OMIT,
-        payment_date: typing.Optional[str] = OMIT,
-        status: typing.Optional[str] = OMIT,
-        currency: typing.Optional[str] = OMIT,
-        description: typing.Optional[str] = OMIT,
-        amount: typing.Optional[float] = OMIT,
-        amount_without_tax: typing.Optional[float] = OMIT,
-        notes: typing.Optional[str] = OMIT,
-        tax_rate: typing.Optional[float] = OMIT,
-        tax_inclusive: typing.Optional[bool] = OMIT,
-        tax_option: typing.Optional[str] = OMIT,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = OMIT,
+        form_view_id: typing.Optional[str] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> PublicBillResponse:
+    ) -> CreatePublicBillApiV2PublicBillsPost200Envelope:
         """
         Parameters
         ----------
-        external_id : typing.Optional[str]
+        workspace_id : typing.Optional[str]
 
-        contact_id : typing.Optional[str]
+        view_id : typing.Optional[str]
 
-        contact_external_id : typing.Optional[str]
+        form_view_id : typing.Optional[str]
 
-        company_id : typing.Optional[str]
-
-        company_external_id : typing.Optional[str]
-
-        issued_date : typing.Optional[str]
-
-        due_date : typing.Optional[str]
-
-        payment_date : typing.Optional[str]
-
-        status : typing.Optional[str]
-
-        currency : typing.Optional[str]
-
-        description : typing.Optional[str]
-
-        amount : typing.Optional[float]
-
-        amount_without_tax : typing.Optional[float]
-
-        notes : typing.Optional[str]
-
-        tax_rate : typing.Optional[float]
-
-        tax_inclusive : typing.Optional[bool]
-
-        tax_option : typing.Optional[str]
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        PublicBillResponse
-            OK
+        CreatePublicBillApiV2PublicBillsPost200Envelope
+            Successful Response
 
         Examples
         --------
@@ -509,48 +490,82 @@ class AsyncBillsClient:
         from sanka_sdk import AsyncSankaClient
 
         client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
 
 
         async def main() -> None:
-            await client.bills.api_routers_v_1_bills_public_api_create_public_bill()
+            await client.bills.create_public_bill_api()
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.api_routers_v_1_bills_public_api_create_public_bill(
-            external_id=external_id,
-            contact_id=contact_id,
-            contact_external_id=contact_external_id,
-            company_id=company_id,
-            company_external_id=company_external_id,
-            issued_date=issued_date,
-            due_date=due_date,
-            payment_date=payment_date,
-            status=status,
-            currency=currency,
-            description=description,
-            amount=amount,
-            amount_without_tax=amount_without_tax,
-            notes=notes,
-            tax_rate=tax_rate,
-            tax_inclusive=tax_inclusive,
-            tax_option=tax_option,
+        _response = await self._raw_client.create_public_bill_api(
+            workspace_id=workspace_id,
+            view_id=view_id,
+            form_view_id=form_view_id,
+            properties=properties,
             request_options=request_options,
         )
         return _response.data
 
-    async def api_routers_v_1_bills_public_api_get_public_bill(
+    async def upload_public_bill_file_api(
+        self,
+        *,
+        file: core.File,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> UploadPublicBillFileApiV2PublicBillsFilesPost200Envelope:
+        """
+        Parameters
+        ----------
+        file : core.File
+            See core.File for more documentation
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        UploadPublicBillFileApiV2PublicBillsFilesPost200Envelope
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sanka_sdk import AsyncSankaClient
+
+        client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.bills.upload_public_bill_file_api()
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.upload_public_bill_file_api(
+            file=file, workspace_id=workspace_id, request_options=request_options
+        )
+        return _response.data
+
+    async def get_public_bill_api(
         self,
         bill_id: str,
         *,
         external_id: typing.Optional[str] = None,
-        lang: typing.Optional[str] = None,
-        language: typing.Optional[str] = None,
-        accept_language: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = None,
+        form_view_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> BillSchema:
+    ) -> GetPublicBillApiV2PublicBillsBillIdGet200Envelope:
         """
         Parameters
         ----------
@@ -558,19 +573,19 @@ class AsyncBillsClient:
 
         external_id : typing.Optional[str]
 
-        lang : typing.Optional[str]
+        workspace_id : typing.Optional[str]
 
-        language : typing.Optional[str]
+        view_id : typing.Optional[str]
 
-        accept_language : typing.Optional[str]
+        form_view_id : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        BillSchema
-            OK
+        GetPublicBillApiV2PublicBillsBillIdGet200Envelope
+            Object record detail response. The base detail payload is intentionally thin; drawer sections load through scoped endpoints.
 
         Examples
         --------
@@ -579,147 +594,40 @@ class AsyncBillsClient:
         from sanka_sdk import AsyncSankaClient
 
         client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
 
 
         async def main() -> None:
-            await client.bills.api_routers_v_1_bills_public_api_get_public_bill(
+            await client.bills.get_public_bill_api(
                 bill_id="bill_id",
             )
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.api_routers_v_1_bills_public_api_get_public_bill(
+        _response = await self._raw_client.get_public_bill_api(
             bill_id,
             external_id=external_id,
-            lang=lang,
-            language=language,
-            accept_language=accept_language,
+            workspace_id=workspace_id,
+            view_id=view_id,
+            form_view_id=form_view_id,
             request_options=request_options,
         )
         return _response.data
 
-    async def api_routers_v_1_bills_public_api_update_public_bill(
-        self,
-        bill_id: str,
-        *,
-        external_id: typing.Optional[str] = OMIT,
-        contact_id: typing.Optional[str] = OMIT,
-        contact_external_id: typing.Optional[str] = OMIT,
-        company_id: typing.Optional[str] = OMIT,
-        company_external_id: typing.Optional[str] = OMIT,
-        issued_date: typing.Optional[str] = OMIT,
-        due_date: typing.Optional[str] = OMIT,
-        payment_date: typing.Optional[str] = OMIT,
-        status: typing.Optional[str] = OMIT,
-        currency: typing.Optional[str] = OMIT,
-        description: typing.Optional[str] = OMIT,
-        amount: typing.Optional[float] = OMIT,
-        amount_without_tax: typing.Optional[float] = OMIT,
-        notes: typing.Optional[str] = OMIT,
-        tax_rate: typing.Optional[float] = OMIT,
-        tax_inclusive: typing.Optional[bool] = OMIT,
-        tax_option: typing.Optional[str] = OMIT,
-        request_options: typing.Optional[RequestOptions] = None,
-    ) -> PublicBillResponse:
-        """
-        Parameters
-        ----------
-        bill_id : str
-
-        external_id : typing.Optional[str]
-
-        contact_id : typing.Optional[str]
-
-        contact_external_id : typing.Optional[str]
-
-        company_id : typing.Optional[str]
-
-        company_external_id : typing.Optional[str]
-
-        issued_date : typing.Optional[str]
-
-        due_date : typing.Optional[str]
-
-        payment_date : typing.Optional[str]
-
-        status : typing.Optional[str]
-
-        currency : typing.Optional[str]
-
-        description : typing.Optional[str]
-
-        amount : typing.Optional[float]
-
-        amount_without_tax : typing.Optional[float]
-
-        notes : typing.Optional[str]
-
-        tax_rate : typing.Optional[float]
-
-        tax_inclusive : typing.Optional[bool]
-
-        tax_option : typing.Optional[str]
-
-        request_options : typing.Optional[RequestOptions]
-            Request-specific configuration.
-
-        Returns
-        -------
-        PublicBillResponse
-            OK
-
-        Examples
-        --------
-        import asyncio
-
-        from sanka_sdk import AsyncSankaClient
-
-        client = AsyncSankaClient(
-            token="YOUR_TOKEN",
-        )
-
-
-        async def main() -> None:
-            await client.bills.api_routers_v_1_bills_public_api_update_public_bill(
-                bill_id="bill_id",
-            )
-
-
-        asyncio.run(main())
-        """
-        _response = await self._raw_client.api_routers_v_1_bills_public_api_update_public_bill(
-            bill_id,
-            external_id=external_id,
-            contact_id=contact_id,
-            contact_external_id=contact_external_id,
-            company_id=company_id,
-            company_external_id=company_external_id,
-            issued_date=issued_date,
-            due_date=due_date,
-            payment_date=payment_date,
-            status=status,
-            currency=currency,
-            description=description,
-            amount=amount,
-            amount_without_tax=amount_without_tax,
-            notes=notes,
-            tax_rate=tax_rate,
-            tax_inclusive=tax_inclusive,
-            tax_option=tax_option,
-            request_options=request_options,
-        )
-        return _response.data
-
-    async def api_routers_v_1_bills_public_api_delete_public_bill(
+    async def update_public_bill_api(
         self,
         bill_id: str,
         *,
         external_id: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = OMIT,
+        form_view_id: typing.Optional[str] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> PublicBillResponse:
+    ) -> UpdatePublicBillApiV2PublicBillsBillIdPut200Envelope:
         """
         Parameters
         ----------
@@ -727,13 +635,21 @@ class AsyncBillsClient:
 
         external_id : typing.Optional[str]
 
+        workspace_id : typing.Optional[str]
+
+        view_id : typing.Optional[str]
+
+        form_view_id : typing.Optional[str]
+
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        PublicBillResponse
-            OK
+        UpdatePublicBillApiV2PublicBillsBillIdPut200Envelope
+            Successful Response
 
         Examples
         --------
@@ -742,19 +658,76 @@ class AsyncBillsClient:
         from sanka_sdk import AsyncSankaClient
 
         client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
 
 
         async def main() -> None:
-            await client.bills.api_routers_v_1_bills_public_api_delete_public_bill(
+            await client.bills.update_public_bill_api(
                 bill_id="bill_id",
             )
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.api_routers_v_1_bills_public_api_delete_public_bill(
-            bill_id, external_id=external_id, request_options=request_options
+        _response = await self._raw_client.update_public_bill_api(
+            bill_id,
+            external_id=external_id,
+            workspace_id=workspace_id,
+            view_id=view_id,
+            form_view_id=form_view_id,
+            properties=properties,
+            request_options=request_options,
+        )
+        return _response.data
+
+    async def delete_public_bill_api(
+        self,
+        bill_id: str,
+        *,
+        external_id: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> DeletePublicBillApiV2PublicBillsBillIdDelete200Envelope:
+        """
+        Parameters
+        ----------
+        bill_id : str
+
+        external_id : typing.Optional[str]
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        DeletePublicBillApiV2PublicBillsBillIdDelete200Envelope
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sanka_sdk import AsyncSankaClient
+
+        client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.bills.delete_public_bill_api(
+                bill_id="bill_id",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.delete_public_bill_api(
+            bill_id, external_id=external_id, workspace_id=workspace_id, request_options=request_options
         )
         return _response.data

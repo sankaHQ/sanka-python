@@ -4,8 +4,27 @@ import typing
 
 from ..core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ..core.request_options import RequestOptions
-from ..types.public_payment_response import PublicPaymentResponse
-from ..types.receipt_schema import ReceiptSchema
+from ..types.create_public_payment_api_v_2_public_payments_post_200_envelope import (
+    CreatePublicPaymentApiV2PublicPaymentsPost200Envelope,
+)
+from ..types.delete_public_payment_api_v_2_public_payments_payment_id_delete_200_envelope import (
+    DeletePublicPaymentApiV2PublicPaymentsPaymentIdDelete200Envelope,
+)
+from ..types.get_public_payment_api_v_2_public_payments_payment_id_get_200_envelope import (
+    GetPublicPaymentApiV2PublicPaymentsPaymentIdGet200Envelope,
+)
+from ..types.list_public_payment_allocations_api_v_2_public_payments_payment_id_allocations_get_200_envelope import (
+    ListPublicPaymentAllocationsApiV2PublicPaymentsPaymentIdAllocationsGet200Envelope,
+)
+from ..types.list_public_payments_api_v_2_public_payments_get_200_envelope import (
+    ListPublicPaymentsApiV2PublicPaymentsGet200Envelope,
+)
+from ..types.update_public_payment_allocations_api_v_2_public_payments_payment_id_allocations_put_200_envelope import (
+    UpdatePublicPaymentAllocationsApiV2PublicPaymentsPaymentIdAllocationsPut200Envelope,
+)
+from ..types.update_public_payment_api_v_2_public_payments_payment_id_put_200_envelope import (
+    UpdatePublicPaymentApiV2PublicPaymentsPaymentIdPut200Envelope,
+)
 from .raw_client import AsyncRawPaymentsClient, RawPaymentsClient
 
 # this is used as the default value for optional parameters
@@ -27,23 +46,44 @@ class PaymentsClient:
         """
         return self._raw_client
 
-    def api_routers_v_1_payments_public_api_list_workspace_payments(
+    def list_public_payments_api(
         self,
         *,
         workspace_id: typing.Optional[str] = None,
-        lang: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = None,
+        search: typing.Optional[str] = None,
         language: typing.Optional[str] = None,
+        status: typing.Optional[str] = None,
+        usage_status: typing.Optional[str] = None,
+        page: typing.Optional[int] = None,
+        limit: typing.Optional[int] = None,
+        sort: typing.Optional[str] = None,
+        x_language: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> typing.List[ReceiptSchema]:
+    ) -> ListPublicPaymentsApiV2PublicPaymentsGet200Envelope:
         """
         Parameters
         ----------
         workspace_id : typing.Optional[str]
 
-        lang : typing.Optional[str]
+        view_id : typing.Optional[str]
+
+        search : typing.Optional[str]
 
         language : typing.Optional[str]
+
+        status : typing.Optional[str]
+
+        usage_status : typing.Optional[str]
+
+        page : typing.Optional[int]
+
+        limit : typing.Optional[int]
+
+        sort : typing.Optional[str]
+
+        x_language : typing.Optional[str]
 
         accept_language : typing.Optional[str]
 
@@ -52,115 +92,306 @@ class PaymentsClient:
 
         Returns
         -------
-        typing.List[ReceiptSchema]
-            OK
+        ListPublicPaymentsApiV2PublicPaymentsGet200Envelope
+            Object record list response
 
         Examples
         --------
         from sanka_sdk import SankaClient
 
         client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
-        client.payments.api_routers_v_1_payments_public_api_list_workspace_payments()
+        client.payments.list_public_payments_api()
         """
-        _response = self._raw_client.api_routers_v_1_payments_public_api_list_workspace_payments(
+        _response = self._raw_client.list_public_payments_api(
             workspace_id=workspace_id,
-            lang=lang,
+            view_id=view_id,
+            search=search,
             language=language,
+            status=status,
+            usage_status=usage_status,
+            page=page,
+            limit=limit,
+            sort=sort,
+            x_language=x_language,
             accept_language=accept_language,
             request_options=request_options,
         )
         return _response.data
 
-    def api_routers_v_1_payments_public_api_create_public_payment(
+    def create_public_payment_api(
         self,
         *,
-        external_id: typing.Optional[str] = OMIT,
-        contact_id: typing.Optional[str] = OMIT,
-        contact_external_id: typing.Optional[str] = OMIT,
-        company_id: typing.Optional[str] = OMIT,
-        company_external_id: typing.Optional[str] = OMIT,
-        start_date: typing.Optional[str] = OMIT,
-        status: typing.Optional[str] = OMIT,
-        currency: typing.Optional[str] = OMIT,
-        total_price: typing.Optional[float] = OMIT,
-        total_price_without_tax: typing.Optional[float] = OMIT,
-        entry_type: typing.Optional[str] = OMIT,
-        notes: typing.Optional[str] = OMIT,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = OMIT,
+        form_view_id: typing.Optional[str] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> PublicPaymentResponse:
+    ) -> CreatePublicPaymentApiV2PublicPaymentsPost200Envelope:
         """
         Parameters
         ----------
-        external_id : typing.Optional[str]
+        workspace_id : typing.Optional[str]
 
-        contact_id : typing.Optional[str]
+        view_id : typing.Optional[str]
 
-        contact_external_id : typing.Optional[str]
+        form_view_id : typing.Optional[str]
 
-        company_id : typing.Optional[str]
-
-        company_external_id : typing.Optional[str]
-
-        start_date : typing.Optional[str]
-
-        status : typing.Optional[str]
-
-        currency : typing.Optional[str]
-
-        total_price : typing.Optional[float]
-
-        total_price_without_tax : typing.Optional[float]
-
-        entry_type : typing.Optional[str]
-
-        notes : typing.Optional[str]
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        PublicPaymentResponse
-            OK
+        CreatePublicPaymentApiV2PublicPaymentsPost200Envelope
+            Successful Response
 
         Examples
         --------
         from sanka_sdk import SankaClient
 
         client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
-        client.payments.api_routers_v_1_payments_public_api_create_public_payment()
+        client.payments.create_public_payment_api()
         """
-        _response = self._raw_client.api_routers_v_1_payments_public_api_create_public_payment(
-            external_id=external_id,
-            contact_id=contact_id,
-            contact_external_id=contact_external_id,
-            company_id=company_id,
-            company_external_id=company_external_id,
-            start_date=start_date,
-            status=status,
-            currency=currency,
-            total_price=total_price,
-            total_price_without_tax=total_price_without_tax,
-            entry_type=entry_type,
-            notes=notes,
+        _response = self._raw_client.create_public_payment_api(
+            workspace_id=workspace_id,
+            view_id=view_id,
+            form_view_id=form_view_id,
+            properties=properties,
             request_options=request_options,
         )
         return _response.data
 
-    def api_routers_v_1_payments_public_api_get_public_payment(
+    def get_public_payment_api(
+        self,
+        payment_id: str,
+        *,
+        external_id: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = None,
+        form_view_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> GetPublicPaymentApiV2PublicPaymentsPaymentIdGet200Envelope:
+        """
+        Parameters
+        ----------
+        payment_id : str
+
+        external_id : typing.Optional[str]
+
+        workspace_id : typing.Optional[str]
+
+        view_id : typing.Optional[str]
+
+        form_view_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        GetPublicPaymentApiV2PublicPaymentsPaymentIdGet200Envelope
+            Object record detail response. The base detail payload is intentionally thin; drawer sections load through scoped endpoints.
+
+        Examples
+        --------
+        from sanka_sdk import SankaClient
+
+        client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+        client.payments.get_public_payment_api(
+            payment_id="payment_id",
+        )
+        """
+        _response = self._raw_client.get_public_payment_api(
+            payment_id,
+            external_id=external_id,
+            workspace_id=workspace_id,
+            view_id=view_id,
+            form_view_id=form_view_id,
+            request_options=request_options,
+        )
+        return _response.data
+
+    def update_public_payment_api(
+        self,
+        payment_id: str,
+        *,
+        external_id: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = OMIT,
+        form_view_id: typing.Optional[str] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> UpdatePublicPaymentApiV2PublicPaymentsPaymentIdPut200Envelope:
+        """
+        Parameters
+        ----------
+        payment_id : str
+
+        external_id : typing.Optional[str]
+
+        workspace_id : typing.Optional[str]
+
+        view_id : typing.Optional[str]
+
+        form_view_id : typing.Optional[str]
+
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        UpdatePublicPaymentApiV2PublicPaymentsPaymentIdPut200Envelope
+            Successful Response
+
+        Examples
+        --------
+        from sanka_sdk import SankaClient
+
+        client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+        client.payments.update_public_payment_api(
+            payment_id="payment_id",
+        )
+        """
+        _response = self._raw_client.update_public_payment_api(
+            payment_id,
+            external_id=external_id,
+            workspace_id=workspace_id,
+            view_id=view_id,
+            form_view_id=form_view_id,
+            properties=properties,
+            request_options=request_options,
+        )
+        return _response.data
+
+    def delete_public_payment_api(
+        self,
+        payment_id: str,
+        *,
+        external_id: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> DeletePublicPaymentApiV2PublicPaymentsPaymentIdDelete200Envelope:
+        """
+        Parameters
+        ----------
+        payment_id : str
+
+        external_id : typing.Optional[str]
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        DeletePublicPaymentApiV2PublicPaymentsPaymentIdDelete200Envelope
+            Successful Response
+
+        Examples
+        --------
+        from sanka_sdk import SankaClient
+
+        client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+        client.payments.delete_public_payment_api(
+            payment_id="payment_id",
+        )
+        """
+        _response = self._raw_client.delete_public_payment_api(
+            payment_id, external_id=external_id, workspace_id=workspace_id, request_options=request_options
+        )
+        return _response.data
+
+    def download_public_payment_pdf_api(
+        self,
+        payment_id: str,
+        *,
+        external_id: typing.Optional[str] = None,
+        template_id: typing.Optional[str] = None,
+        template_select: typing.Optional[str] = None,
+        language: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        accept_language: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> typing.Iterator[bytes]:
+        """
+        Parameters
+        ----------
+        payment_id : str
+
+        external_id : typing.Optional[str]
+
+        template_id : typing.Optional[str]
+
+        template_select : typing.Optional[str]
+
+        language : typing.Optional[str]
+
+        workspace_id : typing.Optional[str]
+
+        accept_language : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration. You can pass in configuration such as `chunk_size`, and more to customize the request and response.
+
+        Returns
+        -------
+        typing.Iterator[bytes]
+            PDF document
+
+        Examples
+        --------
+        from sanka_sdk import SankaClient
+
+        client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+        client.payments.download_public_payment_pdf_api(
+            payment_id="payment_id",
+        )
+        """
+        with self._raw_client.download_public_payment_pdf_api(
+            payment_id,
+            external_id=external_id,
+            template_id=template_id,
+            template_select=template_select,
+            language=language,
+            workspace_id=workspace_id,
+            accept_language=accept_language,
+            request_options=request_options,
+        ) as r:
+            yield from r.data
+
+    def list_public_payment_allocations_api(
         self,
         payment_id: str,
         *,
         external_id: typing.Optional[str] = None,
         lang: typing.Optional[str] = None,
         language: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> ReceiptSchema:
+    ) -> ListPublicPaymentAllocationsApiV2PublicPaymentsPaymentIdAllocationsGet200Envelope:
         """
         Parameters
         ----------
@@ -172,6 +403,8 @@ class PaymentsClient:
 
         language : typing.Optional[str]
 
+        workspace_id : typing.Optional[str]
+
         accept_language : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
@@ -179,153 +412,91 @@ class PaymentsClient:
 
         Returns
         -------
-        ReceiptSchema
-            OK
+        ListPublicPaymentAllocationsApiV2PublicPaymentsPaymentIdAllocationsGet200Envelope
+            Successful Response
 
         Examples
         --------
         from sanka_sdk import SankaClient
 
         client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
-        client.payments.api_routers_v_1_payments_public_api_get_public_payment(
+        client.payments.list_public_payment_allocations_api(
             payment_id="payment_id",
         )
         """
-        _response = self._raw_client.api_routers_v_1_payments_public_api_get_public_payment(
+        _response = self._raw_client.list_public_payment_allocations_api(
             payment_id,
             external_id=external_id,
             lang=lang,
             language=language,
+            workspace_id=workspace_id,
             accept_language=accept_language,
             request_options=request_options,
         )
         return _response.data
 
-    def api_routers_v_1_payments_public_api_update_public_payment(
+    def update_public_payment_allocations_api(
         self,
         payment_id: str,
         *,
+        request: typing.Dict[str, typing.Optional[typing.Any]],
         external_id: typing.Optional[str] = None,
-        public_payment_request_external_id: typing.Optional[str] = OMIT,
-        contact_id: typing.Optional[str] = OMIT,
-        contact_external_id: typing.Optional[str] = OMIT,
-        company_id: typing.Optional[str] = OMIT,
-        company_external_id: typing.Optional[str] = OMIT,
-        start_date: typing.Optional[str] = OMIT,
-        status: typing.Optional[str] = OMIT,
-        currency: typing.Optional[str] = OMIT,
-        total_price: typing.Optional[float] = OMIT,
-        total_price_without_tax: typing.Optional[float] = OMIT,
-        entry_type: typing.Optional[str] = OMIT,
-        notes: typing.Optional[str] = OMIT,
+        lang: typing.Optional[str] = None,
+        language: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        accept_language: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> PublicPaymentResponse:
+    ) -> UpdatePublicPaymentAllocationsApiV2PublicPaymentsPaymentIdAllocationsPut200Envelope:
         """
         Parameters
         ----------
         payment_id : str
 
+        request : typing.Dict[str, typing.Optional[typing.Any]]
+
         external_id : typing.Optional[str]
 
-        public_payment_request_external_id : typing.Optional[str]
+        lang : typing.Optional[str]
 
-        contact_id : typing.Optional[str]
+        language : typing.Optional[str]
 
-        contact_external_id : typing.Optional[str]
+        workspace_id : typing.Optional[str]
 
-        company_id : typing.Optional[str]
-
-        company_external_id : typing.Optional[str]
-
-        start_date : typing.Optional[str]
-
-        status : typing.Optional[str]
-
-        currency : typing.Optional[str]
-
-        total_price : typing.Optional[float]
-
-        total_price_without_tax : typing.Optional[float]
-
-        entry_type : typing.Optional[str]
-
-        notes : typing.Optional[str]
+        accept_language : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        PublicPaymentResponse
-            OK
+        UpdatePublicPaymentAllocationsApiV2PublicPaymentsPaymentIdAllocationsPut200Envelope
+            Successful Response
 
         Examples
         --------
         from sanka_sdk import SankaClient
 
         client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
-        client.payments.api_routers_v_1_payments_public_api_update_public_payment(
+        client.payments.update_public_payment_allocations_api(
             payment_id="payment_id",
+            request={"key": "value"},
         )
         """
-        _response = self._raw_client.api_routers_v_1_payments_public_api_update_public_payment(
+        _response = self._raw_client.update_public_payment_allocations_api(
             payment_id,
+            request=request,
             external_id=external_id,
-            public_payment_request_external_id=public_payment_request_external_id,
-            contact_id=contact_id,
-            contact_external_id=contact_external_id,
-            company_id=company_id,
-            company_external_id=company_external_id,
-            start_date=start_date,
-            status=status,
-            currency=currency,
-            total_price=total_price,
-            total_price_without_tax=total_price_without_tax,
-            entry_type=entry_type,
-            notes=notes,
+            lang=lang,
+            language=language,
+            workspace_id=workspace_id,
+            accept_language=accept_language,
             request_options=request_options,
-        )
-        return _response.data
-
-    def api_routers_v_1_payments_public_api_delete_public_payment(
-        self,
-        payment_id: str,
-        *,
-        external_id: typing.Optional[str] = None,
-        request_options: typing.Optional[RequestOptions] = None,
-    ) -> PublicPaymentResponse:
-        """
-        Parameters
-        ----------
-        payment_id : str
-
-        external_id : typing.Optional[str]
-
-        request_options : typing.Optional[RequestOptions]
-            Request-specific configuration.
-
-        Returns
-        -------
-        PublicPaymentResponse
-            OK
-
-        Examples
-        --------
-        from sanka_sdk import SankaClient
-
-        client = SankaClient(
-            token="YOUR_TOKEN",
-        )
-        client.payments.api_routers_v_1_payments_public_api_delete_public_payment(
-            payment_id="payment_id",
-        )
-        """
-        _response = self._raw_client.api_routers_v_1_payments_public_api_delete_public_payment(
-            payment_id, external_id=external_id, request_options=request_options
         )
         return _response.data
 
@@ -345,23 +516,44 @@ class AsyncPaymentsClient:
         """
         return self._raw_client
 
-    async def api_routers_v_1_payments_public_api_list_workspace_payments(
+    async def list_public_payments_api(
         self,
         *,
         workspace_id: typing.Optional[str] = None,
-        lang: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = None,
+        search: typing.Optional[str] = None,
         language: typing.Optional[str] = None,
+        status: typing.Optional[str] = None,
+        usage_status: typing.Optional[str] = None,
+        page: typing.Optional[int] = None,
+        limit: typing.Optional[int] = None,
+        sort: typing.Optional[str] = None,
+        x_language: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> typing.List[ReceiptSchema]:
+    ) -> ListPublicPaymentsApiV2PublicPaymentsGet200Envelope:
         """
         Parameters
         ----------
         workspace_id : typing.Optional[str]
 
-        lang : typing.Optional[str]
+        view_id : typing.Optional[str]
+
+        search : typing.Optional[str]
 
         language : typing.Optional[str]
+
+        status : typing.Optional[str]
+
+        usage_status : typing.Optional[str]
+
+        page : typing.Optional[int]
+
+        limit : typing.Optional[int]
+
+        sort : typing.Optional[str]
+
+        x_language : typing.Optional[str]
 
         accept_language : typing.Optional[str]
 
@@ -370,8 +562,8 @@ class AsyncPaymentsClient:
 
         Returns
         -------
-        typing.List[ReceiptSchema]
-            OK
+        ListPublicPaymentsApiV2PublicPaymentsGet200Envelope
+            Object record list response
 
         Examples
         --------
@@ -380,76 +572,60 @@ class AsyncPaymentsClient:
         from sanka_sdk import AsyncSankaClient
 
         client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
 
 
         async def main() -> None:
-            await client.payments.api_routers_v_1_payments_public_api_list_workspace_payments()
+            await client.payments.list_public_payments_api()
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.api_routers_v_1_payments_public_api_list_workspace_payments(
+        _response = await self._raw_client.list_public_payments_api(
             workspace_id=workspace_id,
-            lang=lang,
+            view_id=view_id,
+            search=search,
             language=language,
+            status=status,
+            usage_status=usage_status,
+            page=page,
+            limit=limit,
+            sort=sort,
+            x_language=x_language,
             accept_language=accept_language,
             request_options=request_options,
         )
         return _response.data
 
-    async def api_routers_v_1_payments_public_api_create_public_payment(
+    async def create_public_payment_api(
         self,
         *,
-        external_id: typing.Optional[str] = OMIT,
-        contact_id: typing.Optional[str] = OMIT,
-        contact_external_id: typing.Optional[str] = OMIT,
-        company_id: typing.Optional[str] = OMIT,
-        company_external_id: typing.Optional[str] = OMIT,
-        start_date: typing.Optional[str] = OMIT,
-        status: typing.Optional[str] = OMIT,
-        currency: typing.Optional[str] = OMIT,
-        total_price: typing.Optional[float] = OMIT,
-        total_price_without_tax: typing.Optional[float] = OMIT,
-        entry_type: typing.Optional[str] = OMIT,
-        notes: typing.Optional[str] = OMIT,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = OMIT,
+        form_view_id: typing.Optional[str] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> PublicPaymentResponse:
+    ) -> CreatePublicPaymentApiV2PublicPaymentsPost200Envelope:
         """
         Parameters
         ----------
-        external_id : typing.Optional[str]
+        workspace_id : typing.Optional[str]
 
-        contact_id : typing.Optional[str]
+        view_id : typing.Optional[str]
 
-        contact_external_id : typing.Optional[str]
+        form_view_id : typing.Optional[str]
 
-        company_id : typing.Optional[str]
-
-        company_external_id : typing.Optional[str]
-
-        start_date : typing.Optional[str]
-
-        status : typing.Optional[str]
-
-        currency : typing.Optional[str]
-
-        total_price : typing.Optional[float]
-
-        total_price_without_tax : typing.Optional[float]
-
-        entry_type : typing.Optional[str]
-
-        notes : typing.Optional[str]
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        PublicPaymentResponse
-            OK
+        CreatePublicPaymentApiV2PublicPaymentsPost200Envelope
+            Successful Response
 
         Examples
         --------
@@ -458,43 +634,283 @@ class AsyncPaymentsClient:
         from sanka_sdk import AsyncSankaClient
 
         client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
 
 
         async def main() -> None:
-            await client.payments.api_routers_v_1_payments_public_api_create_public_payment()
+            await client.payments.create_public_payment_api()
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.api_routers_v_1_payments_public_api_create_public_payment(
-            external_id=external_id,
-            contact_id=contact_id,
-            contact_external_id=contact_external_id,
-            company_id=company_id,
-            company_external_id=company_external_id,
-            start_date=start_date,
-            status=status,
-            currency=currency,
-            total_price=total_price,
-            total_price_without_tax=total_price_without_tax,
-            entry_type=entry_type,
-            notes=notes,
+        _response = await self._raw_client.create_public_payment_api(
+            workspace_id=workspace_id,
+            view_id=view_id,
+            form_view_id=form_view_id,
+            properties=properties,
             request_options=request_options,
         )
         return _response.data
 
-    async def api_routers_v_1_payments_public_api_get_public_payment(
+    async def get_public_payment_api(
+        self,
+        payment_id: str,
+        *,
+        external_id: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = None,
+        form_view_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> GetPublicPaymentApiV2PublicPaymentsPaymentIdGet200Envelope:
+        """
+        Parameters
+        ----------
+        payment_id : str
+
+        external_id : typing.Optional[str]
+
+        workspace_id : typing.Optional[str]
+
+        view_id : typing.Optional[str]
+
+        form_view_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        GetPublicPaymentApiV2PublicPaymentsPaymentIdGet200Envelope
+            Object record detail response. The base detail payload is intentionally thin; drawer sections load through scoped endpoints.
+
+        Examples
+        --------
+        import asyncio
+
+        from sanka_sdk import AsyncSankaClient
+
+        client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.payments.get_public_payment_api(
+                payment_id="payment_id",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.get_public_payment_api(
+            payment_id,
+            external_id=external_id,
+            workspace_id=workspace_id,
+            view_id=view_id,
+            form_view_id=form_view_id,
+            request_options=request_options,
+        )
+        return _response.data
+
+    async def update_public_payment_api(
+        self,
+        payment_id: str,
+        *,
+        external_id: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = OMIT,
+        form_view_id: typing.Optional[str] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> UpdatePublicPaymentApiV2PublicPaymentsPaymentIdPut200Envelope:
+        """
+        Parameters
+        ----------
+        payment_id : str
+
+        external_id : typing.Optional[str]
+
+        workspace_id : typing.Optional[str]
+
+        view_id : typing.Optional[str]
+
+        form_view_id : typing.Optional[str]
+
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        UpdatePublicPaymentApiV2PublicPaymentsPaymentIdPut200Envelope
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sanka_sdk import AsyncSankaClient
+
+        client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.payments.update_public_payment_api(
+                payment_id="payment_id",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.update_public_payment_api(
+            payment_id,
+            external_id=external_id,
+            workspace_id=workspace_id,
+            view_id=view_id,
+            form_view_id=form_view_id,
+            properties=properties,
+            request_options=request_options,
+        )
+        return _response.data
+
+    async def delete_public_payment_api(
+        self,
+        payment_id: str,
+        *,
+        external_id: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> DeletePublicPaymentApiV2PublicPaymentsPaymentIdDelete200Envelope:
+        """
+        Parameters
+        ----------
+        payment_id : str
+
+        external_id : typing.Optional[str]
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        DeletePublicPaymentApiV2PublicPaymentsPaymentIdDelete200Envelope
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sanka_sdk import AsyncSankaClient
+
+        client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.payments.delete_public_payment_api(
+                payment_id="payment_id",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.delete_public_payment_api(
+            payment_id, external_id=external_id, workspace_id=workspace_id, request_options=request_options
+        )
+        return _response.data
+
+    async def download_public_payment_pdf_api(
+        self,
+        payment_id: str,
+        *,
+        external_id: typing.Optional[str] = None,
+        template_id: typing.Optional[str] = None,
+        template_select: typing.Optional[str] = None,
+        language: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        accept_language: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> typing.AsyncIterator[bytes]:
+        """
+        Parameters
+        ----------
+        payment_id : str
+
+        external_id : typing.Optional[str]
+
+        template_id : typing.Optional[str]
+
+        template_select : typing.Optional[str]
+
+        language : typing.Optional[str]
+
+        workspace_id : typing.Optional[str]
+
+        accept_language : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration. You can pass in configuration such as `chunk_size`, and more to customize the request and response.
+
+        Returns
+        -------
+        typing.AsyncIterator[bytes]
+            PDF document
+
+        Examples
+        --------
+        import asyncio
+
+        from sanka_sdk import AsyncSankaClient
+
+        client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.payments.download_public_payment_pdf_api(
+                payment_id="payment_id",
+            )
+
+
+        asyncio.run(main())
+        """
+        async with self._raw_client.download_public_payment_pdf_api(
+            payment_id,
+            external_id=external_id,
+            template_id=template_id,
+            template_select=template_select,
+            language=language,
+            workspace_id=workspace_id,
+            accept_language=accept_language,
+            request_options=request_options,
+        ) as r:
+            async for _chunk in r.data:
+                yield _chunk
+
+    async def list_public_payment_allocations_api(
         self,
         payment_id: str,
         *,
         external_id: typing.Optional[str] = None,
         lang: typing.Optional[str] = None,
         language: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> ReceiptSchema:
+    ) -> ListPublicPaymentAllocationsApiV2PublicPaymentsPaymentIdAllocationsGet200Envelope:
         """
         Parameters
         ----------
@@ -506,6 +922,8 @@ class AsyncPaymentsClient:
 
         language : typing.Optional[str]
 
+        workspace_id : typing.Optional[str]
+
         accept_language : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
@@ -513,8 +931,8 @@ class AsyncPaymentsClient:
 
         Returns
         -------
-        ReceiptSchema
-            OK
+        ListPublicPaymentAllocationsApiV2PublicPaymentsPaymentIdAllocationsGet200Envelope
+            Successful Response
 
         Examples
         --------
@@ -523,85 +941,66 @@ class AsyncPaymentsClient:
         from sanka_sdk import AsyncSankaClient
 
         client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
 
 
         async def main() -> None:
-            await client.payments.api_routers_v_1_payments_public_api_get_public_payment(
+            await client.payments.list_public_payment_allocations_api(
                 payment_id="payment_id",
             )
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.api_routers_v_1_payments_public_api_get_public_payment(
+        _response = await self._raw_client.list_public_payment_allocations_api(
             payment_id,
             external_id=external_id,
             lang=lang,
             language=language,
+            workspace_id=workspace_id,
             accept_language=accept_language,
             request_options=request_options,
         )
         return _response.data
 
-    async def api_routers_v_1_payments_public_api_update_public_payment(
+    async def update_public_payment_allocations_api(
         self,
         payment_id: str,
         *,
+        request: typing.Dict[str, typing.Optional[typing.Any]],
         external_id: typing.Optional[str] = None,
-        public_payment_request_external_id: typing.Optional[str] = OMIT,
-        contact_id: typing.Optional[str] = OMIT,
-        contact_external_id: typing.Optional[str] = OMIT,
-        company_id: typing.Optional[str] = OMIT,
-        company_external_id: typing.Optional[str] = OMIT,
-        start_date: typing.Optional[str] = OMIT,
-        status: typing.Optional[str] = OMIT,
-        currency: typing.Optional[str] = OMIT,
-        total_price: typing.Optional[float] = OMIT,
-        total_price_without_tax: typing.Optional[float] = OMIT,
-        entry_type: typing.Optional[str] = OMIT,
-        notes: typing.Optional[str] = OMIT,
+        lang: typing.Optional[str] = None,
+        language: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        accept_language: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> PublicPaymentResponse:
+    ) -> UpdatePublicPaymentAllocationsApiV2PublicPaymentsPaymentIdAllocationsPut200Envelope:
         """
         Parameters
         ----------
         payment_id : str
 
+        request : typing.Dict[str, typing.Optional[typing.Any]]
+
         external_id : typing.Optional[str]
 
-        public_payment_request_external_id : typing.Optional[str]
+        lang : typing.Optional[str]
 
-        contact_id : typing.Optional[str]
+        language : typing.Optional[str]
 
-        contact_external_id : typing.Optional[str]
+        workspace_id : typing.Optional[str]
 
-        company_id : typing.Optional[str]
-
-        company_external_id : typing.Optional[str]
-
-        start_date : typing.Optional[str]
-
-        status : typing.Optional[str]
-
-        currency : typing.Optional[str]
-
-        total_price : typing.Optional[float]
-
-        total_price_without_tax : typing.Optional[float]
-
-        entry_type : typing.Optional[str]
-
-        notes : typing.Optional[str]
+        accept_language : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        PublicPaymentResponse
-            OK
+        UpdatePublicPaymentAllocationsApiV2PublicPaymentsPaymentIdAllocationsPut200Envelope
+            Successful Response
 
         Examples
         --------
@@ -610,79 +1009,28 @@ class AsyncPaymentsClient:
         from sanka_sdk import AsyncSankaClient
 
         client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
 
 
         async def main() -> None:
-            await client.payments.api_routers_v_1_payments_public_api_update_public_payment(
+            await client.payments.update_public_payment_allocations_api(
                 payment_id="payment_id",
+                request={"key": "value"},
             )
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.api_routers_v_1_payments_public_api_update_public_payment(
+        _response = await self._raw_client.update_public_payment_allocations_api(
             payment_id,
+            request=request,
             external_id=external_id,
-            public_payment_request_external_id=public_payment_request_external_id,
-            contact_id=contact_id,
-            contact_external_id=contact_external_id,
-            company_id=company_id,
-            company_external_id=company_external_id,
-            start_date=start_date,
-            status=status,
-            currency=currency,
-            total_price=total_price,
-            total_price_without_tax=total_price_without_tax,
-            entry_type=entry_type,
-            notes=notes,
+            lang=lang,
+            language=language,
+            workspace_id=workspace_id,
+            accept_language=accept_language,
             request_options=request_options,
-        )
-        return _response.data
-
-    async def api_routers_v_1_payments_public_api_delete_public_payment(
-        self,
-        payment_id: str,
-        *,
-        external_id: typing.Optional[str] = None,
-        request_options: typing.Optional[RequestOptions] = None,
-    ) -> PublicPaymentResponse:
-        """
-        Parameters
-        ----------
-        payment_id : str
-
-        external_id : typing.Optional[str]
-
-        request_options : typing.Optional[RequestOptions]
-            Request-specific configuration.
-
-        Returns
-        -------
-        PublicPaymentResponse
-            OK
-
-        Examples
-        --------
-        import asyncio
-
-        from sanka_sdk import AsyncSankaClient
-
-        client = AsyncSankaClient(
-            token="YOUR_TOKEN",
-        )
-
-
-        async def main() -> None:
-            await client.payments.api_routers_v_1_payments_public_api_delete_public_payment(
-                payment_id="payment_id",
-            )
-
-
-        asyncio.run(main())
-        """
-        _response = await self._raw_client.api_routers_v_1_payments_public_api_delete_public_payment(
-            payment_id, external_id=external_id, request_options=request_options
         )
         return _response.data

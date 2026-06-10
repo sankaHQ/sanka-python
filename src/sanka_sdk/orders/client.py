@@ -2,13 +2,31 @@
 
 import typing
 
+from .. import core
 from ..core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ..core.request_options import RequestOptions
-from ..types.bulk_order_in import BulkOrderIn
-from ..types.bulk_orders_response import BulkOrdersResponse
-from ..types.orders_list_response import OrdersListResponse
-from ..types.public_order_delete_response import PublicOrderDeleteResponse
-from ..types.public_order_detail_schema import PublicOrderDetailSchema
+from ..types.bulk_create_public_orders_api_v_2_public_orders_bulk_post_200_envelope import (
+    BulkCreatePublicOrdersApiV2PublicOrdersBulkPost200Envelope,
+)
+from ..types.create_public_order_api_v_2_public_orders_post_200_envelope import (
+    CreatePublicOrderApiV2PublicOrdersPost200Envelope,
+)
+from ..types.delete_public_order_api_v_2_public_orders_order_id_delete_200_envelope import (
+    DeletePublicOrderApiV2PublicOrdersOrderIdDelete200Envelope,
+)
+from ..types.get_public_order_api_v_2_public_orders_order_id_get_200_envelope import (
+    GetPublicOrderApiV2PublicOrdersOrderIdGet200Envelope,
+)
+from ..types.list_public_orders_api_v_2_public_orders_get_200_envelope import (
+    ListPublicOrdersApiV2PublicOrdersGet200Envelope,
+)
+from ..types.order_bulk_order_request import OrderBulkOrderRequest
+from ..types.update_public_order_api_v_2_public_orders_order_id_put_200_envelope import (
+    UpdatePublicOrderApiV2PublicOrdersOrderIdPut200Envelope,
+)
+from ..types.upload_public_order_file_api_v_2_public_orders_files_post_200_envelope import (
+    UploadPublicOrderFileApiV2PublicOrdersFilesPost200Envelope,
+)
 from .raw_client import AsyncRawOrdersClient, RawOrdersClient
 
 # this is used as the default value for optional parameters
@@ -30,24 +48,36 @@ class OrdersClient:
         """
         return self._raw_client
 
-    def api_routers_v_1_orders_public_api_public_list_orders(
+    def list_public_orders_api(
         self,
         *,
-        view: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = None,
         search: typing.Optional[str] = None,
+        language: typing.Optional[str] = None,
+        status: typing.Optional[str] = None,
+        usage_status: typing.Optional[str] = None,
         page: typing.Optional[int] = None,
         limit: typing.Optional[int] = None,
         sort: typing.Optional[str] = None,
-        reference_id: typing.Optional[str] = None,
+        x_language: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> OrdersListResponse:
+    ) -> ListPublicOrdersApiV2PublicOrdersGet200Envelope:
         """
         Parameters
         ----------
-        view : typing.Optional[str]
+        workspace_id : typing.Optional[str]
+
+        view_id : typing.Optional[str]
 
         search : typing.Optional[str]
+
+        language : typing.Optional[str]
+
+        status : typing.Optional[str]
+
+        usage_status : typing.Optional[str]
 
         page : typing.Optional[int]
 
@@ -55,7 +85,7 @@ class OrdersClient:
 
         sort : typing.Optional[str]
 
-        reference_id : typing.Optional[str]
+        x_language : typing.Optional[str]
 
         accept_language : typing.Optional[str]
 
@@ -64,89 +94,97 @@ class OrdersClient:
 
         Returns
         -------
-        OrdersListResponse
-            OK
+        ListPublicOrdersApiV2PublicOrdersGet200Envelope
+            Object record list response
 
         Examples
         --------
         from sanka_sdk import SankaClient
 
         client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
-        client.orders.api_routers_v_1_orders_public_api_public_list_orders()
+        client.orders.list_public_orders_api()
         """
-        _response = self._raw_client.api_routers_v_1_orders_public_api_public_list_orders(
-            view=view,
+        _response = self._raw_client.list_public_orders_api(
+            workspace_id=workspace_id,
+            view_id=view_id,
             search=search,
+            language=language,
+            status=status,
+            usage_status=usage_status,
             page=page,
             limit=limit,
             sort=sort,
-            reference_id=reference_id,
+            x_language=x_language,
             accept_language=accept_language,
             request_options=request_options,
         )
         return _response.data
 
-    def api_routers_v_1_orders_public_api_public_upsert_order(
+    def create_public_order_api(
         self,
         *,
-        order: BulkOrderIn,
-        create_missing_items: typing.Optional[bool] = OMIT,
-        trigger_workflows: typing.Optional[bool] = OMIT,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = OMIT,
+        form_view_id: typing.Optional[str] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> BulkOrdersResponse:
+    ) -> CreatePublicOrderApiV2PublicOrdersPost200Envelope:
         """
         Parameters
         ----------
-        order : BulkOrderIn
+        workspace_id : typing.Optional[str]
 
-        create_missing_items : typing.Optional[bool]
+        view_id : typing.Optional[str]
 
-        trigger_workflows : typing.Optional[bool]
+        form_view_id : typing.Optional[str]
+
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        BulkOrdersResponse
-            OK
+        CreatePublicOrderApiV2PublicOrdersPost200Envelope
+            Successful Response
 
         Examples
         --------
-        from sanka_sdk import BulkOrderIn, BulkOrderItemIn, SankaClient
+        from sanka_sdk import SankaClient
 
         client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
-        client.orders.api_routers_v_1_orders_public_api_public_upsert_order(
-            order=BulkOrderIn(
-                external_id="externalId",
-                items=[BulkOrderItemIn()],
-            ),
-        )
+        client.orders.create_public_order_api()
         """
-        _response = self._raw_client.api_routers_v_1_orders_public_api_public_upsert_order(
-            order=order,
-            create_missing_items=create_missing_items,
-            trigger_workflows=trigger_workflows,
+        _response = self._raw_client.create_public_order_api(
+            workspace_id=workspace_id,
+            view_id=view_id,
+            form_view_id=form_view_id,
+            properties=properties,
             request_options=request_options,
         )
         return _response.data
 
-    def api_routers_v_1_orders_public_api_public_bulk_upsert_orders(
+    def bulk_create_public_orders_api(
         self,
         *,
-        orders: typing.Sequence[BulkOrderIn],
+        workspace_id: typing.Optional[str] = None,
+        orders: typing.Optional[typing.Sequence[OrderBulkOrderRequest]] = OMIT,
         create_missing_items: typing.Optional[bool] = OMIT,
         trigger_workflows: typing.Optional[bool] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> BulkOrdersResponse:
+    ) -> BulkCreatePublicOrdersApiV2PublicOrdersBulkPost200Envelope:
         """
         Parameters
         ----------
-        orders : typing.Sequence[BulkOrderIn]
+        workspace_id : typing.Optional[str]
+
+        orders : typing.Optional[typing.Sequence[OrderBulkOrderRequest]]
 
         create_missing_items : typing.Optional[bool]
 
@@ -157,26 +195,21 @@ class OrdersClient:
 
         Returns
         -------
-        BulkOrdersResponse
-            OK
+        BulkCreatePublicOrdersApiV2PublicOrdersBulkPost200Envelope
+            Successful Response
 
         Examples
         --------
-        from sanka_sdk import BulkOrderIn, BulkOrderItemIn, SankaClient
+        from sanka_sdk import SankaClient
 
         client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
-        client.orders.api_routers_v_1_orders_public_api_public_bulk_upsert_orders(
-            orders=[
-                BulkOrderIn(
-                    external_id="externalId",
-                    items=[BulkOrderItemIn()],
-                )
-            ],
-        )
+        client.orders.bulk_create_public_orders_api()
         """
-        _response = self._raw_client.api_routers_v_1_orders_public_api_public_bulk_upsert_orders(
+        _response = self._raw_client.bulk_create_public_orders_api(
+            workspace_id=workspace_id,
             orders=orders,
             create_missing_items=create_missing_items,
             trigger_workflows=trigger_workflows,
@@ -184,13 +217,54 @@ class OrdersClient:
         )
         return _response.data
 
-    def api_routers_v_1_orders_public_api_public_get_order(
+    def upload_public_order_file_api(
+        self,
+        *,
+        file: core.File,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> UploadPublicOrderFileApiV2PublicOrdersFilesPost200Envelope:
+        """
+        Parameters
+        ----------
+        file : core.File
+            See core.File for more documentation
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        UploadPublicOrderFileApiV2PublicOrdersFilesPost200Envelope
+            Successful Response
+
+        Examples
+        --------
+        from sanka_sdk import SankaClient
+
+        client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+        client.orders.upload_public_order_file_api()
+        """
+        _response = self._raw_client.upload_public_order_file_api(
+            file=file, workspace_id=workspace_id, request_options=request_options
+        )
+        return _response.data
+
+    def get_public_order_api(
         self,
         order_id: str,
         *,
         external_id: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = None,
+        form_view_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> PublicOrderDetailSchema:
+    ) -> GetPublicOrderApiV2PublicOrdersOrderIdGet200Envelope:
         """
         Parameters
         ----------
@@ -198,89 +272,53 @@ class OrdersClient:
 
         external_id : typing.Optional[str]
 
+        workspace_id : typing.Optional[str]
+
+        view_id : typing.Optional[str]
+
+        form_view_id : typing.Optional[str]
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        PublicOrderDetailSchema
-            OK
+        GetPublicOrderApiV2PublicOrdersOrderIdGet200Envelope
+            Object record detail response. The base detail payload is intentionally thin; drawer sections load through scoped endpoints.
 
         Examples
         --------
         from sanka_sdk import SankaClient
 
         client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
-        client.orders.api_routers_v_1_orders_public_api_public_get_order(
+        client.orders.get_public_order_api(
             order_id="order_id",
         )
         """
-        _response = self._raw_client.api_routers_v_1_orders_public_api_public_get_order(
-            order_id, external_id=external_id, request_options=request_options
-        )
-        return _response.data
-
-    def api_routers_v_1_orders_public_api_public_update_order(
-        self,
-        order_id: str,
-        *,
-        order: BulkOrderIn,
-        create_missing_items: typing.Optional[bool] = OMIT,
-        trigger_workflows: typing.Optional[bool] = OMIT,
-        request_options: typing.Optional[RequestOptions] = None,
-    ) -> BulkOrdersResponse:
-        """
-        Parameters
-        ----------
-        order_id : str
-
-        order : BulkOrderIn
-
-        create_missing_items : typing.Optional[bool]
-
-        trigger_workflows : typing.Optional[bool]
-
-        request_options : typing.Optional[RequestOptions]
-            Request-specific configuration.
-
-        Returns
-        -------
-        BulkOrdersResponse
-            OK
-
-        Examples
-        --------
-        from sanka_sdk import BulkOrderIn, BulkOrderItemIn, SankaClient
-
-        client = SankaClient(
-            token="YOUR_TOKEN",
-        )
-        client.orders.api_routers_v_1_orders_public_api_public_update_order(
-            order_id="order_id",
-            order=BulkOrderIn(
-                external_id="externalId",
-                items=[BulkOrderItemIn()],
-            ),
-        )
-        """
-        _response = self._raw_client.api_routers_v_1_orders_public_api_public_update_order(
+        _response = self._raw_client.get_public_order_api(
             order_id,
-            order=order,
-            create_missing_items=create_missing_items,
-            trigger_workflows=trigger_workflows,
+            external_id=external_id,
+            workspace_id=workspace_id,
+            view_id=view_id,
+            form_view_id=form_view_id,
             request_options=request_options,
         )
         return _response.data
 
-    def api_routers_v_1_orders_public_api_public_delete_order(
+    def update_public_order_api(
         self,
         order_id: str,
         *,
         external_id: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = OMIT,
+        form_view_id: typing.Optional[str] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> PublicOrderDeleteResponse:
+    ) -> UpdatePublicOrderApiV2PublicOrdersOrderIdPut200Envelope:
         """
         Parameters
         ----------
@@ -288,29 +326,147 @@ class OrdersClient:
 
         external_id : typing.Optional[str]
 
+        workspace_id : typing.Optional[str]
+
+        view_id : typing.Optional[str]
+
+        form_view_id : typing.Optional[str]
+
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        PublicOrderDeleteResponse
-            OK
+        UpdatePublicOrderApiV2PublicOrdersOrderIdPut200Envelope
+            Successful Response
 
         Examples
         --------
         from sanka_sdk import SankaClient
 
         client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
-        client.orders.api_routers_v_1_orders_public_api_public_delete_order(
+        client.orders.update_public_order_api(
             order_id="order_id",
         )
         """
-        _response = self._raw_client.api_routers_v_1_orders_public_api_public_delete_order(
-            order_id, external_id=external_id, request_options=request_options
+        _response = self._raw_client.update_public_order_api(
+            order_id,
+            external_id=external_id,
+            workspace_id=workspace_id,
+            view_id=view_id,
+            form_view_id=form_view_id,
+            properties=properties,
+            request_options=request_options,
         )
         return _response.data
+
+    def delete_public_order_api(
+        self,
+        order_id: str,
+        *,
+        external_id: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> DeletePublicOrderApiV2PublicOrdersOrderIdDelete200Envelope:
+        """
+        Parameters
+        ----------
+        order_id : str
+
+        external_id : typing.Optional[str]
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        DeletePublicOrderApiV2PublicOrdersOrderIdDelete200Envelope
+            Successful Response
+
+        Examples
+        --------
+        from sanka_sdk import SankaClient
+
+        client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+        client.orders.delete_public_order_api(
+            order_id="order_id",
+        )
+        """
+        _response = self._raw_client.delete_public_order_api(
+            order_id, external_id=external_id, workspace_id=workspace_id, request_options=request_options
+        )
+        return _response.data
+
+    def download_public_order_pdf_api(
+        self,
+        order_id: str,
+        *,
+        external_id: typing.Optional[str] = None,
+        template_id: typing.Optional[str] = None,
+        template_select: typing.Optional[str] = None,
+        language: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        accept_language: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> typing.Iterator[bytes]:
+        """
+        Parameters
+        ----------
+        order_id : str
+
+        external_id : typing.Optional[str]
+
+        template_id : typing.Optional[str]
+
+        template_select : typing.Optional[str]
+
+        language : typing.Optional[str]
+
+        workspace_id : typing.Optional[str]
+
+        accept_language : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration. You can pass in configuration such as `chunk_size`, and more to customize the request and response.
+
+        Returns
+        -------
+        typing.Iterator[bytes]
+            PDF document
+
+        Examples
+        --------
+        from sanka_sdk import SankaClient
+
+        client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+        client.orders.download_public_order_pdf_api(
+            order_id="order_id",
+        )
+        """
+        with self._raw_client.download_public_order_pdf_api(
+            order_id,
+            external_id=external_id,
+            template_id=template_id,
+            template_select=template_select,
+            language=language,
+            workspace_id=workspace_id,
+            accept_language=accept_language,
+            request_options=request_options,
+        ) as r:
+            yield from r.data
 
 
 class AsyncOrdersClient:
@@ -328,24 +484,36 @@ class AsyncOrdersClient:
         """
         return self._raw_client
 
-    async def api_routers_v_1_orders_public_api_public_list_orders(
+    async def list_public_orders_api(
         self,
         *,
-        view: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = None,
         search: typing.Optional[str] = None,
+        language: typing.Optional[str] = None,
+        status: typing.Optional[str] = None,
+        usage_status: typing.Optional[str] = None,
         page: typing.Optional[int] = None,
         limit: typing.Optional[int] = None,
         sort: typing.Optional[str] = None,
-        reference_id: typing.Optional[str] = None,
+        x_language: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> OrdersListResponse:
+    ) -> ListPublicOrdersApiV2PublicOrdersGet200Envelope:
         """
         Parameters
         ----------
-        view : typing.Optional[str]
+        workspace_id : typing.Optional[str]
+
+        view_id : typing.Optional[str]
 
         search : typing.Optional[str]
+
+        language : typing.Optional[str]
+
+        status : typing.Optional[str]
+
+        usage_status : typing.Optional[str]
 
         page : typing.Optional[int]
 
@@ -353,7 +521,7 @@ class AsyncOrdersClient:
 
         sort : typing.Optional[str]
 
-        reference_id : typing.Optional[str]
+        x_language : typing.Optional[str]
 
         accept_language : typing.Optional[str]
 
@@ -362,8 +530,8 @@ class AsyncOrdersClient:
 
         Returns
         -------
-        OrdersListResponse
-            OK
+        ListPublicOrdersApiV2PublicOrdersGet200Envelope
+            Object record list response
 
         Examples
         --------
@@ -372,95 +540,103 @@ class AsyncOrdersClient:
         from sanka_sdk import AsyncSankaClient
 
         client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
 
 
         async def main() -> None:
-            await client.orders.api_routers_v_1_orders_public_api_public_list_orders()
+            await client.orders.list_public_orders_api()
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.api_routers_v_1_orders_public_api_public_list_orders(
-            view=view,
+        _response = await self._raw_client.list_public_orders_api(
+            workspace_id=workspace_id,
+            view_id=view_id,
             search=search,
+            language=language,
+            status=status,
+            usage_status=usage_status,
             page=page,
             limit=limit,
             sort=sort,
-            reference_id=reference_id,
+            x_language=x_language,
             accept_language=accept_language,
             request_options=request_options,
         )
         return _response.data
 
-    async def api_routers_v_1_orders_public_api_public_upsert_order(
+    async def create_public_order_api(
         self,
         *,
-        order: BulkOrderIn,
-        create_missing_items: typing.Optional[bool] = OMIT,
-        trigger_workflows: typing.Optional[bool] = OMIT,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = OMIT,
+        form_view_id: typing.Optional[str] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> BulkOrdersResponse:
+    ) -> CreatePublicOrderApiV2PublicOrdersPost200Envelope:
         """
         Parameters
         ----------
-        order : BulkOrderIn
+        workspace_id : typing.Optional[str]
 
-        create_missing_items : typing.Optional[bool]
+        view_id : typing.Optional[str]
 
-        trigger_workflows : typing.Optional[bool]
+        form_view_id : typing.Optional[str]
+
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        BulkOrdersResponse
-            OK
+        CreatePublicOrderApiV2PublicOrdersPost200Envelope
+            Successful Response
 
         Examples
         --------
         import asyncio
 
-        from sanka_sdk import AsyncSankaClient, BulkOrderIn, BulkOrderItemIn
+        from sanka_sdk import AsyncSankaClient
 
         client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
 
 
         async def main() -> None:
-            await client.orders.api_routers_v_1_orders_public_api_public_upsert_order(
-                order=BulkOrderIn(
-                    external_id="externalId",
-                    items=[BulkOrderItemIn()],
-                ),
-            )
+            await client.orders.create_public_order_api()
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.api_routers_v_1_orders_public_api_public_upsert_order(
-            order=order,
-            create_missing_items=create_missing_items,
-            trigger_workflows=trigger_workflows,
+        _response = await self._raw_client.create_public_order_api(
+            workspace_id=workspace_id,
+            view_id=view_id,
+            form_view_id=form_view_id,
+            properties=properties,
             request_options=request_options,
         )
         return _response.data
 
-    async def api_routers_v_1_orders_public_api_public_bulk_upsert_orders(
+    async def bulk_create_public_orders_api(
         self,
         *,
-        orders: typing.Sequence[BulkOrderIn],
+        workspace_id: typing.Optional[str] = None,
+        orders: typing.Optional[typing.Sequence[OrderBulkOrderRequest]] = OMIT,
         create_missing_items: typing.Optional[bool] = OMIT,
         trigger_workflows: typing.Optional[bool] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> BulkOrdersResponse:
+    ) -> BulkCreatePublicOrdersApiV2PublicOrdersBulkPost200Envelope:
         """
         Parameters
         ----------
-        orders : typing.Sequence[BulkOrderIn]
+        workspace_id : typing.Optional[str]
+
+        orders : typing.Optional[typing.Sequence[OrderBulkOrderRequest]]
 
         create_missing_items : typing.Optional[bool]
 
@@ -471,34 +647,29 @@ class AsyncOrdersClient:
 
         Returns
         -------
-        BulkOrdersResponse
-            OK
+        BulkCreatePublicOrdersApiV2PublicOrdersBulkPost200Envelope
+            Successful Response
 
         Examples
         --------
         import asyncio
 
-        from sanka_sdk import AsyncSankaClient, BulkOrderIn, BulkOrderItemIn
+        from sanka_sdk import AsyncSankaClient
 
         client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
 
 
         async def main() -> None:
-            await client.orders.api_routers_v_1_orders_public_api_public_bulk_upsert_orders(
-                orders=[
-                    BulkOrderIn(
-                        external_id="externalId",
-                        items=[BulkOrderItemIn()],
-                    )
-                ],
-            )
+            await client.orders.bulk_create_public_orders_api()
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.api_routers_v_1_orders_public_api_public_bulk_upsert_orders(
+        _response = await self._raw_client.bulk_create_public_orders_api(
+            workspace_id=workspace_id,
             orders=orders,
             create_missing_items=create_missing_items,
             trigger_workflows=trigger_workflows,
@@ -506,27 +677,28 @@ class AsyncOrdersClient:
         )
         return _response.data
 
-    async def api_routers_v_1_orders_public_api_public_get_order(
+    async def upload_public_order_file_api(
         self,
-        order_id: str,
         *,
-        external_id: typing.Optional[str] = None,
+        file: core.File,
+        workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> PublicOrderDetailSchema:
+    ) -> UploadPublicOrderFileApiV2PublicOrdersFilesPost200Envelope:
         """
         Parameters
         ----------
-        order_id : str
+        file : core.File
+            See core.File for more documentation
 
-        external_id : typing.Optional[str]
+        workspace_id : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        PublicOrderDetailSchema
-            OK
+        UploadPublicOrderFileApiV2PublicOrdersFilesPost200Envelope
+            Successful Response
 
         Examples
         --------
@@ -535,90 +707,94 @@ class AsyncOrdersClient:
         from sanka_sdk import AsyncSankaClient
 
         client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
 
 
         async def main() -> None:
-            await client.orders.api_routers_v_1_orders_public_api_public_get_order(
-                order_id="order_id",
-            )
+            await client.orders.upload_public_order_file_api()
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.api_routers_v_1_orders_public_api_public_get_order(
-            order_id, external_id=external_id, request_options=request_options
+        _response = await self._raw_client.upload_public_order_file_api(
+            file=file, workspace_id=workspace_id, request_options=request_options
         )
         return _response.data
 
-    async def api_routers_v_1_orders_public_api_public_update_order(
+    async def get_public_order_api(
         self,
         order_id: str,
         *,
-        order: BulkOrderIn,
-        create_missing_items: typing.Optional[bool] = OMIT,
-        trigger_workflows: typing.Optional[bool] = OMIT,
+        external_id: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = None,
+        form_view_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> BulkOrdersResponse:
+    ) -> GetPublicOrderApiV2PublicOrdersOrderIdGet200Envelope:
         """
         Parameters
         ----------
         order_id : str
 
-        order : BulkOrderIn
+        external_id : typing.Optional[str]
 
-        create_missing_items : typing.Optional[bool]
+        workspace_id : typing.Optional[str]
 
-        trigger_workflows : typing.Optional[bool]
+        view_id : typing.Optional[str]
+
+        form_view_id : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        BulkOrdersResponse
-            OK
+        GetPublicOrderApiV2PublicOrdersOrderIdGet200Envelope
+            Object record detail response. The base detail payload is intentionally thin; drawer sections load through scoped endpoints.
 
         Examples
         --------
         import asyncio
 
-        from sanka_sdk import AsyncSankaClient, BulkOrderIn, BulkOrderItemIn
+        from sanka_sdk import AsyncSankaClient
 
         client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
 
 
         async def main() -> None:
-            await client.orders.api_routers_v_1_orders_public_api_public_update_order(
+            await client.orders.get_public_order_api(
                 order_id="order_id",
-                order=BulkOrderIn(
-                    external_id="externalId",
-                    items=[BulkOrderItemIn()],
-                ),
             )
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.api_routers_v_1_orders_public_api_public_update_order(
+        _response = await self._raw_client.get_public_order_api(
             order_id,
-            order=order,
-            create_missing_items=create_missing_items,
-            trigger_workflows=trigger_workflows,
+            external_id=external_id,
+            workspace_id=workspace_id,
+            view_id=view_id,
+            form_view_id=form_view_id,
             request_options=request_options,
         )
         return _response.data
 
-    async def api_routers_v_1_orders_public_api_public_delete_order(
+    async def update_public_order_api(
         self,
         order_id: str,
         *,
         external_id: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = OMIT,
+        form_view_id: typing.Optional[str] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> PublicOrderDeleteResponse:
+    ) -> UpdatePublicOrderApiV2PublicOrdersOrderIdPut200Envelope:
         """
         Parameters
         ----------
@@ -626,13 +802,21 @@ class AsyncOrdersClient:
 
         external_id : typing.Optional[str]
 
+        workspace_id : typing.Optional[str]
+
+        view_id : typing.Optional[str]
+
+        form_view_id : typing.Optional[str]
+
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        PublicOrderDeleteResponse
-            OK
+        UpdatePublicOrderApiV2PublicOrdersOrderIdPut200Envelope
+            Successful Response
 
         Examples
         --------
@@ -641,19 +825,146 @@ class AsyncOrdersClient:
         from sanka_sdk import AsyncSankaClient
 
         client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
 
 
         async def main() -> None:
-            await client.orders.api_routers_v_1_orders_public_api_public_delete_order(
+            await client.orders.update_public_order_api(
                 order_id="order_id",
             )
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.api_routers_v_1_orders_public_api_public_delete_order(
-            order_id, external_id=external_id, request_options=request_options
+        _response = await self._raw_client.update_public_order_api(
+            order_id,
+            external_id=external_id,
+            workspace_id=workspace_id,
+            view_id=view_id,
+            form_view_id=form_view_id,
+            properties=properties,
+            request_options=request_options,
         )
         return _response.data
+
+    async def delete_public_order_api(
+        self,
+        order_id: str,
+        *,
+        external_id: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> DeletePublicOrderApiV2PublicOrdersOrderIdDelete200Envelope:
+        """
+        Parameters
+        ----------
+        order_id : str
+
+        external_id : typing.Optional[str]
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        DeletePublicOrderApiV2PublicOrdersOrderIdDelete200Envelope
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sanka_sdk import AsyncSankaClient
+
+        client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.orders.delete_public_order_api(
+                order_id="order_id",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.delete_public_order_api(
+            order_id, external_id=external_id, workspace_id=workspace_id, request_options=request_options
+        )
+        return _response.data
+
+    async def download_public_order_pdf_api(
+        self,
+        order_id: str,
+        *,
+        external_id: typing.Optional[str] = None,
+        template_id: typing.Optional[str] = None,
+        template_select: typing.Optional[str] = None,
+        language: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        accept_language: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> typing.AsyncIterator[bytes]:
+        """
+        Parameters
+        ----------
+        order_id : str
+
+        external_id : typing.Optional[str]
+
+        template_id : typing.Optional[str]
+
+        template_select : typing.Optional[str]
+
+        language : typing.Optional[str]
+
+        workspace_id : typing.Optional[str]
+
+        accept_language : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration. You can pass in configuration such as `chunk_size`, and more to customize the request and response.
+
+        Returns
+        -------
+        typing.AsyncIterator[bytes]
+            PDF document
+
+        Examples
+        --------
+        import asyncio
+
+        from sanka_sdk import AsyncSankaClient
+
+        client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.orders.download_public_order_pdf_api(
+                order_id="order_id",
+            )
+
+
+        asyncio.run(main())
+        """
+        async with self._raw_client.download_public_order_pdf_api(
+            order_id,
+            external_id=external_id,
+            template_id=template_id,
+            template_select=template_select,
+            language=language,
+            workspace_id=workspace_id,
+            accept_language=accept_language,
+            request_options=request_options,
+        ) as r:
+            async for _chunk in r.data:
+                yield _chunk

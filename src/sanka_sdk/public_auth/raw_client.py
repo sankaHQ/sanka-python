@@ -8,40 +8,67 @@ from ..core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ..core.http_response import AsyncHttpResponse, HttpResponse
 from ..core.request_options import RequestOptions
 from ..core.unchecked_base_model import construct_type
-from ..errors.internal_server_error import InternalServerError
+from ..errors.forbidden_error import ForbiddenError
 from ..errors.unauthorized_error import UnauthorizedError
-from ..types.public_auth_whoami_response import PublicAuthWhoamiResponse
+from ..errors.unprocessable_entity_error import UnprocessableEntityError
+from ..types.error_envelope import ErrorEnvelope
+from ..types.get_public_auth_session_api_v_2_public_auth_session_get_200_envelope import (
+    GetPublicAuthSessionApiV2PublicAuthSessionGet200Envelope,
+)
+from ..types.get_public_auth_whoami_api_v_2_public_auth_whoami_get_200_envelope import (
+    GetPublicAuthWhoamiApiV2PublicAuthWhoamiGet200Envelope,
+)
+from ..types.record_public_auth_mcp_tool_call_api_v_2_public_auth_mcp_session_tool_call_log_post_200_envelope import (
+    RecordPublicAuthMcpToolCallApiV2PublicAuthMcpSessionToolCallLogPost200Envelope,
+)
+from ..types.revoke_public_auth_session_api_v_2_public_auth_session_revoke_post_200_envelope import (
+    RevokePublicAuthSessionApiV2PublicAuthSessionRevokePost200Envelope,
+)
+from ..types.switch_public_auth_mcp_session_workspace_api_v_2_public_auth_mcp_session_switch_workspace_post_200_envelope import (
+    SwitchPublicAuthMcpSessionWorkspaceApiV2PublicAuthMcpSessionSwitchWorkspacePost200Envelope,
+)
+from ..types.switch_public_auth_session_workspace_api_v_2_public_auth_session_switch_workspace_post_200_envelope import (
+    SwitchPublicAuthSessionWorkspaceApiV2PublicAuthSessionSwitchWorkspacePost200Envelope,
+)
+
+# this is used as the default value for optional parameters
+OMIT = typing.cast(typing.Any, ...)
 
 
 class RawPublicAuthClient:
     def __init__(self, *, client_wrapper: SyncClientWrapper):
         self._client_wrapper = client_wrapper
 
-    def api_routers_v_1_public_auth_api_get_public_auth_whoami(
-        self, *, request_options: typing.Optional[RequestOptions] = None
-    ) -> HttpResponse[PublicAuthWhoamiResponse]:
+    def get_public_auth_whoami_api(
+        self, *, workspace_id: typing.Optional[str] = None, request_options: typing.Optional[RequestOptions] = None
+    ) -> HttpResponse[GetPublicAuthWhoamiApiV2PublicAuthWhoamiGet200Envelope]:
         """
         Parameters
         ----------
+        workspace_id : typing.Optional[str]
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        HttpResponse[PublicAuthWhoamiResponse]
-            OK
+        HttpResponse[GetPublicAuthWhoamiApiV2PublicAuthWhoamiGet200Envelope]
+            Authenticated public developer identity.
         """
         _response = self._client_wrapper.httpx_client.request(
-            "v1/public/auth/whoami",
+            "v2/public/auth/whoami",
             method="GET",
+            params={
+                "workspace_id": workspace_id,
+            },
             request_options=request_options,
         )
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    PublicAuthWhoamiResponse,
+                    GetPublicAuthWhoamiApiV2PublicAuthWhoamiGet200Envelope,
                     construct_type(
-                        type_=PublicAuthWhoamiResponse,  # type: ignore
+                        type_=GetPublicAuthWhoamiApiV2PublicAuthWhoamiGet200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
@@ -50,20 +77,470 @@ class RawPublicAuthClient:
                 raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 500:
-                raise InternalServerError(
+            if _response.status_code == 403:
+                raise ForbiddenError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    def get_public_auth_session_api(
+        self, *, workspace_id: typing.Optional[str] = None, request_options: typing.Optional[RequestOptions] = None
+    ) -> HttpResponse[GetPublicAuthSessionApiV2PublicAuthSessionGet200Envelope]:
+        """
+        Parameters
+        ----------
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[GetPublicAuthSessionApiV2PublicAuthSessionGet200Envelope]
+            Successful Response
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            "v2/public/auth/session",
+            method="GET",
+            params={
+                "workspace_id": workspace_id,
+            },
+            request_options=request_options,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    GetPublicAuthSessionApiV2PublicAuthSessionGet200Envelope,
+                    construct_type(
+                        type_=GetPublicAuthSessionApiV2PublicAuthSessionGet200Envelope,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    def switch_public_auth_session_workspace_api(
+        self,
+        *,
+        auth_workspace_switch_request_workspace_id: str,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> HttpResponse[SwitchPublicAuthSessionWorkspaceApiV2PublicAuthSessionSwitchWorkspacePost200Envelope]:
+        """
+        Parameters
+        ----------
+        auth_workspace_switch_request_workspace_id : str
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[SwitchPublicAuthSessionWorkspaceApiV2PublicAuthSessionSwitchWorkspacePost200Envelope]
+            Successful Response
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            "v2/public/auth/session/switch-workspace",
+            method="POST",
+            params={
+                "workspace_id": workspace_id,
+            },
+            json={
+                "workspace_id": workspace_id,
+            },
+            headers={
+                "content-type": "application/json",
+            },
+            request_options=request_options,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    SwitchPublicAuthSessionWorkspaceApiV2PublicAuthSessionSwitchWorkspacePost200Envelope,
+                    construct_type(
+                        type_=SwitchPublicAuthSessionWorkspaceApiV2PublicAuthSessionSwitchWorkspacePost200Envelope,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    def switch_public_auth_mcp_session_workspace_api(
+        self,
+        *,
+        auth_workspace_switch_request_workspace_id: str,
+        workspace_id: typing.Optional[str] = None,
+        sanka_mcp_session_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> HttpResponse[SwitchPublicAuthMcpSessionWorkspaceApiV2PublicAuthMcpSessionSwitchWorkspacePost200Envelope]:
+        """
+        Parameters
+        ----------
+        auth_workspace_switch_request_workspace_id : str
+
+        workspace_id : typing.Optional[str]
+
+        sanka_mcp_session_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[SwitchPublicAuthMcpSessionWorkspaceApiV2PublicAuthMcpSessionSwitchWorkspacePost200Envelope]
+            Successful Response
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            "v2/public/auth/mcp-session/switch-workspace",
+            method="POST",
+            params={
+                "workspace_id": workspace_id,
+            },
+            json={
+                "workspace_id": workspace_id,
+            },
+            headers={
+                "content-type": "application/json",
+                "X-Sanka-MCP-Session-ID": str(sanka_mcp_session_id) if sanka_mcp_session_id is not None else None,
+            },
+            request_options=request_options,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    SwitchPublicAuthMcpSessionWorkspaceApiV2PublicAuthMcpSessionSwitchWorkspacePost200Envelope,
+                    construct_type(
+                        type_=SwitchPublicAuthMcpSessionWorkspaceApiV2PublicAuthMcpSessionSwitchWorkspacePost200Envelope,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    def record_public_auth_mcp_tool_call_api(
+        self,
+        *,
+        tool_name: str,
+        workspace_id: typing.Optional[str] = None,
+        sanka_mcp_session_id: typing.Optional[str] = None,
+        tool_title: typing.Optional[str] = OMIT,
+        resource: typing.Optional[str] = OMIT,
+        operation: typing.Optional[str] = OMIT,
+        success: typing.Optional[bool] = OMIT,
+        duration_ms: typing.Optional[float] = OMIT,
+        client_name: typing.Optional[str] = OMIT,
+        client_version: typing.Optional[str] = OMIT,
+        error: typing.Optional[str] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> HttpResponse[RecordPublicAuthMcpToolCallApiV2PublicAuthMcpSessionToolCallLogPost200Envelope]:
+        """
+        Parameters
+        ----------
+        tool_name : str
+
+        workspace_id : typing.Optional[str]
+
+        sanka_mcp_session_id : typing.Optional[str]
+
+        tool_title : typing.Optional[str]
+
+        resource : typing.Optional[str]
+
+        operation : typing.Optional[str]
+
+        success : typing.Optional[bool]
+
+        duration_ms : typing.Optional[float]
+
+        client_name : typing.Optional[str]
+
+        client_version : typing.Optional[str]
+
+        error : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[RecordPublicAuthMcpToolCallApiV2PublicAuthMcpSessionToolCallLogPost200Envelope]
+            Successful Response
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            "v2/public/auth/mcp-session/tool-call-log",
+            method="POST",
+            params={
+                "workspace_id": workspace_id,
+            },
+            json={
+                "tool_name": tool_name,
+                "tool_title": tool_title,
+                "resource": resource,
+                "operation": operation,
+                "success": success,
+                "duration_ms": duration_ms,
+                "client_name": client_name,
+                "client_version": client_version,
+                "error": error,
+            },
+            headers={
+                "content-type": "application/json",
+                "X-Sanka-MCP-Session-ID": str(sanka_mcp_session_id) if sanka_mcp_session_id is not None else None,
+            },
+            request_options=request_options,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    RecordPublicAuthMcpToolCallApiV2PublicAuthMcpSessionToolCallLogPost200Envelope,
+                    construct_type(
+                        type_=RecordPublicAuthMcpToolCallApiV2PublicAuthMcpSessionToolCallLogPost200Envelope,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    def revoke_public_auth_session_api(
+        self, *, workspace_id: typing.Optional[str] = None, request_options: typing.Optional[RequestOptions] = None
+    ) -> HttpResponse[RevokePublicAuthSessionApiV2PublicAuthSessionRevokePost200Envelope]:
+        """
+        Parameters
+        ----------
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[RevokePublicAuthSessionApiV2PublicAuthSessionRevokePost200Envelope]
+            Successful Response
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            "v2/public/auth/session/revoke",
+            method="POST",
+            params={
+                "workspace_id": workspace_id,
+            },
+            request_options=request_options,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    RevokePublicAuthSessionApiV2PublicAuthSessionRevokePost200Envelope,
+                    construct_type(
+                        type_=RevokePublicAuthSessionApiV2PublicAuthSessionRevokePost200Envelope,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -78,31 +555,36 @@ class AsyncRawPublicAuthClient:
     def __init__(self, *, client_wrapper: AsyncClientWrapper):
         self._client_wrapper = client_wrapper
 
-    async def api_routers_v_1_public_auth_api_get_public_auth_whoami(
-        self, *, request_options: typing.Optional[RequestOptions] = None
-    ) -> AsyncHttpResponse[PublicAuthWhoamiResponse]:
+    async def get_public_auth_whoami_api(
+        self, *, workspace_id: typing.Optional[str] = None, request_options: typing.Optional[RequestOptions] = None
+    ) -> AsyncHttpResponse[GetPublicAuthWhoamiApiV2PublicAuthWhoamiGet200Envelope]:
         """
         Parameters
         ----------
+        workspace_id : typing.Optional[str]
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        AsyncHttpResponse[PublicAuthWhoamiResponse]
-            OK
+        AsyncHttpResponse[GetPublicAuthWhoamiApiV2PublicAuthWhoamiGet200Envelope]
+            Authenticated public developer identity.
         """
         _response = await self._client_wrapper.httpx_client.request(
-            "v1/public/auth/whoami",
+            "v2/public/auth/whoami",
             method="GET",
+            params={
+                "workspace_id": workspace_id,
+            },
             request_options=request_options,
         )
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    PublicAuthWhoamiResponse,
+                    GetPublicAuthWhoamiApiV2PublicAuthWhoamiGet200Envelope,
                     construct_type(
-                        type_=PublicAuthWhoamiResponse,  # type: ignore
+                        type_=GetPublicAuthWhoamiApiV2PublicAuthWhoamiGet200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
@@ -111,20 +593,470 @@ class AsyncRawPublicAuthClient:
                 raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 500:
-                raise InternalServerError(
+            if _response.status_code == 403:
+                raise ForbiddenError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    async def get_public_auth_session_api(
+        self, *, workspace_id: typing.Optional[str] = None, request_options: typing.Optional[RequestOptions] = None
+    ) -> AsyncHttpResponse[GetPublicAuthSessionApiV2PublicAuthSessionGet200Envelope]:
+        """
+        Parameters
+        ----------
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[GetPublicAuthSessionApiV2PublicAuthSessionGet200Envelope]
+            Successful Response
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            "v2/public/auth/session",
+            method="GET",
+            params={
+                "workspace_id": workspace_id,
+            },
+            request_options=request_options,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    GetPublicAuthSessionApiV2PublicAuthSessionGet200Envelope,
+                    construct_type(
+                        type_=GetPublicAuthSessionApiV2PublicAuthSessionGet200Envelope,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    async def switch_public_auth_session_workspace_api(
+        self,
+        *,
+        auth_workspace_switch_request_workspace_id: str,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> AsyncHttpResponse[SwitchPublicAuthSessionWorkspaceApiV2PublicAuthSessionSwitchWorkspacePost200Envelope]:
+        """
+        Parameters
+        ----------
+        auth_workspace_switch_request_workspace_id : str
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[SwitchPublicAuthSessionWorkspaceApiV2PublicAuthSessionSwitchWorkspacePost200Envelope]
+            Successful Response
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            "v2/public/auth/session/switch-workspace",
+            method="POST",
+            params={
+                "workspace_id": workspace_id,
+            },
+            json={
+                "workspace_id": workspace_id,
+            },
+            headers={
+                "content-type": "application/json",
+            },
+            request_options=request_options,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    SwitchPublicAuthSessionWorkspaceApiV2PublicAuthSessionSwitchWorkspacePost200Envelope,
+                    construct_type(
+                        type_=SwitchPublicAuthSessionWorkspaceApiV2PublicAuthSessionSwitchWorkspacePost200Envelope,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    async def switch_public_auth_mcp_session_workspace_api(
+        self,
+        *,
+        auth_workspace_switch_request_workspace_id: str,
+        workspace_id: typing.Optional[str] = None,
+        sanka_mcp_session_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> AsyncHttpResponse[SwitchPublicAuthMcpSessionWorkspaceApiV2PublicAuthMcpSessionSwitchWorkspacePost200Envelope]:
+        """
+        Parameters
+        ----------
+        auth_workspace_switch_request_workspace_id : str
+
+        workspace_id : typing.Optional[str]
+
+        sanka_mcp_session_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[SwitchPublicAuthMcpSessionWorkspaceApiV2PublicAuthMcpSessionSwitchWorkspacePost200Envelope]
+            Successful Response
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            "v2/public/auth/mcp-session/switch-workspace",
+            method="POST",
+            params={
+                "workspace_id": workspace_id,
+            },
+            json={
+                "workspace_id": workspace_id,
+            },
+            headers={
+                "content-type": "application/json",
+                "X-Sanka-MCP-Session-ID": str(sanka_mcp_session_id) if sanka_mcp_session_id is not None else None,
+            },
+            request_options=request_options,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    SwitchPublicAuthMcpSessionWorkspaceApiV2PublicAuthMcpSessionSwitchWorkspacePost200Envelope,
+                    construct_type(
+                        type_=SwitchPublicAuthMcpSessionWorkspaceApiV2PublicAuthMcpSessionSwitchWorkspacePost200Envelope,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    async def record_public_auth_mcp_tool_call_api(
+        self,
+        *,
+        tool_name: str,
+        workspace_id: typing.Optional[str] = None,
+        sanka_mcp_session_id: typing.Optional[str] = None,
+        tool_title: typing.Optional[str] = OMIT,
+        resource: typing.Optional[str] = OMIT,
+        operation: typing.Optional[str] = OMIT,
+        success: typing.Optional[bool] = OMIT,
+        duration_ms: typing.Optional[float] = OMIT,
+        client_name: typing.Optional[str] = OMIT,
+        client_version: typing.Optional[str] = OMIT,
+        error: typing.Optional[str] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> AsyncHttpResponse[RecordPublicAuthMcpToolCallApiV2PublicAuthMcpSessionToolCallLogPost200Envelope]:
+        """
+        Parameters
+        ----------
+        tool_name : str
+
+        workspace_id : typing.Optional[str]
+
+        sanka_mcp_session_id : typing.Optional[str]
+
+        tool_title : typing.Optional[str]
+
+        resource : typing.Optional[str]
+
+        operation : typing.Optional[str]
+
+        success : typing.Optional[bool]
+
+        duration_ms : typing.Optional[float]
+
+        client_name : typing.Optional[str]
+
+        client_version : typing.Optional[str]
+
+        error : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[RecordPublicAuthMcpToolCallApiV2PublicAuthMcpSessionToolCallLogPost200Envelope]
+            Successful Response
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            "v2/public/auth/mcp-session/tool-call-log",
+            method="POST",
+            params={
+                "workspace_id": workspace_id,
+            },
+            json={
+                "tool_name": tool_name,
+                "tool_title": tool_title,
+                "resource": resource,
+                "operation": operation,
+                "success": success,
+                "duration_ms": duration_ms,
+                "client_name": client_name,
+                "client_version": client_version,
+                "error": error,
+            },
+            headers={
+                "content-type": "application/json",
+                "X-Sanka-MCP-Session-ID": str(sanka_mcp_session_id) if sanka_mcp_session_id is not None else None,
+            },
+            request_options=request_options,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    RecordPublicAuthMcpToolCallApiV2PublicAuthMcpSessionToolCallLogPost200Envelope,
+                    construct_type(
+                        type_=RecordPublicAuthMcpToolCallApiV2PublicAuthMcpSessionToolCallLogPost200Envelope,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    async def revoke_public_auth_session_api(
+        self, *, workspace_id: typing.Optional[str] = None, request_options: typing.Optional[RequestOptions] = None
+    ) -> AsyncHttpResponse[RevokePublicAuthSessionApiV2PublicAuthSessionRevokePost200Envelope]:
+        """
+        Parameters
+        ----------
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[RevokePublicAuthSessionApiV2PublicAuthSessionRevokePost200Envelope]
+            Successful Response
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            "v2/public/auth/session/revoke",
+            method="POST",
+            params={
+                "workspace_id": workspace_id,
+            },
+            request_options=request_options,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    RevokePublicAuthSessionApiV2PublicAuthSessionRevokePost200Envelope,
+                    construct_type(
+                        type_=RevokePublicAuthSessionApiV2PublicAuthSessionRevokePost200Envelope,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),

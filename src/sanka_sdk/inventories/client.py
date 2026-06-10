@@ -4,8 +4,21 @@ import typing
 
 from ..core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ..core.request_options import RequestOptions
-from ..types.public_inventory_response import PublicInventoryResponse
-from ..types.shop_turbo_inventory_schema import ShopTurboInventorySchema
+from ..types.create_public_inventory_api_v_2_public_inventories_post_200_envelope import (
+    CreatePublicInventoryApiV2PublicInventoriesPost200Envelope,
+)
+from ..types.delete_public_inventory_api_v_2_public_inventories_inventory_id_delete_200_envelope import (
+    DeletePublicInventoryApiV2PublicInventoriesInventoryIdDelete200Envelope,
+)
+from ..types.get_public_inventory_api_v_2_public_inventories_inventory_id_get_200_envelope import (
+    GetPublicInventoryApiV2PublicInventoriesInventoryIdGet200Envelope,
+)
+from ..types.list_public_inventories_api_v_2_public_inventories_get_200_envelope import (
+    ListPublicInventoriesApiV2PublicInventoriesGet200Envelope,
+)
+from ..types.update_public_inventory_api_v_2_public_inventories_inventory_id_put_200_envelope import (
+    UpdatePublicInventoryApiV2PublicInventoriesInventoryIdPut200Envelope,
+)
 from .raw_client import AsyncRawInventoriesClient, RawInventoriesClient
 
 # this is used as the default value for optional parameters
@@ -27,23 +40,44 @@ class InventoriesClient:
         """
         return self._raw_client
 
-    def api_routers_v_1_inventories_public_api_list_workspace_inventories(
+    def list_public_inventories_api(
         self,
         *,
         workspace_id: typing.Optional[str] = None,
-        lang: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = None,
+        search: typing.Optional[str] = None,
         language: typing.Optional[str] = None,
+        status: typing.Optional[str] = None,
+        usage_status: typing.Optional[str] = None,
+        page: typing.Optional[int] = None,
+        limit: typing.Optional[int] = None,
+        sort: typing.Optional[str] = None,
+        x_language: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> typing.List[ShopTurboInventorySchema]:
+    ) -> ListPublicInventoriesApiV2PublicInventoriesGet200Envelope:
         """
         Parameters
         ----------
         workspace_id : typing.Optional[str]
 
-        lang : typing.Optional[str]
+        view_id : typing.Optional[str]
+
+        search : typing.Optional[str]
 
         language : typing.Optional[str]
+
+        status : typing.Optional[str]
+
+        usage_status : typing.Optional[str]
+
+        page : typing.Optional[int]
+
+        limit : typing.Optional[int]
+
+        sort : typing.Optional[str]
+
+        x_language : typing.Optional[str]
 
         accept_language : typing.Optional[str]
 
@@ -52,111 +86,124 @@ class InventoriesClient:
 
         Returns
         -------
-        typing.List[ShopTurboInventorySchema]
-            OK
+        ListPublicInventoriesApiV2PublicInventoriesGet200Envelope
+            Object record list response
 
         Examples
         --------
         from sanka_sdk import SankaClient
 
         client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
-        client.inventories.api_routers_v_1_inventories_public_api_list_workspace_inventories()
+        client.inventories.list_public_inventories_api()
         """
-        _response = self._raw_client.api_routers_v_1_inventories_public_api_list_workspace_inventories(
+        _response = self._raw_client.list_public_inventories_api(
             workspace_id=workspace_id,
-            lang=lang,
+            view_id=view_id,
+            search=search,
             language=language,
+            status=status,
+            usage_status=usage_status,
+            page=page,
+            limit=limit,
+            sort=sort,
+            x_language=x_language,
             accept_language=accept_language,
             request_options=request_options,
         )
         return _response.data
 
-    def api_routers_v_1_inventories_public_api_create_public_inventory(
+    def create_public_inventory_api(
         self,
         *,
-        external_id: str,
-        name: typing.Optional[str] = OMIT,
-        item_id: typing.Optional[str] = OMIT,
-        item_external_id: typing.Optional[str] = OMIT,
-        status: typing.Optional[str] = OMIT,
-        inventory_status: typing.Optional[str] = OMIT,
-        currency: typing.Optional[str] = OMIT,
-        unit_price: typing.Optional[float] = OMIT,
-        initial_value: typing.Optional[int] = OMIT,
-        date: typing.Optional[str] = OMIT,
-        warehouse_id: typing.Optional[str] = OMIT,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = OMIT,
+        form_view_id: typing.Optional[str] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
+        target: typing.Optional[str] = OMIT,
+        provider: typing.Optional[str] = OMIT,
+        channel_id: typing.Optional[str] = OMIT,
+        external_object_type: typing.Optional[str] = OMIT,
+        external_id: typing.Optional[str] = OMIT,
+        operation: typing.Optional[str] = OMIT,
+        dry_run: typing.Optional[bool] = OMIT,
+        confirm: typing.Optional[bool] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> PublicInventoryResponse:
+    ) -> CreatePublicInventoryApiV2PublicInventoriesPost200Envelope:
         """
         Parameters
         ----------
-        external_id : str
+        workspace_id : typing.Optional[str]
 
-        name : typing.Optional[str]
+        view_id : typing.Optional[str]
 
-        item_id : typing.Optional[str]
+        form_view_id : typing.Optional[str]
 
-        item_external_id : typing.Optional[str]
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
 
-        status : typing.Optional[str]
+        target : typing.Optional[str]
 
-        inventory_status : typing.Optional[str]
+        provider : typing.Optional[str]
 
-        currency : typing.Optional[str]
+        channel_id : typing.Optional[str]
 
-        unit_price : typing.Optional[float]
+        external_object_type : typing.Optional[str]
 
-        initial_value : typing.Optional[int]
+        external_id : typing.Optional[str]
 
-        date : typing.Optional[str]
+        operation : typing.Optional[str]
 
-        warehouse_id : typing.Optional[str]
+        dry_run : typing.Optional[bool]
+
+        confirm : typing.Optional[bool]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        PublicInventoryResponse
-            OK
+        CreatePublicInventoryApiV2PublicInventoriesPost200Envelope
+            Successful Response
 
         Examples
         --------
         from sanka_sdk import SankaClient
 
         client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
-        client.inventories.api_routers_v_1_inventories_public_api_create_public_inventory(
-            external_id="externalId",
-        )
+        client.inventories.create_public_inventory_api()
         """
-        _response = self._raw_client.api_routers_v_1_inventories_public_api_create_public_inventory(
+        _response = self._raw_client.create_public_inventory_api(
+            workspace_id=workspace_id,
+            view_id=view_id,
+            form_view_id=form_view_id,
+            properties=properties,
+            target=target,
+            provider=provider,
+            channel_id=channel_id,
+            external_object_type=external_object_type,
             external_id=external_id,
-            name=name,
-            item_id=item_id,
-            item_external_id=item_external_id,
-            status=status,
-            inventory_status=inventory_status,
-            currency=currency,
-            unit_price=unit_price,
-            initial_value=initial_value,
-            date=date,
-            warehouse_id=warehouse_id,
+            operation=operation,
+            dry_run=dry_run,
+            confirm=confirm,
             request_options=request_options,
         )
         return _response.data
 
-    def api_routers_v_1_inventories_public_api_get_public_inventory(
+    def get_public_inventory_api(
         self,
         inventory_id: str,
         *,
         external_id: typing.Optional[str] = None,
-        accept_language: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = None,
+        form_view_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> ShopTurboInventorySchema:
+    ) -> GetPublicInventoryApiV2PublicInventoriesInventoryIdGet200Envelope:
         """
         Parameters
         ----------
@@ -164,120 +211,61 @@ class InventoriesClient:
 
         external_id : typing.Optional[str]
 
-        accept_language : typing.Optional[str]
+        workspace_id : typing.Optional[str]
+
+        view_id : typing.Optional[str]
+
+        form_view_id : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        ShopTurboInventorySchema
-            OK
+        GetPublicInventoryApiV2PublicInventoriesInventoryIdGet200Envelope
+            Object record detail response. The base detail payload is intentionally thin; drawer sections load through scoped endpoints.
 
         Examples
         --------
         from sanka_sdk import SankaClient
 
         client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
-        client.inventories.api_routers_v_1_inventories_public_api_get_public_inventory(
+        client.inventories.get_public_inventory_api(
             inventory_id="inventory_id",
         )
         """
-        _response = self._raw_client.api_routers_v_1_inventories_public_api_get_public_inventory(
-            inventory_id, external_id=external_id, accept_language=accept_language, request_options=request_options
-        )
-        return _response.data
-
-    def api_routers_v_1_inventories_public_api_update_public_inventory(
-        self,
-        inventory_id: str,
-        *,
-        external_id: str,
-        name: typing.Optional[str] = OMIT,
-        item_id: typing.Optional[str] = OMIT,
-        item_external_id: typing.Optional[str] = OMIT,
-        status: typing.Optional[str] = OMIT,
-        inventory_status: typing.Optional[str] = OMIT,
-        currency: typing.Optional[str] = OMIT,
-        unit_price: typing.Optional[float] = OMIT,
-        initial_value: typing.Optional[int] = OMIT,
-        date: typing.Optional[str] = OMIT,
-        warehouse_id: typing.Optional[str] = OMIT,
-        request_options: typing.Optional[RequestOptions] = None,
-    ) -> PublicInventoryResponse:
-        """
-        Parameters
-        ----------
-        inventory_id : str
-
-        external_id : str
-
-        name : typing.Optional[str]
-
-        item_id : typing.Optional[str]
-
-        item_external_id : typing.Optional[str]
-
-        status : typing.Optional[str]
-
-        inventory_status : typing.Optional[str]
-
-        currency : typing.Optional[str]
-
-        unit_price : typing.Optional[float]
-
-        initial_value : typing.Optional[int]
-
-        date : typing.Optional[str]
-
-        warehouse_id : typing.Optional[str]
-
-        request_options : typing.Optional[RequestOptions]
-            Request-specific configuration.
-
-        Returns
-        -------
-        PublicInventoryResponse
-            OK
-
-        Examples
-        --------
-        from sanka_sdk import SankaClient
-
-        client = SankaClient(
-            token="YOUR_TOKEN",
-        )
-        client.inventories.api_routers_v_1_inventories_public_api_update_public_inventory(
-            inventory_id="inventory_id",
-            external_id="externalId",
-        )
-        """
-        _response = self._raw_client.api_routers_v_1_inventories_public_api_update_public_inventory(
+        _response = self._raw_client.get_public_inventory_api(
             inventory_id,
             external_id=external_id,
-            name=name,
-            item_id=item_id,
-            item_external_id=item_external_id,
-            status=status,
-            inventory_status=inventory_status,
-            currency=currency,
-            unit_price=unit_price,
-            initial_value=initial_value,
-            date=date,
-            warehouse_id=warehouse_id,
+            workspace_id=workspace_id,
+            view_id=view_id,
+            form_view_id=form_view_id,
             request_options=request_options,
         )
         return _response.data
 
-    def api_routers_v_1_inventories_public_api_delete_public_inventory(
+    def update_public_inventory_api(
         self,
         inventory_id: str,
         *,
         external_id: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = OMIT,
+        form_view_id: typing.Optional[str] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
+        target: typing.Optional[str] = OMIT,
+        provider: typing.Optional[str] = OMIT,
+        channel_id: typing.Optional[str] = OMIT,
+        external_object_type: typing.Optional[str] = OMIT,
+        public_object_record_mutation_request_external_id: typing.Optional[str] = OMIT,
+        operation: typing.Optional[str] = OMIT,
+        dry_run: typing.Optional[bool] = OMIT,
+        confirm: typing.Optional[bool] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> PublicInventoryResponse:
+    ) -> UpdatePublicInventoryApiV2PublicInventoriesInventoryIdPut200Envelope:
         """
         Parameters
         ----------
@@ -285,27 +273,108 @@ class InventoriesClient:
 
         external_id : typing.Optional[str]
 
+        workspace_id : typing.Optional[str]
+
+        view_id : typing.Optional[str]
+
+        form_view_id : typing.Optional[str]
+
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
+
+        target : typing.Optional[str]
+
+        provider : typing.Optional[str]
+
+        channel_id : typing.Optional[str]
+
+        external_object_type : typing.Optional[str]
+
+        public_object_record_mutation_request_external_id : typing.Optional[str]
+
+        operation : typing.Optional[str]
+
+        dry_run : typing.Optional[bool]
+
+        confirm : typing.Optional[bool]
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        PublicInventoryResponse
-            OK
+        UpdatePublicInventoryApiV2PublicInventoriesInventoryIdPut200Envelope
+            Successful Response
 
         Examples
         --------
         from sanka_sdk import SankaClient
 
         client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
-        client.inventories.api_routers_v_1_inventories_public_api_delete_public_inventory(
+        client.inventories.update_public_inventory_api(
             inventory_id="inventory_id",
         )
         """
-        _response = self._raw_client.api_routers_v_1_inventories_public_api_delete_public_inventory(
-            inventory_id, external_id=external_id, request_options=request_options
+        _response = self._raw_client.update_public_inventory_api(
+            inventory_id,
+            external_id=external_id,
+            workspace_id=workspace_id,
+            view_id=view_id,
+            form_view_id=form_view_id,
+            properties=properties,
+            target=target,
+            provider=provider,
+            channel_id=channel_id,
+            external_object_type=external_object_type,
+            public_object_record_mutation_request_external_id=public_object_record_mutation_request_external_id,
+            operation=operation,
+            dry_run=dry_run,
+            confirm=confirm,
+            request_options=request_options,
+        )
+        return _response.data
+
+    def delete_public_inventory_api(
+        self,
+        inventory_id: str,
+        *,
+        external_id: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> DeletePublicInventoryApiV2PublicInventoriesInventoryIdDelete200Envelope:
+        """
+        Parameters
+        ----------
+        inventory_id : str
+
+        external_id : typing.Optional[str]
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        DeletePublicInventoryApiV2PublicInventoriesInventoryIdDelete200Envelope
+            Successful Response
+
+        Examples
+        --------
+        from sanka_sdk import SankaClient
+
+        client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+        client.inventories.delete_public_inventory_api(
+            inventory_id="inventory_id",
+        )
+        """
+        _response = self._raw_client.delete_public_inventory_api(
+            inventory_id, external_id=external_id, workspace_id=workspace_id, request_options=request_options
         )
         return _response.data
 
@@ -325,23 +394,44 @@ class AsyncInventoriesClient:
         """
         return self._raw_client
 
-    async def api_routers_v_1_inventories_public_api_list_workspace_inventories(
+    async def list_public_inventories_api(
         self,
         *,
         workspace_id: typing.Optional[str] = None,
-        lang: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = None,
+        search: typing.Optional[str] = None,
         language: typing.Optional[str] = None,
+        status: typing.Optional[str] = None,
+        usage_status: typing.Optional[str] = None,
+        page: typing.Optional[int] = None,
+        limit: typing.Optional[int] = None,
+        sort: typing.Optional[str] = None,
+        x_language: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> typing.List[ShopTurboInventorySchema]:
+    ) -> ListPublicInventoriesApiV2PublicInventoriesGet200Envelope:
         """
         Parameters
         ----------
         workspace_id : typing.Optional[str]
 
-        lang : typing.Optional[str]
+        view_id : typing.Optional[str]
+
+        search : typing.Optional[str]
 
         language : typing.Optional[str]
+
+        status : typing.Optional[str]
+
+        usage_status : typing.Optional[str]
+
+        page : typing.Optional[int]
+
+        limit : typing.Optional[int]
+
+        sort : typing.Optional[str]
+
+        x_language : typing.Optional[str]
 
         accept_language : typing.Optional[str]
 
@@ -350,8 +440,8 @@ class AsyncInventoriesClient:
 
         Returns
         -------
-        typing.List[ShopTurboInventorySchema]
-            OK
+        ListPublicInventoriesApiV2PublicInventoriesGet200Envelope
+            Object record list response
 
         Examples
         --------
@@ -360,73 +450,84 @@ class AsyncInventoriesClient:
         from sanka_sdk import AsyncSankaClient
 
         client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
 
 
         async def main() -> None:
-            await client.inventories.api_routers_v_1_inventories_public_api_list_workspace_inventories()
+            await client.inventories.list_public_inventories_api()
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.api_routers_v_1_inventories_public_api_list_workspace_inventories(
+        _response = await self._raw_client.list_public_inventories_api(
             workspace_id=workspace_id,
-            lang=lang,
+            view_id=view_id,
+            search=search,
             language=language,
+            status=status,
+            usage_status=usage_status,
+            page=page,
+            limit=limit,
+            sort=sort,
+            x_language=x_language,
             accept_language=accept_language,
             request_options=request_options,
         )
         return _response.data
 
-    async def api_routers_v_1_inventories_public_api_create_public_inventory(
+    async def create_public_inventory_api(
         self,
         *,
-        external_id: str,
-        name: typing.Optional[str] = OMIT,
-        item_id: typing.Optional[str] = OMIT,
-        item_external_id: typing.Optional[str] = OMIT,
-        status: typing.Optional[str] = OMIT,
-        inventory_status: typing.Optional[str] = OMIT,
-        currency: typing.Optional[str] = OMIT,
-        unit_price: typing.Optional[float] = OMIT,
-        initial_value: typing.Optional[int] = OMIT,
-        date: typing.Optional[str] = OMIT,
-        warehouse_id: typing.Optional[str] = OMIT,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = OMIT,
+        form_view_id: typing.Optional[str] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
+        target: typing.Optional[str] = OMIT,
+        provider: typing.Optional[str] = OMIT,
+        channel_id: typing.Optional[str] = OMIT,
+        external_object_type: typing.Optional[str] = OMIT,
+        external_id: typing.Optional[str] = OMIT,
+        operation: typing.Optional[str] = OMIT,
+        dry_run: typing.Optional[bool] = OMIT,
+        confirm: typing.Optional[bool] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> PublicInventoryResponse:
+    ) -> CreatePublicInventoryApiV2PublicInventoriesPost200Envelope:
         """
         Parameters
         ----------
-        external_id : str
+        workspace_id : typing.Optional[str]
 
-        name : typing.Optional[str]
+        view_id : typing.Optional[str]
 
-        item_id : typing.Optional[str]
+        form_view_id : typing.Optional[str]
 
-        item_external_id : typing.Optional[str]
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
 
-        status : typing.Optional[str]
+        target : typing.Optional[str]
 
-        inventory_status : typing.Optional[str]
+        provider : typing.Optional[str]
 
-        currency : typing.Optional[str]
+        channel_id : typing.Optional[str]
 
-        unit_price : typing.Optional[float]
+        external_object_type : typing.Optional[str]
 
-        initial_value : typing.Optional[int]
+        external_id : typing.Optional[str]
 
-        date : typing.Optional[str]
+        operation : typing.Optional[str]
 
-        warehouse_id : typing.Optional[str]
+        dry_run : typing.Optional[bool]
+
+        confirm : typing.Optional[bool]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        PublicInventoryResponse
-            OK
+        CreatePublicInventoryApiV2PublicInventoriesPost200Envelope
+            Successful Response
 
         Examples
         --------
@@ -435,42 +536,44 @@ class AsyncInventoriesClient:
         from sanka_sdk import AsyncSankaClient
 
         client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
 
 
         async def main() -> None:
-            await client.inventories.api_routers_v_1_inventories_public_api_create_public_inventory(
-                external_id="externalId",
-            )
+            await client.inventories.create_public_inventory_api()
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.api_routers_v_1_inventories_public_api_create_public_inventory(
+        _response = await self._raw_client.create_public_inventory_api(
+            workspace_id=workspace_id,
+            view_id=view_id,
+            form_view_id=form_view_id,
+            properties=properties,
+            target=target,
+            provider=provider,
+            channel_id=channel_id,
+            external_object_type=external_object_type,
             external_id=external_id,
-            name=name,
-            item_id=item_id,
-            item_external_id=item_external_id,
-            status=status,
-            inventory_status=inventory_status,
-            currency=currency,
-            unit_price=unit_price,
-            initial_value=initial_value,
-            date=date,
-            warehouse_id=warehouse_id,
+            operation=operation,
+            dry_run=dry_run,
+            confirm=confirm,
             request_options=request_options,
         )
         return _response.data
 
-    async def api_routers_v_1_inventories_public_api_get_public_inventory(
+    async def get_public_inventory_api(
         self,
         inventory_id: str,
         *,
         external_id: typing.Optional[str] = None,
-        accept_language: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = None,
+        form_view_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> ShopTurboInventorySchema:
+    ) -> GetPublicInventoryApiV2PublicInventoriesInventoryIdGet200Envelope:
         """
         Parameters
         ----------
@@ -478,15 +581,19 @@ class AsyncInventoriesClient:
 
         external_id : typing.Optional[str]
 
-        accept_language : typing.Optional[str]
+        workspace_id : typing.Optional[str]
+
+        view_id : typing.Optional[str]
+
+        form_view_id : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        ShopTurboInventorySchema
-            OK
+        GetPublicInventoryApiV2PublicInventoriesInventoryIdGet200Envelope
+            Object record detail response. The base detail payload is intentionally thin; drawer sections load through scoped endpoints.
 
         Examples
         --------
@@ -495,119 +602,48 @@ class AsyncInventoriesClient:
         from sanka_sdk import AsyncSankaClient
 
         client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
 
 
         async def main() -> None:
-            await client.inventories.api_routers_v_1_inventories_public_api_get_public_inventory(
+            await client.inventories.get_public_inventory_api(
                 inventory_id="inventory_id",
             )
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.api_routers_v_1_inventories_public_api_get_public_inventory(
-            inventory_id, external_id=external_id, accept_language=accept_language, request_options=request_options
-        )
-        return _response.data
-
-    async def api_routers_v_1_inventories_public_api_update_public_inventory(
-        self,
-        inventory_id: str,
-        *,
-        external_id: str,
-        name: typing.Optional[str] = OMIT,
-        item_id: typing.Optional[str] = OMIT,
-        item_external_id: typing.Optional[str] = OMIT,
-        status: typing.Optional[str] = OMIT,
-        inventory_status: typing.Optional[str] = OMIT,
-        currency: typing.Optional[str] = OMIT,
-        unit_price: typing.Optional[float] = OMIT,
-        initial_value: typing.Optional[int] = OMIT,
-        date: typing.Optional[str] = OMIT,
-        warehouse_id: typing.Optional[str] = OMIT,
-        request_options: typing.Optional[RequestOptions] = None,
-    ) -> PublicInventoryResponse:
-        """
-        Parameters
-        ----------
-        inventory_id : str
-
-        external_id : str
-
-        name : typing.Optional[str]
-
-        item_id : typing.Optional[str]
-
-        item_external_id : typing.Optional[str]
-
-        status : typing.Optional[str]
-
-        inventory_status : typing.Optional[str]
-
-        currency : typing.Optional[str]
-
-        unit_price : typing.Optional[float]
-
-        initial_value : typing.Optional[int]
-
-        date : typing.Optional[str]
-
-        warehouse_id : typing.Optional[str]
-
-        request_options : typing.Optional[RequestOptions]
-            Request-specific configuration.
-
-        Returns
-        -------
-        PublicInventoryResponse
-            OK
-
-        Examples
-        --------
-        import asyncio
-
-        from sanka_sdk import AsyncSankaClient
-
-        client = AsyncSankaClient(
-            token="YOUR_TOKEN",
-        )
-
-
-        async def main() -> None:
-            await client.inventories.api_routers_v_1_inventories_public_api_update_public_inventory(
-                inventory_id="inventory_id",
-                external_id="externalId",
-            )
-
-
-        asyncio.run(main())
-        """
-        _response = await self._raw_client.api_routers_v_1_inventories_public_api_update_public_inventory(
+        _response = await self._raw_client.get_public_inventory_api(
             inventory_id,
             external_id=external_id,
-            name=name,
-            item_id=item_id,
-            item_external_id=item_external_id,
-            status=status,
-            inventory_status=inventory_status,
-            currency=currency,
-            unit_price=unit_price,
-            initial_value=initial_value,
-            date=date,
-            warehouse_id=warehouse_id,
+            workspace_id=workspace_id,
+            view_id=view_id,
+            form_view_id=form_view_id,
             request_options=request_options,
         )
         return _response.data
 
-    async def api_routers_v_1_inventories_public_api_delete_public_inventory(
+    async def update_public_inventory_api(
         self,
         inventory_id: str,
         *,
         external_id: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = OMIT,
+        form_view_id: typing.Optional[str] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
+        target: typing.Optional[str] = OMIT,
+        provider: typing.Optional[str] = OMIT,
+        channel_id: typing.Optional[str] = OMIT,
+        external_object_type: typing.Optional[str] = OMIT,
+        public_object_record_mutation_request_external_id: typing.Optional[str] = OMIT,
+        operation: typing.Optional[str] = OMIT,
+        dry_run: typing.Optional[bool] = OMIT,
+        confirm: typing.Optional[bool] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> PublicInventoryResponse:
+    ) -> UpdatePublicInventoryApiV2PublicInventoriesInventoryIdPut200Envelope:
         """
         Parameters
         ----------
@@ -615,13 +651,37 @@ class AsyncInventoriesClient:
 
         external_id : typing.Optional[str]
 
+        workspace_id : typing.Optional[str]
+
+        view_id : typing.Optional[str]
+
+        form_view_id : typing.Optional[str]
+
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
+
+        target : typing.Optional[str]
+
+        provider : typing.Optional[str]
+
+        channel_id : typing.Optional[str]
+
+        external_object_type : typing.Optional[str]
+
+        public_object_record_mutation_request_external_id : typing.Optional[str]
+
+        operation : typing.Optional[str]
+
+        dry_run : typing.Optional[bool]
+
+        confirm : typing.Optional[bool]
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        PublicInventoryResponse
-            OK
+        UpdatePublicInventoryApiV2PublicInventoriesInventoryIdPut200Envelope
+            Successful Response
 
         Examples
         --------
@@ -630,19 +690,84 @@ class AsyncInventoriesClient:
         from sanka_sdk import AsyncSankaClient
 
         client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
 
 
         async def main() -> None:
-            await client.inventories.api_routers_v_1_inventories_public_api_delete_public_inventory(
+            await client.inventories.update_public_inventory_api(
                 inventory_id="inventory_id",
             )
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.api_routers_v_1_inventories_public_api_delete_public_inventory(
-            inventory_id, external_id=external_id, request_options=request_options
+        _response = await self._raw_client.update_public_inventory_api(
+            inventory_id,
+            external_id=external_id,
+            workspace_id=workspace_id,
+            view_id=view_id,
+            form_view_id=form_view_id,
+            properties=properties,
+            target=target,
+            provider=provider,
+            channel_id=channel_id,
+            external_object_type=external_object_type,
+            public_object_record_mutation_request_external_id=public_object_record_mutation_request_external_id,
+            operation=operation,
+            dry_run=dry_run,
+            confirm=confirm,
+            request_options=request_options,
+        )
+        return _response.data
+
+    async def delete_public_inventory_api(
+        self,
+        inventory_id: str,
+        *,
+        external_id: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> DeletePublicInventoryApiV2PublicInventoriesInventoryIdDelete200Envelope:
+        """
+        Parameters
+        ----------
+        inventory_id : str
+
+        external_id : typing.Optional[str]
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        DeletePublicInventoryApiV2PublicInventoriesInventoryIdDelete200Envelope
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sanka_sdk import AsyncSankaClient
+
+        client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.inventories.delete_public_inventory_api(
+                inventory_id="inventory_id",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.delete_public_inventory_api(
+            inventory_id, external_id=external_id, workspace_id=workspace_id, request_options=request_options
         )
         return _response.data

@@ -4,9 +4,22 @@ import typing
 
 from ..core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ..core.request_options import RequestOptions
-from ..types.public_property_mutation_response import PublicPropertyMutationResponse
-from ..types.public_property_schema import PublicPropertySchema
-from ..types.public_property_upsert_request_choice_values import PublicPropertyUpsertRequestChoiceValues
+from ..types.create_public_developer_property_api_v_2_public_properties_object_name_post_200_envelope import (
+    CreatePublicDeveloperPropertyApiV2PublicPropertiesObjectNamePost200Envelope,
+)
+from ..types.delete_public_developer_property_api_v_2_public_properties_object_name_property_ref_delete_200_envelope import (
+    DeletePublicDeveloperPropertyApiV2PublicPropertiesObjectNamePropertyRefDelete200Envelope,
+)
+from ..types.list_public_developer_properties_api_v_2_public_properties_object_name_get_200_envelope import (
+    ListPublicDeveloperPropertiesApiV2PublicPropertiesObjectNameGet200Envelope,
+)
+from ..types.public_property_mutation_request_choice_values import PublicPropertyMutationRequestChoiceValues
+from ..types.retrieve_public_developer_property_api_v_2_public_properties_object_name_property_ref_get_200_envelope import (
+    RetrievePublicDeveloperPropertyApiV2PublicPropertiesObjectNamePropertyRefGet200Envelope,
+)
+from ..types.update_public_developer_property_api_v_2_public_properties_object_name_property_ref_put_200_envelope import (
+    UpdatePublicDeveloperPropertyApiV2PublicPropertiesObjectNamePropertyRefPut200Envelope,
+)
 from .raw_client import AsyncRawPropertiesClient, RawPropertiesClient
 
 # this is used as the default value for optional parameters
@@ -28,17 +41,123 @@ class PropertiesClient:
         """
         return self._raw_client
 
-    def api_routers_v_1_properties_public_api_list_public_properties(
+    def list_public_developer_properties_api(
+        self,
+        object_name: str,
+        *,
+        custom_object_id: typing.Optional[str] = None,
+        q: typing.Optional[str] = None,
+        search: typing.Optional[str] = None,
+        page: typing.Optional[int] = None,
+        limit: typing.Optional[int] = None,
+        language: typing.Optional[str] = None,
+        lang: typing.Optional[str] = None,
+        scope: typing.Optional[str] = None,
+        source: typing.Optional[str] = None,
+        provider: typing.Optional[str] = None,
+        channel_id: typing.Optional[str] = None,
+        external_object_type: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> ListPublicDeveloperPropertiesApiV2PublicPropertiesObjectNameGet200Envelope:
+        """
+        Parameters
+        ----------
+        object_name : str
+
+        custom_object_id : typing.Optional[str]
+
+        q : typing.Optional[str]
+
+        search : typing.Optional[str]
+
+        page : typing.Optional[int]
+
+        limit : typing.Optional[int]
+
+        language : typing.Optional[str]
+
+        lang : typing.Optional[str]
+
+        scope : typing.Optional[str]
+
+        source : typing.Optional[str]
+
+        provider : typing.Optional[str]
+
+        channel_id : typing.Optional[str]
+
+        external_object_type : typing.Optional[str]
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        ListPublicDeveloperPropertiesApiV2PublicPropertiesObjectNameGet200Envelope
+            Successful Response
+
+        Examples
+        --------
+        from sanka_sdk import SankaClient
+
+        client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+        client.properties.list_public_developer_properties_api(
+            object_name="object_name",
+        )
+        """
+        _response = self._raw_client.list_public_developer_properties_api(
+            object_name,
+            custom_object_id=custom_object_id,
+            q=q,
+            search=search,
+            page=page,
+            limit=limit,
+            language=language,
+            lang=lang,
+            scope=scope,
+            source=source,
+            provider=provider,
+            channel_id=channel_id,
+            external_object_type=external_object_type,
+            workspace_id=workspace_id,
+            request_options=request_options,
+        )
+        return _response.data
+
+    def create_public_developer_property_api(
         self,
         object_name: str,
         *,
         workspace_id: typing.Optional[str] = None,
-        custom_only: typing.Optional[bool] = None,
-        lang: typing.Optional[str] = None,
-        language: typing.Optional[str] = None,
-        accept_language: typing.Optional[str] = None,
+        name: typing.Optional[str] = OMIT,
+        type: typing.Optional[str] = OMIT,
+        internal_name: typing.Optional[str] = OMIT,
+        choice_values: typing.Optional[PublicPropertyMutationRequestChoiceValues] = OMIT,
+        choice_labels: typing.Optional[typing.Sequence[str]] = OMIT,
+        choice_colors: typing.Optional[typing.Sequence[str]] = OMIT,
+        target: typing.Optional[str] = OMIT,
+        language: typing.Optional[str] = OMIT,
+        custom_object_id: typing.Optional[str] = OMIT,
+        editor_variant: typing.Optional[str] = OMIT,
+        source: typing.Optional[str] = OMIT,
+        scope: typing.Optional[str] = OMIT,
+        provider: typing.Optional[str] = OMIT,
+        channel_id: typing.Optional[str] = OMIT,
+        external_object_type: typing.Optional[str] = OMIT,
+        external_id: typing.Optional[str] = OMIT,
+        field_type: typing.Optional[str] = OMIT,
+        group_name: typing.Optional[str] = OMIT,
+        options: typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]] = OMIT,
+        dry_run: typing.Optional[bool] = OMIT,
+        confirm: typing.Optional[bool] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> typing.List[PublicPropertySchema]:
+    ) -> CreatePublicDeveloperPropertyApiV2PublicPropertiesObjectNamePost200Envelope:
         """
         Parameters
         ----------
@@ -46,147 +165,203 @@ class PropertiesClient:
 
         workspace_id : typing.Optional[str]
 
-        custom_only : typing.Optional[bool]
+        name : typing.Optional[str]
 
-        lang : typing.Optional[str]
+        type : typing.Optional[str]
+
+        internal_name : typing.Optional[str]
+
+        choice_values : typing.Optional[PublicPropertyMutationRequestChoiceValues]
+
+        choice_labels : typing.Optional[typing.Sequence[str]]
+
+        choice_colors : typing.Optional[typing.Sequence[str]]
+
+        target : typing.Optional[str]
 
         language : typing.Optional[str]
 
-        accept_language : typing.Optional[str]
+        custom_object_id : typing.Optional[str]
+
+        editor_variant : typing.Optional[str]
+
+        source : typing.Optional[str]
+
+        scope : typing.Optional[str]
+
+        provider : typing.Optional[str]
+
+        channel_id : typing.Optional[str]
+
+        external_object_type : typing.Optional[str]
+
+        external_id : typing.Optional[str]
+
+        field_type : typing.Optional[str]
+
+        group_name : typing.Optional[str]
+
+        options : typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]]
+
+        dry_run : typing.Optional[bool]
+
+        confirm : typing.Optional[bool]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        typing.List[PublicPropertySchema]
-            OK
+        CreatePublicDeveloperPropertyApiV2PublicPropertiesObjectNamePost200Envelope
+            Successful Response
 
         Examples
         --------
         from sanka_sdk import SankaClient
 
         client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
-        client.properties.api_routers_v_1_properties_public_api_list_public_properties(
+        client.properties.create_public_developer_property_api(
             object_name="object_name",
         )
         """
-        _response = self._raw_client.api_routers_v_1_properties_public_api_list_public_properties(
+        _response = self._raw_client.create_public_developer_property_api(
             object_name,
             workspace_id=workspace_id,
-            custom_only=custom_only,
-            lang=lang,
+            name=name,
+            type=type,
+            internal_name=internal_name,
+            choice_values=choice_values,
+            choice_labels=choice_labels,
+            choice_colors=choice_colors,
+            target=target,
             language=language,
-            accept_language=accept_language,
+            custom_object_id=custom_object_id,
+            editor_variant=editor_variant,
+            source=source,
+            scope=scope,
+            provider=provider,
+            channel_id=channel_id,
+            external_object_type=external_object_type,
+            external_id=external_id,
+            field_type=field_type,
+            group_name=group_name,
+            options=options,
+            dry_run=dry_run,
+            confirm=confirm,
             request_options=request_options,
         )
         return _response.data
 
-    def api_routers_v_1_properties_public_api_create_public_property(
+    def retrieve_public_developer_property_api(
         self,
         object_name: str,
+        property_ref: str,
         *,
-        name: typing.Optional[str] = OMIT,
-        internal_name: typing.Optional[str] = OMIT,
-        type: typing.Optional[str] = OMIT,
-        description: typing.Optional[str] = OMIT,
-        number_format: typing.Optional[str] = OMIT,
-        choice_values: typing.Optional[PublicPropertyUpsertRequestChoiceValues] = OMIT,
-        conditional_choice_mapping: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
-        tag_values: typing.Optional[typing.Sequence[str]] = OMIT,
-        unique: typing.Optional[bool] = OMIT,
-        required_field: typing.Optional[bool] = OMIT,
-        multiple_select: typing.Optional[bool] = OMIT,
-        show_badge: typing.Optional[bool] = OMIT,
-        badge_color: typing.Optional[str] = OMIT,
-        order: typing.Optional[int] = OMIT,
+        custom_object_id: typing.Optional[str] = None,
+        language: typing.Optional[str] = None,
+        lang: typing.Optional[str] = None,
+        scope: typing.Optional[str] = None,
+        source: typing.Optional[str] = None,
+        provider: typing.Optional[str] = None,
+        channel_id: typing.Optional[str] = None,
+        external_object_type: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> PublicPropertyMutationResponse:
+    ) -> RetrievePublicDeveloperPropertyApiV2PublicPropertiesObjectNamePropertyRefGet200Envelope:
         """
         Parameters
         ----------
         object_name : str
 
-        name : typing.Optional[str]
+        property_ref : str
 
-        internal_name : typing.Optional[str]
+        custom_object_id : typing.Optional[str]
 
-        type : typing.Optional[str]
+        language : typing.Optional[str]
 
-        description : typing.Optional[str]
+        lang : typing.Optional[str]
 
-        number_format : typing.Optional[str]
+        scope : typing.Optional[str]
 
-        choice_values : typing.Optional[PublicPropertyUpsertRequestChoiceValues]
+        source : typing.Optional[str]
 
-        conditional_choice_mapping : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
+        provider : typing.Optional[str]
 
-        tag_values : typing.Optional[typing.Sequence[str]]
+        channel_id : typing.Optional[str]
 
-        unique : typing.Optional[bool]
+        external_object_type : typing.Optional[str]
 
-        required_field : typing.Optional[bool]
-
-        multiple_select : typing.Optional[bool]
-
-        show_badge : typing.Optional[bool]
-
-        badge_color : typing.Optional[str]
-
-        order : typing.Optional[int]
+        workspace_id : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        PublicPropertyMutationResponse
-            OK
+        RetrievePublicDeveloperPropertyApiV2PublicPropertiesObjectNamePropertyRefGet200Envelope
+            Successful Response
 
         Examples
         --------
         from sanka_sdk import SankaClient
 
         client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
-        client.properties.api_routers_v_1_properties_public_api_create_public_property(
+        client.properties.retrieve_public_developer_property_api(
             object_name="object_name",
+            property_ref="property_ref",
         )
         """
-        _response = self._raw_client.api_routers_v_1_properties_public_api_create_public_property(
+        _response = self._raw_client.retrieve_public_developer_property_api(
             object_name,
-            name=name,
-            internal_name=internal_name,
-            type=type,
-            description=description,
-            number_format=number_format,
-            choice_values=choice_values,
-            conditional_choice_mapping=conditional_choice_mapping,
-            tag_values=tag_values,
-            unique=unique,
-            required_field=required_field,
-            multiple_select=multiple_select,
-            show_badge=show_badge,
-            badge_color=badge_color,
-            order=order,
+            property_ref,
+            custom_object_id=custom_object_id,
+            language=language,
+            lang=lang,
+            scope=scope,
+            source=source,
+            provider=provider,
+            channel_id=channel_id,
+            external_object_type=external_object_type,
+            workspace_id=workspace_id,
             request_options=request_options,
         )
         return _response.data
 
-    def api_routers_v_1_properties_public_api_retrieve_public_property(
+    def update_public_developer_property_api(
         self,
         object_name: str,
         property_ref: str,
         *,
         workspace_id: typing.Optional[str] = None,
-        lang: typing.Optional[str] = None,
-        language: typing.Optional[str] = None,
-        accept_language: typing.Optional[str] = None,
+        name: typing.Optional[str] = OMIT,
+        type: typing.Optional[str] = OMIT,
+        internal_name: typing.Optional[str] = OMIT,
+        choice_values: typing.Optional[PublicPropertyMutationRequestChoiceValues] = OMIT,
+        choice_labels: typing.Optional[typing.Sequence[str]] = OMIT,
+        choice_colors: typing.Optional[typing.Sequence[str]] = OMIT,
+        target: typing.Optional[str] = OMIT,
+        language: typing.Optional[str] = OMIT,
+        custom_object_id: typing.Optional[str] = OMIT,
+        editor_variant: typing.Optional[str] = OMIT,
+        source: typing.Optional[str] = OMIT,
+        scope: typing.Optional[str] = OMIT,
+        provider: typing.Optional[str] = OMIT,
+        channel_id: typing.Optional[str] = OMIT,
+        external_object_type: typing.Optional[str] = OMIT,
+        external_id: typing.Optional[str] = OMIT,
+        field_type: typing.Optional[str] = OMIT,
+        group_name: typing.Optional[str] = OMIT,
+        options: typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]] = OMIT,
+        dry_run: typing.Optional[bool] = OMIT,
+        confirm: typing.Optional[bool] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> PublicPropertySchema:
+    ) -> UpdatePublicDeveloperPropertyApiV2PublicPropertiesObjectNamePropertyRefPut200Envelope:
         """
         Parameters
         ----------
@@ -196,64 +371,116 @@ class PropertiesClient:
 
         workspace_id : typing.Optional[str]
 
-        lang : typing.Optional[str]
+        name : typing.Optional[str]
+
+        type : typing.Optional[str]
+
+        internal_name : typing.Optional[str]
+
+        choice_values : typing.Optional[PublicPropertyMutationRequestChoiceValues]
+
+        choice_labels : typing.Optional[typing.Sequence[str]]
+
+        choice_colors : typing.Optional[typing.Sequence[str]]
+
+        target : typing.Optional[str]
 
         language : typing.Optional[str]
 
-        accept_language : typing.Optional[str]
+        custom_object_id : typing.Optional[str]
+
+        editor_variant : typing.Optional[str]
+
+        source : typing.Optional[str]
+
+        scope : typing.Optional[str]
+
+        provider : typing.Optional[str]
+
+        channel_id : typing.Optional[str]
+
+        external_object_type : typing.Optional[str]
+
+        external_id : typing.Optional[str]
+
+        field_type : typing.Optional[str]
+
+        group_name : typing.Optional[str]
+
+        options : typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]]
+
+        dry_run : typing.Optional[bool]
+
+        confirm : typing.Optional[bool]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        PublicPropertySchema
-            OK
+        UpdatePublicDeveloperPropertyApiV2PublicPropertiesObjectNamePropertyRefPut200Envelope
+            Successful Response
 
         Examples
         --------
         from sanka_sdk import SankaClient
 
         client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
-        client.properties.api_routers_v_1_properties_public_api_retrieve_public_property(
+        client.properties.update_public_developer_property_api(
             object_name="object_name",
             property_ref="property_ref",
         )
         """
-        _response = self._raw_client.api_routers_v_1_properties_public_api_retrieve_public_property(
+        _response = self._raw_client.update_public_developer_property_api(
             object_name,
             property_ref,
             workspace_id=workspace_id,
-            lang=lang,
+            name=name,
+            type=type,
+            internal_name=internal_name,
+            choice_values=choice_values,
+            choice_labels=choice_labels,
+            choice_colors=choice_colors,
+            target=target,
             language=language,
-            accept_language=accept_language,
+            custom_object_id=custom_object_id,
+            editor_variant=editor_variant,
+            source=source,
+            scope=scope,
+            provider=provider,
+            channel_id=channel_id,
+            external_object_type=external_object_type,
+            external_id=external_id,
+            field_type=field_type,
+            group_name=group_name,
+            options=options,
+            dry_run=dry_run,
+            confirm=confirm,
             request_options=request_options,
         )
         return _response.data
 
-    def api_routers_v_1_properties_public_api_update_public_property(
+    def delete_public_developer_property_api(
         self,
         object_name: str,
         property_ref: str,
         *,
-        name: typing.Optional[str] = OMIT,
-        internal_name: typing.Optional[str] = OMIT,
-        type: typing.Optional[str] = OMIT,
-        description: typing.Optional[str] = OMIT,
-        number_format: typing.Optional[str] = OMIT,
-        choice_values: typing.Optional[PublicPropertyUpsertRequestChoiceValues] = OMIT,
-        conditional_choice_mapping: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
-        tag_values: typing.Optional[typing.Sequence[str]] = OMIT,
-        unique: typing.Optional[bool] = OMIT,
-        required_field: typing.Optional[bool] = OMIT,
-        multiple_select: typing.Optional[bool] = OMIT,
-        show_badge: typing.Optional[bool] = OMIT,
-        badge_color: typing.Optional[str] = OMIT,
-        order: typing.Optional[int] = OMIT,
+        custom_object_id: typing.Optional[str] = None,
+        target: typing.Optional[str] = None,
+        source: typing.Optional[str] = None,
+        scope: typing.Optional[str] = None,
+        provider: typing.Optional[str] = None,
+        channel_id: typing.Optional[str] = None,
+        external_object_type: typing.Optional[str] = None,
+        dry_run: typing.Optional[bool] = None,
+        confirm: typing.Optional[bool] = None,
+        language: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> PublicPropertyMutationResponse:
+    ) -> DeletePublicDeveloperPropertyApiV2PublicPropertiesObjectNamePropertyRefDelete200Envelope:
         """
         Parameters
         ----------
@@ -261,107 +488,64 @@ class PropertiesClient:
 
         property_ref : str
 
-        name : typing.Optional[str]
+        custom_object_id : typing.Optional[str]
 
-        internal_name : typing.Optional[str]
+        target : typing.Optional[str]
 
-        type : typing.Optional[str]
+        source : typing.Optional[str]
 
-        description : typing.Optional[str]
+        scope : typing.Optional[str]
 
-        number_format : typing.Optional[str]
+        provider : typing.Optional[str]
 
-        choice_values : typing.Optional[PublicPropertyUpsertRequestChoiceValues]
+        channel_id : typing.Optional[str]
 
-        conditional_choice_mapping : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
+        external_object_type : typing.Optional[str]
 
-        tag_values : typing.Optional[typing.Sequence[str]]
+        dry_run : typing.Optional[bool]
 
-        unique : typing.Optional[bool]
+        confirm : typing.Optional[bool]
 
-        required_field : typing.Optional[bool]
+        language : typing.Optional[str]
 
-        multiple_select : typing.Optional[bool]
-
-        show_badge : typing.Optional[bool]
-
-        badge_color : typing.Optional[str]
-
-        order : typing.Optional[int]
+        workspace_id : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        PublicPropertyMutationResponse
-            OK
+        DeletePublicDeveloperPropertyApiV2PublicPropertiesObjectNamePropertyRefDelete200Envelope
+            Successful Response
 
         Examples
         --------
         from sanka_sdk import SankaClient
 
         client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
-        client.properties.api_routers_v_1_properties_public_api_update_public_property(
+        client.properties.delete_public_developer_property_api(
             object_name="object_name",
             property_ref="property_ref",
         )
         """
-        _response = self._raw_client.api_routers_v_1_properties_public_api_update_public_property(
+        _response = self._raw_client.delete_public_developer_property_api(
             object_name,
             property_ref,
-            name=name,
-            internal_name=internal_name,
-            type=type,
-            description=description,
-            number_format=number_format,
-            choice_values=choice_values,
-            conditional_choice_mapping=conditional_choice_mapping,
-            tag_values=tag_values,
-            unique=unique,
-            required_field=required_field,
-            multiple_select=multiple_select,
-            show_badge=show_badge,
-            badge_color=badge_color,
-            order=order,
+            custom_object_id=custom_object_id,
+            target=target,
+            source=source,
+            scope=scope,
+            provider=provider,
+            channel_id=channel_id,
+            external_object_type=external_object_type,
+            dry_run=dry_run,
+            confirm=confirm,
+            language=language,
+            workspace_id=workspace_id,
             request_options=request_options,
-        )
-        return _response.data
-
-    def api_routers_v_1_properties_public_api_delete_public_property(
-        self, object_name: str, property_ref: str, *, request_options: typing.Optional[RequestOptions] = None
-    ) -> PublicPropertyMutationResponse:
-        """
-        Parameters
-        ----------
-        object_name : str
-
-        property_ref : str
-
-        request_options : typing.Optional[RequestOptions]
-            Request-specific configuration.
-
-        Returns
-        -------
-        PublicPropertyMutationResponse
-            OK
-
-        Examples
-        --------
-        from sanka_sdk import SankaClient
-
-        client = SankaClient(
-            token="YOUR_TOKEN",
-        )
-        client.properties.api_routers_v_1_properties_public_api_delete_public_property(
-            object_name="object_name",
-            property_ref="property_ref",
-        )
-        """
-        _response = self._raw_client.api_routers_v_1_properties_public_api_delete_public_property(
-            object_name, property_ref, request_options=request_options
         )
         return _response.data
 
@@ -381,17 +565,131 @@ class AsyncPropertiesClient:
         """
         return self._raw_client
 
-    async def api_routers_v_1_properties_public_api_list_public_properties(
+    async def list_public_developer_properties_api(
+        self,
+        object_name: str,
+        *,
+        custom_object_id: typing.Optional[str] = None,
+        q: typing.Optional[str] = None,
+        search: typing.Optional[str] = None,
+        page: typing.Optional[int] = None,
+        limit: typing.Optional[int] = None,
+        language: typing.Optional[str] = None,
+        lang: typing.Optional[str] = None,
+        scope: typing.Optional[str] = None,
+        source: typing.Optional[str] = None,
+        provider: typing.Optional[str] = None,
+        channel_id: typing.Optional[str] = None,
+        external_object_type: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> ListPublicDeveloperPropertiesApiV2PublicPropertiesObjectNameGet200Envelope:
+        """
+        Parameters
+        ----------
+        object_name : str
+
+        custom_object_id : typing.Optional[str]
+
+        q : typing.Optional[str]
+
+        search : typing.Optional[str]
+
+        page : typing.Optional[int]
+
+        limit : typing.Optional[int]
+
+        language : typing.Optional[str]
+
+        lang : typing.Optional[str]
+
+        scope : typing.Optional[str]
+
+        source : typing.Optional[str]
+
+        provider : typing.Optional[str]
+
+        channel_id : typing.Optional[str]
+
+        external_object_type : typing.Optional[str]
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        ListPublicDeveloperPropertiesApiV2PublicPropertiesObjectNameGet200Envelope
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sanka_sdk import AsyncSankaClient
+
+        client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.properties.list_public_developer_properties_api(
+                object_name="object_name",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.list_public_developer_properties_api(
+            object_name,
+            custom_object_id=custom_object_id,
+            q=q,
+            search=search,
+            page=page,
+            limit=limit,
+            language=language,
+            lang=lang,
+            scope=scope,
+            source=source,
+            provider=provider,
+            channel_id=channel_id,
+            external_object_type=external_object_type,
+            workspace_id=workspace_id,
+            request_options=request_options,
+        )
+        return _response.data
+
+    async def create_public_developer_property_api(
         self,
         object_name: str,
         *,
         workspace_id: typing.Optional[str] = None,
-        custom_only: typing.Optional[bool] = None,
-        lang: typing.Optional[str] = None,
-        language: typing.Optional[str] = None,
-        accept_language: typing.Optional[str] = None,
+        name: typing.Optional[str] = OMIT,
+        type: typing.Optional[str] = OMIT,
+        internal_name: typing.Optional[str] = OMIT,
+        choice_values: typing.Optional[PublicPropertyMutationRequestChoiceValues] = OMIT,
+        choice_labels: typing.Optional[typing.Sequence[str]] = OMIT,
+        choice_colors: typing.Optional[typing.Sequence[str]] = OMIT,
+        target: typing.Optional[str] = OMIT,
+        language: typing.Optional[str] = OMIT,
+        custom_object_id: typing.Optional[str] = OMIT,
+        editor_variant: typing.Optional[str] = OMIT,
+        source: typing.Optional[str] = OMIT,
+        scope: typing.Optional[str] = OMIT,
+        provider: typing.Optional[str] = OMIT,
+        channel_id: typing.Optional[str] = OMIT,
+        external_object_type: typing.Optional[str] = OMIT,
+        external_id: typing.Optional[str] = OMIT,
+        field_type: typing.Optional[str] = OMIT,
+        group_name: typing.Optional[str] = OMIT,
+        options: typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]] = OMIT,
+        dry_run: typing.Optional[bool] = OMIT,
+        confirm: typing.Optional[bool] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> typing.List[PublicPropertySchema]:
+    ) -> CreatePublicDeveloperPropertyApiV2PublicPropertiesObjectNamePost200Envelope:
         """
         Parameters
         ----------
@@ -399,21 +697,55 @@ class AsyncPropertiesClient:
 
         workspace_id : typing.Optional[str]
 
-        custom_only : typing.Optional[bool]
+        name : typing.Optional[str]
 
-        lang : typing.Optional[str]
+        type : typing.Optional[str]
+
+        internal_name : typing.Optional[str]
+
+        choice_values : typing.Optional[PublicPropertyMutationRequestChoiceValues]
+
+        choice_labels : typing.Optional[typing.Sequence[str]]
+
+        choice_colors : typing.Optional[typing.Sequence[str]]
+
+        target : typing.Optional[str]
 
         language : typing.Optional[str]
 
-        accept_language : typing.Optional[str]
+        custom_object_id : typing.Optional[str]
+
+        editor_variant : typing.Optional[str]
+
+        source : typing.Optional[str]
+
+        scope : typing.Optional[str]
+
+        provider : typing.Optional[str]
+
+        channel_id : typing.Optional[str]
+
+        external_object_type : typing.Optional[str]
+
+        external_id : typing.Optional[str]
+
+        field_type : typing.Optional[str]
+
+        group_name : typing.Optional[str]
+
+        options : typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]]
+
+        dry_run : typing.Optional[bool]
+
+        confirm : typing.Optional[bool]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        typing.List[PublicPropertySchema]
-            OK
+        CreatePublicDeveloperPropertyApiV2PublicPropertiesObjectNamePost200Envelope
+            Successful Response
 
         Examples
         --------
@@ -422,89 +754,95 @@ class AsyncPropertiesClient:
         from sanka_sdk import AsyncSankaClient
 
         client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
 
 
         async def main() -> None:
-            await client.properties.api_routers_v_1_properties_public_api_list_public_properties(
+            await client.properties.create_public_developer_property_api(
                 object_name="object_name",
             )
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.api_routers_v_1_properties_public_api_list_public_properties(
+        _response = await self._raw_client.create_public_developer_property_api(
             object_name,
             workspace_id=workspace_id,
-            custom_only=custom_only,
-            lang=lang,
+            name=name,
+            type=type,
+            internal_name=internal_name,
+            choice_values=choice_values,
+            choice_labels=choice_labels,
+            choice_colors=choice_colors,
+            target=target,
             language=language,
-            accept_language=accept_language,
+            custom_object_id=custom_object_id,
+            editor_variant=editor_variant,
+            source=source,
+            scope=scope,
+            provider=provider,
+            channel_id=channel_id,
+            external_object_type=external_object_type,
+            external_id=external_id,
+            field_type=field_type,
+            group_name=group_name,
+            options=options,
+            dry_run=dry_run,
+            confirm=confirm,
             request_options=request_options,
         )
         return _response.data
 
-    async def api_routers_v_1_properties_public_api_create_public_property(
+    async def retrieve_public_developer_property_api(
         self,
         object_name: str,
+        property_ref: str,
         *,
-        name: typing.Optional[str] = OMIT,
-        internal_name: typing.Optional[str] = OMIT,
-        type: typing.Optional[str] = OMIT,
-        description: typing.Optional[str] = OMIT,
-        number_format: typing.Optional[str] = OMIT,
-        choice_values: typing.Optional[PublicPropertyUpsertRequestChoiceValues] = OMIT,
-        conditional_choice_mapping: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
-        tag_values: typing.Optional[typing.Sequence[str]] = OMIT,
-        unique: typing.Optional[bool] = OMIT,
-        required_field: typing.Optional[bool] = OMIT,
-        multiple_select: typing.Optional[bool] = OMIT,
-        show_badge: typing.Optional[bool] = OMIT,
-        badge_color: typing.Optional[str] = OMIT,
-        order: typing.Optional[int] = OMIT,
+        custom_object_id: typing.Optional[str] = None,
+        language: typing.Optional[str] = None,
+        lang: typing.Optional[str] = None,
+        scope: typing.Optional[str] = None,
+        source: typing.Optional[str] = None,
+        provider: typing.Optional[str] = None,
+        channel_id: typing.Optional[str] = None,
+        external_object_type: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> PublicPropertyMutationResponse:
+    ) -> RetrievePublicDeveloperPropertyApiV2PublicPropertiesObjectNamePropertyRefGet200Envelope:
         """
         Parameters
         ----------
         object_name : str
 
-        name : typing.Optional[str]
+        property_ref : str
 
-        internal_name : typing.Optional[str]
+        custom_object_id : typing.Optional[str]
 
-        type : typing.Optional[str]
+        language : typing.Optional[str]
 
-        description : typing.Optional[str]
+        lang : typing.Optional[str]
 
-        number_format : typing.Optional[str]
+        scope : typing.Optional[str]
 
-        choice_values : typing.Optional[PublicPropertyUpsertRequestChoiceValues]
+        source : typing.Optional[str]
 
-        conditional_choice_mapping : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
+        provider : typing.Optional[str]
 
-        tag_values : typing.Optional[typing.Sequence[str]]
+        channel_id : typing.Optional[str]
 
-        unique : typing.Optional[bool]
+        external_object_type : typing.Optional[str]
 
-        required_field : typing.Optional[bool]
-
-        multiple_select : typing.Optional[bool]
-
-        show_badge : typing.Optional[bool]
-
-        badge_color : typing.Optional[str]
-
-        order : typing.Optional[int]
+        workspace_id : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        PublicPropertyMutationResponse
-            OK
+        RetrievePublicDeveloperPropertyApiV2PublicPropertiesObjectNamePropertyRefGet200Envelope
+            Successful Response
 
         Examples
         --------
@@ -513,49 +851,65 @@ class AsyncPropertiesClient:
         from sanka_sdk import AsyncSankaClient
 
         client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
 
 
         async def main() -> None:
-            await client.properties.api_routers_v_1_properties_public_api_create_public_property(
+            await client.properties.retrieve_public_developer_property_api(
                 object_name="object_name",
+                property_ref="property_ref",
             )
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.api_routers_v_1_properties_public_api_create_public_property(
+        _response = await self._raw_client.retrieve_public_developer_property_api(
             object_name,
-            name=name,
-            internal_name=internal_name,
-            type=type,
-            description=description,
-            number_format=number_format,
-            choice_values=choice_values,
-            conditional_choice_mapping=conditional_choice_mapping,
-            tag_values=tag_values,
-            unique=unique,
-            required_field=required_field,
-            multiple_select=multiple_select,
-            show_badge=show_badge,
-            badge_color=badge_color,
-            order=order,
+            property_ref,
+            custom_object_id=custom_object_id,
+            language=language,
+            lang=lang,
+            scope=scope,
+            source=source,
+            provider=provider,
+            channel_id=channel_id,
+            external_object_type=external_object_type,
+            workspace_id=workspace_id,
             request_options=request_options,
         )
         return _response.data
 
-    async def api_routers_v_1_properties_public_api_retrieve_public_property(
+    async def update_public_developer_property_api(
         self,
         object_name: str,
         property_ref: str,
         *,
         workspace_id: typing.Optional[str] = None,
-        lang: typing.Optional[str] = None,
-        language: typing.Optional[str] = None,
-        accept_language: typing.Optional[str] = None,
+        name: typing.Optional[str] = OMIT,
+        type: typing.Optional[str] = OMIT,
+        internal_name: typing.Optional[str] = OMIT,
+        choice_values: typing.Optional[PublicPropertyMutationRequestChoiceValues] = OMIT,
+        choice_labels: typing.Optional[typing.Sequence[str]] = OMIT,
+        choice_colors: typing.Optional[typing.Sequence[str]] = OMIT,
+        target: typing.Optional[str] = OMIT,
+        language: typing.Optional[str] = OMIT,
+        custom_object_id: typing.Optional[str] = OMIT,
+        editor_variant: typing.Optional[str] = OMIT,
+        source: typing.Optional[str] = OMIT,
+        scope: typing.Optional[str] = OMIT,
+        provider: typing.Optional[str] = OMIT,
+        channel_id: typing.Optional[str] = OMIT,
+        external_object_type: typing.Optional[str] = OMIT,
+        external_id: typing.Optional[str] = OMIT,
+        field_type: typing.Optional[str] = OMIT,
+        group_name: typing.Optional[str] = OMIT,
+        options: typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]] = OMIT,
+        dry_run: typing.Optional[bool] = OMIT,
+        confirm: typing.Optional[bool] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> PublicPropertySchema:
+    ) -> UpdatePublicDeveloperPropertyApiV2PublicPropertiesObjectNamePropertyRefPut200Envelope:
         """
         Parameters
         ----------
@@ -565,19 +919,55 @@ class AsyncPropertiesClient:
 
         workspace_id : typing.Optional[str]
 
-        lang : typing.Optional[str]
+        name : typing.Optional[str]
+
+        type : typing.Optional[str]
+
+        internal_name : typing.Optional[str]
+
+        choice_values : typing.Optional[PublicPropertyMutationRequestChoiceValues]
+
+        choice_labels : typing.Optional[typing.Sequence[str]]
+
+        choice_colors : typing.Optional[typing.Sequence[str]]
+
+        target : typing.Optional[str]
 
         language : typing.Optional[str]
 
-        accept_language : typing.Optional[str]
+        custom_object_id : typing.Optional[str]
+
+        editor_variant : typing.Optional[str]
+
+        source : typing.Optional[str]
+
+        scope : typing.Optional[str]
+
+        provider : typing.Optional[str]
+
+        channel_id : typing.Optional[str]
+
+        external_object_type : typing.Optional[str]
+
+        external_id : typing.Optional[str]
+
+        field_type : typing.Optional[str]
+
+        group_name : typing.Optional[str]
+
+        options : typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]]
+
+        dry_run : typing.Optional[bool]
+
+        confirm : typing.Optional[bool]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        PublicPropertySchema
-            OK
+        UpdatePublicDeveloperPropertyApiV2PublicPropertiesObjectNamePropertyRefPut200Envelope
+            Successful Response
 
         Examples
         --------
@@ -586,12 +976,13 @@ class AsyncPropertiesClient:
         from sanka_sdk import AsyncSankaClient
 
         client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
 
 
         async def main() -> None:
-            await client.properties.api_routers_v_1_properties_public_api_retrieve_public_property(
+            await client.properties.update_public_developer_property_api(
                 object_name="object_name",
                 property_ref="property_ref",
             )
@@ -599,38 +990,53 @@ class AsyncPropertiesClient:
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.api_routers_v_1_properties_public_api_retrieve_public_property(
+        _response = await self._raw_client.update_public_developer_property_api(
             object_name,
             property_ref,
             workspace_id=workspace_id,
-            lang=lang,
+            name=name,
+            type=type,
+            internal_name=internal_name,
+            choice_values=choice_values,
+            choice_labels=choice_labels,
+            choice_colors=choice_colors,
+            target=target,
             language=language,
-            accept_language=accept_language,
+            custom_object_id=custom_object_id,
+            editor_variant=editor_variant,
+            source=source,
+            scope=scope,
+            provider=provider,
+            channel_id=channel_id,
+            external_object_type=external_object_type,
+            external_id=external_id,
+            field_type=field_type,
+            group_name=group_name,
+            options=options,
+            dry_run=dry_run,
+            confirm=confirm,
             request_options=request_options,
         )
         return _response.data
 
-    async def api_routers_v_1_properties_public_api_update_public_property(
+    async def delete_public_developer_property_api(
         self,
         object_name: str,
         property_ref: str,
         *,
-        name: typing.Optional[str] = OMIT,
-        internal_name: typing.Optional[str] = OMIT,
-        type: typing.Optional[str] = OMIT,
-        description: typing.Optional[str] = OMIT,
-        number_format: typing.Optional[str] = OMIT,
-        choice_values: typing.Optional[PublicPropertyUpsertRequestChoiceValues] = OMIT,
-        conditional_choice_mapping: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
-        tag_values: typing.Optional[typing.Sequence[str]] = OMIT,
-        unique: typing.Optional[bool] = OMIT,
-        required_field: typing.Optional[bool] = OMIT,
-        multiple_select: typing.Optional[bool] = OMIT,
-        show_badge: typing.Optional[bool] = OMIT,
-        badge_color: typing.Optional[str] = OMIT,
-        order: typing.Optional[int] = OMIT,
+        custom_object_id: typing.Optional[str] = None,
+        target: typing.Optional[str] = None,
+        source: typing.Optional[str] = None,
+        scope: typing.Optional[str] = None,
+        provider: typing.Optional[str] = None,
+        channel_id: typing.Optional[str] = None,
+        external_object_type: typing.Optional[str] = None,
+        dry_run: typing.Optional[bool] = None,
+        confirm: typing.Optional[bool] = None,
+        language: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> PublicPropertyMutationResponse:
+    ) -> DeletePublicDeveloperPropertyApiV2PublicPropertiesObjectNamePropertyRefDelete200Envelope:
         """
         Parameters
         ----------
@@ -638,41 +1044,35 @@ class AsyncPropertiesClient:
 
         property_ref : str
 
-        name : typing.Optional[str]
+        custom_object_id : typing.Optional[str]
 
-        internal_name : typing.Optional[str]
+        target : typing.Optional[str]
 
-        type : typing.Optional[str]
+        source : typing.Optional[str]
 
-        description : typing.Optional[str]
+        scope : typing.Optional[str]
 
-        number_format : typing.Optional[str]
+        provider : typing.Optional[str]
 
-        choice_values : typing.Optional[PublicPropertyUpsertRequestChoiceValues]
+        channel_id : typing.Optional[str]
 
-        conditional_choice_mapping : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
+        external_object_type : typing.Optional[str]
 
-        tag_values : typing.Optional[typing.Sequence[str]]
+        dry_run : typing.Optional[bool]
 
-        unique : typing.Optional[bool]
+        confirm : typing.Optional[bool]
 
-        required_field : typing.Optional[bool]
+        language : typing.Optional[str]
 
-        multiple_select : typing.Optional[bool]
-
-        show_badge : typing.Optional[bool]
-
-        badge_color : typing.Optional[str]
-
-        order : typing.Optional[int]
+        workspace_id : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        PublicPropertyMutationResponse
-            OK
+        DeletePublicDeveloperPropertyApiV2PublicPropertiesObjectNamePropertyRefDelete200Envelope
+            Successful Response
 
         Examples
         --------
@@ -681,12 +1081,13 @@ class AsyncPropertiesClient:
         from sanka_sdk import AsyncSankaClient
 
         client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
 
 
         async def main() -> None:
-            await client.properties.api_routers_v_1_properties_public_api_update_public_property(
+            await client.properties.delete_public_developer_property_api(
                 object_name="object_name",
                 property_ref="property_ref",
             )
@@ -694,66 +1095,20 @@ class AsyncPropertiesClient:
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.api_routers_v_1_properties_public_api_update_public_property(
+        _response = await self._raw_client.delete_public_developer_property_api(
             object_name,
             property_ref,
-            name=name,
-            internal_name=internal_name,
-            type=type,
-            description=description,
-            number_format=number_format,
-            choice_values=choice_values,
-            conditional_choice_mapping=conditional_choice_mapping,
-            tag_values=tag_values,
-            unique=unique,
-            required_field=required_field,
-            multiple_select=multiple_select,
-            show_badge=show_badge,
-            badge_color=badge_color,
-            order=order,
+            custom_object_id=custom_object_id,
+            target=target,
+            source=source,
+            scope=scope,
+            provider=provider,
+            channel_id=channel_id,
+            external_object_type=external_object_type,
+            dry_run=dry_run,
+            confirm=confirm,
+            language=language,
+            workspace_id=workspace_id,
             request_options=request_options,
-        )
-        return _response.data
-
-    async def api_routers_v_1_properties_public_api_delete_public_property(
-        self, object_name: str, property_ref: str, *, request_options: typing.Optional[RequestOptions] = None
-    ) -> PublicPropertyMutationResponse:
-        """
-        Parameters
-        ----------
-        object_name : str
-
-        property_ref : str
-
-        request_options : typing.Optional[RequestOptions]
-            Request-specific configuration.
-
-        Returns
-        -------
-        PublicPropertyMutationResponse
-            OK
-
-        Examples
-        --------
-        import asyncio
-
-        from sanka_sdk import AsyncSankaClient
-
-        client = AsyncSankaClient(
-            token="YOUR_TOKEN",
-        )
-
-
-        async def main() -> None:
-            await client.properties.api_routers_v_1_properties_public_api_delete_public_property(
-                object_name="object_name",
-                property_ref="property_ref",
-            )
-
-
-        asyncio.run(main())
-        """
-        _response = await self._raw_client.api_routers_v_1_properties_public_api_delete_public_property(
-            object_name, property_ref, request_options=request_options
         )
         return _response.data

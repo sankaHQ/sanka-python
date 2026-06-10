@@ -9,17 +9,28 @@ from ..core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ..core.http_response import AsyncHttpResponse, HttpResponse
 from ..core.jsonable_encoder import jsonable_encoder
 from ..core.request_options import RequestOptions
-from ..core.serialization import convert_and_respect_annotation_metadata
 from ..core.unchecked_base_model import construct_type
-from ..errors.bad_request_error import BadRequestError
-from ..errors.conflict_error import ConflictError
-from ..errors.forbidden_error import ForbiddenError
-from ..errors.internal_server_error import InternalServerError
-from ..errors.not_found_error import NotFoundError
-from ..types.expense_schema import ExpenseSchema
-from ..types.public_expense_attachment_payload import PublicExpenseAttachmentPayload
-from ..types.public_expense_file_upload_response import PublicExpenseFileUploadResponse
-from ..types.public_expense_response import PublicExpenseResponse
+from ..errors.unauthorized_error import UnauthorizedError
+from ..errors.unprocessable_entity_error import UnprocessableEntityError
+from ..types.create_public_expense_api_v_2_public_expenses_post_200_envelope import (
+    CreatePublicExpenseApiV2PublicExpensesPost200Envelope,
+)
+from ..types.delete_public_expense_api_v_2_public_expenses_expense_id_delete_200_envelope import (
+    DeletePublicExpenseApiV2PublicExpensesExpenseIdDelete200Envelope,
+)
+from ..types.error_envelope import ErrorEnvelope
+from ..types.get_public_expense_api_v_2_public_expenses_expense_id_get_200_envelope import (
+    GetPublicExpenseApiV2PublicExpensesExpenseIdGet200Envelope,
+)
+from ..types.list_public_expenses_api_v_2_public_expenses_get_200_envelope import (
+    ListPublicExpensesApiV2PublicExpensesGet200Envelope,
+)
+from ..types.update_public_expense_api_v_2_public_expenses_expense_id_put_200_envelope import (
+    UpdatePublicExpenseApiV2PublicExpensesExpenseIdPut200Envelope,
+)
+from ..types.upload_public_expense_file_api_v_2_public_expenses_files_post_200_envelope import (
+    UploadPublicExpenseFileApiV2PublicExpensesFilesPost200Envelope,
+)
 
 # this is used as the default value for optional parameters
 OMIT = typing.cast(typing.Any, ...)
@@ -29,23 +40,44 @@ class RawExpensesClient:
     def __init__(self, *, client_wrapper: SyncClientWrapper):
         self._client_wrapper = client_wrapper
 
-    def api_routers_v_1_expenses_public_api_list_workspace_expenses(
+    def list_public_expenses_api(
         self,
         *,
         workspace_id: typing.Optional[str] = None,
-        lang: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = None,
+        search: typing.Optional[str] = None,
         language: typing.Optional[str] = None,
+        status: typing.Optional[str] = None,
+        usage_status: typing.Optional[str] = None,
+        page: typing.Optional[int] = None,
+        limit: typing.Optional[int] = None,
+        sort: typing.Optional[str] = None,
+        x_language: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> HttpResponse[typing.List[ExpenseSchema]]:
+    ) -> HttpResponse[ListPublicExpensesApiV2PublicExpensesGet200Envelope]:
         """
         Parameters
         ----------
         workspace_id : typing.Optional[str]
 
-        lang : typing.Optional[str]
+        view_id : typing.Optional[str]
+
+        search : typing.Optional[str]
 
         language : typing.Optional[str]
+
+        status : typing.Optional[str]
+
+        usage_status : typing.Optional[str]
+
+        page : typing.Optional[int]
+
+        limit : typing.Optional[int]
+
+        sort : typing.Optional[str]
+
+        x_language : typing.Optional[str]
 
         accept_language : typing.Optional[str]
 
@@ -54,18 +86,25 @@ class RawExpensesClient:
 
         Returns
         -------
-        HttpResponse[typing.List[ExpenseSchema]]
-            OK
+        HttpResponse[ListPublicExpensesApiV2PublicExpensesGet200Envelope]
+            Object record list response
         """
         _response = self._client_wrapper.httpx_client.request(
-            "v1/public/expenses",
+            "v2/public/expenses",
             method="GET",
             params={
                 "workspace_id": workspace_id,
-                "lang": lang,
+                "view_id": view_id,
+                "search": search,
                 "language": language,
+                "status": status,
+                "usage_status": usage_status,
+                "page": page,
+                "limit": limit,
+                "sort": sort,
             },
             headers={
+                "X-Language": str(x_language) if x_language is not None else None,
                 "Accept-Language": str(accept_language) if accept_language is not None else None,
             },
             request_options=request_options,
@@ -73,42 +112,31 @@ class RawExpensesClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    typing.List[ExpenseSchema],
+                    ListPublicExpensesApiV2PublicExpensesGet200Envelope,
                     construct_type(
-                        type_=typing.List[ExpenseSchema],  # type: ignore
+                        type_=ListPublicExpensesApiV2PublicExpensesGet200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return HttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 403:
-                raise ForbiddenError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -118,76 +146,44 @@ class RawExpensesClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    def api_routers_v_1_expenses_public_api_create_public_expense(
+    def create_public_expense_api(
         self,
         *,
-        external_id: typing.Optional[str] = OMIT,
-        contact_id: typing.Optional[str] = OMIT,
-        contact_external_id: typing.Optional[str] = OMIT,
-        company_id: typing.Optional[str] = OMIT,
-        company_external_id: typing.Optional[str] = OMIT,
-        description: typing.Optional[str] = OMIT,
-        reimburse_date: typing.Optional[str] = OMIT,
-        due_date: typing.Optional[str] = OMIT,
-        status: typing.Optional[str] = OMIT,
-        currency: typing.Optional[str] = OMIT,
-        amount: typing.Optional[float] = OMIT,
-        attachment_file: typing.Optional[PublicExpenseAttachmentPayload] = OMIT,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = OMIT,
+        form_view_id: typing.Optional[str] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> HttpResponse[PublicExpenseResponse]:
+    ) -> HttpResponse[CreatePublicExpenseApiV2PublicExpensesPost200Envelope]:
         """
         Parameters
         ----------
-        external_id : typing.Optional[str]
+        workspace_id : typing.Optional[str]
 
-        contact_id : typing.Optional[str]
+        view_id : typing.Optional[str]
 
-        contact_external_id : typing.Optional[str]
+        form_view_id : typing.Optional[str]
 
-        company_id : typing.Optional[str]
-
-        company_external_id : typing.Optional[str]
-
-        description : typing.Optional[str]
-
-        reimburse_date : typing.Optional[str]
-
-        due_date : typing.Optional[str]
-
-        status : typing.Optional[str]
-
-        currency : typing.Optional[str]
-
-        amount : typing.Optional[float]
-
-        attachment_file : typing.Optional[PublicExpenseAttachmentPayload]
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        HttpResponse[PublicExpenseResponse]
-            OK
+        HttpResponse[CreatePublicExpenseApiV2PublicExpensesPost200Envelope]
+            Successful Response
         """
         _response = self._client_wrapper.httpx_client.request(
-            "v1/public/expenses",
+            "v2/public/expenses",
             method="POST",
+            params={
+                "workspace_id": workspace_id,
+            },
             json={
-                "external_id": external_id,
-                "contact_id": contact_id,
-                "contact_external_id": contact_external_id,
-                "company_id": company_id,
-                "company_external_id": company_external_id,
-                "description": description,
-                "reimburse_date": reimburse_date,
-                "due_date": due_date,
-                "status": status,
-                "currency": currency,
-                "amount": amount,
-                "attachment_file": convert_and_respect_annotation_metadata(
-                    object_=attachment_file, annotation=PublicExpenseAttachmentPayload, direction="write"
-                ),
+                "view_id": view_id,
+                "form_view_id": form_view_id,
+                "properties": properties,
             },
             headers={
                 "content-type": "application/json",
@@ -198,53 +194,31 @@ class RawExpensesClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    PublicExpenseResponse,
+                    CreatePublicExpenseApiV2PublicExpensesPost200Envelope,
                     construct_type(
-                        type_=PublicExpenseResponse,  # type: ignore
+                        type_=CreatePublicExpenseApiV2PublicExpensesPost200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return HttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 403:
-                raise ForbiddenError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -254,26 +228,35 @@ class RawExpensesClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    def api_routers_v_1_expenses_public_api_upload_public_expense_file(
-        self, *, file: core.File, request_options: typing.Optional[RequestOptions] = None
-    ) -> HttpResponse[PublicExpenseFileUploadResponse]:
+    def upload_public_expense_file_api(
+        self,
+        *,
+        file: core.File,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> HttpResponse[UploadPublicExpenseFileApiV2PublicExpensesFilesPost200Envelope]:
         """
         Parameters
         ----------
         file : core.File
             See core.File for more documentation
 
+        workspace_id : typing.Optional[str]
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        HttpResponse[PublicExpenseFileUploadResponse]
-            OK
+        HttpResponse[UploadPublicExpenseFileApiV2PublicExpensesFilesPost200Envelope]
+            Successful Response
         """
         _response = self._client_wrapper.httpx_client.request(
-            "v1/public/expenses/files",
+            "v2/public/expenses/files",
             method="POST",
+            params={
+                "workspace_id": workspace_id,
+            },
             data={},
             files={
                 "file": file,
@@ -285,42 +268,31 @@ class RawExpensesClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    PublicExpenseFileUploadResponse,
+                    UploadPublicExpenseFileApiV2PublicExpensesFilesPost200Envelope,
                     construct_type(
-                        type_=PublicExpenseFileUploadResponse,  # type: ignore
+                        type_=UploadPublicExpenseFileApiV2PublicExpensesFilesPost200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return HttpResponse(response=_response, data=_data)
-            if _response.status_code == 403:
-                raise ForbiddenError(
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 404:
-                raise NotFoundError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -330,16 +302,16 @@ class RawExpensesClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    def api_routers_v_1_expenses_public_api_get_public_expense(
+    def get_public_expense_api(
         self,
         expense_id: str,
         *,
         external_id: typing.Optional[str] = None,
-        lang: typing.Optional[str] = None,
-        language: typing.Optional[str] = None,
-        accept_language: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = None,
+        form_view_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> HttpResponse[ExpenseSchema]:
+    ) -> HttpResponse[GetPublicExpenseApiV2PublicExpensesExpenseIdGet200Envelope]:
         """
         Parameters
         ----------
@@ -347,83 +319,59 @@ class RawExpensesClient:
 
         external_id : typing.Optional[str]
 
-        lang : typing.Optional[str]
+        workspace_id : typing.Optional[str]
 
-        language : typing.Optional[str]
+        view_id : typing.Optional[str]
 
-        accept_language : typing.Optional[str]
+        form_view_id : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        HttpResponse[ExpenseSchema]
-            OK
+        HttpResponse[GetPublicExpenseApiV2PublicExpensesExpenseIdGet200Envelope]
+            Object record detail response. The base detail payload is intentionally thin; drawer sections load through scoped endpoints.
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"v1/public/expenses/{jsonable_encoder(expense_id)}",
+            f"v2/public/expenses/{jsonable_encoder(expense_id)}",
             method="GET",
             params={
                 "external_id": external_id,
-                "lang": lang,
-                "language": language,
-            },
-            headers={
-                "Accept-Language": str(accept_language) if accept_language is not None else None,
+                "workspace_id": workspace_id,
+                "view_id": view_id,
+                "form_view_id": form_view_id,
             },
             request_options=request_options,
         )
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    ExpenseSchema,
+                    GetPublicExpenseApiV2PublicExpensesExpenseIdGet200Envelope,
                     construct_type(
-                        type_=ExpenseSchema,  # type: ignore
+                        type_=GetPublicExpenseApiV2PublicExpensesExpenseIdGet200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return HttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 403:
-                raise ForbiddenError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -433,24 +381,17 @@ class RawExpensesClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    def api_routers_v_1_expenses_public_api_update_public_expense(
+    def update_public_expense_api(
         self,
         expense_id: str,
         *,
-        external_id: typing.Optional[str] = OMIT,
-        contact_id: typing.Optional[str] = OMIT,
-        contact_external_id: typing.Optional[str] = OMIT,
-        company_id: typing.Optional[str] = OMIT,
-        company_external_id: typing.Optional[str] = OMIT,
-        description: typing.Optional[str] = OMIT,
-        reimburse_date: typing.Optional[str] = OMIT,
-        due_date: typing.Optional[str] = OMIT,
-        status: typing.Optional[str] = OMIT,
-        currency: typing.Optional[str] = OMIT,
-        amount: typing.Optional[float] = OMIT,
-        attachment_file: typing.Optional[PublicExpenseAttachmentPayload] = OMIT,
+        external_id: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = OMIT,
+        form_view_id: typing.Optional[str] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> HttpResponse[PublicExpenseResponse]:
+    ) -> HttpResponse[UpdatePublicExpenseApiV2PublicExpensesExpenseIdPut200Envelope]:
         """
         Parameters
         ----------
@@ -458,54 +399,33 @@ class RawExpensesClient:
 
         external_id : typing.Optional[str]
 
-        contact_id : typing.Optional[str]
+        workspace_id : typing.Optional[str]
 
-        contact_external_id : typing.Optional[str]
+        view_id : typing.Optional[str]
 
-        company_id : typing.Optional[str]
+        form_view_id : typing.Optional[str]
 
-        company_external_id : typing.Optional[str]
-
-        description : typing.Optional[str]
-
-        reimburse_date : typing.Optional[str]
-
-        due_date : typing.Optional[str]
-
-        status : typing.Optional[str]
-
-        currency : typing.Optional[str]
-
-        amount : typing.Optional[float]
-
-        attachment_file : typing.Optional[PublicExpenseAttachmentPayload]
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        HttpResponse[PublicExpenseResponse]
-            OK
+        HttpResponse[UpdatePublicExpenseApiV2PublicExpensesExpenseIdPut200Envelope]
+            Successful Response
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"v1/public/expenses/{jsonable_encoder(expense_id)}",
+            f"v2/public/expenses/{jsonable_encoder(expense_id)}",
             method="PUT",
-            json={
+            params={
                 "external_id": external_id,
-                "contact_id": contact_id,
-                "contact_external_id": contact_external_id,
-                "company_id": company_id,
-                "company_external_id": company_external_id,
-                "description": description,
-                "reimburse_date": reimburse_date,
-                "due_date": due_date,
-                "status": status,
-                "currency": currency,
-                "amount": amount,
-                "attachment_file": convert_and_respect_annotation_metadata(
-                    object_=attachment_file, annotation=PublicExpenseAttachmentPayload, direction="write"
-                ),
+                "workspace_id": workspace_id,
+            },
+            json={
+                "view_id": view_id,
+                "form_view_id": form_view_id,
+                "properties": properties,
             },
             headers={
                 "content-type": "application/json",
@@ -516,64 +436,31 @@ class RawExpensesClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    PublicExpenseResponse,
+                    UpdatePublicExpenseApiV2PublicExpensesExpenseIdPut200Envelope,
                     construct_type(
-                        type_=PublicExpenseResponse,  # type: ignore
+                        type_=UpdatePublicExpenseApiV2PublicExpensesExpenseIdPut200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return HttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 403:
-                raise ForbiddenError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 409:
-                raise ConflictError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -583,13 +470,14 @@ class RawExpensesClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    def api_routers_v_1_expenses_public_api_delete_public_expense(
+    def delete_public_expense_api(
         self,
         expense_id: str,
         *,
         external_id: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> HttpResponse[PublicExpenseResponse]:
+    ) -> HttpResponse[DeletePublicExpenseApiV2PublicExpensesExpenseIdDelete200Envelope]:
         """
         Parameters
         ----------
@@ -597,72 +485,53 @@ class RawExpensesClient:
 
         external_id : typing.Optional[str]
 
+        workspace_id : typing.Optional[str]
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        HttpResponse[PublicExpenseResponse]
-            OK
+        HttpResponse[DeletePublicExpenseApiV2PublicExpensesExpenseIdDelete200Envelope]
+            Successful Response
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"v1/public/expenses/{jsonable_encoder(expense_id)}",
+            f"v2/public/expenses/{jsonable_encoder(expense_id)}",
             method="DELETE",
             params={
                 "external_id": external_id,
+                "workspace_id": workspace_id,
             },
             request_options=request_options,
         )
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    PublicExpenseResponse,
+                    DeletePublicExpenseApiV2PublicExpensesExpenseIdDelete200Envelope,
                     construct_type(
-                        type_=PublicExpenseResponse,  # type: ignore
+                        type_=DeletePublicExpenseApiV2PublicExpensesExpenseIdDelete200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return HttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 403:
-                raise ForbiddenError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -677,23 +546,44 @@ class AsyncRawExpensesClient:
     def __init__(self, *, client_wrapper: AsyncClientWrapper):
         self._client_wrapper = client_wrapper
 
-    async def api_routers_v_1_expenses_public_api_list_workspace_expenses(
+    async def list_public_expenses_api(
         self,
         *,
         workspace_id: typing.Optional[str] = None,
-        lang: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = None,
+        search: typing.Optional[str] = None,
         language: typing.Optional[str] = None,
+        status: typing.Optional[str] = None,
+        usage_status: typing.Optional[str] = None,
+        page: typing.Optional[int] = None,
+        limit: typing.Optional[int] = None,
+        sort: typing.Optional[str] = None,
+        x_language: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> AsyncHttpResponse[typing.List[ExpenseSchema]]:
+    ) -> AsyncHttpResponse[ListPublicExpensesApiV2PublicExpensesGet200Envelope]:
         """
         Parameters
         ----------
         workspace_id : typing.Optional[str]
 
-        lang : typing.Optional[str]
+        view_id : typing.Optional[str]
+
+        search : typing.Optional[str]
 
         language : typing.Optional[str]
+
+        status : typing.Optional[str]
+
+        usage_status : typing.Optional[str]
+
+        page : typing.Optional[int]
+
+        limit : typing.Optional[int]
+
+        sort : typing.Optional[str]
+
+        x_language : typing.Optional[str]
 
         accept_language : typing.Optional[str]
 
@@ -702,18 +592,25 @@ class AsyncRawExpensesClient:
 
         Returns
         -------
-        AsyncHttpResponse[typing.List[ExpenseSchema]]
-            OK
+        AsyncHttpResponse[ListPublicExpensesApiV2PublicExpensesGet200Envelope]
+            Object record list response
         """
         _response = await self._client_wrapper.httpx_client.request(
-            "v1/public/expenses",
+            "v2/public/expenses",
             method="GET",
             params={
                 "workspace_id": workspace_id,
-                "lang": lang,
+                "view_id": view_id,
+                "search": search,
                 "language": language,
+                "status": status,
+                "usage_status": usage_status,
+                "page": page,
+                "limit": limit,
+                "sort": sort,
             },
             headers={
+                "X-Language": str(x_language) if x_language is not None else None,
                 "Accept-Language": str(accept_language) if accept_language is not None else None,
             },
             request_options=request_options,
@@ -721,42 +618,31 @@ class AsyncRawExpensesClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    typing.List[ExpenseSchema],
+                    ListPublicExpensesApiV2PublicExpensesGet200Envelope,
                     construct_type(
-                        type_=typing.List[ExpenseSchema],  # type: ignore
+                        type_=ListPublicExpensesApiV2PublicExpensesGet200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return AsyncHttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 403:
-                raise ForbiddenError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -766,76 +652,44 @@ class AsyncRawExpensesClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    async def api_routers_v_1_expenses_public_api_create_public_expense(
+    async def create_public_expense_api(
         self,
         *,
-        external_id: typing.Optional[str] = OMIT,
-        contact_id: typing.Optional[str] = OMIT,
-        contact_external_id: typing.Optional[str] = OMIT,
-        company_id: typing.Optional[str] = OMIT,
-        company_external_id: typing.Optional[str] = OMIT,
-        description: typing.Optional[str] = OMIT,
-        reimburse_date: typing.Optional[str] = OMIT,
-        due_date: typing.Optional[str] = OMIT,
-        status: typing.Optional[str] = OMIT,
-        currency: typing.Optional[str] = OMIT,
-        amount: typing.Optional[float] = OMIT,
-        attachment_file: typing.Optional[PublicExpenseAttachmentPayload] = OMIT,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = OMIT,
+        form_view_id: typing.Optional[str] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> AsyncHttpResponse[PublicExpenseResponse]:
+    ) -> AsyncHttpResponse[CreatePublicExpenseApiV2PublicExpensesPost200Envelope]:
         """
         Parameters
         ----------
-        external_id : typing.Optional[str]
+        workspace_id : typing.Optional[str]
 
-        contact_id : typing.Optional[str]
+        view_id : typing.Optional[str]
 
-        contact_external_id : typing.Optional[str]
+        form_view_id : typing.Optional[str]
 
-        company_id : typing.Optional[str]
-
-        company_external_id : typing.Optional[str]
-
-        description : typing.Optional[str]
-
-        reimburse_date : typing.Optional[str]
-
-        due_date : typing.Optional[str]
-
-        status : typing.Optional[str]
-
-        currency : typing.Optional[str]
-
-        amount : typing.Optional[float]
-
-        attachment_file : typing.Optional[PublicExpenseAttachmentPayload]
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        AsyncHttpResponse[PublicExpenseResponse]
-            OK
+        AsyncHttpResponse[CreatePublicExpenseApiV2PublicExpensesPost200Envelope]
+            Successful Response
         """
         _response = await self._client_wrapper.httpx_client.request(
-            "v1/public/expenses",
+            "v2/public/expenses",
             method="POST",
+            params={
+                "workspace_id": workspace_id,
+            },
             json={
-                "external_id": external_id,
-                "contact_id": contact_id,
-                "contact_external_id": contact_external_id,
-                "company_id": company_id,
-                "company_external_id": company_external_id,
-                "description": description,
-                "reimburse_date": reimburse_date,
-                "due_date": due_date,
-                "status": status,
-                "currency": currency,
-                "amount": amount,
-                "attachment_file": convert_and_respect_annotation_metadata(
-                    object_=attachment_file, annotation=PublicExpenseAttachmentPayload, direction="write"
-                ),
+                "view_id": view_id,
+                "form_view_id": form_view_id,
+                "properties": properties,
             },
             headers={
                 "content-type": "application/json",
@@ -846,53 +700,31 @@ class AsyncRawExpensesClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    PublicExpenseResponse,
+                    CreatePublicExpenseApiV2PublicExpensesPost200Envelope,
                     construct_type(
-                        type_=PublicExpenseResponse,  # type: ignore
+                        type_=CreatePublicExpenseApiV2PublicExpensesPost200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return AsyncHttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 403:
-                raise ForbiddenError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -902,26 +734,35 @@ class AsyncRawExpensesClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    async def api_routers_v_1_expenses_public_api_upload_public_expense_file(
-        self, *, file: core.File, request_options: typing.Optional[RequestOptions] = None
-    ) -> AsyncHttpResponse[PublicExpenseFileUploadResponse]:
+    async def upload_public_expense_file_api(
+        self,
+        *,
+        file: core.File,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> AsyncHttpResponse[UploadPublicExpenseFileApiV2PublicExpensesFilesPost200Envelope]:
         """
         Parameters
         ----------
         file : core.File
             See core.File for more documentation
 
+        workspace_id : typing.Optional[str]
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        AsyncHttpResponse[PublicExpenseFileUploadResponse]
-            OK
+        AsyncHttpResponse[UploadPublicExpenseFileApiV2PublicExpensesFilesPost200Envelope]
+            Successful Response
         """
         _response = await self._client_wrapper.httpx_client.request(
-            "v1/public/expenses/files",
+            "v2/public/expenses/files",
             method="POST",
+            params={
+                "workspace_id": workspace_id,
+            },
             data={},
             files={
                 "file": file,
@@ -933,42 +774,31 @@ class AsyncRawExpensesClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    PublicExpenseFileUploadResponse,
+                    UploadPublicExpenseFileApiV2PublicExpensesFilesPost200Envelope,
                     construct_type(
-                        type_=PublicExpenseFileUploadResponse,  # type: ignore
+                        type_=UploadPublicExpenseFileApiV2PublicExpensesFilesPost200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return AsyncHttpResponse(response=_response, data=_data)
-            if _response.status_code == 403:
-                raise ForbiddenError(
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 404:
-                raise NotFoundError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -978,16 +808,16 @@ class AsyncRawExpensesClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    async def api_routers_v_1_expenses_public_api_get_public_expense(
+    async def get_public_expense_api(
         self,
         expense_id: str,
         *,
         external_id: typing.Optional[str] = None,
-        lang: typing.Optional[str] = None,
-        language: typing.Optional[str] = None,
-        accept_language: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = None,
+        form_view_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> AsyncHttpResponse[ExpenseSchema]:
+    ) -> AsyncHttpResponse[GetPublicExpenseApiV2PublicExpensesExpenseIdGet200Envelope]:
         """
         Parameters
         ----------
@@ -995,83 +825,59 @@ class AsyncRawExpensesClient:
 
         external_id : typing.Optional[str]
 
-        lang : typing.Optional[str]
+        workspace_id : typing.Optional[str]
 
-        language : typing.Optional[str]
+        view_id : typing.Optional[str]
 
-        accept_language : typing.Optional[str]
+        form_view_id : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        AsyncHttpResponse[ExpenseSchema]
-            OK
+        AsyncHttpResponse[GetPublicExpenseApiV2PublicExpensesExpenseIdGet200Envelope]
+            Object record detail response. The base detail payload is intentionally thin; drawer sections load through scoped endpoints.
         """
         _response = await self._client_wrapper.httpx_client.request(
-            f"v1/public/expenses/{jsonable_encoder(expense_id)}",
+            f"v2/public/expenses/{jsonable_encoder(expense_id)}",
             method="GET",
             params={
                 "external_id": external_id,
-                "lang": lang,
-                "language": language,
-            },
-            headers={
-                "Accept-Language": str(accept_language) if accept_language is not None else None,
+                "workspace_id": workspace_id,
+                "view_id": view_id,
+                "form_view_id": form_view_id,
             },
             request_options=request_options,
         )
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    ExpenseSchema,
+                    GetPublicExpenseApiV2PublicExpensesExpenseIdGet200Envelope,
                     construct_type(
-                        type_=ExpenseSchema,  # type: ignore
+                        type_=GetPublicExpenseApiV2PublicExpensesExpenseIdGet200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return AsyncHttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 403:
-                raise ForbiddenError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -1081,24 +887,17 @@ class AsyncRawExpensesClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    async def api_routers_v_1_expenses_public_api_update_public_expense(
+    async def update_public_expense_api(
         self,
         expense_id: str,
         *,
-        external_id: typing.Optional[str] = OMIT,
-        contact_id: typing.Optional[str] = OMIT,
-        contact_external_id: typing.Optional[str] = OMIT,
-        company_id: typing.Optional[str] = OMIT,
-        company_external_id: typing.Optional[str] = OMIT,
-        description: typing.Optional[str] = OMIT,
-        reimburse_date: typing.Optional[str] = OMIT,
-        due_date: typing.Optional[str] = OMIT,
-        status: typing.Optional[str] = OMIT,
-        currency: typing.Optional[str] = OMIT,
-        amount: typing.Optional[float] = OMIT,
-        attachment_file: typing.Optional[PublicExpenseAttachmentPayload] = OMIT,
+        external_id: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = OMIT,
+        form_view_id: typing.Optional[str] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> AsyncHttpResponse[PublicExpenseResponse]:
+    ) -> AsyncHttpResponse[UpdatePublicExpenseApiV2PublicExpensesExpenseIdPut200Envelope]:
         """
         Parameters
         ----------
@@ -1106,54 +905,33 @@ class AsyncRawExpensesClient:
 
         external_id : typing.Optional[str]
 
-        contact_id : typing.Optional[str]
+        workspace_id : typing.Optional[str]
 
-        contact_external_id : typing.Optional[str]
+        view_id : typing.Optional[str]
 
-        company_id : typing.Optional[str]
+        form_view_id : typing.Optional[str]
 
-        company_external_id : typing.Optional[str]
-
-        description : typing.Optional[str]
-
-        reimburse_date : typing.Optional[str]
-
-        due_date : typing.Optional[str]
-
-        status : typing.Optional[str]
-
-        currency : typing.Optional[str]
-
-        amount : typing.Optional[float]
-
-        attachment_file : typing.Optional[PublicExpenseAttachmentPayload]
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        AsyncHttpResponse[PublicExpenseResponse]
-            OK
+        AsyncHttpResponse[UpdatePublicExpenseApiV2PublicExpensesExpenseIdPut200Envelope]
+            Successful Response
         """
         _response = await self._client_wrapper.httpx_client.request(
-            f"v1/public/expenses/{jsonable_encoder(expense_id)}",
+            f"v2/public/expenses/{jsonable_encoder(expense_id)}",
             method="PUT",
-            json={
+            params={
                 "external_id": external_id,
-                "contact_id": contact_id,
-                "contact_external_id": contact_external_id,
-                "company_id": company_id,
-                "company_external_id": company_external_id,
-                "description": description,
-                "reimburse_date": reimburse_date,
-                "due_date": due_date,
-                "status": status,
-                "currency": currency,
-                "amount": amount,
-                "attachment_file": convert_and_respect_annotation_metadata(
-                    object_=attachment_file, annotation=PublicExpenseAttachmentPayload, direction="write"
-                ),
+                "workspace_id": workspace_id,
+            },
+            json={
+                "view_id": view_id,
+                "form_view_id": form_view_id,
+                "properties": properties,
             },
             headers={
                 "content-type": "application/json",
@@ -1164,64 +942,31 @@ class AsyncRawExpensesClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    PublicExpenseResponse,
+                    UpdatePublicExpenseApiV2PublicExpensesExpenseIdPut200Envelope,
                     construct_type(
-                        type_=PublicExpenseResponse,  # type: ignore
+                        type_=UpdatePublicExpenseApiV2PublicExpensesExpenseIdPut200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return AsyncHttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 403:
-                raise ForbiddenError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 409:
-                raise ConflictError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -1231,13 +976,14 @@ class AsyncRawExpensesClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    async def api_routers_v_1_expenses_public_api_delete_public_expense(
+    async def delete_public_expense_api(
         self,
         expense_id: str,
         *,
         external_id: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> AsyncHttpResponse[PublicExpenseResponse]:
+    ) -> AsyncHttpResponse[DeletePublicExpenseApiV2PublicExpensesExpenseIdDelete200Envelope]:
         """
         Parameters
         ----------
@@ -1245,72 +991,53 @@ class AsyncRawExpensesClient:
 
         external_id : typing.Optional[str]
 
+        workspace_id : typing.Optional[str]
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        AsyncHttpResponse[PublicExpenseResponse]
-            OK
+        AsyncHttpResponse[DeletePublicExpenseApiV2PublicExpensesExpenseIdDelete200Envelope]
+            Successful Response
         """
         _response = await self._client_wrapper.httpx_client.request(
-            f"v1/public/expenses/{jsonable_encoder(expense_id)}",
+            f"v2/public/expenses/{jsonable_encoder(expense_id)}",
             method="DELETE",
             params={
                 "external_id": external_id,
+                "workspace_id": workspace_id,
             },
             request_options=request_options,
         )
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    PublicExpenseResponse,
+                    DeletePublicExpenseApiV2PublicExpensesExpenseIdDelete200Envelope,
                     construct_type(
-                        type_=PublicExpenseResponse,  # type: ignore
+                        type_=DeletePublicExpenseApiV2PublicExpensesExpenseIdDelete200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return AsyncHttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 403:
-                raise ForbiddenError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),

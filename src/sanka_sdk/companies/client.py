@@ -4,9 +4,33 @@ import typing
 
 from ..core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ..core.request_options import RequestOptions
-from ..types.companies_list_response import CompaniesListResponse
-from ..types.company_schema import CompanySchema
-from ..types.public_company_response import PublicCompanyResponse
+from ..types.apply_public_company_price_table_items_api_v_2_public_companies_company_id_price_table_items_apply_all_post_200_envelope import (
+    ApplyPublicCompanyPriceTableItemsApiV2PublicCompaniesCompanyIdPriceTableItemsApplyAllPost200Envelope,
+)
+from ..types.create_public_company_api_v_2_public_companies_post_200_envelope import (
+    CreatePublicCompanyApiV2PublicCompaniesPost200Envelope,
+)
+from ..types.delete_public_company_api_v_2_public_companies_company_id_delete_200_envelope import (
+    DeletePublicCompanyApiV2PublicCompaniesCompanyIdDelete200Envelope,
+)
+from ..types.get_public_company_api_v_2_public_companies_company_id_get_200_envelope import (
+    GetPublicCompanyApiV2PublicCompaniesCompanyIdGet200Envelope,
+)
+from ..types.get_public_company_price_table_api_v_2_public_companies_company_id_price_table_get_200_envelope import (
+    GetPublicCompanyPriceTableApiV2PublicCompaniesCompanyIdPriceTableGet200Envelope,
+)
+from ..types.list_public_companies_api_v_2_public_companies_get_200_envelope import (
+    ListPublicCompaniesApiV2PublicCompaniesGet200Envelope,
+)
+from ..types.update_public_company_api_v_2_public_companies_company_id_put_200_envelope import (
+    UpdatePublicCompanyApiV2PublicCompaniesCompanyIdPut200Envelope,
+)
+from ..types.update_public_company_price_table_company_api_v_2_public_companies_company_id_price_table_company_patch_200_envelope import (
+    UpdatePublicCompanyPriceTableCompanyApiV2PublicCompaniesCompanyIdPriceTableCompanyPatch200Envelope,
+)
+from ..types.update_public_company_price_table_item_api_v_2_public_companies_company_id_price_table_items_item_id_patch_200_envelope import (
+    UpdatePublicCompanyPriceTableItemApiV2PublicCompaniesCompanyIdPriceTableItemsItemIdPatch200Envelope,
+)
 from .raw_client import AsyncRawCompaniesClient, RawCompaniesClient
 
 # this is used as the default value for optional parameters
@@ -28,24 +52,36 @@ class CompaniesClient:
         """
         return self._raw_client
 
-    def api_routers_v_1_companies_public_api_list_workspace_companies(
+    def list_public_companies_api(
         self,
         *,
-        view: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = None,
         search: typing.Optional[str] = None,
+        language: typing.Optional[str] = None,
+        status: typing.Optional[str] = None,
+        usage_status: typing.Optional[str] = None,
         page: typing.Optional[int] = None,
         limit: typing.Optional[int] = None,
         sort: typing.Optional[str] = None,
-        reference_id: typing.Optional[str] = None,
+        x_language: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> CompaniesListResponse:
+    ) -> ListPublicCompaniesApiV2PublicCompaniesGet200Envelope:
         """
         Parameters
         ----------
-        view : typing.Optional[str]
+        workspace_id : typing.Optional[str]
+
+        view_id : typing.Optional[str]
 
         search : typing.Optional[str]
+
+        language : typing.Optional[str]
+
+        status : typing.Optional[str]
+
+        usage_status : typing.Optional[str]
 
         page : typing.Optional[int]
 
@@ -53,7 +89,7 @@ class CompaniesClient:
 
         sort : typing.Optional[str]
 
-        reference_id : typing.Optional[str]
+        x_language : typing.Optional[str]
 
         accept_language : typing.Optional[str]
 
@@ -62,99 +98,124 @@ class CompaniesClient:
 
         Returns
         -------
-        CompaniesListResponse
-            OK
+        ListPublicCompaniesApiV2PublicCompaniesGet200Envelope
+            Object record list response
 
         Examples
         --------
         from sanka_sdk import SankaClient
 
         client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
-        client.companies.api_routers_v_1_companies_public_api_list_workspace_companies()
+        client.companies.list_public_companies_api()
         """
-        _response = self._raw_client.api_routers_v_1_companies_public_api_list_workspace_companies(
-            view=view,
+        _response = self._raw_client.list_public_companies_api(
+            workspace_id=workspace_id,
+            view_id=view_id,
             search=search,
+            language=language,
+            status=status,
+            usage_status=usage_status,
             page=page,
             limit=limit,
             sort=sort,
-            reference_id=reference_id,
+            x_language=x_language,
             accept_language=accept_language,
             request_options=request_options,
         )
         return _response.data
 
-    def api_routers_v_1_companies_public_api_create_public_company(
+    def create_public_company_api(
         self,
         *,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = OMIT,
+        form_view_id: typing.Optional[str] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
+        target: typing.Optional[str] = OMIT,
+        provider: typing.Optional[str] = OMIT,
+        channel_id: typing.Optional[str] = OMIT,
+        external_object_type: typing.Optional[str] = OMIT,
         external_id: typing.Optional[str] = OMIT,
-        name: typing.Optional[str] = OMIT,
-        address: typing.Optional[str] = OMIT,
-        email: typing.Optional[str] = OMIT,
-        phone_number: typing.Optional[str] = OMIT,
-        url: typing.Optional[str] = OMIT,
-        status: typing.Optional[str] = OMIT,
-        allowed_in_store: typing.Optional[bool] = OMIT,
+        operation: typing.Optional[str] = OMIT,
+        dry_run: typing.Optional[bool] = OMIT,
+        confirm: typing.Optional[bool] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> PublicCompanyResponse:
+    ) -> CreatePublicCompanyApiV2PublicCompaniesPost200Envelope:
         """
         Parameters
         ----------
+        workspace_id : typing.Optional[str]
+
+        view_id : typing.Optional[str]
+
+        form_view_id : typing.Optional[str]
+
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
+
+        target : typing.Optional[str]
+
+        provider : typing.Optional[str]
+
+        channel_id : typing.Optional[str]
+
+        external_object_type : typing.Optional[str]
+
         external_id : typing.Optional[str]
 
-        name : typing.Optional[str]
+        operation : typing.Optional[str]
 
-        address : typing.Optional[str]
+        dry_run : typing.Optional[bool]
 
-        email : typing.Optional[str]
-
-        phone_number : typing.Optional[str]
-
-        url : typing.Optional[str]
-
-        status : typing.Optional[str]
-
-        allowed_in_store : typing.Optional[bool]
+        confirm : typing.Optional[bool]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        PublicCompanyResponse
-            OK
+        CreatePublicCompanyApiV2PublicCompaniesPost200Envelope
+            Successful Response
 
         Examples
         --------
         from sanka_sdk import SankaClient
 
         client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
-        client.companies.api_routers_v_1_companies_public_api_create_public_company()
+        client.companies.create_public_company_api()
         """
-        _response = self._raw_client.api_routers_v_1_companies_public_api_create_public_company(
+        _response = self._raw_client.create_public_company_api(
+            workspace_id=workspace_id,
+            view_id=view_id,
+            form_view_id=form_view_id,
+            properties=properties,
+            target=target,
+            provider=provider,
+            channel_id=channel_id,
+            external_object_type=external_object_type,
             external_id=external_id,
-            name=name,
-            address=address,
-            email=email,
-            phone_number=phone_number,
-            url=url,
-            status=status,
-            allowed_in_store=allowed_in_store,
+            operation=operation,
+            dry_run=dry_run,
+            confirm=confirm,
             request_options=request_options,
         )
         return _response.data
 
-    def api_routers_v_1_companies_public_api_get_public_company(
+    def get_public_company_api(
         self,
         company_id: str,
         *,
         external_id: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = None,
+        form_view_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> CompanySchema:
+    ) -> GetPublicCompanyApiV2PublicCompaniesCompanyIdGet200Envelope:
         """
         Parameters
         ----------
@@ -162,105 +223,61 @@ class CompaniesClient:
 
         external_id : typing.Optional[str]
 
-        request_options : typing.Optional[RequestOptions]
-            Request-specific configuration.
+        workspace_id : typing.Optional[str]
 
-        Returns
-        -------
-        CompanySchema
-            OK
+        view_id : typing.Optional[str]
 
-        Examples
-        --------
-        from sanka_sdk import SankaClient
-
-        client = SankaClient(
-            token="YOUR_TOKEN",
-        )
-        client.companies.api_routers_v_1_companies_public_api_get_public_company(
-            company_id="company_id",
-        )
-        """
-        _response = self._raw_client.api_routers_v_1_companies_public_api_get_public_company(
-            company_id, external_id=external_id, request_options=request_options
-        )
-        return _response.data
-
-    def api_routers_v_1_companies_public_api_update_public_company(
-        self,
-        company_id: str,
-        *,
-        external_id: typing.Optional[str] = OMIT,
-        name: typing.Optional[str] = OMIT,
-        address: typing.Optional[str] = OMIT,
-        email: typing.Optional[str] = OMIT,
-        phone_number: typing.Optional[str] = OMIT,
-        url: typing.Optional[str] = OMIT,
-        status: typing.Optional[str] = OMIT,
-        allowed_in_store: typing.Optional[bool] = OMIT,
-        request_options: typing.Optional[RequestOptions] = None,
-    ) -> PublicCompanyResponse:
-        """
-        Parameters
-        ----------
-        company_id : str
-
-        external_id : typing.Optional[str]
-
-        name : typing.Optional[str]
-
-        address : typing.Optional[str]
-
-        email : typing.Optional[str]
-
-        phone_number : typing.Optional[str]
-
-        url : typing.Optional[str]
-
-        status : typing.Optional[str]
-
-        allowed_in_store : typing.Optional[bool]
+        form_view_id : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        PublicCompanyResponse
-            OK
+        GetPublicCompanyApiV2PublicCompaniesCompanyIdGet200Envelope
+            Object record detail response. The base detail payload is intentionally thin; drawer sections load through scoped endpoints.
 
         Examples
         --------
         from sanka_sdk import SankaClient
 
         client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
-        client.companies.api_routers_v_1_companies_public_api_update_public_company(
+        client.companies.get_public_company_api(
             company_id="company_id",
         )
         """
-        _response = self._raw_client.api_routers_v_1_companies_public_api_update_public_company(
+        _response = self._raw_client.get_public_company_api(
             company_id,
             external_id=external_id,
-            name=name,
-            address=address,
-            email=email,
-            phone_number=phone_number,
-            url=url,
-            status=status,
-            allowed_in_store=allowed_in_store,
+            workspace_id=workspace_id,
+            view_id=view_id,
+            form_view_id=form_view_id,
             request_options=request_options,
         )
         return _response.data
 
-    def api_routers_v_1_companies_public_api_delete_public_company(
+    def update_public_company_api(
         self,
         company_id: str,
         *,
         external_id: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = OMIT,
+        form_view_id: typing.Optional[str] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
+        target: typing.Optional[str] = OMIT,
+        provider: typing.Optional[str] = OMIT,
+        channel_id: typing.Optional[str] = OMIT,
+        external_object_type: typing.Optional[str] = OMIT,
+        public_object_record_mutation_request_external_id: typing.Optional[str] = OMIT,
+        operation: typing.Optional[str] = OMIT,
+        dry_run: typing.Optional[bool] = OMIT,
+        confirm: typing.Optional[bool] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> PublicCompanyResponse:
+    ) -> UpdatePublicCompanyApiV2PublicCompaniesCompanyIdPut200Envelope:
         """
         Parameters
         ----------
@@ -268,27 +285,380 @@ class CompaniesClient:
 
         external_id : typing.Optional[str]
 
+        workspace_id : typing.Optional[str]
+
+        view_id : typing.Optional[str]
+
+        form_view_id : typing.Optional[str]
+
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
+
+        target : typing.Optional[str]
+
+        provider : typing.Optional[str]
+
+        channel_id : typing.Optional[str]
+
+        external_object_type : typing.Optional[str]
+
+        public_object_record_mutation_request_external_id : typing.Optional[str]
+
+        operation : typing.Optional[str]
+
+        dry_run : typing.Optional[bool]
+
+        confirm : typing.Optional[bool]
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        PublicCompanyResponse
-            OK
+        UpdatePublicCompanyApiV2PublicCompaniesCompanyIdPut200Envelope
+            Successful Response
 
         Examples
         --------
         from sanka_sdk import SankaClient
 
         client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
-        client.companies.api_routers_v_1_companies_public_api_delete_public_company(
+        client.companies.update_public_company_api(
             company_id="company_id",
         )
         """
-        _response = self._raw_client.api_routers_v_1_companies_public_api_delete_public_company(
-            company_id, external_id=external_id, request_options=request_options
+        _response = self._raw_client.update_public_company_api(
+            company_id,
+            external_id=external_id,
+            workspace_id=workspace_id,
+            view_id=view_id,
+            form_view_id=form_view_id,
+            properties=properties,
+            target=target,
+            provider=provider,
+            channel_id=channel_id,
+            external_object_type=external_object_type,
+            public_object_record_mutation_request_external_id=public_object_record_mutation_request_external_id,
+            operation=operation,
+            dry_run=dry_run,
+            confirm=confirm,
+            request_options=request_options,
+        )
+        return _response.data
+
+    def delete_public_company_api(
+        self,
+        company_id: str,
+        *,
+        external_id: typing.Optional[str] = None,
+        target: typing.Optional[str] = None,
+        provider: typing.Optional[str] = None,
+        channel_id: typing.Optional[str] = None,
+        external_object_type: typing.Optional[str] = None,
+        dry_run: typing.Optional[bool] = None,
+        confirm: typing.Optional[bool] = None,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> DeletePublicCompanyApiV2PublicCompaniesCompanyIdDelete200Envelope:
+        """
+        Parameters
+        ----------
+        company_id : str
+
+        external_id : typing.Optional[str]
+
+        target : typing.Optional[str]
+
+        provider : typing.Optional[str]
+
+        channel_id : typing.Optional[str]
+
+        external_object_type : typing.Optional[str]
+
+        dry_run : typing.Optional[bool]
+
+        confirm : typing.Optional[bool]
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        DeletePublicCompanyApiV2PublicCompaniesCompanyIdDelete200Envelope
+            Successful Response
+
+        Examples
+        --------
+        from sanka_sdk import SankaClient
+
+        client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+        client.companies.delete_public_company_api(
+            company_id="company_id",
+        )
+        """
+        _response = self._raw_client.delete_public_company_api(
+            company_id,
+            external_id=external_id,
+            target=target,
+            provider=provider,
+            channel_id=channel_id,
+            external_object_type=external_object_type,
+            dry_run=dry_run,
+            confirm=confirm,
+            workspace_id=workspace_id,
+            request_options=request_options,
+        )
+        return _response.data
+
+    def get_public_company_price_table_api(
+        self,
+        company_id: str,
+        *,
+        field_ref: typing.Optional[str] = None,
+        q: typing.Optional[str] = None,
+        search: typing.Optional[str] = None,
+        page: typing.Optional[int] = None,
+        page_size: typing.Optional[int] = None,
+        external_id: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> GetPublicCompanyPriceTableApiV2PublicCompaniesCompanyIdPriceTableGet200Envelope:
+        """
+        Parameters
+        ----------
+        company_id : str
+
+        field_ref : typing.Optional[str]
+
+        q : typing.Optional[str]
+
+        search : typing.Optional[str]
+
+        page : typing.Optional[int]
+
+        page_size : typing.Optional[int]
+
+        external_id : typing.Optional[str]
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        GetPublicCompanyPriceTableApiV2PublicCompaniesCompanyIdPriceTableGet200Envelope
+            Successful Response
+
+        Examples
+        --------
+        from sanka_sdk import SankaClient
+
+        client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+        client.companies.get_public_company_price_table_api(
+            company_id="company_id",
+        )
+        """
+        _response = self._raw_client.get_public_company_price_table_api(
+            company_id,
+            field_ref=field_ref,
+            q=q,
+            search=search,
+            page=page,
+            page_size=page_size,
+            external_id=external_id,
+            workspace_id=workspace_id,
+            request_options=request_options,
+        )
+        return _response.data
+
+    def update_public_company_price_table_company_api(
+        self,
+        company_id: str,
+        *,
+        external_id: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        price_precentage: typing.Optional[float] = OMIT,
+        field_ref: typing.Optional[str] = OMIT,
+        mode: typing.Optional[str] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> UpdatePublicCompanyPriceTableCompanyApiV2PublicCompaniesCompanyIdPriceTableCompanyPatch200Envelope:
+        """
+        Parameters
+        ----------
+        company_id : str
+
+        external_id : typing.Optional[str]
+
+        workspace_id : typing.Optional[str]
+
+        price_precentage : typing.Optional[float]
+
+        field_ref : typing.Optional[str]
+
+        mode : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        UpdatePublicCompanyPriceTableCompanyApiV2PublicCompaniesCompanyIdPriceTableCompanyPatch200Envelope
+            Successful Response
+
+        Examples
+        --------
+        from sanka_sdk import SankaClient
+
+        client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+        client.companies.update_public_company_price_table_company_api(
+            company_id="company_id",
+        )
+        """
+        _response = self._raw_client.update_public_company_price_table_company_api(
+            company_id,
+            external_id=external_id,
+            workspace_id=workspace_id,
+            price_precentage=price_precentage,
+            field_ref=field_ref,
+            mode=mode,
+            request_options=request_options,
+        )
+        return _response.data
+
+    def apply_public_company_price_table_items_api(
+        self,
+        company_id: str,
+        *,
+        external_id: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        price_precentage: typing.Optional[float] = OMIT,
+        field_ref: typing.Optional[str] = OMIT,
+        mode: typing.Optional[str] = OMIT,
+        exclude_item_ids: typing.Optional[typing.Sequence[str]] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> ApplyPublicCompanyPriceTableItemsApiV2PublicCompaniesCompanyIdPriceTableItemsApplyAllPost200Envelope:
+        """
+        Parameters
+        ----------
+        company_id : str
+
+        external_id : typing.Optional[str]
+
+        workspace_id : typing.Optional[str]
+
+        price_precentage : typing.Optional[float]
+
+        field_ref : typing.Optional[str]
+
+        mode : typing.Optional[str]
+
+        exclude_item_ids : typing.Optional[typing.Sequence[str]]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        ApplyPublicCompanyPriceTableItemsApiV2PublicCompaniesCompanyIdPriceTableItemsApplyAllPost200Envelope
+            Successful Response
+
+        Examples
+        --------
+        from sanka_sdk import SankaClient
+
+        client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+        client.companies.apply_public_company_price_table_items_api(
+            company_id="company_id",
+        )
+        """
+        _response = self._raw_client.apply_public_company_price_table_items_api(
+            company_id,
+            external_id=external_id,
+            workspace_id=workspace_id,
+            price_precentage=price_precentage,
+            field_ref=field_ref,
+            mode=mode,
+            exclude_item_ids=exclude_item_ids,
+            request_options=request_options,
+        )
+        return _response.data
+
+    def update_public_company_price_table_item_api(
+        self,
+        company_id: str,
+        item_id: str,
+        *,
+        external_id: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        price_precentage: typing.Optional[float] = OMIT,
+        field_ref: typing.Optional[str] = OMIT,
+        discount_price: typing.Optional[float] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> UpdatePublicCompanyPriceTableItemApiV2PublicCompaniesCompanyIdPriceTableItemsItemIdPatch200Envelope:
+        """
+        Parameters
+        ----------
+        company_id : str
+
+        item_id : str
+
+        external_id : typing.Optional[str]
+
+        workspace_id : typing.Optional[str]
+
+        price_precentage : typing.Optional[float]
+
+        field_ref : typing.Optional[str]
+
+        discount_price : typing.Optional[float]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        UpdatePublicCompanyPriceTableItemApiV2PublicCompaniesCompanyIdPriceTableItemsItemIdPatch200Envelope
+            Successful Response
+
+        Examples
+        --------
+        from sanka_sdk import SankaClient
+
+        client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+        client.companies.update_public_company_price_table_item_api(
+            company_id="company_id",
+            item_id="item_id",
+        )
+        """
+        _response = self._raw_client.update_public_company_price_table_item_api(
+            company_id,
+            item_id,
+            external_id=external_id,
+            workspace_id=workspace_id,
+            price_precentage=price_precentage,
+            field_ref=field_ref,
+            discount_price=discount_price,
+            request_options=request_options,
         )
         return _response.data
 
@@ -308,24 +678,36 @@ class AsyncCompaniesClient:
         """
         return self._raw_client
 
-    async def api_routers_v_1_companies_public_api_list_workspace_companies(
+    async def list_public_companies_api(
         self,
         *,
-        view: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = None,
         search: typing.Optional[str] = None,
+        language: typing.Optional[str] = None,
+        status: typing.Optional[str] = None,
+        usage_status: typing.Optional[str] = None,
         page: typing.Optional[int] = None,
         limit: typing.Optional[int] = None,
         sort: typing.Optional[str] = None,
-        reference_id: typing.Optional[str] = None,
+        x_language: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> CompaniesListResponse:
+    ) -> ListPublicCompaniesApiV2PublicCompaniesGet200Envelope:
         """
         Parameters
         ----------
-        view : typing.Optional[str]
+        workspace_id : typing.Optional[str]
+
+        view_id : typing.Optional[str]
 
         search : typing.Optional[str]
+
+        language : typing.Optional[str]
+
+        status : typing.Optional[str]
+
+        usage_status : typing.Optional[str]
 
         page : typing.Optional[int]
 
@@ -333,7 +715,7 @@ class AsyncCompaniesClient:
 
         sort : typing.Optional[str]
 
-        reference_id : typing.Optional[str]
+        x_language : typing.Optional[str]
 
         accept_language : typing.Optional[str]
 
@@ -342,8 +724,8 @@ class AsyncCompaniesClient:
 
         Returns
         -------
-        CompaniesListResponse
-            OK
+        ListPublicCompaniesApiV2PublicCompaniesGet200Envelope
+            Object record list response
 
         Examples
         --------
@@ -352,67 +734,84 @@ class AsyncCompaniesClient:
         from sanka_sdk import AsyncSankaClient
 
         client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
 
 
         async def main() -> None:
-            await client.companies.api_routers_v_1_companies_public_api_list_workspace_companies()
+            await client.companies.list_public_companies_api()
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.api_routers_v_1_companies_public_api_list_workspace_companies(
-            view=view,
+        _response = await self._raw_client.list_public_companies_api(
+            workspace_id=workspace_id,
+            view_id=view_id,
             search=search,
+            language=language,
+            status=status,
+            usage_status=usage_status,
             page=page,
             limit=limit,
             sort=sort,
-            reference_id=reference_id,
+            x_language=x_language,
             accept_language=accept_language,
             request_options=request_options,
         )
         return _response.data
 
-    async def api_routers_v_1_companies_public_api_create_public_company(
+    async def create_public_company_api(
         self,
         *,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = OMIT,
+        form_view_id: typing.Optional[str] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
+        target: typing.Optional[str] = OMIT,
+        provider: typing.Optional[str] = OMIT,
+        channel_id: typing.Optional[str] = OMIT,
+        external_object_type: typing.Optional[str] = OMIT,
         external_id: typing.Optional[str] = OMIT,
-        name: typing.Optional[str] = OMIT,
-        address: typing.Optional[str] = OMIT,
-        email: typing.Optional[str] = OMIT,
-        phone_number: typing.Optional[str] = OMIT,
-        url: typing.Optional[str] = OMIT,
-        status: typing.Optional[str] = OMIT,
-        allowed_in_store: typing.Optional[bool] = OMIT,
+        operation: typing.Optional[str] = OMIT,
+        dry_run: typing.Optional[bool] = OMIT,
+        confirm: typing.Optional[bool] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> PublicCompanyResponse:
+    ) -> CreatePublicCompanyApiV2PublicCompaniesPost200Envelope:
         """
         Parameters
         ----------
+        workspace_id : typing.Optional[str]
+
+        view_id : typing.Optional[str]
+
+        form_view_id : typing.Optional[str]
+
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
+
+        target : typing.Optional[str]
+
+        provider : typing.Optional[str]
+
+        channel_id : typing.Optional[str]
+
+        external_object_type : typing.Optional[str]
+
         external_id : typing.Optional[str]
 
-        name : typing.Optional[str]
+        operation : typing.Optional[str]
 
-        address : typing.Optional[str]
+        dry_run : typing.Optional[bool]
 
-        email : typing.Optional[str]
-
-        phone_number : typing.Optional[str]
-
-        url : typing.Optional[str]
-
-        status : typing.Optional[str]
-
-        allowed_in_store : typing.Optional[bool]
+        confirm : typing.Optional[bool]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        PublicCompanyResponse
-            OK
+        CreatePublicCompanyApiV2PublicCompaniesPost200Envelope
+            Successful Response
 
         Examples
         --------
@@ -421,36 +820,44 @@ class AsyncCompaniesClient:
         from sanka_sdk import AsyncSankaClient
 
         client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
 
 
         async def main() -> None:
-            await client.companies.api_routers_v_1_companies_public_api_create_public_company()
+            await client.companies.create_public_company_api()
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.api_routers_v_1_companies_public_api_create_public_company(
+        _response = await self._raw_client.create_public_company_api(
+            workspace_id=workspace_id,
+            view_id=view_id,
+            form_view_id=form_view_id,
+            properties=properties,
+            target=target,
+            provider=provider,
+            channel_id=channel_id,
+            external_object_type=external_object_type,
             external_id=external_id,
-            name=name,
-            address=address,
-            email=email,
-            phone_number=phone_number,
-            url=url,
-            status=status,
-            allowed_in_store=allowed_in_store,
+            operation=operation,
+            dry_run=dry_run,
+            confirm=confirm,
             request_options=request_options,
         )
         return _response.data
 
-    async def api_routers_v_1_companies_public_api_get_public_company(
+    async def get_public_company_api(
         self,
         company_id: str,
         *,
         external_id: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = None,
+        form_view_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> CompanySchema:
+    ) -> GetPublicCompanyApiV2PublicCompaniesCompanyIdGet200Envelope:
         """
         Parameters
         ----------
@@ -458,13 +865,19 @@ class AsyncCompaniesClient:
 
         external_id : typing.Optional[str]
 
+        workspace_id : typing.Optional[str]
+
+        view_id : typing.Optional[str]
+
+        form_view_id : typing.Optional[str]
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        CompanySchema
-            OK
+        GetPublicCompanyApiV2PublicCompaniesCompanyIdGet200Envelope
+            Object record detail response. The base detail payload is intentionally thin; drawer sections load through scoped endpoints.
 
         Examples
         --------
@@ -473,106 +886,48 @@ class AsyncCompaniesClient:
         from sanka_sdk import AsyncSankaClient
 
         client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
 
 
         async def main() -> None:
-            await client.companies.api_routers_v_1_companies_public_api_get_public_company(
+            await client.companies.get_public_company_api(
                 company_id="company_id",
             )
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.api_routers_v_1_companies_public_api_get_public_company(
-            company_id, external_id=external_id, request_options=request_options
-        )
-        return _response.data
-
-    async def api_routers_v_1_companies_public_api_update_public_company(
-        self,
-        company_id: str,
-        *,
-        external_id: typing.Optional[str] = OMIT,
-        name: typing.Optional[str] = OMIT,
-        address: typing.Optional[str] = OMIT,
-        email: typing.Optional[str] = OMIT,
-        phone_number: typing.Optional[str] = OMIT,
-        url: typing.Optional[str] = OMIT,
-        status: typing.Optional[str] = OMIT,
-        allowed_in_store: typing.Optional[bool] = OMIT,
-        request_options: typing.Optional[RequestOptions] = None,
-    ) -> PublicCompanyResponse:
-        """
-        Parameters
-        ----------
-        company_id : str
-
-        external_id : typing.Optional[str]
-
-        name : typing.Optional[str]
-
-        address : typing.Optional[str]
-
-        email : typing.Optional[str]
-
-        phone_number : typing.Optional[str]
-
-        url : typing.Optional[str]
-
-        status : typing.Optional[str]
-
-        allowed_in_store : typing.Optional[bool]
-
-        request_options : typing.Optional[RequestOptions]
-            Request-specific configuration.
-
-        Returns
-        -------
-        PublicCompanyResponse
-            OK
-
-        Examples
-        --------
-        import asyncio
-
-        from sanka_sdk import AsyncSankaClient
-
-        client = AsyncSankaClient(
-            token="YOUR_TOKEN",
-        )
-
-
-        async def main() -> None:
-            await client.companies.api_routers_v_1_companies_public_api_update_public_company(
-                company_id="company_id",
-            )
-
-
-        asyncio.run(main())
-        """
-        _response = await self._raw_client.api_routers_v_1_companies_public_api_update_public_company(
+        _response = await self._raw_client.get_public_company_api(
             company_id,
             external_id=external_id,
-            name=name,
-            address=address,
-            email=email,
-            phone_number=phone_number,
-            url=url,
-            status=status,
-            allowed_in_store=allowed_in_store,
+            workspace_id=workspace_id,
+            view_id=view_id,
+            form_view_id=form_view_id,
             request_options=request_options,
         )
         return _response.data
 
-    async def api_routers_v_1_companies_public_api_delete_public_company(
+    async def update_public_company_api(
         self,
         company_id: str,
         *,
         external_id: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = OMIT,
+        form_view_id: typing.Optional[str] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
+        target: typing.Optional[str] = OMIT,
+        provider: typing.Optional[str] = OMIT,
+        channel_id: typing.Optional[str] = OMIT,
+        external_object_type: typing.Optional[str] = OMIT,
+        public_object_record_mutation_request_external_id: typing.Optional[str] = OMIT,
+        operation: typing.Optional[str] = OMIT,
+        dry_run: typing.Optional[bool] = OMIT,
+        confirm: typing.Optional[bool] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> PublicCompanyResponse:
+    ) -> UpdatePublicCompanyApiV2PublicCompaniesCompanyIdPut200Envelope:
         """
         Parameters
         ----------
@@ -580,13 +935,37 @@ class AsyncCompaniesClient:
 
         external_id : typing.Optional[str]
 
+        workspace_id : typing.Optional[str]
+
+        view_id : typing.Optional[str]
+
+        form_view_id : typing.Optional[str]
+
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
+
+        target : typing.Optional[str]
+
+        provider : typing.Optional[str]
+
+        channel_id : typing.Optional[str]
+
+        external_object_type : typing.Optional[str]
+
+        public_object_record_mutation_request_external_id : typing.Optional[str]
+
+        operation : typing.Optional[str]
+
+        dry_run : typing.Optional[bool]
+
+        confirm : typing.Optional[bool]
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        PublicCompanyResponse
-            OK
+        UpdatePublicCompanyApiV2PublicCompaniesCompanyIdPut200Envelope
+            Successful Response
 
         Examples
         --------
@@ -595,19 +974,388 @@ class AsyncCompaniesClient:
         from sanka_sdk import AsyncSankaClient
 
         client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
 
 
         async def main() -> None:
-            await client.companies.api_routers_v_1_companies_public_api_delete_public_company(
+            await client.companies.update_public_company_api(
                 company_id="company_id",
             )
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.api_routers_v_1_companies_public_api_delete_public_company(
-            company_id, external_id=external_id, request_options=request_options
+        _response = await self._raw_client.update_public_company_api(
+            company_id,
+            external_id=external_id,
+            workspace_id=workspace_id,
+            view_id=view_id,
+            form_view_id=form_view_id,
+            properties=properties,
+            target=target,
+            provider=provider,
+            channel_id=channel_id,
+            external_object_type=external_object_type,
+            public_object_record_mutation_request_external_id=public_object_record_mutation_request_external_id,
+            operation=operation,
+            dry_run=dry_run,
+            confirm=confirm,
+            request_options=request_options,
+        )
+        return _response.data
+
+    async def delete_public_company_api(
+        self,
+        company_id: str,
+        *,
+        external_id: typing.Optional[str] = None,
+        target: typing.Optional[str] = None,
+        provider: typing.Optional[str] = None,
+        channel_id: typing.Optional[str] = None,
+        external_object_type: typing.Optional[str] = None,
+        dry_run: typing.Optional[bool] = None,
+        confirm: typing.Optional[bool] = None,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> DeletePublicCompanyApiV2PublicCompaniesCompanyIdDelete200Envelope:
+        """
+        Parameters
+        ----------
+        company_id : str
+
+        external_id : typing.Optional[str]
+
+        target : typing.Optional[str]
+
+        provider : typing.Optional[str]
+
+        channel_id : typing.Optional[str]
+
+        external_object_type : typing.Optional[str]
+
+        dry_run : typing.Optional[bool]
+
+        confirm : typing.Optional[bool]
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        DeletePublicCompanyApiV2PublicCompaniesCompanyIdDelete200Envelope
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sanka_sdk import AsyncSankaClient
+
+        client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.companies.delete_public_company_api(
+                company_id="company_id",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.delete_public_company_api(
+            company_id,
+            external_id=external_id,
+            target=target,
+            provider=provider,
+            channel_id=channel_id,
+            external_object_type=external_object_type,
+            dry_run=dry_run,
+            confirm=confirm,
+            workspace_id=workspace_id,
+            request_options=request_options,
+        )
+        return _response.data
+
+    async def get_public_company_price_table_api(
+        self,
+        company_id: str,
+        *,
+        field_ref: typing.Optional[str] = None,
+        q: typing.Optional[str] = None,
+        search: typing.Optional[str] = None,
+        page: typing.Optional[int] = None,
+        page_size: typing.Optional[int] = None,
+        external_id: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> GetPublicCompanyPriceTableApiV2PublicCompaniesCompanyIdPriceTableGet200Envelope:
+        """
+        Parameters
+        ----------
+        company_id : str
+
+        field_ref : typing.Optional[str]
+
+        q : typing.Optional[str]
+
+        search : typing.Optional[str]
+
+        page : typing.Optional[int]
+
+        page_size : typing.Optional[int]
+
+        external_id : typing.Optional[str]
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        GetPublicCompanyPriceTableApiV2PublicCompaniesCompanyIdPriceTableGet200Envelope
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sanka_sdk import AsyncSankaClient
+
+        client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.companies.get_public_company_price_table_api(
+                company_id="company_id",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.get_public_company_price_table_api(
+            company_id,
+            field_ref=field_ref,
+            q=q,
+            search=search,
+            page=page,
+            page_size=page_size,
+            external_id=external_id,
+            workspace_id=workspace_id,
+            request_options=request_options,
+        )
+        return _response.data
+
+    async def update_public_company_price_table_company_api(
+        self,
+        company_id: str,
+        *,
+        external_id: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        price_precentage: typing.Optional[float] = OMIT,
+        field_ref: typing.Optional[str] = OMIT,
+        mode: typing.Optional[str] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> UpdatePublicCompanyPriceTableCompanyApiV2PublicCompaniesCompanyIdPriceTableCompanyPatch200Envelope:
+        """
+        Parameters
+        ----------
+        company_id : str
+
+        external_id : typing.Optional[str]
+
+        workspace_id : typing.Optional[str]
+
+        price_precentage : typing.Optional[float]
+
+        field_ref : typing.Optional[str]
+
+        mode : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        UpdatePublicCompanyPriceTableCompanyApiV2PublicCompaniesCompanyIdPriceTableCompanyPatch200Envelope
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sanka_sdk import AsyncSankaClient
+
+        client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.companies.update_public_company_price_table_company_api(
+                company_id="company_id",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.update_public_company_price_table_company_api(
+            company_id,
+            external_id=external_id,
+            workspace_id=workspace_id,
+            price_precentage=price_precentage,
+            field_ref=field_ref,
+            mode=mode,
+            request_options=request_options,
+        )
+        return _response.data
+
+    async def apply_public_company_price_table_items_api(
+        self,
+        company_id: str,
+        *,
+        external_id: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        price_precentage: typing.Optional[float] = OMIT,
+        field_ref: typing.Optional[str] = OMIT,
+        mode: typing.Optional[str] = OMIT,
+        exclude_item_ids: typing.Optional[typing.Sequence[str]] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> ApplyPublicCompanyPriceTableItemsApiV2PublicCompaniesCompanyIdPriceTableItemsApplyAllPost200Envelope:
+        """
+        Parameters
+        ----------
+        company_id : str
+
+        external_id : typing.Optional[str]
+
+        workspace_id : typing.Optional[str]
+
+        price_precentage : typing.Optional[float]
+
+        field_ref : typing.Optional[str]
+
+        mode : typing.Optional[str]
+
+        exclude_item_ids : typing.Optional[typing.Sequence[str]]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        ApplyPublicCompanyPriceTableItemsApiV2PublicCompaniesCompanyIdPriceTableItemsApplyAllPost200Envelope
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sanka_sdk import AsyncSankaClient
+
+        client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.companies.apply_public_company_price_table_items_api(
+                company_id="company_id",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.apply_public_company_price_table_items_api(
+            company_id,
+            external_id=external_id,
+            workspace_id=workspace_id,
+            price_precentage=price_precentage,
+            field_ref=field_ref,
+            mode=mode,
+            exclude_item_ids=exclude_item_ids,
+            request_options=request_options,
+        )
+        return _response.data
+
+    async def update_public_company_price_table_item_api(
+        self,
+        company_id: str,
+        item_id: str,
+        *,
+        external_id: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        price_precentage: typing.Optional[float] = OMIT,
+        field_ref: typing.Optional[str] = OMIT,
+        discount_price: typing.Optional[float] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> UpdatePublicCompanyPriceTableItemApiV2PublicCompaniesCompanyIdPriceTableItemsItemIdPatch200Envelope:
+        """
+        Parameters
+        ----------
+        company_id : str
+
+        item_id : str
+
+        external_id : typing.Optional[str]
+
+        workspace_id : typing.Optional[str]
+
+        price_precentage : typing.Optional[float]
+
+        field_ref : typing.Optional[str]
+
+        discount_price : typing.Optional[float]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        UpdatePublicCompanyPriceTableItemApiV2PublicCompaniesCompanyIdPriceTableItemsItemIdPatch200Envelope
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sanka_sdk import AsyncSankaClient
+
+        client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.companies.update_public_company_price_table_item_api(
+                company_id="company_id",
+                item_id="item_id",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.update_public_company_price_table_item_api(
+            company_id,
+            item_id,
+            external_id=external_id,
+            workspace_id=workspace_id,
+            price_precentage=price_precentage,
+            field_ref=field_ref,
+            discount_price=discount_price,
+            request_options=request_options,
         )
         return _response.data

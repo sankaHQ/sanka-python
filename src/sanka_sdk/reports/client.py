@@ -4,13 +4,22 @@ import typing
 
 from ..core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ..core.request_options import RequestOptions
-from ..types.public_create_report_response import PublicCreateReportResponse
-from ..types.public_delete_report_response import PublicDeleteReportResponse
-from ..types.public_report_detail_schema import PublicReportDetailSchema
-from ..types.public_report_list_item_schema import PublicReportListItemSchema
-from ..types.public_report_metadata_request import PublicReportMetadataRequest
-from ..types.public_report_panel_request import PublicReportPanelRequest
-from ..types.public_update_report_metadata_request import PublicUpdateReportMetadataRequest
+from ..types.create_public_report_api_v_2_public_reports_post_200_envelope import (
+    CreatePublicReportApiV2PublicReportsPost200Envelope,
+)
+from ..types.delete_public_report_api_v_2_public_reports_report_id_delete_200_envelope import (
+    DeletePublicReportApiV2PublicReportsReportIdDelete200Envelope,
+)
+from ..types.get_public_report_api_v_2_public_reports_report_id_get_200_envelope import (
+    GetPublicReportApiV2PublicReportsReportIdGet200Envelope,
+)
+from ..types.list_public_reports_api_v_2_public_reports_get_200_envelope import (
+    ListPublicReportsApiV2PublicReportsGet200Envelope,
+)
+from ..types.report_metric_mutation_item import ReportMetricMutationItem
+from ..types.update_public_report_api_v_2_public_reports_report_id_put_200_envelope import (
+    UpdatePublicReportApiV2PublicReportsReportIdPut200Envelope,
+)
 from .raw_client import AsyncRawReportsClient, RawReportsClient
 
 # this is used as the default value for optional parameters
@@ -32,12 +41,21 @@ class ReportsClient:
         """
         return self._raw_client
 
-    def api_routers_v_1_reports_public_api_list_public_reports(
-        self, *, workspace_id: typing.Optional[str] = None, request_options: typing.Optional[RequestOptions] = None
-    ) -> typing.List[PublicReportListItemSchema]:
+    def list_public_reports_api(
+        self,
+        *,
+        page: typing.Optional[int] = None,
+        limit: typing.Optional[int] = None,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> ListPublicReportsApiV2PublicReportsGet200Envelope:
         """
         Parameters
         ----------
+        page : typing.Optional[int]
+
+        limit : typing.Optional[int]
+
         workspace_id : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
@@ -45,83 +63,145 @@ class ReportsClient:
 
         Returns
         -------
-        typing.List[PublicReportListItemSchema]
-            OK
+        ListPublicReportsApiV2PublicReportsGet200Envelope
+            Successful Response
 
         Examples
         --------
         from sanka_sdk import SankaClient
 
         client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
-        client.reports.api_routers_v_1_reports_public_api_list_public_reports()
+        client.reports.list_public_reports_api()
         """
-        _response = self._raw_client.api_routers_v_1_reports_public_api_list_public_reports(
-            workspace_id=workspace_id, request_options=request_options
+        _response = self._raw_client.list_public_reports_api(
+            page=page, limit=limit, workspace_id=workspace_id, request_options=request_options
         )
         return _response.data
 
-    def api_routers_v_1_reports_public_api_create_public_report(
+    def create_public_report_api(
         self,
         *,
-        report_metadata: PublicReportMetadataRequest,
-        panels: typing.Optional[typing.Sequence[PublicReportPanelRequest]] = OMIT,
-        create_default_panel: typing.Optional[bool] = OMIT,
+        name: str,
+        panel_type: str,
+        workspace_id: typing.Optional[str] = None,
+        description: typing.Optional[str] = OMIT,
+        description_ja: typing.Optional[str] = OMIT,
+        data_source_type: typing.Optional[str] = OMIT,
+        object_sources: typing.Optional[typing.Sequence[str]] = OMIT,
+        breakdown: typing.Optional[str] = OMIT,
+        x_axis: typing.Optional[str] = OMIT,
+        owner_id: typing.Optional[str] = OMIT,
+        dashboard_id: typing.Optional[str] = OMIT,
+        update_dashboard_assignment: typing.Optional[bool] = OMIT,
+        is_forecast: typing.Optional[bool] = OMIT,
+        is_stacked_chart: typing.Optional[bool] = OMIT,
+        is_realtime: typing.Optional[bool] = OMIT,
+        ratio: typing.Optional[int] = OMIT,
+        filter: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
+        meta_data: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
+        metrics: typing.Optional[typing.Sequence[ReportMetricMutationItem]] = OMIT,
+        advanced: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> PublicCreateReportResponse:
+    ) -> CreatePublicReportApiV2PublicReportsPost200Envelope:
         """
         Parameters
         ----------
-        report_metadata : PublicReportMetadataRequest
+        name : str
 
-        panels : typing.Optional[typing.Sequence[PublicReportPanelRequest]]
+        panel_type : str
 
-        create_default_panel : typing.Optional[bool]
+        workspace_id : typing.Optional[str]
+
+        description : typing.Optional[str]
+
+        description_ja : typing.Optional[str]
+
+        data_source_type : typing.Optional[str]
+
+        object_sources : typing.Optional[typing.Sequence[str]]
+
+        breakdown : typing.Optional[str]
+
+        x_axis : typing.Optional[str]
+
+        owner_id : typing.Optional[str]
+
+        dashboard_id : typing.Optional[str]
+
+        update_dashboard_assignment : typing.Optional[bool]
+
+        is_forecast : typing.Optional[bool]
+
+        is_stacked_chart : typing.Optional[bool]
+
+        is_realtime : typing.Optional[bool]
+
+        ratio : typing.Optional[int]
+
+        filter : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
+
+        meta_data : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
+
+        metrics : typing.Optional[typing.Sequence[ReportMetricMutationItem]]
+
+        advanced : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        PublicCreateReportResponse
-            OK
+        CreatePublicReportApiV2PublicReportsPost200Envelope
+            Successful Response
 
         Examples
         --------
-        from sanka_sdk import (
-            PublicReportMetadataRequest,
-            PublicReportTypeSchema,
-            SankaClient,
-        )
+        from sanka_sdk import SankaClient
 
         client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
-        client.reports.api_routers_v_1_reports_public_api_create_public_report(
-            report_metadata=PublicReportMetadataRequest(
-                name="name",
-                report_type=PublicReportTypeSchema(
-                    type="type",
-                ),
-            ),
+        client.reports.create_public_report_api(
+            name="name",
+            panel_type="panel_type",
         )
         """
-        _response = self._raw_client.api_routers_v_1_reports_public_api_create_public_report(
-            report_metadata=report_metadata,
-            panels=panels,
-            create_default_panel=create_default_panel,
+        _response = self._raw_client.create_public_report_api(
+            name=name,
+            panel_type=panel_type,
+            workspace_id=workspace_id,
+            description=description,
+            description_ja=description_ja,
+            data_source_type=data_source_type,
+            object_sources=object_sources,
+            breakdown=breakdown,
+            x_axis=x_axis,
+            owner_id=owner_id,
+            dashboard_id=dashboard_id,
+            update_dashboard_assignment=update_dashboard_assignment,
+            is_forecast=is_forecast,
+            is_stacked_chart=is_stacked_chart,
+            is_realtime=is_realtime,
+            ratio=ratio,
+            filter=filter,
+            meta_data=meta_data,
+            metrics=metrics,
+            advanced=advanced,
             request_options=request_options,
         )
         return _response.data
 
-    def api_routers_v_1_reports_public_api_get_public_report(
+    def get_public_report_api(
         self,
         report_id: str,
         *,
         workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> PublicReportDetailSchema:
+    ) -> GetPublicReportApiV2PublicReportsReportIdGet200Envelope:
         """
         Parameters
         ----------
@@ -134,35 +214,52 @@ class ReportsClient:
 
         Returns
         -------
-        PublicReportDetailSchema
-            OK
+        GetPublicReportApiV2PublicReportsReportIdGet200Envelope
+            Successful Response
 
         Examples
         --------
         from sanka_sdk import SankaClient
 
         client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
-        client.reports.api_routers_v_1_reports_public_api_get_public_report(
+        client.reports.get_public_report_api(
             report_id="report_id",
         )
         """
-        _response = self._raw_client.api_routers_v_1_reports_public_api_get_public_report(
+        _response = self._raw_client.get_public_report_api(
             report_id, workspace_id=workspace_id, request_options=request_options
         )
         return _response.data
 
-    def api_routers_v_1_reports_public_api_update_public_report(
+    def update_public_report_api(
         self,
         report_id: str,
         *,
         workspace_id: typing.Optional[str] = None,
-        report_metadata: typing.Optional[PublicUpdateReportMetadataRequest] = OMIT,
-        panels: typing.Optional[typing.Sequence[PublicReportPanelRequest]] = OMIT,
-        create_default_panel: typing.Optional[bool] = OMIT,
+        name: typing.Optional[str] = OMIT,
+        description: typing.Optional[str] = OMIT,
+        description_ja: typing.Optional[str] = OMIT,
+        panel_type: typing.Optional[str] = OMIT,
+        data_source_type: typing.Optional[str] = OMIT,
+        object_sources: typing.Optional[typing.Sequence[str]] = OMIT,
+        breakdown: typing.Optional[str] = OMIT,
+        x_axis: typing.Optional[str] = OMIT,
+        owner_id: typing.Optional[str] = OMIT,
+        dashboard_id: typing.Optional[str] = OMIT,
+        update_dashboard_assignment: typing.Optional[bool] = OMIT,
+        is_forecast: typing.Optional[bool] = OMIT,
+        is_stacked_chart: typing.Optional[bool] = OMIT,
+        is_realtime: typing.Optional[bool] = OMIT,
+        ratio: typing.Optional[int] = OMIT,
+        filter: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
+        meta_data: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
+        metrics: typing.Optional[typing.Sequence[ReportMetricMutationItem]] = OMIT,
+        advanced: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> PublicCreateReportResponse:
+    ) -> UpdatePublicReportApiV2PublicReportsReportIdPut200Envelope:
         """
         Parameters
         ----------
@@ -170,48 +267,97 @@ class ReportsClient:
 
         workspace_id : typing.Optional[str]
 
-        report_metadata : typing.Optional[PublicUpdateReportMetadataRequest]
+        name : typing.Optional[str]
 
-        panels : typing.Optional[typing.Sequence[PublicReportPanelRequest]]
+        description : typing.Optional[str]
 
-        create_default_panel : typing.Optional[bool]
+        description_ja : typing.Optional[str]
+
+        panel_type : typing.Optional[str]
+
+        data_source_type : typing.Optional[str]
+
+        object_sources : typing.Optional[typing.Sequence[str]]
+
+        breakdown : typing.Optional[str]
+
+        x_axis : typing.Optional[str]
+
+        owner_id : typing.Optional[str]
+
+        dashboard_id : typing.Optional[str]
+
+        update_dashboard_assignment : typing.Optional[bool]
+
+        is_forecast : typing.Optional[bool]
+
+        is_stacked_chart : typing.Optional[bool]
+
+        is_realtime : typing.Optional[bool]
+
+        ratio : typing.Optional[int]
+
+        filter : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
+
+        meta_data : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
+
+        metrics : typing.Optional[typing.Sequence[ReportMetricMutationItem]]
+
+        advanced : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        PublicCreateReportResponse
-            OK
+        UpdatePublicReportApiV2PublicReportsReportIdPut200Envelope
+            Successful Response
 
         Examples
         --------
         from sanka_sdk import SankaClient
 
         client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
-        client.reports.api_routers_v_1_reports_public_api_update_public_report(
+        client.reports.update_public_report_api(
             report_id="report_id",
         )
         """
-        _response = self._raw_client.api_routers_v_1_reports_public_api_update_public_report(
+        _response = self._raw_client.update_public_report_api(
             report_id,
             workspace_id=workspace_id,
-            report_metadata=report_metadata,
-            panels=panels,
-            create_default_panel=create_default_panel,
+            name=name,
+            description=description,
+            description_ja=description_ja,
+            panel_type=panel_type,
+            data_source_type=data_source_type,
+            object_sources=object_sources,
+            breakdown=breakdown,
+            x_axis=x_axis,
+            owner_id=owner_id,
+            dashboard_id=dashboard_id,
+            update_dashboard_assignment=update_dashboard_assignment,
+            is_forecast=is_forecast,
+            is_stacked_chart=is_stacked_chart,
+            is_realtime=is_realtime,
+            ratio=ratio,
+            filter=filter,
+            meta_data=meta_data,
+            metrics=metrics,
+            advanced=advanced,
             request_options=request_options,
         )
         return _response.data
 
-    def api_routers_v_1_reports_public_api_delete_public_report(
+    def delete_public_report_api(
         self,
         report_id: str,
         *,
         workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> PublicDeleteReportResponse:
+    ) -> DeletePublicReportApiV2PublicReportsReportIdDelete200Envelope:
         """
         Parameters
         ----------
@@ -224,21 +370,22 @@ class ReportsClient:
 
         Returns
         -------
-        PublicDeleteReportResponse
-            OK
+        DeletePublicReportApiV2PublicReportsReportIdDelete200Envelope
+            Successful Response
 
         Examples
         --------
         from sanka_sdk import SankaClient
 
         client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
-        client.reports.api_routers_v_1_reports_public_api_delete_public_report(
+        client.reports.delete_public_report_api(
             report_id="report_id",
         )
         """
-        _response = self._raw_client.api_routers_v_1_reports_public_api_delete_public_report(
+        _response = self._raw_client.delete_public_report_api(
             report_id, workspace_id=workspace_id, request_options=request_options
         )
         return _response.data
@@ -259,12 +406,21 @@ class AsyncReportsClient:
         """
         return self._raw_client
 
-    async def api_routers_v_1_reports_public_api_list_public_reports(
-        self, *, workspace_id: typing.Optional[str] = None, request_options: typing.Optional[RequestOptions] = None
-    ) -> typing.List[PublicReportListItemSchema]:
+    async def list_public_reports_api(
+        self,
+        *,
+        page: typing.Optional[int] = None,
+        limit: typing.Optional[int] = None,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> ListPublicReportsApiV2PublicReportsGet200Envelope:
         """
         Parameters
         ----------
+        page : typing.Optional[int]
+
+        limit : typing.Optional[int]
+
         workspace_id : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
@@ -272,8 +428,8 @@ class AsyncReportsClient:
 
         Returns
         -------
-        typing.List[PublicReportListItemSchema]
-            OK
+        ListPublicReportsApiV2PublicReportsGet200Envelope
+            Successful Response
 
         Examples
         --------
@@ -282,89 +438,151 @@ class AsyncReportsClient:
         from sanka_sdk import AsyncSankaClient
 
         client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
 
 
         async def main() -> None:
-            await client.reports.api_routers_v_1_reports_public_api_list_public_reports()
+            await client.reports.list_public_reports_api()
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.api_routers_v_1_reports_public_api_list_public_reports(
-            workspace_id=workspace_id, request_options=request_options
+        _response = await self._raw_client.list_public_reports_api(
+            page=page, limit=limit, workspace_id=workspace_id, request_options=request_options
         )
         return _response.data
 
-    async def api_routers_v_1_reports_public_api_create_public_report(
+    async def create_public_report_api(
         self,
         *,
-        report_metadata: PublicReportMetadataRequest,
-        panels: typing.Optional[typing.Sequence[PublicReportPanelRequest]] = OMIT,
-        create_default_panel: typing.Optional[bool] = OMIT,
+        name: str,
+        panel_type: str,
+        workspace_id: typing.Optional[str] = None,
+        description: typing.Optional[str] = OMIT,
+        description_ja: typing.Optional[str] = OMIT,
+        data_source_type: typing.Optional[str] = OMIT,
+        object_sources: typing.Optional[typing.Sequence[str]] = OMIT,
+        breakdown: typing.Optional[str] = OMIT,
+        x_axis: typing.Optional[str] = OMIT,
+        owner_id: typing.Optional[str] = OMIT,
+        dashboard_id: typing.Optional[str] = OMIT,
+        update_dashboard_assignment: typing.Optional[bool] = OMIT,
+        is_forecast: typing.Optional[bool] = OMIT,
+        is_stacked_chart: typing.Optional[bool] = OMIT,
+        is_realtime: typing.Optional[bool] = OMIT,
+        ratio: typing.Optional[int] = OMIT,
+        filter: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
+        meta_data: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
+        metrics: typing.Optional[typing.Sequence[ReportMetricMutationItem]] = OMIT,
+        advanced: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> PublicCreateReportResponse:
+    ) -> CreatePublicReportApiV2PublicReportsPost200Envelope:
         """
         Parameters
         ----------
-        report_metadata : PublicReportMetadataRequest
+        name : str
 
-        panels : typing.Optional[typing.Sequence[PublicReportPanelRequest]]
+        panel_type : str
 
-        create_default_panel : typing.Optional[bool]
+        workspace_id : typing.Optional[str]
+
+        description : typing.Optional[str]
+
+        description_ja : typing.Optional[str]
+
+        data_source_type : typing.Optional[str]
+
+        object_sources : typing.Optional[typing.Sequence[str]]
+
+        breakdown : typing.Optional[str]
+
+        x_axis : typing.Optional[str]
+
+        owner_id : typing.Optional[str]
+
+        dashboard_id : typing.Optional[str]
+
+        update_dashboard_assignment : typing.Optional[bool]
+
+        is_forecast : typing.Optional[bool]
+
+        is_stacked_chart : typing.Optional[bool]
+
+        is_realtime : typing.Optional[bool]
+
+        ratio : typing.Optional[int]
+
+        filter : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
+
+        meta_data : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
+
+        metrics : typing.Optional[typing.Sequence[ReportMetricMutationItem]]
+
+        advanced : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        PublicCreateReportResponse
-            OK
+        CreatePublicReportApiV2PublicReportsPost200Envelope
+            Successful Response
 
         Examples
         --------
         import asyncio
 
-        from sanka_sdk import (
-            AsyncSankaClient,
-            PublicReportMetadataRequest,
-            PublicReportTypeSchema,
-        )
+        from sanka_sdk import AsyncSankaClient
 
         client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
 
 
         async def main() -> None:
-            await client.reports.api_routers_v_1_reports_public_api_create_public_report(
-                report_metadata=PublicReportMetadataRequest(
-                    name="name",
-                    report_type=PublicReportTypeSchema(
-                        type="type",
-                    ),
-                ),
+            await client.reports.create_public_report_api(
+                name="name",
+                panel_type="panel_type",
             )
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.api_routers_v_1_reports_public_api_create_public_report(
-            report_metadata=report_metadata,
-            panels=panels,
-            create_default_panel=create_default_panel,
+        _response = await self._raw_client.create_public_report_api(
+            name=name,
+            panel_type=panel_type,
+            workspace_id=workspace_id,
+            description=description,
+            description_ja=description_ja,
+            data_source_type=data_source_type,
+            object_sources=object_sources,
+            breakdown=breakdown,
+            x_axis=x_axis,
+            owner_id=owner_id,
+            dashboard_id=dashboard_id,
+            update_dashboard_assignment=update_dashboard_assignment,
+            is_forecast=is_forecast,
+            is_stacked_chart=is_stacked_chart,
+            is_realtime=is_realtime,
+            ratio=ratio,
+            filter=filter,
+            meta_data=meta_data,
+            metrics=metrics,
+            advanced=advanced,
             request_options=request_options,
         )
         return _response.data
 
-    async def api_routers_v_1_reports_public_api_get_public_report(
+    async def get_public_report_api(
         self,
         report_id: str,
         *,
         workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> PublicReportDetailSchema:
+    ) -> GetPublicReportApiV2PublicReportsReportIdGet200Envelope:
         """
         Parameters
         ----------
@@ -377,8 +595,8 @@ class AsyncReportsClient:
 
         Returns
         -------
-        PublicReportDetailSchema
-            OK
+        GetPublicReportApiV2PublicReportsReportIdGet200Envelope
+            Successful Response
 
         Examples
         --------
@@ -387,33 +605,50 @@ class AsyncReportsClient:
         from sanka_sdk import AsyncSankaClient
 
         client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
 
 
         async def main() -> None:
-            await client.reports.api_routers_v_1_reports_public_api_get_public_report(
+            await client.reports.get_public_report_api(
                 report_id="report_id",
             )
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.api_routers_v_1_reports_public_api_get_public_report(
+        _response = await self._raw_client.get_public_report_api(
             report_id, workspace_id=workspace_id, request_options=request_options
         )
         return _response.data
 
-    async def api_routers_v_1_reports_public_api_update_public_report(
+    async def update_public_report_api(
         self,
         report_id: str,
         *,
         workspace_id: typing.Optional[str] = None,
-        report_metadata: typing.Optional[PublicUpdateReportMetadataRequest] = OMIT,
-        panels: typing.Optional[typing.Sequence[PublicReportPanelRequest]] = OMIT,
-        create_default_panel: typing.Optional[bool] = OMIT,
+        name: typing.Optional[str] = OMIT,
+        description: typing.Optional[str] = OMIT,
+        description_ja: typing.Optional[str] = OMIT,
+        panel_type: typing.Optional[str] = OMIT,
+        data_source_type: typing.Optional[str] = OMIT,
+        object_sources: typing.Optional[typing.Sequence[str]] = OMIT,
+        breakdown: typing.Optional[str] = OMIT,
+        x_axis: typing.Optional[str] = OMIT,
+        owner_id: typing.Optional[str] = OMIT,
+        dashboard_id: typing.Optional[str] = OMIT,
+        update_dashboard_assignment: typing.Optional[bool] = OMIT,
+        is_forecast: typing.Optional[bool] = OMIT,
+        is_stacked_chart: typing.Optional[bool] = OMIT,
+        is_realtime: typing.Optional[bool] = OMIT,
+        ratio: typing.Optional[int] = OMIT,
+        filter: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
+        meta_data: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
+        metrics: typing.Optional[typing.Sequence[ReportMetricMutationItem]] = OMIT,
+        advanced: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> PublicCreateReportResponse:
+    ) -> UpdatePublicReportApiV2PublicReportsReportIdPut200Envelope:
         """
         Parameters
         ----------
@@ -421,19 +656,51 @@ class AsyncReportsClient:
 
         workspace_id : typing.Optional[str]
 
-        report_metadata : typing.Optional[PublicUpdateReportMetadataRequest]
+        name : typing.Optional[str]
 
-        panels : typing.Optional[typing.Sequence[PublicReportPanelRequest]]
+        description : typing.Optional[str]
 
-        create_default_panel : typing.Optional[bool]
+        description_ja : typing.Optional[str]
+
+        panel_type : typing.Optional[str]
+
+        data_source_type : typing.Optional[str]
+
+        object_sources : typing.Optional[typing.Sequence[str]]
+
+        breakdown : typing.Optional[str]
+
+        x_axis : typing.Optional[str]
+
+        owner_id : typing.Optional[str]
+
+        dashboard_id : typing.Optional[str]
+
+        update_dashboard_assignment : typing.Optional[bool]
+
+        is_forecast : typing.Optional[bool]
+
+        is_stacked_chart : typing.Optional[bool]
+
+        is_realtime : typing.Optional[bool]
+
+        ratio : typing.Optional[int]
+
+        filter : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
+
+        meta_data : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
+
+        metrics : typing.Optional[typing.Sequence[ReportMetricMutationItem]]
+
+        advanced : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        PublicCreateReportResponse
-            OK
+        UpdatePublicReportApiV2PublicReportsReportIdPut200Envelope
+            Successful Response
 
         Examples
         --------
@@ -442,35 +709,52 @@ class AsyncReportsClient:
         from sanka_sdk import AsyncSankaClient
 
         client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
 
 
         async def main() -> None:
-            await client.reports.api_routers_v_1_reports_public_api_update_public_report(
+            await client.reports.update_public_report_api(
                 report_id="report_id",
             )
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.api_routers_v_1_reports_public_api_update_public_report(
+        _response = await self._raw_client.update_public_report_api(
             report_id,
             workspace_id=workspace_id,
-            report_metadata=report_metadata,
-            panels=panels,
-            create_default_panel=create_default_panel,
+            name=name,
+            description=description,
+            description_ja=description_ja,
+            panel_type=panel_type,
+            data_source_type=data_source_type,
+            object_sources=object_sources,
+            breakdown=breakdown,
+            x_axis=x_axis,
+            owner_id=owner_id,
+            dashboard_id=dashboard_id,
+            update_dashboard_assignment=update_dashboard_assignment,
+            is_forecast=is_forecast,
+            is_stacked_chart=is_stacked_chart,
+            is_realtime=is_realtime,
+            ratio=ratio,
+            filter=filter,
+            meta_data=meta_data,
+            metrics=metrics,
+            advanced=advanced,
             request_options=request_options,
         )
         return _response.data
 
-    async def api_routers_v_1_reports_public_api_delete_public_report(
+    async def delete_public_report_api(
         self,
         report_id: str,
         *,
         workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> PublicDeleteReportResponse:
+    ) -> DeletePublicReportApiV2PublicReportsReportIdDelete200Envelope:
         """
         Parameters
         ----------
@@ -483,8 +767,8 @@ class AsyncReportsClient:
 
         Returns
         -------
-        PublicDeleteReportResponse
-            OK
+        DeletePublicReportApiV2PublicReportsReportIdDelete200Envelope
+            Successful Response
 
         Examples
         --------
@@ -493,19 +777,20 @@ class AsyncReportsClient:
         from sanka_sdk import AsyncSankaClient
 
         client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
 
 
         async def main() -> None:
-            await client.reports.api_routers_v_1_reports_public_api_delete_public_report(
+            await client.reports.delete_public_report_api(
                 report_id="report_id",
             )
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.api_routers_v_1_reports_public_api_delete_public_report(
+        _response = await self._raw_client.delete_public_report_api(
             report_id, workspace_id=workspace_id, request_options=request_options
         )
         return _response.data

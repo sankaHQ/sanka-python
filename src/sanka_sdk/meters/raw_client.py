@@ -9,13 +9,24 @@ from ..core.http_response import AsyncHttpResponse, HttpResponse
 from ..core.jsonable_encoder import jsonable_encoder
 from ..core.request_options import RequestOptions
 from ..core.unchecked_base_model import construct_type
-from ..errors.bad_request_error import BadRequestError
-from ..errors.conflict_error import ConflictError
-from ..errors.forbidden_error import ForbiddenError
-from ..errors.internal_server_error import InternalServerError
-from ..errors.not_found_error import NotFoundError
-from ..types.commerce_meter_schema import CommerceMeterSchema
-from ..types.public_meter_response import PublicMeterResponse
+from ..errors.unauthorized_error import UnauthorizedError
+from ..errors.unprocessable_entity_error import UnprocessableEntityError
+from ..types.create_public_meter_api_v_2_public_meters_post_200_envelope import (
+    CreatePublicMeterApiV2PublicMetersPost200Envelope,
+)
+from ..types.delete_public_meter_api_v_2_public_meters_meter_id_delete_200_envelope import (
+    DeletePublicMeterApiV2PublicMetersMeterIdDelete200Envelope,
+)
+from ..types.error_envelope import ErrorEnvelope
+from ..types.get_public_meter_api_v_2_public_meters_meter_id_get_200_envelope import (
+    GetPublicMeterApiV2PublicMetersMeterIdGet200Envelope,
+)
+from ..types.list_public_meters_api_v_2_public_meters_get_200_envelope import (
+    ListPublicMetersApiV2PublicMetersGet200Envelope,
+)
+from ..types.update_public_meter_api_v_2_public_meters_meter_id_put_200_envelope import (
+    UpdatePublicMeterApiV2PublicMetersMeterIdPut200Envelope,
+)
 
 # this is used as the default value for optional parameters
 OMIT = typing.cast(typing.Any, ...)
@@ -25,23 +36,44 @@ class RawMetersClient:
     def __init__(self, *, client_wrapper: SyncClientWrapper):
         self._client_wrapper = client_wrapper
 
-    def api_routers_v_1_meters_public_api_list_workspace_meters(
+    def list_public_meters_api(
         self,
         *,
         workspace_id: typing.Optional[str] = None,
-        lang: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = None,
+        search: typing.Optional[str] = None,
         language: typing.Optional[str] = None,
+        status: typing.Optional[str] = None,
+        usage_status: typing.Optional[str] = None,
+        page: typing.Optional[int] = None,
+        limit: typing.Optional[int] = None,
+        sort: typing.Optional[str] = None,
+        x_language: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> HttpResponse[typing.List[CommerceMeterSchema]]:
+    ) -> HttpResponse[ListPublicMetersApiV2PublicMetersGet200Envelope]:
         """
         Parameters
         ----------
         workspace_id : typing.Optional[str]
 
-        lang : typing.Optional[str]
+        view_id : typing.Optional[str]
+
+        search : typing.Optional[str]
 
         language : typing.Optional[str]
+
+        status : typing.Optional[str]
+
+        usage_status : typing.Optional[str]
+
+        page : typing.Optional[int]
+
+        limit : typing.Optional[int]
+
+        sort : typing.Optional[str]
+
+        x_language : typing.Optional[str]
 
         accept_language : typing.Optional[str]
 
@@ -50,18 +82,25 @@ class RawMetersClient:
 
         Returns
         -------
-        HttpResponse[typing.List[CommerceMeterSchema]]
-            OK
+        HttpResponse[ListPublicMetersApiV2PublicMetersGet200Envelope]
+            Object record list response
         """
         _response = self._client_wrapper.httpx_client.request(
-            "v1/public/meters",
+            "v2/public/meters",
             method="GET",
             params={
                 "workspace_id": workspace_id,
-                "lang": lang,
+                "view_id": view_id,
+                "search": search,
                 "language": language,
+                "status": status,
+                "usage_status": usage_status,
+                "page": page,
+                "limit": limit,
+                "sort": sort,
             },
             headers={
+                "X-Language": str(x_language) if x_language is not None else None,
                 "Accept-Language": str(accept_language) if accept_language is not None else None,
             },
             request_options=request_options,
@@ -69,86 +108,110 @@ class RawMetersClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    typing.List[CommerceMeterSchema],
+                    ListPublicMetersApiV2PublicMetersGet200Envelope,
                     construct_type(
-                        type_=typing.List[CommerceMeterSchema],  # type: ignore
+                        type_=ListPublicMetersApiV2PublicMetersGet200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
             _response_json = _response.json()
         except JSONDecodeError:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    def api_routers_v_1_meters_public_api_create_public_meter(
+    def create_public_meter_api(
         self,
         *,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = OMIT,
+        form_view_id: typing.Optional[str] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
+        target: typing.Optional[str] = OMIT,
+        provider: typing.Optional[str] = OMIT,
+        channel_id: typing.Optional[str] = OMIT,
+        external_object_type: typing.Optional[str] = OMIT,
         external_id: typing.Optional[str] = OMIT,
-        contact_id: typing.Optional[str] = OMIT,
-        contact_external_id: typing.Optional[str] = OMIT,
-        company_id: typing.Optional[str] = OMIT,
-        company_external_id: typing.Optional[str] = OMIT,
-        item_id: typing.Optional[str] = OMIT,
-        item_external_id: typing.Optional[str] = OMIT,
-        subscription_id: typing.Optional[str] = OMIT,
-        subscription_external_id: typing.Optional[str] = OMIT,
-        usage: typing.Optional[float] = OMIT,
-        usage_status: typing.Optional[str] = OMIT,
-        usage_at: typing.Optional[str] = OMIT,
+        operation: typing.Optional[str] = OMIT,
+        dry_run: typing.Optional[bool] = OMIT,
+        confirm: typing.Optional[bool] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> HttpResponse[PublicMeterResponse]:
+    ) -> HttpResponse[CreatePublicMeterApiV2PublicMetersPost200Envelope]:
         """
         Parameters
         ----------
+        workspace_id : typing.Optional[str]
+
+        view_id : typing.Optional[str]
+
+        form_view_id : typing.Optional[str]
+
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
+
+        target : typing.Optional[str]
+
+        provider : typing.Optional[str]
+
+        channel_id : typing.Optional[str]
+
+        external_object_type : typing.Optional[str]
+
         external_id : typing.Optional[str]
 
-        contact_id : typing.Optional[str]
+        operation : typing.Optional[str]
 
-        contact_external_id : typing.Optional[str]
+        dry_run : typing.Optional[bool]
 
-        company_id : typing.Optional[str]
-
-        company_external_id : typing.Optional[str]
-
-        item_id : typing.Optional[str]
-
-        item_external_id : typing.Optional[str]
-
-        subscription_id : typing.Optional[str]
-
-        subscription_external_id : typing.Optional[str]
-
-        usage : typing.Optional[float]
-
-        usage_status : typing.Optional[str]
-
-        usage_at : typing.Optional[str]
+        confirm : typing.Optional[bool]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        HttpResponse[PublicMeterResponse]
-            OK
+        HttpResponse[CreatePublicMeterApiV2PublicMetersPost200Envelope]
+            Successful Response
         """
         _response = self._client_wrapper.httpx_client.request(
-            "v1/public/meters",
+            "v2/public/meters",
             method="POST",
+            params={
+                "workspace_id": workspace_id,
+            },
             json={
-                "externalId": external_id,
-                "contactId": contact_id,
-                "contactExternalId": contact_external_id,
-                "companyId": company_id,
-                "companyExternalId": company_external_id,
-                "itemId": item_id,
-                "itemExternalId": item_external_id,
-                "subscriptionId": subscription_id,
-                "subscriptionExternalId": subscription_external_id,
-                "usage": usage,
-                "usageStatus": usage_status,
-                "usageAt": usage_at,
+                "view_id": view_id,
+                "form_view_id": form_view_id,
+                "properties": properties,
+                "target": target,
+                "provider": provider,
+                "channel_id": channel_id,
+                "external_object_type": external_object_type,
+                "external_id": external_id,
+                "operation": operation,
+                "dry_run": dry_run,
+                "confirm": confirm,
             },
             headers={
                 "content-type": "application/json",
@@ -159,53 +222,31 @@ class RawMetersClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    PublicMeterResponse,
+                    CreatePublicMeterApiV2PublicMetersPost200Envelope,
                     construct_type(
-                        type_=PublicMeterResponse,  # type: ignore
+                        type_=CreatePublicMeterApiV2PublicMetersPost200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return HttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 403:
-                raise ForbiddenError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -215,16 +256,16 @@ class RawMetersClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    def api_routers_v_1_meters_public_api_get_public_meter(
+    def get_public_meter_api(
         self,
         meter_id: str,
         *,
         external_id: typing.Optional[str] = None,
-        lang: typing.Optional[str] = None,
-        language: typing.Optional[str] = None,
-        accept_language: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = None,
+        form_view_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> HttpResponse[CommerceMeterSchema]:
+    ) -> HttpResponse[GetPublicMeterApiV2PublicMetersMeterIdGet200Envelope]:
         """
         Parameters
         ----------
@@ -232,83 +273,59 @@ class RawMetersClient:
 
         external_id : typing.Optional[str]
 
-        lang : typing.Optional[str]
+        workspace_id : typing.Optional[str]
 
-        language : typing.Optional[str]
+        view_id : typing.Optional[str]
 
-        accept_language : typing.Optional[str]
+        form_view_id : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        HttpResponse[CommerceMeterSchema]
-            OK
+        HttpResponse[GetPublicMeterApiV2PublicMetersMeterIdGet200Envelope]
+            Object record detail response. The base detail payload is intentionally thin; drawer sections load through scoped endpoints.
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"v1/public/meters/{jsonable_encoder(meter_id)}",
+            f"v2/public/meters/{jsonable_encoder(meter_id)}",
             method="GET",
             params={
                 "external_id": external_id,
-                "lang": lang,
-                "language": language,
-            },
-            headers={
-                "Accept-Language": str(accept_language) if accept_language is not None else None,
+                "workspace_id": workspace_id,
+                "view_id": view_id,
+                "form_view_id": form_view_id,
             },
             request_options=request_options,
         )
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    CommerceMeterSchema,
+                    GetPublicMeterApiV2PublicMetersMeterIdGet200Envelope,
                     construct_type(
-                        type_=CommerceMeterSchema,  # type: ignore
+                        type_=GetPublicMeterApiV2PublicMetersMeterIdGet200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return HttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 403:
-                raise ForbiddenError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -318,25 +335,25 @@ class RawMetersClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    def api_routers_v_1_meters_public_api_update_public_meter(
+    def update_public_meter_api(
         self,
         meter_id: str,
         *,
         external_id: typing.Optional[str] = None,
-        public_meter_request_external_id: typing.Optional[str] = OMIT,
-        contact_id: typing.Optional[str] = OMIT,
-        contact_external_id: typing.Optional[str] = OMIT,
-        company_id: typing.Optional[str] = OMIT,
-        company_external_id: typing.Optional[str] = OMIT,
-        item_id: typing.Optional[str] = OMIT,
-        item_external_id: typing.Optional[str] = OMIT,
-        subscription_id: typing.Optional[str] = OMIT,
-        subscription_external_id: typing.Optional[str] = OMIT,
-        usage: typing.Optional[float] = OMIT,
-        usage_status: typing.Optional[str] = OMIT,
-        usage_at: typing.Optional[str] = OMIT,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = OMIT,
+        form_view_id: typing.Optional[str] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
+        target: typing.Optional[str] = OMIT,
+        provider: typing.Optional[str] = OMIT,
+        channel_id: typing.Optional[str] = OMIT,
+        external_object_type: typing.Optional[str] = OMIT,
+        public_object_record_mutation_request_external_id: typing.Optional[str] = OMIT,
+        operation: typing.Optional[str] = OMIT,
+        dry_run: typing.Optional[bool] = OMIT,
+        confirm: typing.Optional[bool] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> HttpResponse[PublicMeterResponse]:
+    ) -> HttpResponse[UpdatePublicMeterApiV2PublicMetersMeterIdPut200Envelope]:
         """
         Parameters
         ----------
@@ -344,57 +361,57 @@ class RawMetersClient:
 
         external_id : typing.Optional[str]
 
-        public_meter_request_external_id : typing.Optional[str]
+        workspace_id : typing.Optional[str]
 
-        contact_id : typing.Optional[str]
+        view_id : typing.Optional[str]
 
-        contact_external_id : typing.Optional[str]
+        form_view_id : typing.Optional[str]
 
-        company_id : typing.Optional[str]
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
 
-        company_external_id : typing.Optional[str]
+        target : typing.Optional[str]
 
-        item_id : typing.Optional[str]
+        provider : typing.Optional[str]
 
-        item_external_id : typing.Optional[str]
+        channel_id : typing.Optional[str]
 
-        subscription_id : typing.Optional[str]
+        external_object_type : typing.Optional[str]
 
-        subscription_external_id : typing.Optional[str]
+        public_object_record_mutation_request_external_id : typing.Optional[str]
 
-        usage : typing.Optional[float]
+        operation : typing.Optional[str]
 
-        usage_status : typing.Optional[str]
+        dry_run : typing.Optional[bool]
 
-        usage_at : typing.Optional[str]
+        confirm : typing.Optional[bool]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        HttpResponse[PublicMeterResponse]
-            OK
+        HttpResponse[UpdatePublicMeterApiV2PublicMetersMeterIdPut200Envelope]
+            Successful Response
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"v1/public/meters/{jsonable_encoder(meter_id)}",
+            f"v2/public/meters/{jsonable_encoder(meter_id)}",
             method="PUT",
             params={
                 "external_id": external_id,
+                "workspace_id": workspace_id,
             },
             json={
-                "externalId": external_id,
-                "contactId": contact_id,
-                "contactExternalId": contact_external_id,
-                "companyId": company_id,
-                "companyExternalId": company_external_id,
-                "itemId": item_id,
-                "itemExternalId": item_external_id,
-                "subscriptionId": subscription_id,
-                "subscriptionExternalId": subscription_external_id,
-                "usage": usage,
-                "usageStatus": usage_status,
-                "usageAt": usage_at,
+                "view_id": view_id,
+                "form_view_id": form_view_id,
+                "properties": properties,
+                "target": target,
+                "provider": provider,
+                "channel_id": channel_id,
+                "external_object_type": external_object_type,
+                "external_id": external_id,
+                "operation": operation,
+                "dry_run": dry_run,
+                "confirm": confirm,
             },
             headers={
                 "content-type": "application/json",
@@ -405,64 +422,31 @@ class RawMetersClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    PublicMeterResponse,
+                    UpdatePublicMeterApiV2PublicMetersMeterIdPut200Envelope,
                     construct_type(
-                        type_=PublicMeterResponse,  # type: ignore
+                        type_=UpdatePublicMeterApiV2PublicMetersMeterIdPut200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return HttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 403:
-                raise ForbiddenError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 409:
-                raise ConflictError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -472,13 +456,14 @@ class RawMetersClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    def api_routers_v_1_meters_public_api_delete_public_meter(
+    def delete_public_meter_api(
         self,
         meter_id: str,
         *,
         external_id: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> HttpResponse[PublicMeterResponse]:
+    ) -> HttpResponse[DeletePublicMeterApiV2PublicMetersMeterIdDelete200Envelope]:
         """
         Parameters
         ----------
@@ -486,83 +471,53 @@ class RawMetersClient:
 
         external_id : typing.Optional[str]
 
+        workspace_id : typing.Optional[str]
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        HttpResponse[PublicMeterResponse]
-            OK
+        HttpResponse[DeletePublicMeterApiV2PublicMetersMeterIdDelete200Envelope]
+            Successful Response
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"v1/public/meters/{jsonable_encoder(meter_id)}",
+            f"v2/public/meters/{jsonable_encoder(meter_id)}",
             method="DELETE",
             params={
                 "external_id": external_id,
+                "workspace_id": workspace_id,
             },
             request_options=request_options,
         )
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    PublicMeterResponse,
+                    DeletePublicMeterApiV2PublicMetersMeterIdDelete200Envelope,
                     construct_type(
-                        type_=PublicMeterResponse,  # type: ignore
+                        type_=DeletePublicMeterApiV2PublicMetersMeterIdDelete200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return HttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 403:
-                raise ForbiddenError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 409:
-                raise ConflictError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -577,23 +532,44 @@ class AsyncRawMetersClient:
     def __init__(self, *, client_wrapper: AsyncClientWrapper):
         self._client_wrapper = client_wrapper
 
-    async def api_routers_v_1_meters_public_api_list_workspace_meters(
+    async def list_public_meters_api(
         self,
         *,
         workspace_id: typing.Optional[str] = None,
-        lang: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = None,
+        search: typing.Optional[str] = None,
         language: typing.Optional[str] = None,
+        status: typing.Optional[str] = None,
+        usage_status: typing.Optional[str] = None,
+        page: typing.Optional[int] = None,
+        limit: typing.Optional[int] = None,
+        sort: typing.Optional[str] = None,
+        x_language: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> AsyncHttpResponse[typing.List[CommerceMeterSchema]]:
+    ) -> AsyncHttpResponse[ListPublicMetersApiV2PublicMetersGet200Envelope]:
         """
         Parameters
         ----------
         workspace_id : typing.Optional[str]
 
-        lang : typing.Optional[str]
+        view_id : typing.Optional[str]
+
+        search : typing.Optional[str]
 
         language : typing.Optional[str]
+
+        status : typing.Optional[str]
+
+        usage_status : typing.Optional[str]
+
+        page : typing.Optional[int]
+
+        limit : typing.Optional[int]
+
+        sort : typing.Optional[str]
+
+        x_language : typing.Optional[str]
 
         accept_language : typing.Optional[str]
 
@@ -602,18 +578,25 @@ class AsyncRawMetersClient:
 
         Returns
         -------
-        AsyncHttpResponse[typing.List[CommerceMeterSchema]]
-            OK
+        AsyncHttpResponse[ListPublicMetersApiV2PublicMetersGet200Envelope]
+            Object record list response
         """
         _response = await self._client_wrapper.httpx_client.request(
-            "v1/public/meters",
+            "v2/public/meters",
             method="GET",
             params={
                 "workspace_id": workspace_id,
-                "lang": lang,
+                "view_id": view_id,
+                "search": search,
                 "language": language,
+                "status": status,
+                "usage_status": usage_status,
+                "page": page,
+                "limit": limit,
+                "sort": sort,
             },
             headers={
+                "X-Language": str(x_language) if x_language is not None else None,
                 "Accept-Language": str(accept_language) if accept_language is not None else None,
             },
             request_options=request_options,
@@ -621,86 +604,110 @@ class AsyncRawMetersClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    typing.List[CommerceMeterSchema],
+                    ListPublicMetersApiV2PublicMetersGet200Envelope,
                     construct_type(
-                        type_=typing.List[CommerceMeterSchema],  # type: ignore
+                        type_=ListPublicMetersApiV2PublicMetersGet200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
             _response_json = _response.json()
         except JSONDecodeError:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    async def api_routers_v_1_meters_public_api_create_public_meter(
+    async def create_public_meter_api(
         self,
         *,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = OMIT,
+        form_view_id: typing.Optional[str] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
+        target: typing.Optional[str] = OMIT,
+        provider: typing.Optional[str] = OMIT,
+        channel_id: typing.Optional[str] = OMIT,
+        external_object_type: typing.Optional[str] = OMIT,
         external_id: typing.Optional[str] = OMIT,
-        contact_id: typing.Optional[str] = OMIT,
-        contact_external_id: typing.Optional[str] = OMIT,
-        company_id: typing.Optional[str] = OMIT,
-        company_external_id: typing.Optional[str] = OMIT,
-        item_id: typing.Optional[str] = OMIT,
-        item_external_id: typing.Optional[str] = OMIT,
-        subscription_id: typing.Optional[str] = OMIT,
-        subscription_external_id: typing.Optional[str] = OMIT,
-        usage: typing.Optional[float] = OMIT,
-        usage_status: typing.Optional[str] = OMIT,
-        usage_at: typing.Optional[str] = OMIT,
+        operation: typing.Optional[str] = OMIT,
+        dry_run: typing.Optional[bool] = OMIT,
+        confirm: typing.Optional[bool] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> AsyncHttpResponse[PublicMeterResponse]:
+    ) -> AsyncHttpResponse[CreatePublicMeterApiV2PublicMetersPost200Envelope]:
         """
         Parameters
         ----------
+        workspace_id : typing.Optional[str]
+
+        view_id : typing.Optional[str]
+
+        form_view_id : typing.Optional[str]
+
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
+
+        target : typing.Optional[str]
+
+        provider : typing.Optional[str]
+
+        channel_id : typing.Optional[str]
+
+        external_object_type : typing.Optional[str]
+
         external_id : typing.Optional[str]
 
-        contact_id : typing.Optional[str]
+        operation : typing.Optional[str]
 
-        contact_external_id : typing.Optional[str]
+        dry_run : typing.Optional[bool]
 
-        company_id : typing.Optional[str]
-
-        company_external_id : typing.Optional[str]
-
-        item_id : typing.Optional[str]
-
-        item_external_id : typing.Optional[str]
-
-        subscription_id : typing.Optional[str]
-
-        subscription_external_id : typing.Optional[str]
-
-        usage : typing.Optional[float]
-
-        usage_status : typing.Optional[str]
-
-        usage_at : typing.Optional[str]
+        confirm : typing.Optional[bool]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        AsyncHttpResponse[PublicMeterResponse]
-            OK
+        AsyncHttpResponse[CreatePublicMeterApiV2PublicMetersPost200Envelope]
+            Successful Response
         """
         _response = await self._client_wrapper.httpx_client.request(
-            "v1/public/meters",
+            "v2/public/meters",
             method="POST",
+            params={
+                "workspace_id": workspace_id,
+            },
             json={
-                "externalId": external_id,
-                "contactId": contact_id,
-                "contactExternalId": contact_external_id,
-                "companyId": company_id,
-                "companyExternalId": company_external_id,
-                "itemId": item_id,
-                "itemExternalId": item_external_id,
-                "subscriptionId": subscription_id,
-                "subscriptionExternalId": subscription_external_id,
-                "usage": usage,
-                "usageStatus": usage_status,
-                "usageAt": usage_at,
+                "view_id": view_id,
+                "form_view_id": form_view_id,
+                "properties": properties,
+                "target": target,
+                "provider": provider,
+                "channel_id": channel_id,
+                "external_object_type": external_object_type,
+                "external_id": external_id,
+                "operation": operation,
+                "dry_run": dry_run,
+                "confirm": confirm,
             },
             headers={
                 "content-type": "application/json",
@@ -711,53 +718,31 @@ class AsyncRawMetersClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    PublicMeterResponse,
+                    CreatePublicMeterApiV2PublicMetersPost200Envelope,
                     construct_type(
-                        type_=PublicMeterResponse,  # type: ignore
+                        type_=CreatePublicMeterApiV2PublicMetersPost200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return AsyncHttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 403:
-                raise ForbiddenError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -767,16 +752,16 @@ class AsyncRawMetersClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    async def api_routers_v_1_meters_public_api_get_public_meter(
+    async def get_public_meter_api(
         self,
         meter_id: str,
         *,
         external_id: typing.Optional[str] = None,
-        lang: typing.Optional[str] = None,
-        language: typing.Optional[str] = None,
-        accept_language: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = None,
+        form_view_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> AsyncHttpResponse[CommerceMeterSchema]:
+    ) -> AsyncHttpResponse[GetPublicMeterApiV2PublicMetersMeterIdGet200Envelope]:
         """
         Parameters
         ----------
@@ -784,83 +769,59 @@ class AsyncRawMetersClient:
 
         external_id : typing.Optional[str]
 
-        lang : typing.Optional[str]
+        workspace_id : typing.Optional[str]
 
-        language : typing.Optional[str]
+        view_id : typing.Optional[str]
 
-        accept_language : typing.Optional[str]
+        form_view_id : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        AsyncHttpResponse[CommerceMeterSchema]
-            OK
+        AsyncHttpResponse[GetPublicMeterApiV2PublicMetersMeterIdGet200Envelope]
+            Object record detail response. The base detail payload is intentionally thin; drawer sections load through scoped endpoints.
         """
         _response = await self._client_wrapper.httpx_client.request(
-            f"v1/public/meters/{jsonable_encoder(meter_id)}",
+            f"v2/public/meters/{jsonable_encoder(meter_id)}",
             method="GET",
             params={
                 "external_id": external_id,
-                "lang": lang,
-                "language": language,
-            },
-            headers={
-                "Accept-Language": str(accept_language) if accept_language is not None else None,
+                "workspace_id": workspace_id,
+                "view_id": view_id,
+                "form_view_id": form_view_id,
             },
             request_options=request_options,
         )
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    CommerceMeterSchema,
+                    GetPublicMeterApiV2PublicMetersMeterIdGet200Envelope,
                     construct_type(
-                        type_=CommerceMeterSchema,  # type: ignore
+                        type_=GetPublicMeterApiV2PublicMetersMeterIdGet200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return AsyncHttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 403:
-                raise ForbiddenError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -870,25 +831,25 @@ class AsyncRawMetersClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    async def api_routers_v_1_meters_public_api_update_public_meter(
+    async def update_public_meter_api(
         self,
         meter_id: str,
         *,
         external_id: typing.Optional[str] = None,
-        public_meter_request_external_id: typing.Optional[str] = OMIT,
-        contact_id: typing.Optional[str] = OMIT,
-        contact_external_id: typing.Optional[str] = OMIT,
-        company_id: typing.Optional[str] = OMIT,
-        company_external_id: typing.Optional[str] = OMIT,
-        item_id: typing.Optional[str] = OMIT,
-        item_external_id: typing.Optional[str] = OMIT,
-        subscription_id: typing.Optional[str] = OMIT,
-        subscription_external_id: typing.Optional[str] = OMIT,
-        usage: typing.Optional[float] = OMIT,
-        usage_status: typing.Optional[str] = OMIT,
-        usage_at: typing.Optional[str] = OMIT,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = OMIT,
+        form_view_id: typing.Optional[str] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
+        target: typing.Optional[str] = OMIT,
+        provider: typing.Optional[str] = OMIT,
+        channel_id: typing.Optional[str] = OMIT,
+        external_object_type: typing.Optional[str] = OMIT,
+        public_object_record_mutation_request_external_id: typing.Optional[str] = OMIT,
+        operation: typing.Optional[str] = OMIT,
+        dry_run: typing.Optional[bool] = OMIT,
+        confirm: typing.Optional[bool] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> AsyncHttpResponse[PublicMeterResponse]:
+    ) -> AsyncHttpResponse[UpdatePublicMeterApiV2PublicMetersMeterIdPut200Envelope]:
         """
         Parameters
         ----------
@@ -896,57 +857,57 @@ class AsyncRawMetersClient:
 
         external_id : typing.Optional[str]
 
-        public_meter_request_external_id : typing.Optional[str]
+        workspace_id : typing.Optional[str]
 
-        contact_id : typing.Optional[str]
+        view_id : typing.Optional[str]
 
-        contact_external_id : typing.Optional[str]
+        form_view_id : typing.Optional[str]
 
-        company_id : typing.Optional[str]
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
 
-        company_external_id : typing.Optional[str]
+        target : typing.Optional[str]
 
-        item_id : typing.Optional[str]
+        provider : typing.Optional[str]
 
-        item_external_id : typing.Optional[str]
+        channel_id : typing.Optional[str]
 
-        subscription_id : typing.Optional[str]
+        external_object_type : typing.Optional[str]
 
-        subscription_external_id : typing.Optional[str]
+        public_object_record_mutation_request_external_id : typing.Optional[str]
 
-        usage : typing.Optional[float]
+        operation : typing.Optional[str]
 
-        usage_status : typing.Optional[str]
+        dry_run : typing.Optional[bool]
 
-        usage_at : typing.Optional[str]
+        confirm : typing.Optional[bool]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        AsyncHttpResponse[PublicMeterResponse]
-            OK
+        AsyncHttpResponse[UpdatePublicMeterApiV2PublicMetersMeterIdPut200Envelope]
+            Successful Response
         """
         _response = await self._client_wrapper.httpx_client.request(
-            f"v1/public/meters/{jsonable_encoder(meter_id)}",
+            f"v2/public/meters/{jsonable_encoder(meter_id)}",
             method="PUT",
             params={
                 "external_id": external_id,
+                "workspace_id": workspace_id,
             },
             json={
-                "externalId": external_id,
-                "contactId": contact_id,
-                "contactExternalId": contact_external_id,
-                "companyId": company_id,
-                "companyExternalId": company_external_id,
-                "itemId": item_id,
-                "itemExternalId": item_external_id,
-                "subscriptionId": subscription_id,
-                "subscriptionExternalId": subscription_external_id,
-                "usage": usage,
-                "usageStatus": usage_status,
-                "usageAt": usage_at,
+                "view_id": view_id,
+                "form_view_id": form_view_id,
+                "properties": properties,
+                "target": target,
+                "provider": provider,
+                "channel_id": channel_id,
+                "external_object_type": external_object_type,
+                "external_id": external_id,
+                "operation": operation,
+                "dry_run": dry_run,
+                "confirm": confirm,
             },
             headers={
                 "content-type": "application/json",
@@ -957,64 +918,31 @@ class AsyncRawMetersClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    PublicMeterResponse,
+                    UpdatePublicMeterApiV2PublicMetersMeterIdPut200Envelope,
                     construct_type(
-                        type_=PublicMeterResponse,  # type: ignore
+                        type_=UpdatePublicMeterApiV2PublicMetersMeterIdPut200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return AsyncHttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 403:
-                raise ForbiddenError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 409:
-                raise ConflictError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -1024,13 +952,14 @@ class AsyncRawMetersClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    async def api_routers_v_1_meters_public_api_delete_public_meter(
+    async def delete_public_meter_api(
         self,
         meter_id: str,
         *,
         external_id: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> AsyncHttpResponse[PublicMeterResponse]:
+    ) -> AsyncHttpResponse[DeletePublicMeterApiV2PublicMetersMeterIdDelete200Envelope]:
         """
         Parameters
         ----------
@@ -1038,83 +967,53 @@ class AsyncRawMetersClient:
 
         external_id : typing.Optional[str]
 
+        workspace_id : typing.Optional[str]
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        AsyncHttpResponse[PublicMeterResponse]
-            OK
+        AsyncHttpResponse[DeletePublicMeterApiV2PublicMetersMeterIdDelete200Envelope]
+            Successful Response
         """
         _response = await self._client_wrapper.httpx_client.request(
-            f"v1/public/meters/{jsonable_encoder(meter_id)}",
+            f"v2/public/meters/{jsonable_encoder(meter_id)}",
             method="DELETE",
             params={
                 "external_id": external_id,
+                "workspace_id": workspace_id,
             },
             request_options=request_options,
         )
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    PublicMeterResponse,
+                    DeletePublicMeterApiV2PublicMetersMeterIdDelete200Envelope,
                     construct_type(
-                        type_=PublicMeterResponse,  # type: ignore
+                        type_=DeletePublicMeterApiV2PublicMetersMeterIdDelete200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return AsyncHttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 403:
-                raise ForbiddenError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 409:
-                raise ConflictError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
