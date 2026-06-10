@@ -4,8 +4,21 @@ import typing
 
 from ..core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ..core.request_options import RequestOptions
-from ..types.inventory_warehouse_schema import InventoryWarehouseSchema
-from ..types.public_location_response import PublicLocationResponse
+from ..types.create_public_location_api_v_2_public_locations_post_200_envelope import (
+    CreatePublicLocationApiV2PublicLocationsPost200Envelope,
+)
+from ..types.delete_public_location_api_v_2_public_locations_location_id_delete_200_envelope import (
+    DeletePublicLocationApiV2PublicLocationsLocationIdDelete200Envelope,
+)
+from ..types.get_public_location_api_v_2_public_locations_location_id_get_200_envelope import (
+    GetPublicLocationApiV2PublicLocationsLocationIdGet200Envelope,
+)
+from ..types.list_public_locations_api_v_2_public_locations_get_200_envelope import (
+    ListPublicLocationsApiV2PublicLocationsGet200Envelope,
+)
+from ..types.update_public_location_api_v_2_public_locations_location_id_put_200_envelope import (
+    UpdatePublicLocationApiV2PublicLocationsLocationIdPut200Envelope,
+)
 from .raw_client import AsyncRawLocationsClient, RawLocationsClient
 
 # this is used as the default value for optional parameters
@@ -27,29 +40,44 @@ class LocationsClient:
         """
         return self._raw_client
 
-    def api_routers_v_1_locations_public_api_list_workspace_locations(
+    def list_public_locations_api(
         self,
         *,
         workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = None,
         search: typing.Optional[str] = None,
-        q: typing.Optional[str] = None,
-        lang: typing.Optional[str] = None,
         language: typing.Optional[str] = None,
+        status: typing.Optional[str] = None,
+        usage_status: typing.Optional[str] = None,
+        page: typing.Optional[int] = None,
+        limit: typing.Optional[int] = None,
+        sort: typing.Optional[str] = None,
+        x_language: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> typing.List[InventoryWarehouseSchema]:
+    ) -> ListPublicLocationsApiV2PublicLocationsGet200Envelope:
         """
         Parameters
         ----------
         workspace_id : typing.Optional[str]
 
+        view_id : typing.Optional[str]
+
         search : typing.Optional[str]
 
-        q : typing.Optional[str]
-
-        lang : typing.Optional[str]
-
         language : typing.Optional[str]
+
+        status : typing.Optional[str]
+
+        usage_status : typing.Optional[str]
+
+        page : typing.Optional[int]
+
+        limit : typing.Optional[int]
+
+        sort : typing.Optional[str]
+
+        x_language : typing.Optional[str]
 
         accept_language : typing.Optional[str]
 
@@ -58,102 +86,92 @@ class LocationsClient:
 
         Returns
         -------
-        typing.List[InventoryWarehouseSchema]
-            OK
+        ListPublicLocationsApiV2PublicLocationsGet200Envelope
+            Object record list response
 
         Examples
         --------
         from sanka_sdk import SankaClient
 
         client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
-        client.locations.api_routers_v_1_locations_public_api_list_workspace_locations()
+        client.locations.list_public_locations_api()
         """
-        _response = self._raw_client.api_routers_v_1_locations_public_api_list_workspace_locations(
+        _response = self._raw_client.list_public_locations_api(
             workspace_id=workspace_id,
+            view_id=view_id,
             search=search,
-            q=q,
-            lang=lang,
             language=language,
+            status=status,
+            usage_status=usage_status,
+            page=page,
+            limit=limit,
+            sort=sort,
+            x_language=x_language,
             accept_language=accept_language,
             request_options=request_options,
         )
         return _response.data
 
-    def api_routers_v_1_locations_public_api_create_public_location(
+    def create_public_location_api(
         self,
         *,
-        external_id: typing.Optional[str] = OMIT,
-        warehouse: typing.Optional[str] = OMIT,
-        floor: typing.Optional[str] = OMIT,
-        zone: typing.Optional[str] = OMIT,
-        aisle: typing.Optional[str] = OMIT,
-        rack: typing.Optional[str] = OMIT,
-        shelf: typing.Optional[str] = OMIT,
-        bin: typing.Optional[str] = OMIT,
-        usage_status: typing.Optional[str] = OMIT,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = OMIT,
+        form_view_id: typing.Optional[str] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> PublicLocationResponse:
+    ) -> CreatePublicLocationApiV2PublicLocationsPost200Envelope:
         """
         Parameters
         ----------
-        external_id : typing.Optional[str]
+        workspace_id : typing.Optional[str]
 
-        warehouse : typing.Optional[str]
+        view_id : typing.Optional[str]
 
-        floor : typing.Optional[str]
+        form_view_id : typing.Optional[str]
 
-        zone : typing.Optional[str]
-
-        aisle : typing.Optional[str]
-
-        rack : typing.Optional[str]
-
-        shelf : typing.Optional[str]
-
-        bin : typing.Optional[str]
-
-        usage_status : typing.Optional[str]
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        PublicLocationResponse
-            OK
+        CreatePublicLocationApiV2PublicLocationsPost200Envelope
+            Successful Response
 
         Examples
         --------
         from sanka_sdk import SankaClient
 
         client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
-        client.locations.api_routers_v_1_locations_public_api_create_public_location()
+        client.locations.create_public_location_api()
         """
-        _response = self._raw_client.api_routers_v_1_locations_public_api_create_public_location(
-            external_id=external_id,
-            warehouse=warehouse,
-            floor=floor,
-            zone=zone,
-            aisle=aisle,
-            rack=rack,
-            shelf=shelf,
-            bin=bin,
-            usage_status=usage_status,
+        _response = self._raw_client.create_public_location_api(
+            workspace_id=workspace_id,
+            view_id=view_id,
+            form_view_id=form_view_id,
+            properties=properties,
             request_options=request_options,
         )
         return _response.data
 
-    def api_routers_v_1_locations_public_api_get_public_location(
+    def get_public_location_api(
         self,
         location_id: str,
         *,
         external_id: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = None,
+        form_view_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> InventoryWarehouseSchema:
+    ) -> GetPublicLocationApiV2PublicLocationsLocationIdGet200Envelope:
         """
         Parameters
         ----------
@@ -161,113 +179,53 @@ class LocationsClient:
 
         external_id : typing.Optional[str]
 
-        request_options : typing.Optional[RequestOptions]
-            Request-specific configuration.
+        workspace_id : typing.Optional[str]
 
-        Returns
-        -------
-        InventoryWarehouseSchema
-            OK
+        view_id : typing.Optional[str]
 
-        Examples
-        --------
-        from sanka_sdk import SankaClient
-
-        client = SankaClient(
-            token="YOUR_TOKEN",
-        )
-        client.locations.api_routers_v_1_locations_public_api_get_public_location(
-            location_id="location_id",
-        )
-        """
-        _response = self._raw_client.api_routers_v_1_locations_public_api_get_public_location(
-            location_id, external_id=external_id, request_options=request_options
-        )
-        return _response.data
-
-    def api_routers_v_1_locations_public_api_update_public_location(
-        self,
-        location_id: str,
-        *,
-        external_id: typing.Optional[str] = None,
-        public_location_request_external_id: typing.Optional[str] = OMIT,
-        warehouse: typing.Optional[str] = OMIT,
-        floor: typing.Optional[str] = OMIT,
-        zone: typing.Optional[str] = OMIT,
-        aisle: typing.Optional[str] = OMIT,
-        rack: typing.Optional[str] = OMIT,
-        shelf: typing.Optional[str] = OMIT,
-        bin: typing.Optional[str] = OMIT,
-        usage_status: typing.Optional[str] = OMIT,
-        request_options: typing.Optional[RequestOptions] = None,
-    ) -> PublicLocationResponse:
-        """
-        Parameters
-        ----------
-        location_id : str
-
-        external_id : typing.Optional[str]
-
-        public_location_request_external_id : typing.Optional[str]
-
-        warehouse : typing.Optional[str]
-
-        floor : typing.Optional[str]
-
-        zone : typing.Optional[str]
-
-        aisle : typing.Optional[str]
-
-        rack : typing.Optional[str]
-
-        shelf : typing.Optional[str]
-
-        bin : typing.Optional[str]
-
-        usage_status : typing.Optional[str]
+        form_view_id : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        PublicLocationResponse
-            OK
+        GetPublicLocationApiV2PublicLocationsLocationIdGet200Envelope
+            Object record detail response. The base detail payload is intentionally thin; drawer sections load through scoped endpoints.
 
         Examples
         --------
         from sanka_sdk import SankaClient
 
         client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
-        client.locations.api_routers_v_1_locations_public_api_update_public_location(
+        client.locations.get_public_location_api(
             location_id="location_id",
         )
         """
-        _response = self._raw_client.api_routers_v_1_locations_public_api_update_public_location(
+        _response = self._raw_client.get_public_location_api(
             location_id,
             external_id=external_id,
-            public_location_request_external_id=public_location_request_external_id,
-            warehouse=warehouse,
-            floor=floor,
-            zone=zone,
-            aisle=aisle,
-            rack=rack,
-            shelf=shelf,
-            bin=bin,
-            usage_status=usage_status,
+            workspace_id=workspace_id,
+            view_id=view_id,
+            form_view_id=form_view_id,
             request_options=request_options,
         )
         return _response.data
 
-    def api_routers_v_1_locations_public_api_delete_public_location(
+    def update_public_location_api(
         self,
         location_id: str,
         *,
         external_id: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = OMIT,
+        form_view_id: typing.Optional[str] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> PublicLocationResponse:
+    ) -> UpdatePublicLocationApiV2PublicLocationsLocationIdPut200Envelope:
         """
         Parameters
         ----------
@@ -275,27 +233,81 @@ class LocationsClient:
 
         external_id : typing.Optional[str]
 
+        workspace_id : typing.Optional[str]
+
+        view_id : typing.Optional[str]
+
+        form_view_id : typing.Optional[str]
+
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        PublicLocationResponse
-            OK
+        UpdatePublicLocationApiV2PublicLocationsLocationIdPut200Envelope
+            Successful Response
 
         Examples
         --------
         from sanka_sdk import SankaClient
 
         client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
-        client.locations.api_routers_v_1_locations_public_api_delete_public_location(
+        client.locations.update_public_location_api(
             location_id="location_id",
         )
         """
-        _response = self._raw_client.api_routers_v_1_locations_public_api_delete_public_location(
-            location_id, external_id=external_id, request_options=request_options
+        _response = self._raw_client.update_public_location_api(
+            location_id,
+            external_id=external_id,
+            workspace_id=workspace_id,
+            view_id=view_id,
+            form_view_id=form_view_id,
+            properties=properties,
+            request_options=request_options,
+        )
+        return _response.data
+
+    def delete_public_location_api(
+        self,
+        location_id: str,
+        *,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> DeletePublicLocationApiV2PublicLocationsLocationIdDelete200Envelope:
+        """
+        Parameters
+        ----------
+        location_id : str
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        DeletePublicLocationApiV2PublicLocationsLocationIdDelete200Envelope
+            Successful Response
+
+        Examples
+        --------
+        from sanka_sdk import SankaClient
+
+        client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+        client.locations.delete_public_location_api(
+            location_id="location_id",
+        )
+        """
+        _response = self._raw_client.delete_public_location_api(
+            location_id, workspace_id=workspace_id, request_options=request_options
         )
         return _response.data
 
@@ -315,29 +327,44 @@ class AsyncLocationsClient:
         """
         return self._raw_client
 
-    async def api_routers_v_1_locations_public_api_list_workspace_locations(
+    async def list_public_locations_api(
         self,
         *,
         workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = None,
         search: typing.Optional[str] = None,
-        q: typing.Optional[str] = None,
-        lang: typing.Optional[str] = None,
         language: typing.Optional[str] = None,
+        status: typing.Optional[str] = None,
+        usage_status: typing.Optional[str] = None,
+        page: typing.Optional[int] = None,
+        limit: typing.Optional[int] = None,
+        sort: typing.Optional[str] = None,
+        x_language: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> typing.List[InventoryWarehouseSchema]:
+    ) -> ListPublicLocationsApiV2PublicLocationsGet200Envelope:
         """
         Parameters
         ----------
         workspace_id : typing.Optional[str]
 
+        view_id : typing.Optional[str]
+
         search : typing.Optional[str]
 
-        q : typing.Optional[str]
-
-        lang : typing.Optional[str]
-
         language : typing.Optional[str]
+
+        status : typing.Optional[str]
+
+        usage_status : typing.Optional[str]
+
+        page : typing.Optional[int]
+
+        limit : typing.Optional[int]
+
+        sort : typing.Optional[str]
+
+        x_language : typing.Optional[str]
 
         accept_language : typing.Optional[str]
 
@@ -346,8 +373,8 @@ class AsyncLocationsClient:
 
         Returns
         -------
-        typing.List[InventoryWarehouseSchema]
-            OK
+        ListPublicLocationsApiV2PublicLocationsGet200Envelope
+            Object record list response
 
         Examples
         --------
@@ -356,69 +383,60 @@ class AsyncLocationsClient:
         from sanka_sdk import AsyncSankaClient
 
         client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
 
 
         async def main() -> None:
-            await client.locations.api_routers_v_1_locations_public_api_list_workspace_locations()
+            await client.locations.list_public_locations_api()
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.api_routers_v_1_locations_public_api_list_workspace_locations(
+        _response = await self._raw_client.list_public_locations_api(
             workspace_id=workspace_id,
+            view_id=view_id,
             search=search,
-            q=q,
-            lang=lang,
             language=language,
+            status=status,
+            usage_status=usage_status,
+            page=page,
+            limit=limit,
+            sort=sort,
+            x_language=x_language,
             accept_language=accept_language,
             request_options=request_options,
         )
         return _response.data
 
-    async def api_routers_v_1_locations_public_api_create_public_location(
+    async def create_public_location_api(
         self,
         *,
-        external_id: typing.Optional[str] = OMIT,
-        warehouse: typing.Optional[str] = OMIT,
-        floor: typing.Optional[str] = OMIT,
-        zone: typing.Optional[str] = OMIT,
-        aisle: typing.Optional[str] = OMIT,
-        rack: typing.Optional[str] = OMIT,
-        shelf: typing.Optional[str] = OMIT,
-        bin: typing.Optional[str] = OMIT,
-        usage_status: typing.Optional[str] = OMIT,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = OMIT,
+        form_view_id: typing.Optional[str] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> PublicLocationResponse:
+    ) -> CreatePublicLocationApiV2PublicLocationsPost200Envelope:
         """
         Parameters
         ----------
-        external_id : typing.Optional[str]
+        workspace_id : typing.Optional[str]
 
-        warehouse : typing.Optional[str]
+        view_id : typing.Optional[str]
 
-        floor : typing.Optional[str]
+        form_view_id : typing.Optional[str]
 
-        zone : typing.Optional[str]
-
-        aisle : typing.Optional[str]
-
-        rack : typing.Optional[str]
-
-        shelf : typing.Optional[str]
-
-        bin : typing.Optional[str]
-
-        usage_status : typing.Optional[str]
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        PublicLocationResponse
-            OK
+        CreatePublicLocationApiV2PublicLocationsPost200Envelope
+            Successful Response
 
         Examples
         --------
@@ -427,37 +445,36 @@ class AsyncLocationsClient:
         from sanka_sdk import AsyncSankaClient
 
         client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
 
 
         async def main() -> None:
-            await client.locations.api_routers_v_1_locations_public_api_create_public_location()
+            await client.locations.create_public_location_api()
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.api_routers_v_1_locations_public_api_create_public_location(
-            external_id=external_id,
-            warehouse=warehouse,
-            floor=floor,
-            zone=zone,
-            aisle=aisle,
-            rack=rack,
-            shelf=shelf,
-            bin=bin,
-            usage_status=usage_status,
+        _response = await self._raw_client.create_public_location_api(
+            workspace_id=workspace_id,
+            view_id=view_id,
+            form_view_id=form_view_id,
+            properties=properties,
             request_options=request_options,
         )
         return _response.data
 
-    async def api_routers_v_1_locations_public_api_get_public_location(
+    async def get_public_location_api(
         self,
         location_id: str,
         *,
         external_id: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = None,
+        form_view_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> InventoryWarehouseSchema:
+    ) -> GetPublicLocationApiV2PublicLocationsLocationIdGet200Envelope:
         """
         Parameters
         ----------
@@ -465,13 +482,19 @@ class AsyncLocationsClient:
 
         external_id : typing.Optional[str]
 
+        workspace_id : typing.Optional[str]
+
+        view_id : typing.Optional[str]
+
+        form_view_id : typing.Optional[str]
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        InventoryWarehouseSchema
-            OK
+        GetPublicLocationApiV2PublicLocationsLocationIdGet200Envelope
+            Object record detail response. The base detail payload is intentionally thin; drawer sections load through scoped endpoints.
 
         Examples
         --------
@@ -480,114 +503,40 @@ class AsyncLocationsClient:
         from sanka_sdk import AsyncSankaClient
 
         client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
 
 
         async def main() -> None:
-            await client.locations.api_routers_v_1_locations_public_api_get_public_location(
+            await client.locations.get_public_location_api(
                 location_id="location_id",
             )
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.api_routers_v_1_locations_public_api_get_public_location(
-            location_id, external_id=external_id, request_options=request_options
-        )
-        return _response.data
-
-    async def api_routers_v_1_locations_public_api_update_public_location(
-        self,
-        location_id: str,
-        *,
-        external_id: typing.Optional[str] = None,
-        public_location_request_external_id: typing.Optional[str] = OMIT,
-        warehouse: typing.Optional[str] = OMIT,
-        floor: typing.Optional[str] = OMIT,
-        zone: typing.Optional[str] = OMIT,
-        aisle: typing.Optional[str] = OMIT,
-        rack: typing.Optional[str] = OMIT,
-        shelf: typing.Optional[str] = OMIT,
-        bin: typing.Optional[str] = OMIT,
-        usage_status: typing.Optional[str] = OMIT,
-        request_options: typing.Optional[RequestOptions] = None,
-    ) -> PublicLocationResponse:
-        """
-        Parameters
-        ----------
-        location_id : str
-
-        external_id : typing.Optional[str]
-
-        public_location_request_external_id : typing.Optional[str]
-
-        warehouse : typing.Optional[str]
-
-        floor : typing.Optional[str]
-
-        zone : typing.Optional[str]
-
-        aisle : typing.Optional[str]
-
-        rack : typing.Optional[str]
-
-        shelf : typing.Optional[str]
-
-        bin : typing.Optional[str]
-
-        usage_status : typing.Optional[str]
-
-        request_options : typing.Optional[RequestOptions]
-            Request-specific configuration.
-
-        Returns
-        -------
-        PublicLocationResponse
-            OK
-
-        Examples
-        --------
-        import asyncio
-
-        from sanka_sdk import AsyncSankaClient
-
-        client = AsyncSankaClient(
-            token="YOUR_TOKEN",
-        )
-
-
-        async def main() -> None:
-            await client.locations.api_routers_v_1_locations_public_api_update_public_location(
-                location_id="location_id",
-            )
-
-
-        asyncio.run(main())
-        """
-        _response = await self._raw_client.api_routers_v_1_locations_public_api_update_public_location(
+        _response = await self._raw_client.get_public_location_api(
             location_id,
             external_id=external_id,
-            public_location_request_external_id=public_location_request_external_id,
-            warehouse=warehouse,
-            floor=floor,
-            zone=zone,
-            aisle=aisle,
-            rack=rack,
-            shelf=shelf,
-            bin=bin,
-            usage_status=usage_status,
+            workspace_id=workspace_id,
+            view_id=view_id,
+            form_view_id=form_view_id,
             request_options=request_options,
         )
         return _response.data
 
-    async def api_routers_v_1_locations_public_api_delete_public_location(
+    async def update_public_location_api(
         self,
         location_id: str,
         *,
         external_id: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = OMIT,
+        form_view_id: typing.Optional[str] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> PublicLocationResponse:
+    ) -> UpdatePublicLocationApiV2PublicLocationsLocationIdPut200Envelope:
         """
         Parameters
         ----------
@@ -595,13 +544,21 @@ class AsyncLocationsClient:
 
         external_id : typing.Optional[str]
 
+        workspace_id : typing.Optional[str]
+
+        view_id : typing.Optional[str]
+
+        form_view_id : typing.Optional[str]
+
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        PublicLocationResponse
-            OK
+        UpdatePublicLocationApiV2PublicLocationsLocationIdPut200Envelope
+            Successful Response
 
         Examples
         --------
@@ -610,19 +567,73 @@ class AsyncLocationsClient:
         from sanka_sdk import AsyncSankaClient
 
         client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
 
 
         async def main() -> None:
-            await client.locations.api_routers_v_1_locations_public_api_delete_public_location(
+            await client.locations.update_public_location_api(
                 location_id="location_id",
             )
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.api_routers_v_1_locations_public_api_delete_public_location(
-            location_id, external_id=external_id, request_options=request_options
+        _response = await self._raw_client.update_public_location_api(
+            location_id,
+            external_id=external_id,
+            workspace_id=workspace_id,
+            view_id=view_id,
+            form_view_id=form_view_id,
+            properties=properties,
+            request_options=request_options,
+        )
+        return _response.data
+
+    async def delete_public_location_api(
+        self,
+        location_id: str,
+        *,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> DeletePublicLocationApiV2PublicLocationsLocationIdDelete200Envelope:
+        """
+        Parameters
+        ----------
+        location_id : str
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        DeletePublicLocationApiV2PublicLocationsLocationIdDelete200Envelope
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sanka_sdk import AsyncSankaClient
+
+        client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.locations.delete_public_location_api(
+                location_id="location_id",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.delete_public_location_api(
+            location_id, workspace_id=workspace_id, request_options=request_options
         )
         return _response.data

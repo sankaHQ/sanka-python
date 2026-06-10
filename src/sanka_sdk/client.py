@@ -9,30 +9,50 @@ from .core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from .environment import SankaClientEnvironment
 
 if typing.TYPE_CHECKING:
+    from .absences.client import AbsencesClient, AsyncAbsencesClient
+    from .activity_logs.client import ActivityLogsClient, AsyncActivityLogsClient
     from .ai.client import AiClient, AsyncAiClient
+    from .approval_requests.client import ApprovalRequestsClient, AsyncApprovalRequestsClient
+    from .associations.client import AssociationsClient, AsyncAssociationsClient
+    from .attendance_records.client import AsyncAttendanceRecordsClient, AttendanceRecordsClient
     from .bills.client import AsyncBillsClient, BillsClient
-    from .calendar.client import AsyncCalendarClient, CalendarClient
     from .companies.client import AsyncCompaniesClient, CompaniesClient
     from .contacts.client import AsyncContactsClient, ContactsClient
+    from .custom_objects.client import AsyncCustomObjectsClient, CustomObjectsClient
     from .deals.client import AsyncDealsClient, DealsClient
     from .disbursements.client import AsyncDisbursementsClient, DisbursementsClient
+    from .employees.client import AsyncEmployeesClient, EmployeesClient
     from .estimates.client import AsyncEstimatesClient, EstimatesClient
     from .expenses.client import AsyncExpensesClient, ExpensesClient
+    from .exports.client import AsyncExportsClient, ExportsClient
+    from .files.client import AsyncFilesClient, FilesClient
+    from .imports.client import AsyncImportsClient, ImportsClient
+    from .incentives.client import AsyncIncentivesClient, IncentivesClient
     from .inventories.client import AsyncInventoriesClient, InventoriesClient
     from .inventory_transactions.client import AsyncInventoryTransactionsClient, InventoryTransactionsClient
     from .invoices.client import AsyncInvoicesClient, InvoicesClient
     from .items.client import AsyncItemsClient, ItemsClient
+    from .journals.client import AsyncJournalsClient, JournalsClient
     from .locations.client import AsyncLocationsClient, LocationsClient
     from .meters.client import AsyncMetersClient, MetersClient
+    from .object_schemas.client import AsyncObjectSchemasClient, ObjectSchemasClient
     from .orders.client import AsyncOrdersClient, OrdersClient
     from .payments.client import AsyncPaymentsClient, PaymentsClient
+    from .payroll.client import AsyncPayrollClient, PayrollClient
     from .properties.client import AsyncPropertiesClient, PropertiesClient
     from .public_auth.client import AsyncPublicAuthClient, PublicAuthClient
     from .purchase_orders.client import AsyncPurchaseOrdersClient, PurchaseOrdersClient
+    from .records.client import AsyncRecordsClient, RecordsClient
     from .reports.client import AsyncReportsClient, ReportsClient
-    from .slips.client import AsyncSlipsClient, SlipsClient
+    from .revenues.client import AsyncRevenuesClient, RevenuesClient
+    from .rule_settings.client import AsyncRuleSettingsClient, RuleSettingsClient
     from .subscriptions.client import AsyncSubscriptionsClient, SubscriptionsClient
+    from .tasks.client import AsyncTasksClient, TasksClient
     from .tickets.client import AsyncTicketsClient, TicketsClient
+    from .transfers.client import AsyncTransfersClient, TransfersClient
+    from .views.client import AsyncViewsClient, ViewsClient
+    from .workflow_actions.client import AsyncWorkflowActionsClient, WorkflowActionsClient
+    from .workflow_runs.client import AsyncWorkflowRunsClient, WorkflowRunsClient
     from .workflows.client import AsyncWorkflowsClient, WorkflowsClient
 
 
@@ -54,7 +74,8 @@ class SankaClient:
 
 
 
-    token : typing.Optional[typing.Union[str, typing.Callable[[], str]]]
+    workspace_code : typing.Optional[str]
+    token : typing.Union[str, typing.Callable[[], str]]
     headers : typing.Optional[typing.Dict[str, str]]
         Additional headers to send with every request.
 
@@ -72,6 +93,7 @@ class SankaClient:
     from sanka_sdk import SankaClient
 
     client = SankaClient(
+        workspace_code="YOUR_WORKSPACE_CODE",
         token="YOUR_TOKEN",
     )
     """
@@ -81,7 +103,8 @@ class SankaClient:
         *,
         base_url: typing.Optional[str] = None,
         environment: SankaClientEnvironment = SankaClientEnvironment.DEFAULT,
-        token: typing.Optional[typing.Union[str, typing.Callable[[], str]]] = None,
+        workspace_code: typing.Optional[str] = None,
+        token: typing.Union[str, typing.Callable[[], str]],
         headers: typing.Optional[typing.Dict[str, str]] = None,
         timeout: typing.Optional[float] = None,
         follow_redirects: typing.Optional[bool] = True,
@@ -92,6 +115,7 @@ class SankaClient:
         )
         self._client_wrapper = SyncClientWrapper(
             base_url=_get_base_url(base_url=base_url, environment=environment),
+            workspace_code=workspace_code,
             token=token,
             headers=headers,
             httpx_client=httpx_client
@@ -101,31 +125,67 @@ class SankaClient:
             else httpx.Client(timeout=_defaulted_timeout),
             timeout=_defaulted_timeout,
         )
+        self._absences: typing.Optional[AbsencesClient] = None
+        self._activity_logs: typing.Optional[ActivityLogsClient] = None
         self._ai: typing.Optional[AiClient] = None
-        self._orders: typing.Optional[OrdersClient] = None
-        self._items: typing.Optional[ItemsClient] = None
-        self._contacts: typing.Optional[ContactsClient] = None
-        self._companies: typing.Optional[CompaniesClient] = None
-        self._deals: typing.Optional[DealsClient] = None
-        self._tickets: typing.Optional[TicketsClient] = None
-        self._subscriptions: typing.Optional[SubscriptionsClient] = None
-        self._estimates: typing.Optional[EstimatesClient] = None
-        self._invoices: typing.Optional[InvoicesClient] = None
-        self._payments: typing.Optional[PaymentsClient] = None
-        self._expenses: typing.Optional[ExpensesClient] = None
-        self._inventories: typing.Optional[InventoriesClient] = None
-        self._locations: typing.Optional[LocationsClient] = None
-        self._inventory_transactions: typing.Optional[InventoryTransactionsClient] = None
-        self._meters: typing.Optional[MetersClient] = None
-        self._properties: typing.Optional[PropertiesClient] = None
-        self._purchase_orders: typing.Optional[PurchaseOrdersClient] = None
-        self._slips: typing.Optional[SlipsClient] = None
+        self._approval_requests: typing.Optional[ApprovalRequestsClient] = None
+        self._associations: typing.Optional[AssociationsClient] = None
+        self._attendance_records: typing.Optional[AttendanceRecordsClient] = None
         self._bills: typing.Optional[BillsClient] = None
+        self._companies: typing.Optional[CompaniesClient] = None
+        self._contacts: typing.Optional[ContactsClient] = None
+        self._custom_objects: typing.Optional[CustomObjectsClient] = None
+        self._deals: typing.Optional[DealsClient] = None
         self._disbursements: typing.Optional[DisbursementsClient] = None
-        self._reports: typing.Optional[ReportsClient] = None
-        self._workflows: typing.Optional[WorkflowsClient] = None
-        self._calendar: typing.Optional[CalendarClient] = None
+        self._employees: typing.Optional[EmployeesClient] = None
+        self._estimates: typing.Optional[EstimatesClient] = None
+        self._expenses: typing.Optional[ExpensesClient] = None
+        self._exports: typing.Optional[ExportsClient] = None
+        self._files: typing.Optional[FilesClient] = None
+        self._inventories: typing.Optional[InventoriesClient] = None
+        self._inventory_transactions: typing.Optional[InventoryTransactionsClient] = None
+        self._invoices: typing.Optional[InvoicesClient] = None
+        self._incentives: typing.Optional[IncentivesClient] = None
+        self._imports: typing.Optional[ImportsClient] = None
+        self._items: typing.Optional[ItemsClient] = None
+        self._journals: typing.Optional[JournalsClient] = None
+        self._locations: typing.Optional[LocationsClient] = None
+        self._meters: typing.Optional[MetersClient] = None
+        self._object_schemas: typing.Optional[ObjectSchemasClient] = None
+        self._orders: typing.Optional[OrdersClient] = None
+        self._payments: typing.Optional[PaymentsClient] = None
+        self._payroll: typing.Optional[PayrollClient] = None
+        self._properties: typing.Optional[PropertiesClient] = None
         self._public_auth: typing.Optional[PublicAuthClient] = None
+        self._reports: typing.Optional[ReportsClient] = None
+        self._purchase_orders: typing.Optional[PurchaseOrdersClient] = None
+        self._records: typing.Optional[RecordsClient] = None
+        self._revenues: typing.Optional[RevenuesClient] = None
+        self._rule_settings: typing.Optional[RuleSettingsClient] = None
+        self._subscriptions: typing.Optional[SubscriptionsClient] = None
+        self._tasks: typing.Optional[TasksClient] = None
+        self._tickets: typing.Optional[TicketsClient] = None
+        self._transfers: typing.Optional[TransfersClient] = None
+        self._views: typing.Optional[ViewsClient] = None
+        self._workflow_actions: typing.Optional[WorkflowActionsClient] = None
+        self._workflows: typing.Optional[WorkflowsClient] = None
+        self._workflow_runs: typing.Optional[WorkflowRunsClient] = None
+
+    @property
+    def absences(self):
+        if self._absences is None:
+            from .absences.client import AbsencesClient  # noqa: E402
+
+            self._absences = AbsencesClient(client_wrapper=self._client_wrapper)
+        return self._absences
+
+    @property
+    def activity_logs(self):
+        if self._activity_logs is None:
+            from .activity_logs.client import ActivityLogsClient  # noqa: E402
+
+            self._activity_logs = ActivityLogsClient(client_wrapper=self._client_wrapper)
+        return self._activity_logs
 
     @property
     def ai(self):
@@ -136,148 +196,28 @@ class SankaClient:
         return self._ai
 
     @property
-    def orders(self):
-        if self._orders is None:
-            from .orders.client import OrdersClient  # noqa: E402
+    def approval_requests(self):
+        if self._approval_requests is None:
+            from .approval_requests.client import ApprovalRequestsClient  # noqa: E402
 
-            self._orders = OrdersClient(client_wrapper=self._client_wrapper)
-        return self._orders
-
-    @property
-    def items(self):
-        if self._items is None:
-            from .items.client import ItemsClient  # noqa: E402
-
-            self._items = ItemsClient(client_wrapper=self._client_wrapper)
-        return self._items
+            self._approval_requests = ApprovalRequestsClient(client_wrapper=self._client_wrapper)
+        return self._approval_requests
 
     @property
-    def contacts(self):
-        if self._contacts is None:
-            from .contacts.client import ContactsClient  # noqa: E402
+    def associations(self):
+        if self._associations is None:
+            from .associations.client import AssociationsClient  # noqa: E402
 
-            self._contacts = ContactsClient(client_wrapper=self._client_wrapper)
-        return self._contacts
-
-    @property
-    def companies(self):
-        if self._companies is None:
-            from .companies.client import CompaniesClient  # noqa: E402
-
-            self._companies = CompaniesClient(client_wrapper=self._client_wrapper)
-        return self._companies
+            self._associations = AssociationsClient(client_wrapper=self._client_wrapper)
+        return self._associations
 
     @property
-    def deals(self):
-        if self._deals is None:
-            from .deals.client import DealsClient  # noqa: E402
+    def attendance_records(self):
+        if self._attendance_records is None:
+            from .attendance_records.client import AttendanceRecordsClient  # noqa: E402
 
-            self._deals = DealsClient(client_wrapper=self._client_wrapper)
-        return self._deals
-
-    @property
-    def tickets(self):
-        if self._tickets is None:
-            from .tickets.client import TicketsClient  # noqa: E402
-
-            self._tickets = TicketsClient(client_wrapper=self._client_wrapper)
-        return self._tickets
-
-    @property
-    def subscriptions(self):
-        if self._subscriptions is None:
-            from .subscriptions.client import SubscriptionsClient  # noqa: E402
-
-            self._subscriptions = SubscriptionsClient(client_wrapper=self._client_wrapper)
-        return self._subscriptions
-
-    @property
-    def estimates(self):
-        if self._estimates is None:
-            from .estimates.client import EstimatesClient  # noqa: E402
-
-            self._estimates = EstimatesClient(client_wrapper=self._client_wrapper)
-        return self._estimates
-
-    @property
-    def invoices(self):
-        if self._invoices is None:
-            from .invoices.client import InvoicesClient  # noqa: E402
-
-            self._invoices = InvoicesClient(client_wrapper=self._client_wrapper)
-        return self._invoices
-
-    @property
-    def payments(self):
-        if self._payments is None:
-            from .payments.client import PaymentsClient  # noqa: E402
-
-            self._payments = PaymentsClient(client_wrapper=self._client_wrapper)
-        return self._payments
-
-    @property
-    def expenses(self):
-        if self._expenses is None:
-            from .expenses.client import ExpensesClient  # noqa: E402
-
-            self._expenses = ExpensesClient(client_wrapper=self._client_wrapper)
-        return self._expenses
-
-    @property
-    def inventories(self):
-        if self._inventories is None:
-            from .inventories.client import InventoriesClient  # noqa: E402
-
-            self._inventories = InventoriesClient(client_wrapper=self._client_wrapper)
-        return self._inventories
-
-    @property
-    def locations(self):
-        if self._locations is None:
-            from .locations.client import LocationsClient  # noqa: E402
-
-            self._locations = LocationsClient(client_wrapper=self._client_wrapper)
-        return self._locations
-
-    @property
-    def inventory_transactions(self):
-        if self._inventory_transactions is None:
-            from .inventory_transactions.client import InventoryTransactionsClient  # noqa: E402
-
-            self._inventory_transactions = InventoryTransactionsClient(client_wrapper=self._client_wrapper)
-        return self._inventory_transactions
-
-    @property
-    def meters(self):
-        if self._meters is None:
-            from .meters.client import MetersClient  # noqa: E402
-
-            self._meters = MetersClient(client_wrapper=self._client_wrapper)
-        return self._meters
-
-    @property
-    def properties(self):
-        if self._properties is None:
-            from .properties.client import PropertiesClient  # noqa: E402
-
-            self._properties = PropertiesClient(client_wrapper=self._client_wrapper)
-        return self._properties
-
-    @property
-    def purchase_orders(self):
-        if self._purchase_orders is None:
-            from .purchase_orders.client import PurchaseOrdersClient  # noqa: E402
-
-            self._purchase_orders = PurchaseOrdersClient(client_wrapper=self._client_wrapper)
-        return self._purchase_orders
-
-    @property
-    def slips(self):
-        if self._slips is None:
-            from .slips.client import SlipsClient  # noqa: E402
-
-            self._slips = SlipsClient(client_wrapper=self._client_wrapper)
-        return self._slips
+            self._attendance_records = AttendanceRecordsClient(client_wrapper=self._client_wrapper)
+        return self._attendance_records
 
     @property
     def bills(self):
@@ -288,12 +228,204 @@ class SankaClient:
         return self._bills
 
     @property
+    def companies(self):
+        if self._companies is None:
+            from .companies.client import CompaniesClient  # noqa: E402
+
+            self._companies = CompaniesClient(client_wrapper=self._client_wrapper)
+        return self._companies
+
+    @property
+    def contacts(self):
+        if self._contacts is None:
+            from .contacts.client import ContactsClient  # noqa: E402
+
+            self._contacts = ContactsClient(client_wrapper=self._client_wrapper)
+        return self._contacts
+
+    @property
+    def custom_objects(self):
+        if self._custom_objects is None:
+            from .custom_objects.client import CustomObjectsClient  # noqa: E402
+
+            self._custom_objects = CustomObjectsClient(client_wrapper=self._client_wrapper)
+        return self._custom_objects
+
+    @property
+    def deals(self):
+        if self._deals is None:
+            from .deals.client import DealsClient  # noqa: E402
+
+            self._deals = DealsClient(client_wrapper=self._client_wrapper)
+        return self._deals
+
+    @property
     def disbursements(self):
         if self._disbursements is None:
             from .disbursements.client import DisbursementsClient  # noqa: E402
 
             self._disbursements = DisbursementsClient(client_wrapper=self._client_wrapper)
         return self._disbursements
+
+    @property
+    def employees(self):
+        if self._employees is None:
+            from .employees.client import EmployeesClient  # noqa: E402
+
+            self._employees = EmployeesClient(client_wrapper=self._client_wrapper)
+        return self._employees
+
+    @property
+    def estimates(self):
+        if self._estimates is None:
+            from .estimates.client import EstimatesClient  # noqa: E402
+
+            self._estimates = EstimatesClient(client_wrapper=self._client_wrapper)
+        return self._estimates
+
+    @property
+    def expenses(self):
+        if self._expenses is None:
+            from .expenses.client import ExpensesClient  # noqa: E402
+
+            self._expenses = ExpensesClient(client_wrapper=self._client_wrapper)
+        return self._expenses
+
+    @property
+    def exports(self):
+        if self._exports is None:
+            from .exports.client import ExportsClient  # noqa: E402
+
+            self._exports = ExportsClient(client_wrapper=self._client_wrapper)
+        return self._exports
+
+    @property
+    def files(self):
+        if self._files is None:
+            from .files.client import FilesClient  # noqa: E402
+
+            self._files = FilesClient(client_wrapper=self._client_wrapper)
+        return self._files
+
+    @property
+    def inventories(self):
+        if self._inventories is None:
+            from .inventories.client import InventoriesClient  # noqa: E402
+
+            self._inventories = InventoriesClient(client_wrapper=self._client_wrapper)
+        return self._inventories
+
+    @property
+    def inventory_transactions(self):
+        if self._inventory_transactions is None:
+            from .inventory_transactions.client import InventoryTransactionsClient  # noqa: E402
+
+            self._inventory_transactions = InventoryTransactionsClient(client_wrapper=self._client_wrapper)
+        return self._inventory_transactions
+
+    @property
+    def invoices(self):
+        if self._invoices is None:
+            from .invoices.client import InvoicesClient  # noqa: E402
+
+            self._invoices = InvoicesClient(client_wrapper=self._client_wrapper)
+        return self._invoices
+
+    @property
+    def incentives(self):
+        if self._incentives is None:
+            from .incentives.client import IncentivesClient  # noqa: E402
+
+            self._incentives = IncentivesClient(client_wrapper=self._client_wrapper)
+        return self._incentives
+
+    @property
+    def imports(self):
+        if self._imports is None:
+            from .imports.client import ImportsClient  # noqa: E402
+
+            self._imports = ImportsClient(client_wrapper=self._client_wrapper)
+        return self._imports
+
+    @property
+    def items(self):
+        if self._items is None:
+            from .items.client import ItemsClient  # noqa: E402
+
+            self._items = ItemsClient(client_wrapper=self._client_wrapper)
+        return self._items
+
+    @property
+    def journals(self):
+        if self._journals is None:
+            from .journals.client import JournalsClient  # noqa: E402
+
+            self._journals = JournalsClient(client_wrapper=self._client_wrapper)
+        return self._journals
+
+    @property
+    def locations(self):
+        if self._locations is None:
+            from .locations.client import LocationsClient  # noqa: E402
+
+            self._locations = LocationsClient(client_wrapper=self._client_wrapper)
+        return self._locations
+
+    @property
+    def meters(self):
+        if self._meters is None:
+            from .meters.client import MetersClient  # noqa: E402
+
+            self._meters = MetersClient(client_wrapper=self._client_wrapper)
+        return self._meters
+
+    @property
+    def object_schemas(self):
+        if self._object_schemas is None:
+            from .object_schemas.client import ObjectSchemasClient  # noqa: E402
+
+            self._object_schemas = ObjectSchemasClient(client_wrapper=self._client_wrapper)
+        return self._object_schemas
+
+    @property
+    def orders(self):
+        if self._orders is None:
+            from .orders.client import OrdersClient  # noqa: E402
+
+            self._orders = OrdersClient(client_wrapper=self._client_wrapper)
+        return self._orders
+
+    @property
+    def payments(self):
+        if self._payments is None:
+            from .payments.client import PaymentsClient  # noqa: E402
+
+            self._payments = PaymentsClient(client_wrapper=self._client_wrapper)
+        return self._payments
+
+    @property
+    def payroll(self):
+        if self._payroll is None:
+            from .payroll.client import PayrollClient  # noqa: E402
+
+            self._payroll = PayrollClient(client_wrapper=self._client_wrapper)
+        return self._payroll
+
+    @property
+    def properties(self):
+        if self._properties is None:
+            from .properties.client import PropertiesClient  # noqa: E402
+
+            self._properties = PropertiesClient(client_wrapper=self._client_wrapper)
+        return self._properties
+
+    @property
+    def public_auth(self):
+        if self._public_auth is None:
+            from .public_auth.client import PublicAuthClient  # noqa: E402
+
+            self._public_auth = PublicAuthClient(client_wrapper=self._client_wrapper)
+        return self._public_auth
 
     @property
     def reports(self):
@@ -304,6 +436,86 @@ class SankaClient:
         return self._reports
 
     @property
+    def purchase_orders(self):
+        if self._purchase_orders is None:
+            from .purchase_orders.client import PurchaseOrdersClient  # noqa: E402
+
+            self._purchase_orders = PurchaseOrdersClient(client_wrapper=self._client_wrapper)
+        return self._purchase_orders
+
+    @property
+    def records(self):
+        if self._records is None:
+            from .records.client import RecordsClient  # noqa: E402
+
+            self._records = RecordsClient(client_wrapper=self._client_wrapper)
+        return self._records
+
+    @property
+    def revenues(self):
+        if self._revenues is None:
+            from .revenues.client import RevenuesClient  # noqa: E402
+
+            self._revenues = RevenuesClient(client_wrapper=self._client_wrapper)
+        return self._revenues
+
+    @property
+    def rule_settings(self):
+        if self._rule_settings is None:
+            from .rule_settings.client import RuleSettingsClient  # noqa: E402
+
+            self._rule_settings = RuleSettingsClient(client_wrapper=self._client_wrapper)
+        return self._rule_settings
+
+    @property
+    def subscriptions(self):
+        if self._subscriptions is None:
+            from .subscriptions.client import SubscriptionsClient  # noqa: E402
+
+            self._subscriptions = SubscriptionsClient(client_wrapper=self._client_wrapper)
+        return self._subscriptions
+
+    @property
+    def tasks(self):
+        if self._tasks is None:
+            from .tasks.client import TasksClient  # noqa: E402
+
+            self._tasks = TasksClient(client_wrapper=self._client_wrapper)
+        return self._tasks
+
+    @property
+    def tickets(self):
+        if self._tickets is None:
+            from .tickets.client import TicketsClient  # noqa: E402
+
+            self._tickets = TicketsClient(client_wrapper=self._client_wrapper)
+        return self._tickets
+
+    @property
+    def transfers(self):
+        if self._transfers is None:
+            from .transfers.client import TransfersClient  # noqa: E402
+
+            self._transfers = TransfersClient(client_wrapper=self._client_wrapper)
+        return self._transfers
+
+    @property
+    def views(self):
+        if self._views is None:
+            from .views.client import ViewsClient  # noqa: E402
+
+            self._views = ViewsClient(client_wrapper=self._client_wrapper)
+        return self._views
+
+    @property
+    def workflow_actions(self):
+        if self._workflow_actions is None:
+            from .workflow_actions.client import WorkflowActionsClient  # noqa: E402
+
+            self._workflow_actions = WorkflowActionsClient(client_wrapper=self._client_wrapper)
+        return self._workflow_actions
+
+    @property
     def workflows(self):
         if self._workflows is None:
             from .workflows.client import WorkflowsClient  # noqa: E402
@@ -312,20 +524,12 @@ class SankaClient:
         return self._workflows
 
     @property
-    def calendar(self):
-        if self._calendar is None:
-            from .calendar.client import CalendarClient  # noqa: E402
+    def workflow_runs(self):
+        if self._workflow_runs is None:
+            from .workflow_runs.client import WorkflowRunsClient  # noqa: E402
 
-            self._calendar = CalendarClient(client_wrapper=self._client_wrapper)
-        return self._calendar
-
-    @property
-    def public_auth(self):
-        if self._public_auth is None:
-            from .public_auth.client import PublicAuthClient  # noqa: E402
-
-            self._public_auth = PublicAuthClient(client_wrapper=self._client_wrapper)
-        return self._public_auth
+            self._workflow_runs = WorkflowRunsClient(client_wrapper=self._client_wrapper)
+        return self._workflow_runs
 
 
 class AsyncSankaClient:
@@ -346,7 +550,8 @@ class AsyncSankaClient:
 
 
 
-    token : typing.Optional[typing.Union[str, typing.Callable[[], str]]]
+    workspace_code : typing.Optional[str]
+    token : typing.Union[str, typing.Callable[[], str]]
     headers : typing.Optional[typing.Dict[str, str]]
         Additional headers to send with every request.
 
@@ -364,6 +569,7 @@ class AsyncSankaClient:
     from sanka_sdk import AsyncSankaClient
 
     client = AsyncSankaClient(
+        workspace_code="YOUR_WORKSPACE_CODE",
         token="YOUR_TOKEN",
     )
     """
@@ -373,7 +579,8 @@ class AsyncSankaClient:
         *,
         base_url: typing.Optional[str] = None,
         environment: SankaClientEnvironment = SankaClientEnvironment.DEFAULT,
-        token: typing.Optional[typing.Union[str, typing.Callable[[], str]]] = None,
+        workspace_code: typing.Optional[str] = None,
+        token: typing.Union[str, typing.Callable[[], str]],
         headers: typing.Optional[typing.Dict[str, str]] = None,
         timeout: typing.Optional[float] = None,
         follow_redirects: typing.Optional[bool] = True,
@@ -384,6 +591,7 @@ class AsyncSankaClient:
         )
         self._client_wrapper = AsyncClientWrapper(
             base_url=_get_base_url(base_url=base_url, environment=environment),
+            workspace_code=workspace_code,
             token=token,
             headers=headers,
             httpx_client=httpx_client
@@ -393,31 +601,67 @@ class AsyncSankaClient:
             else httpx.AsyncClient(timeout=_defaulted_timeout),
             timeout=_defaulted_timeout,
         )
+        self._absences: typing.Optional[AsyncAbsencesClient] = None
+        self._activity_logs: typing.Optional[AsyncActivityLogsClient] = None
         self._ai: typing.Optional[AsyncAiClient] = None
-        self._orders: typing.Optional[AsyncOrdersClient] = None
-        self._items: typing.Optional[AsyncItemsClient] = None
-        self._contacts: typing.Optional[AsyncContactsClient] = None
-        self._companies: typing.Optional[AsyncCompaniesClient] = None
-        self._deals: typing.Optional[AsyncDealsClient] = None
-        self._tickets: typing.Optional[AsyncTicketsClient] = None
-        self._subscriptions: typing.Optional[AsyncSubscriptionsClient] = None
-        self._estimates: typing.Optional[AsyncEstimatesClient] = None
-        self._invoices: typing.Optional[AsyncInvoicesClient] = None
-        self._payments: typing.Optional[AsyncPaymentsClient] = None
-        self._expenses: typing.Optional[AsyncExpensesClient] = None
-        self._inventories: typing.Optional[AsyncInventoriesClient] = None
-        self._locations: typing.Optional[AsyncLocationsClient] = None
-        self._inventory_transactions: typing.Optional[AsyncInventoryTransactionsClient] = None
-        self._meters: typing.Optional[AsyncMetersClient] = None
-        self._properties: typing.Optional[AsyncPropertiesClient] = None
-        self._purchase_orders: typing.Optional[AsyncPurchaseOrdersClient] = None
-        self._slips: typing.Optional[AsyncSlipsClient] = None
+        self._approval_requests: typing.Optional[AsyncApprovalRequestsClient] = None
+        self._associations: typing.Optional[AsyncAssociationsClient] = None
+        self._attendance_records: typing.Optional[AsyncAttendanceRecordsClient] = None
         self._bills: typing.Optional[AsyncBillsClient] = None
+        self._companies: typing.Optional[AsyncCompaniesClient] = None
+        self._contacts: typing.Optional[AsyncContactsClient] = None
+        self._custom_objects: typing.Optional[AsyncCustomObjectsClient] = None
+        self._deals: typing.Optional[AsyncDealsClient] = None
         self._disbursements: typing.Optional[AsyncDisbursementsClient] = None
-        self._reports: typing.Optional[AsyncReportsClient] = None
-        self._workflows: typing.Optional[AsyncWorkflowsClient] = None
-        self._calendar: typing.Optional[AsyncCalendarClient] = None
+        self._employees: typing.Optional[AsyncEmployeesClient] = None
+        self._estimates: typing.Optional[AsyncEstimatesClient] = None
+        self._expenses: typing.Optional[AsyncExpensesClient] = None
+        self._exports: typing.Optional[AsyncExportsClient] = None
+        self._files: typing.Optional[AsyncFilesClient] = None
+        self._inventories: typing.Optional[AsyncInventoriesClient] = None
+        self._inventory_transactions: typing.Optional[AsyncInventoryTransactionsClient] = None
+        self._invoices: typing.Optional[AsyncInvoicesClient] = None
+        self._incentives: typing.Optional[AsyncIncentivesClient] = None
+        self._imports: typing.Optional[AsyncImportsClient] = None
+        self._items: typing.Optional[AsyncItemsClient] = None
+        self._journals: typing.Optional[AsyncJournalsClient] = None
+        self._locations: typing.Optional[AsyncLocationsClient] = None
+        self._meters: typing.Optional[AsyncMetersClient] = None
+        self._object_schemas: typing.Optional[AsyncObjectSchemasClient] = None
+        self._orders: typing.Optional[AsyncOrdersClient] = None
+        self._payments: typing.Optional[AsyncPaymentsClient] = None
+        self._payroll: typing.Optional[AsyncPayrollClient] = None
+        self._properties: typing.Optional[AsyncPropertiesClient] = None
         self._public_auth: typing.Optional[AsyncPublicAuthClient] = None
+        self._reports: typing.Optional[AsyncReportsClient] = None
+        self._purchase_orders: typing.Optional[AsyncPurchaseOrdersClient] = None
+        self._records: typing.Optional[AsyncRecordsClient] = None
+        self._revenues: typing.Optional[AsyncRevenuesClient] = None
+        self._rule_settings: typing.Optional[AsyncRuleSettingsClient] = None
+        self._subscriptions: typing.Optional[AsyncSubscriptionsClient] = None
+        self._tasks: typing.Optional[AsyncTasksClient] = None
+        self._tickets: typing.Optional[AsyncTicketsClient] = None
+        self._transfers: typing.Optional[AsyncTransfersClient] = None
+        self._views: typing.Optional[AsyncViewsClient] = None
+        self._workflow_actions: typing.Optional[AsyncWorkflowActionsClient] = None
+        self._workflows: typing.Optional[AsyncWorkflowsClient] = None
+        self._workflow_runs: typing.Optional[AsyncWorkflowRunsClient] = None
+
+    @property
+    def absences(self):
+        if self._absences is None:
+            from .absences.client import AsyncAbsencesClient  # noqa: E402
+
+            self._absences = AsyncAbsencesClient(client_wrapper=self._client_wrapper)
+        return self._absences
+
+    @property
+    def activity_logs(self):
+        if self._activity_logs is None:
+            from .activity_logs.client import AsyncActivityLogsClient  # noqa: E402
+
+            self._activity_logs = AsyncActivityLogsClient(client_wrapper=self._client_wrapper)
+        return self._activity_logs
 
     @property
     def ai(self):
@@ -428,148 +672,28 @@ class AsyncSankaClient:
         return self._ai
 
     @property
-    def orders(self):
-        if self._orders is None:
-            from .orders.client import AsyncOrdersClient  # noqa: E402
+    def approval_requests(self):
+        if self._approval_requests is None:
+            from .approval_requests.client import AsyncApprovalRequestsClient  # noqa: E402
 
-            self._orders = AsyncOrdersClient(client_wrapper=self._client_wrapper)
-        return self._orders
-
-    @property
-    def items(self):
-        if self._items is None:
-            from .items.client import AsyncItemsClient  # noqa: E402
-
-            self._items = AsyncItemsClient(client_wrapper=self._client_wrapper)
-        return self._items
+            self._approval_requests = AsyncApprovalRequestsClient(client_wrapper=self._client_wrapper)
+        return self._approval_requests
 
     @property
-    def contacts(self):
-        if self._contacts is None:
-            from .contacts.client import AsyncContactsClient  # noqa: E402
+    def associations(self):
+        if self._associations is None:
+            from .associations.client import AsyncAssociationsClient  # noqa: E402
 
-            self._contacts = AsyncContactsClient(client_wrapper=self._client_wrapper)
-        return self._contacts
-
-    @property
-    def companies(self):
-        if self._companies is None:
-            from .companies.client import AsyncCompaniesClient  # noqa: E402
-
-            self._companies = AsyncCompaniesClient(client_wrapper=self._client_wrapper)
-        return self._companies
+            self._associations = AsyncAssociationsClient(client_wrapper=self._client_wrapper)
+        return self._associations
 
     @property
-    def deals(self):
-        if self._deals is None:
-            from .deals.client import AsyncDealsClient  # noqa: E402
+    def attendance_records(self):
+        if self._attendance_records is None:
+            from .attendance_records.client import AsyncAttendanceRecordsClient  # noqa: E402
 
-            self._deals = AsyncDealsClient(client_wrapper=self._client_wrapper)
-        return self._deals
-
-    @property
-    def tickets(self):
-        if self._tickets is None:
-            from .tickets.client import AsyncTicketsClient  # noqa: E402
-
-            self._tickets = AsyncTicketsClient(client_wrapper=self._client_wrapper)
-        return self._tickets
-
-    @property
-    def subscriptions(self):
-        if self._subscriptions is None:
-            from .subscriptions.client import AsyncSubscriptionsClient  # noqa: E402
-
-            self._subscriptions = AsyncSubscriptionsClient(client_wrapper=self._client_wrapper)
-        return self._subscriptions
-
-    @property
-    def estimates(self):
-        if self._estimates is None:
-            from .estimates.client import AsyncEstimatesClient  # noqa: E402
-
-            self._estimates = AsyncEstimatesClient(client_wrapper=self._client_wrapper)
-        return self._estimates
-
-    @property
-    def invoices(self):
-        if self._invoices is None:
-            from .invoices.client import AsyncInvoicesClient  # noqa: E402
-
-            self._invoices = AsyncInvoicesClient(client_wrapper=self._client_wrapper)
-        return self._invoices
-
-    @property
-    def payments(self):
-        if self._payments is None:
-            from .payments.client import AsyncPaymentsClient  # noqa: E402
-
-            self._payments = AsyncPaymentsClient(client_wrapper=self._client_wrapper)
-        return self._payments
-
-    @property
-    def expenses(self):
-        if self._expenses is None:
-            from .expenses.client import AsyncExpensesClient  # noqa: E402
-
-            self._expenses = AsyncExpensesClient(client_wrapper=self._client_wrapper)
-        return self._expenses
-
-    @property
-    def inventories(self):
-        if self._inventories is None:
-            from .inventories.client import AsyncInventoriesClient  # noqa: E402
-
-            self._inventories = AsyncInventoriesClient(client_wrapper=self._client_wrapper)
-        return self._inventories
-
-    @property
-    def locations(self):
-        if self._locations is None:
-            from .locations.client import AsyncLocationsClient  # noqa: E402
-
-            self._locations = AsyncLocationsClient(client_wrapper=self._client_wrapper)
-        return self._locations
-
-    @property
-    def inventory_transactions(self):
-        if self._inventory_transactions is None:
-            from .inventory_transactions.client import AsyncInventoryTransactionsClient  # noqa: E402
-
-            self._inventory_transactions = AsyncInventoryTransactionsClient(client_wrapper=self._client_wrapper)
-        return self._inventory_transactions
-
-    @property
-    def meters(self):
-        if self._meters is None:
-            from .meters.client import AsyncMetersClient  # noqa: E402
-
-            self._meters = AsyncMetersClient(client_wrapper=self._client_wrapper)
-        return self._meters
-
-    @property
-    def properties(self):
-        if self._properties is None:
-            from .properties.client import AsyncPropertiesClient  # noqa: E402
-
-            self._properties = AsyncPropertiesClient(client_wrapper=self._client_wrapper)
-        return self._properties
-
-    @property
-    def purchase_orders(self):
-        if self._purchase_orders is None:
-            from .purchase_orders.client import AsyncPurchaseOrdersClient  # noqa: E402
-
-            self._purchase_orders = AsyncPurchaseOrdersClient(client_wrapper=self._client_wrapper)
-        return self._purchase_orders
-
-    @property
-    def slips(self):
-        if self._slips is None:
-            from .slips.client import AsyncSlipsClient  # noqa: E402
-
-            self._slips = AsyncSlipsClient(client_wrapper=self._client_wrapper)
-        return self._slips
+            self._attendance_records = AsyncAttendanceRecordsClient(client_wrapper=self._client_wrapper)
+        return self._attendance_records
 
     @property
     def bills(self):
@@ -580,12 +704,204 @@ class AsyncSankaClient:
         return self._bills
 
     @property
+    def companies(self):
+        if self._companies is None:
+            from .companies.client import AsyncCompaniesClient  # noqa: E402
+
+            self._companies = AsyncCompaniesClient(client_wrapper=self._client_wrapper)
+        return self._companies
+
+    @property
+    def contacts(self):
+        if self._contacts is None:
+            from .contacts.client import AsyncContactsClient  # noqa: E402
+
+            self._contacts = AsyncContactsClient(client_wrapper=self._client_wrapper)
+        return self._contacts
+
+    @property
+    def custom_objects(self):
+        if self._custom_objects is None:
+            from .custom_objects.client import AsyncCustomObjectsClient  # noqa: E402
+
+            self._custom_objects = AsyncCustomObjectsClient(client_wrapper=self._client_wrapper)
+        return self._custom_objects
+
+    @property
+    def deals(self):
+        if self._deals is None:
+            from .deals.client import AsyncDealsClient  # noqa: E402
+
+            self._deals = AsyncDealsClient(client_wrapper=self._client_wrapper)
+        return self._deals
+
+    @property
     def disbursements(self):
         if self._disbursements is None:
             from .disbursements.client import AsyncDisbursementsClient  # noqa: E402
 
             self._disbursements = AsyncDisbursementsClient(client_wrapper=self._client_wrapper)
         return self._disbursements
+
+    @property
+    def employees(self):
+        if self._employees is None:
+            from .employees.client import AsyncEmployeesClient  # noqa: E402
+
+            self._employees = AsyncEmployeesClient(client_wrapper=self._client_wrapper)
+        return self._employees
+
+    @property
+    def estimates(self):
+        if self._estimates is None:
+            from .estimates.client import AsyncEstimatesClient  # noqa: E402
+
+            self._estimates = AsyncEstimatesClient(client_wrapper=self._client_wrapper)
+        return self._estimates
+
+    @property
+    def expenses(self):
+        if self._expenses is None:
+            from .expenses.client import AsyncExpensesClient  # noqa: E402
+
+            self._expenses = AsyncExpensesClient(client_wrapper=self._client_wrapper)
+        return self._expenses
+
+    @property
+    def exports(self):
+        if self._exports is None:
+            from .exports.client import AsyncExportsClient  # noqa: E402
+
+            self._exports = AsyncExportsClient(client_wrapper=self._client_wrapper)
+        return self._exports
+
+    @property
+    def files(self):
+        if self._files is None:
+            from .files.client import AsyncFilesClient  # noqa: E402
+
+            self._files = AsyncFilesClient(client_wrapper=self._client_wrapper)
+        return self._files
+
+    @property
+    def inventories(self):
+        if self._inventories is None:
+            from .inventories.client import AsyncInventoriesClient  # noqa: E402
+
+            self._inventories = AsyncInventoriesClient(client_wrapper=self._client_wrapper)
+        return self._inventories
+
+    @property
+    def inventory_transactions(self):
+        if self._inventory_transactions is None:
+            from .inventory_transactions.client import AsyncInventoryTransactionsClient  # noqa: E402
+
+            self._inventory_transactions = AsyncInventoryTransactionsClient(client_wrapper=self._client_wrapper)
+        return self._inventory_transactions
+
+    @property
+    def invoices(self):
+        if self._invoices is None:
+            from .invoices.client import AsyncInvoicesClient  # noqa: E402
+
+            self._invoices = AsyncInvoicesClient(client_wrapper=self._client_wrapper)
+        return self._invoices
+
+    @property
+    def incentives(self):
+        if self._incentives is None:
+            from .incentives.client import AsyncIncentivesClient  # noqa: E402
+
+            self._incentives = AsyncIncentivesClient(client_wrapper=self._client_wrapper)
+        return self._incentives
+
+    @property
+    def imports(self):
+        if self._imports is None:
+            from .imports.client import AsyncImportsClient  # noqa: E402
+
+            self._imports = AsyncImportsClient(client_wrapper=self._client_wrapper)
+        return self._imports
+
+    @property
+    def items(self):
+        if self._items is None:
+            from .items.client import AsyncItemsClient  # noqa: E402
+
+            self._items = AsyncItemsClient(client_wrapper=self._client_wrapper)
+        return self._items
+
+    @property
+    def journals(self):
+        if self._journals is None:
+            from .journals.client import AsyncJournalsClient  # noqa: E402
+
+            self._journals = AsyncJournalsClient(client_wrapper=self._client_wrapper)
+        return self._journals
+
+    @property
+    def locations(self):
+        if self._locations is None:
+            from .locations.client import AsyncLocationsClient  # noqa: E402
+
+            self._locations = AsyncLocationsClient(client_wrapper=self._client_wrapper)
+        return self._locations
+
+    @property
+    def meters(self):
+        if self._meters is None:
+            from .meters.client import AsyncMetersClient  # noqa: E402
+
+            self._meters = AsyncMetersClient(client_wrapper=self._client_wrapper)
+        return self._meters
+
+    @property
+    def object_schemas(self):
+        if self._object_schemas is None:
+            from .object_schemas.client import AsyncObjectSchemasClient  # noqa: E402
+
+            self._object_schemas = AsyncObjectSchemasClient(client_wrapper=self._client_wrapper)
+        return self._object_schemas
+
+    @property
+    def orders(self):
+        if self._orders is None:
+            from .orders.client import AsyncOrdersClient  # noqa: E402
+
+            self._orders = AsyncOrdersClient(client_wrapper=self._client_wrapper)
+        return self._orders
+
+    @property
+    def payments(self):
+        if self._payments is None:
+            from .payments.client import AsyncPaymentsClient  # noqa: E402
+
+            self._payments = AsyncPaymentsClient(client_wrapper=self._client_wrapper)
+        return self._payments
+
+    @property
+    def payroll(self):
+        if self._payroll is None:
+            from .payroll.client import AsyncPayrollClient  # noqa: E402
+
+            self._payroll = AsyncPayrollClient(client_wrapper=self._client_wrapper)
+        return self._payroll
+
+    @property
+    def properties(self):
+        if self._properties is None:
+            from .properties.client import AsyncPropertiesClient  # noqa: E402
+
+            self._properties = AsyncPropertiesClient(client_wrapper=self._client_wrapper)
+        return self._properties
+
+    @property
+    def public_auth(self):
+        if self._public_auth is None:
+            from .public_auth.client import AsyncPublicAuthClient  # noqa: E402
+
+            self._public_auth = AsyncPublicAuthClient(client_wrapper=self._client_wrapper)
+        return self._public_auth
 
     @property
     def reports(self):
@@ -596,6 +912,86 @@ class AsyncSankaClient:
         return self._reports
 
     @property
+    def purchase_orders(self):
+        if self._purchase_orders is None:
+            from .purchase_orders.client import AsyncPurchaseOrdersClient  # noqa: E402
+
+            self._purchase_orders = AsyncPurchaseOrdersClient(client_wrapper=self._client_wrapper)
+        return self._purchase_orders
+
+    @property
+    def records(self):
+        if self._records is None:
+            from .records.client import AsyncRecordsClient  # noqa: E402
+
+            self._records = AsyncRecordsClient(client_wrapper=self._client_wrapper)
+        return self._records
+
+    @property
+    def revenues(self):
+        if self._revenues is None:
+            from .revenues.client import AsyncRevenuesClient  # noqa: E402
+
+            self._revenues = AsyncRevenuesClient(client_wrapper=self._client_wrapper)
+        return self._revenues
+
+    @property
+    def rule_settings(self):
+        if self._rule_settings is None:
+            from .rule_settings.client import AsyncRuleSettingsClient  # noqa: E402
+
+            self._rule_settings = AsyncRuleSettingsClient(client_wrapper=self._client_wrapper)
+        return self._rule_settings
+
+    @property
+    def subscriptions(self):
+        if self._subscriptions is None:
+            from .subscriptions.client import AsyncSubscriptionsClient  # noqa: E402
+
+            self._subscriptions = AsyncSubscriptionsClient(client_wrapper=self._client_wrapper)
+        return self._subscriptions
+
+    @property
+    def tasks(self):
+        if self._tasks is None:
+            from .tasks.client import AsyncTasksClient  # noqa: E402
+
+            self._tasks = AsyncTasksClient(client_wrapper=self._client_wrapper)
+        return self._tasks
+
+    @property
+    def tickets(self):
+        if self._tickets is None:
+            from .tickets.client import AsyncTicketsClient  # noqa: E402
+
+            self._tickets = AsyncTicketsClient(client_wrapper=self._client_wrapper)
+        return self._tickets
+
+    @property
+    def transfers(self):
+        if self._transfers is None:
+            from .transfers.client import AsyncTransfersClient  # noqa: E402
+
+            self._transfers = AsyncTransfersClient(client_wrapper=self._client_wrapper)
+        return self._transfers
+
+    @property
+    def views(self):
+        if self._views is None:
+            from .views.client import AsyncViewsClient  # noqa: E402
+
+            self._views = AsyncViewsClient(client_wrapper=self._client_wrapper)
+        return self._views
+
+    @property
+    def workflow_actions(self):
+        if self._workflow_actions is None:
+            from .workflow_actions.client import AsyncWorkflowActionsClient  # noqa: E402
+
+            self._workflow_actions = AsyncWorkflowActionsClient(client_wrapper=self._client_wrapper)
+        return self._workflow_actions
+
+    @property
     def workflows(self):
         if self._workflows is None:
             from .workflows.client import AsyncWorkflowsClient  # noqa: E402
@@ -604,20 +1000,12 @@ class AsyncSankaClient:
         return self._workflows
 
     @property
-    def calendar(self):
-        if self._calendar is None:
-            from .calendar.client import AsyncCalendarClient  # noqa: E402
+    def workflow_runs(self):
+        if self._workflow_runs is None:
+            from .workflow_runs.client import AsyncWorkflowRunsClient  # noqa: E402
 
-            self._calendar = AsyncCalendarClient(client_wrapper=self._client_wrapper)
-        return self._calendar
-
-    @property
-    def public_auth(self):
-        if self._public_auth is None:
-            from .public_auth.client import AsyncPublicAuthClient  # noqa: E402
-
-            self._public_auth = AsyncPublicAuthClient(client_wrapper=self._client_wrapper)
-        return self._public_auth
+            self._workflow_runs = AsyncWorkflowRunsClient(client_wrapper=self._client_wrapper)
+        return self._workflow_runs
 
 
 def _get_base_url(*, base_url: typing.Optional[str] = None, environment: SankaClientEnvironment) -> str:

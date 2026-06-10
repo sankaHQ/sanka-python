@@ -9,13 +9,24 @@ from ..core.http_response import AsyncHttpResponse, HttpResponse
 from ..core.jsonable_encoder import jsonable_encoder
 from ..core.request_options import RequestOptions
 from ..core.unchecked_base_model import construct_type
-from ..errors.bad_request_error import BadRequestError
-from ..errors.conflict_error import ConflictError
-from ..errors.forbidden_error import ForbiddenError
-from ..errors.internal_server_error import InternalServerError
-from ..errors.not_found_error import NotFoundError
-from ..types.inventory_warehouse_schema import InventoryWarehouseSchema
-from ..types.public_location_response import PublicLocationResponse
+from ..errors.unauthorized_error import UnauthorizedError
+from ..errors.unprocessable_entity_error import UnprocessableEntityError
+from ..types.create_public_location_api_v_2_public_locations_post_200_envelope import (
+    CreatePublicLocationApiV2PublicLocationsPost200Envelope,
+)
+from ..types.delete_public_location_api_v_2_public_locations_location_id_delete_200_envelope import (
+    DeletePublicLocationApiV2PublicLocationsLocationIdDelete200Envelope,
+)
+from ..types.error_envelope import ErrorEnvelope
+from ..types.get_public_location_api_v_2_public_locations_location_id_get_200_envelope import (
+    GetPublicLocationApiV2PublicLocationsLocationIdGet200Envelope,
+)
+from ..types.list_public_locations_api_v_2_public_locations_get_200_envelope import (
+    ListPublicLocationsApiV2PublicLocationsGet200Envelope,
+)
+from ..types.update_public_location_api_v_2_public_locations_location_id_put_200_envelope import (
+    UpdatePublicLocationApiV2PublicLocationsLocationIdPut200Envelope,
+)
 
 # this is used as the default value for optional parameters
 OMIT = typing.cast(typing.Any, ...)
@@ -25,29 +36,44 @@ class RawLocationsClient:
     def __init__(self, *, client_wrapper: SyncClientWrapper):
         self._client_wrapper = client_wrapper
 
-    def api_routers_v_1_locations_public_api_list_workspace_locations(
+    def list_public_locations_api(
         self,
         *,
         workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = None,
         search: typing.Optional[str] = None,
-        q: typing.Optional[str] = None,
-        lang: typing.Optional[str] = None,
         language: typing.Optional[str] = None,
+        status: typing.Optional[str] = None,
+        usage_status: typing.Optional[str] = None,
+        page: typing.Optional[int] = None,
+        limit: typing.Optional[int] = None,
+        sort: typing.Optional[str] = None,
+        x_language: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> HttpResponse[typing.List[InventoryWarehouseSchema]]:
+    ) -> HttpResponse[ListPublicLocationsApiV2PublicLocationsGet200Envelope]:
         """
         Parameters
         ----------
         workspace_id : typing.Optional[str]
 
+        view_id : typing.Optional[str]
+
         search : typing.Optional[str]
 
-        q : typing.Optional[str]
-
-        lang : typing.Optional[str]
-
         language : typing.Optional[str]
+
+        status : typing.Optional[str]
+
+        usage_status : typing.Optional[str]
+
+        page : typing.Optional[int]
+
+        limit : typing.Optional[int]
+
+        sort : typing.Optional[str]
+
+        x_language : typing.Optional[str]
 
         accept_language : typing.Optional[str]
 
@@ -56,20 +82,25 @@ class RawLocationsClient:
 
         Returns
         -------
-        HttpResponse[typing.List[InventoryWarehouseSchema]]
-            OK
+        HttpResponse[ListPublicLocationsApiV2PublicLocationsGet200Envelope]
+            Object record list response
         """
         _response = self._client_wrapper.httpx_client.request(
-            "v1/public/locations",
+            "v2/public/locations",
             method="GET",
             params={
                 "workspace_id": workspace_id,
+                "view_id": view_id,
                 "search": search,
-                "q": q,
-                "lang": lang,
                 "language": language,
+                "status": status,
+                "usage_status": usage_status,
+                "page": page,
+                "limit": limit,
+                "sort": sort,
             },
             headers={
+                "X-Language": str(x_language) if x_language is not None else None,
                 "Accept-Language": str(accept_language) if accept_language is not None else None,
             },
             request_options=request_options,
@@ -77,74 +108,78 @@ class RawLocationsClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    typing.List[InventoryWarehouseSchema],
+                    ListPublicLocationsApiV2PublicLocationsGet200Envelope,
                     construct_type(
-                        type_=typing.List[InventoryWarehouseSchema],  # type: ignore
+                        type_=ListPublicLocationsApiV2PublicLocationsGet200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
             _response_json = _response.json()
         except JSONDecodeError:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    def api_routers_v_1_locations_public_api_create_public_location(
+    def create_public_location_api(
         self,
         *,
-        external_id: typing.Optional[str] = OMIT,
-        warehouse: typing.Optional[str] = OMIT,
-        floor: typing.Optional[str] = OMIT,
-        zone: typing.Optional[str] = OMIT,
-        aisle: typing.Optional[str] = OMIT,
-        rack: typing.Optional[str] = OMIT,
-        shelf: typing.Optional[str] = OMIT,
-        bin: typing.Optional[str] = OMIT,
-        usage_status: typing.Optional[str] = OMIT,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = OMIT,
+        form_view_id: typing.Optional[str] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> HttpResponse[PublicLocationResponse]:
+    ) -> HttpResponse[CreatePublicLocationApiV2PublicLocationsPost200Envelope]:
         """
         Parameters
         ----------
-        external_id : typing.Optional[str]
+        workspace_id : typing.Optional[str]
 
-        warehouse : typing.Optional[str]
+        view_id : typing.Optional[str]
 
-        floor : typing.Optional[str]
+        form_view_id : typing.Optional[str]
 
-        zone : typing.Optional[str]
-
-        aisle : typing.Optional[str]
-
-        rack : typing.Optional[str]
-
-        shelf : typing.Optional[str]
-
-        bin : typing.Optional[str]
-
-        usage_status : typing.Optional[str]
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        HttpResponse[PublicLocationResponse]
-            OK
+        HttpResponse[CreatePublicLocationApiV2PublicLocationsPost200Envelope]
+            Successful Response
         """
         _response = self._client_wrapper.httpx_client.request(
-            "v1/public/locations",
+            "v2/public/locations",
             method="POST",
+            params={
+                "workspace_id": workspace_id,
+            },
             json={
-                "externalId": external_id,
-                "warehouse": warehouse,
-                "floor": floor,
-                "zone": zone,
-                "aisle": aisle,
-                "rack": rack,
-                "shelf": shelf,
-                "bin": bin,
-                "usageStatus": usage_status,
+                "view_id": view_id,
+                "form_view_id": form_view_id,
+                "properties": properties,
             },
             headers={
                 "content-type": "application/json",
@@ -155,53 +190,31 @@ class RawLocationsClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    PublicLocationResponse,
+                    CreatePublicLocationApiV2PublicLocationsPost200Envelope,
                     construct_type(
-                        type_=PublicLocationResponse,  # type: ignore
+                        type_=CreatePublicLocationApiV2PublicLocationsPost200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return HttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 403:
-                raise ForbiddenError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -211,13 +224,16 @@ class RawLocationsClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    def api_routers_v_1_locations_public_api_get_public_location(
+    def get_public_location_api(
         self,
         location_id: str,
         *,
         external_id: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = None,
+        form_view_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> HttpResponse[InventoryWarehouseSchema]:
+    ) -> HttpResponse[GetPublicLocationApiV2PublicLocationsLocationIdGet200Envelope]:
         """
         Parameters
         ----------
@@ -225,72 +241,59 @@ class RawLocationsClient:
 
         external_id : typing.Optional[str]
 
+        workspace_id : typing.Optional[str]
+
+        view_id : typing.Optional[str]
+
+        form_view_id : typing.Optional[str]
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        HttpResponse[InventoryWarehouseSchema]
-            OK
+        HttpResponse[GetPublicLocationApiV2PublicLocationsLocationIdGet200Envelope]
+            Object record detail response. The base detail payload is intentionally thin; drawer sections load through scoped endpoints.
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"v1/public/locations/{jsonable_encoder(location_id)}",
+            f"v2/public/locations/{jsonable_encoder(location_id)}",
             method="GET",
             params={
                 "external_id": external_id,
+                "workspace_id": workspace_id,
+                "view_id": view_id,
+                "form_view_id": form_view_id,
             },
             request_options=request_options,
         )
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    InventoryWarehouseSchema,
+                    GetPublicLocationApiV2PublicLocationsLocationIdGet200Envelope,
                     construct_type(
-                        type_=InventoryWarehouseSchema,  # type: ignore
+                        type_=GetPublicLocationApiV2PublicLocationsLocationIdGet200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return HttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 403:
-                raise ForbiddenError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -300,22 +303,17 @@ class RawLocationsClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    def api_routers_v_1_locations_public_api_update_public_location(
+    def update_public_location_api(
         self,
         location_id: str,
         *,
         external_id: typing.Optional[str] = None,
-        public_location_request_external_id: typing.Optional[str] = OMIT,
-        warehouse: typing.Optional[str] = OMIT,
-        floor: typing.Optional[str] = OMIT,
-        zone: typing.Optional[str] = OMIT,
-        aisle: typing.Optional[str] = OMIT,
-        rack: typing.Optional[str] = OMIT,
-        shelf: typing.Optional[str] = OMIT,
-        bin: typing.Optional[str] = OMIT,
-        usage_status: typing.Optional[str] = OMIT,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = OMIT,
+        form_view_id: typing.Optional[str] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> HttpResponse[PublicLocationResponse]:
+    ) -> HttpResponse[UpdatePublicLocationApiV2PublicLocationsLocationIdPut200Envelope]:
         """
         Parameters
         ----------
@@ -323,48 +321,33 @@ class RawLocationsClient:
 
         external_id : typing.Optional[str]
 
-        public_location_request_external_id : typing.Optional[str]
+        workspace_id : typing.Optional[str]
 
-        warehouse : typing.Optional[str]
+        view_id : typing.Optional[str]
 
-        floor : typing.Optional[str]
+        form_view_id : typing.Optional[str]
 
-        zone : typing.Optional[str]
-
-        aisle : typing.Optional[str]
-
-        rack : typing.Optional[str]
-
-        shelf : typing.Optional[str]
-
-        bin : typing.Optional[str]
-
-        usage_status : typing.Optional[str]
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        HttpResponse[PublicLocationResponse]
-            OK
+        HttpResponse[UpdatePublicLocationApiV2PublicLocationsLocationIdPut200Envelope]
+            Successful Response
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"v1/public/locations/{jsonable_encoder(location_id)}",
+            f"v2/public/locations/{jsonable_encoder(location_id)}",
             method="PUT",
             params={
                 "external_id": external_id,
+                "workspace_id": workspace_id,
             },
             json={
-                "externalId": external_id,
-                "warehouse": warehouse,
-                "floor": floor,
-                "zone": zone,
-                "aisle": aisle,
-                "rack": rack,
-                "shelf": shelf,
-                "bin": bin,
-                "usageStatus": usage_status,
+                "view_id": view_id,
+                "form_view_id": form_view_id,
+                "properties": properties,
             },
             headers={
                 "content-type": "application/json",
@@ -375,64 +358,31 @@ class RawLocationsClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    PublicLocationResponse,
+                    UpdatePublicLocationApiV2PublicLocationsLocationIdPut200Envelope,
                     construct_type(
-                        type_=PublicLocationResponse,  # type: ignore
+                        type_=UpdatePublicLocationApiV2PublicLocationsLocationIdPut200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return HttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 403:
-                raise ForbiddenError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 409:
-                raise ConflictError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -442,97 +392,64 @@ class RawLocationsClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    def api_routers_v_1_locations_public_api_delete_public_location(
+    def delete_public_location_api(
         self,
         location_id: str,
         *,
-        external_id: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> HttpResponse[PublicLocationResponse]:
+    ) -> HttpResponse[DeletePublicLocationApiV2PublicLocationsLocationIdDelete200Envelope]:
         """
         Parameters
         ----------
         location_id : str
 
-        external_id : typing.Optional[str]
+        workspace_id : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        HttpResponse[PublicLocationResponse]
-            OK
+        HttpResponse[DeletePublicLocationApiV2PublicLocationsLocationIdDelete200Envelope]
+            Successful Response
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"v1/public/locations/{jsonable_encoder(location_id)}",
+            f"v2/public/locations/{jsonable_encoder(location_id)}",
             method="DELETE",
             params={
-                "external_id": external_id,
+                "workspace_id": workspace_id,
             },
             request_options=request_options,
         )
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    PublicLocationResponse,
+                    DeletePublicLocationApiV2PublicLocationsLocationIdDelete200Envelope,
                     construct_type(
-                        type_=PublicLocationResponse,  # type: ignore
+                        type_=DeletePublicLocationApiV2PublicLocationsLocationIdDelete200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return HttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 403:
-                raise ForbiddenError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 409:
-                raise ConflictError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -547,29 +464,44 @@ class AsyncRawLocationsClient:
     def __init__(self, *, client_wrapper: AsyncClientWrapper):
         self._client_wrapper = client_wrapper
 
-    async def api_routers_v_1_locations_public_api_list_workspace_locations(
+    async def list_public_locations_api(
         self,
         *,
         workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = None,
         search: typing.Optional[str] = None,
-        q: typing.Optional[str] = None,
-        lang: typing.Optional[str] = None,
         language: typing.Optional[str] = None,
+        status: typing.Optional[str] = None,
+        usage_status: typing.Optional[str] = None,
+        page: typing.Optional[int] = None,
+        limit: typing.Optional[int] = None,
+        sort: typing.Optional[str] = None,
+        x_language: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> AsyncHttpResponse[typing.List[InventoryWarehouseSchema]]:
+    ) -> AsyncHttpResponse[ListPublicLocationsApiV2PublicLocationsGet200Envelope]:
         """
         Parameters
         ----------
         workspace_id : typing.Optional[str]
 
+        view_id : typing.Optional[str]
+
         search : typing.Optional[str]
 
-        q : typing.Optional[str]
-
-        lang : typing.Optional[str]
-
         language : typing.Optional[str]
+
+        status : typing.Optional[str]
+
+        usage_status : typing.Optional[str]
+
+        page : typing.Optional[int]
+
+        limit : typing.Optional[int]
+
+        sort : typing.Optional[str]
+
+        x_language : typing.Optional[str]
 
         accept_language : typing.Optional[str]
 
@@ -578,20 +510,25 @@ class AsyncRawLocationsClient:
 
         Returns
         -------
-        AsyncHttpResponse[typing.List[InventoryWarehouseSchema]]
-            OK
+        AsyncHttpResponse[ListPublicLocationsApiV2PublicLocationsGet200Envelope]
+            Object record list response
         """
         _response = await self._client_wrapper.httpx_client.request(
-            "v1/public/locations",
+            "v2/public/locations",
             method="GET",
             params={
                 "workspace_id": workspace_id,
+                "view_id": view_id,
                 "search": search,
-                "q": q,
-                "lang": lang,
                 "language": language,
+                "status": status,
+                "usage_status": usage_status,
+                "page": page,
+                "limit": limit,
+                "sort": sort,
             },
             headers={
+                "X-Language": str(x_language) if x_language is not None else None,
                 "Accept-Language": str(accept_language) if accept_language is not None else None,
             },
             request_options=request_options,
@@ -599,74 +536,78 @@ class AsyncRawLocationsClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    typing.List[InventoryWarehouseSchema],
+                    ListPublicLocationsApiV2PublicLocationsGet200Envelope,
                     construct_type(
-                        type_=typing.List[InventoryWarehouseSchema],  # type: ignore
+                        type_=ListPublicLocationsApiV2PublicLocationsGet200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
             _response_json = _response.json()
         except JSONDecodeError:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    async def api_routers_v_1_locations_public_api_create_public_location(
+    async def create_public_location_api(
         self,
         *,
-        external_id: typing.Optional[str] = OMIT,
-        warehouse: typing.Optional[str] = OMIT,
-        floor: typing.Optional[str] = OMIT,
-        zone: typing.Optional[str] = OMIT,
-        aisle: typing.Optional[str] = OMIT,
-        rack: typing.Optional[str] = OMIT,
-        shelf: typing.Optional[str] = OMIT,
-        bin: typing.Optional[str] = OMIT,
-        usage_status: typing.Optional[str] = OMIT,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = OMIT,
+        form_view_id: typing.Optional[str] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> AsyncHttpResponse[PublicLocationResponse]:
+    ) -> AsyncHttpResponse[CreatePublicLocationApiV2PublicLocationsPost200Envelope]:
         """
         Parameters
         ----------
-        external_id : typing.Optional[str]
+        workspace_id : typing.Optional[str]
 
-        warehouse : typing.Optional[str]
+        view_id : typing.Optional[str]
 
-        floor : typing.Optional[str]
+        form_view_id : typing.Optional[str]
 
-        zone : typing.Optional[str]
-
-        aisle : typing.Optional[str]
-
-        rack : typing.Optional[str]
-
-        shelf : typing.Optional[str]
-
-        bin : typing.Optional[str]
-
-        usage_status : typing.Optional[str]
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        AsyncHttpResponse[PublicLocationResponse]
-            OK
+        AsyncHttpResponse[CreatePublicLocationApiV2PublicLocationsPost200Envelope]
+            Successful Response
         """
         _response = await self._client_wrapper.httpx_client.request(
-            "v1/public/locations",
+            "v2/public/locations",
             method="POST",
+            params={
+                "workspace_id": workspace_id,
+            },
             json={
-                "externalId": external_id,
-                "warehouse": warehouse,
-                "floor": floor,
-                "zone": zone,
-                "aisle": aisle,
-                "rack": rack,
-                "shelf": shelf,
-                "bin": bin,
-                "usageStatus": usage_status,
+                "view_id": view_id,
+                "form_view_id": form_view_id,
+                "properties": properties,
             },
             headers={
                 "content-type": "application/json",
@@ -677,53 +618,31 @@ class AsyncRawLocationsClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    PublicLocationResponse,
+                    CreatePublicLocationApiV2PublicLocationsPost200Envelope,
                     construct_type(
-                        type_=PublicLocationResponse,  # type: ignore
+                        type_=CreatePublicLocationApiV2PublicLocationsPost200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return AsyncHttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 403:
-                raise ForbiddenError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -733,13 +652,16 @@ class AsyncRawLocationsClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    async def api_routers_v_1_locations_public_api_get_public_location(
+    async def get_public_location_api(
         self,
         location_id: str,
         *,
         external_id: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = None,
+        form_view_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> AsyncHttpResponse[InventoryWarehouseSchema]:
+    ) -> AsyncHttpResponse[GetPublicLocationApiV2PublicLocationsLocationIdGet200Envelope]:
         """
         Parameters
         ----------
@@ -747,72 +669,59 @@ class AsyncRawLocationsClient:
 
         external_id : typing.Optional[str]
 
+        workspace_id : typing.Optional[str]
+
+        view_id : typing.Optional[str]
+
+        form_view_id : typing.Optional[str]
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        AsyncHttpResponse[InventoryWarehouseSchema]
-            OK
+        AsyncHttpResponse[GetPublicLocationApiV2PublicLocationsLocationIdGet200Envelope]
+            Object record detail response. The base detail payload is intentionally thin; drawer sections load through scoped endpoints.
         """
         _response = await self._client_wrapper.httpx_client.request(
-            f"v1/public/locations/{jsonable_encoder(location_id)}",
+            f"v2/public/locations/{jsonable_encoder(location_id)}",
             method="GET",
             params={
                 "external_id": external_id,
+                "workspace_id": workspace_id,
+                "view_id": view_id,
+                "form_view_id": form_view_id,
             },
             request_options=request_options,
         )
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    InventoryWarehouseSchema,
+                    GetPublicLocationApiV2PublicLocationsLocationIdGet200Envelope,
                     construct_type(
-                        type_=InventoryWarehouseSchema,  # type: ignore
+                        type_=GetPublicLocationApiV2PublicLocationsLocationIdGet200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return AsyncHttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 403:
-                raise ForbiddenError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -822,22 +731,17 @@ class AsyncRawLocationsClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    async def api_routers_v_1_locations_public_api_update_public_location(
+    async def update_public_location_api(
         self,
         location_id: str,
         *,
         external_id: typing.Optional[str] = None,
-        public_location_request_external_id: typing.Optional[str] = OMIT,
-        warehouse: typing.Optional[str] = OMIT,
-        floor: typing.Optional[str] = OMIT,
-        zone: typing.Optional[str] = OMIT,
-        aisle: typing.Optional[str] = OMIT,
-        rack: typing.Optional[str] = OMIT,
-        shelf: typing.Optional[str] = OMIT,
-        bin: typing.Optional[str] = OMIT,
-        usage_status: typing.Optional[str] = OMIT,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = OMIT,
+        form_view_id: typing.Optional[str] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> AsyncHttpResponse[PublicLocationResponse]:
+    ) -> AsyncHttpResponse[UpdatePublicLocationApiV2PublicLocationsLocationIdPut200Envelope]:
         """
         Parameters
         ----------
@@ -845,48 +749,33 @@ class AsyncRawLocationsClient:
 
         external_id : typing.Optional[str]
 
-        public_location_request_external_id : typing.Optional[str]
+        workspace_id : typing.Optional[str]
 
-        warehouse : typing.Optional[str]
+        view_id : typing.Optional[str]
 
-        floor : typing.Optional[str]
+        form_view_id : typing.Optional[str]
 
-        zone : typing.Optional[str]
-
-        aisle : typing.Optional[str]
-
-        rack : typing.Optional[str]
-
-        shelf : typing.Optional[str]
-
-        bin : typing.Optional[str]
-
-        usage_status : typing.Optional[str]
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        AsyncHttpResponse[PublicLocationResponse]
-            OK
+        AsyncHttpResponse[UpdatePublicLocationApiV2PublicLocationsLocationIdPut200Envelope]
+            Successful Response
         """
         _response = await self._client_wrapper.httpx_client.request(
-            f"v1/public/locations/{jsonable_encoder(location_id)}",
+            f"v2/public/locations/{jsonable_encoder(location_id)}",
             method="PUT",
             params={
                 "external_id": external_id,
+                "workspace_id": workspace_id,
             },
             json={
-                "externalId": external_id,
-                "warehouse": warehouse,
-                "floor": floor,
-                "zone": zone,
-                "aisle": aisle,
-                "rack": rack,
-                "shelf": shelf,
-                "bin": bin,
-                "usageStatus": usage_status,
+                "view_id": view_id,
+                "form_view_id": form_view_id,
+                "properties": properties,
             },
             headers={
                 "content-type": "application/json",
@@ -897,64 +786,31 @@ class AsyncRawLocationsClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    PublicLocationResponse,
+                    UpdatePublicLocationApiV2PublicLocationsLocationIdPut200Envelope,
                     construct_type(
-                        type_=PublicLocationResponse,  # type: ignore
+                        type_=UpdatePublicLocationApiV2PublicLocationsLocationIdPut200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return AsyncHttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 403:
-                raise ForbiddenError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 409:
-                raise ConflictError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -964,97 +820,64 @@ class AsyncRawLocationsClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    async def api_routers_v_1_locations_public_api_delete_public_location(
+    async def delete_public_location_api(
         self,
         location_id: str,
         *,
-        external_id: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> AsyncHttpResponse[PublicLocationResponse]:
+    ) -> AsyncHttpResponse[DeletePublicLocationApiV2PublicLocationsLocationIdDelete200Envelope]:
         """
         Parameters
         ----------
         location_id : str
 
-        external_id : typing.Optional[str]
+        workspace_id : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        AsyncHttpResponse[PublicLocationResponse]
-            OK
+        AsyncHttpResponse[DeletePublicLocationApiV2PublicLocationsLocationIdDelete200Envelope]
+            Successful Response
         """
         _response = await self._client_wrapper.httpx_client.request(
-            f"v1/public/locations/{jsonable_encoder(location_id)}",
+            f"v2/public/locations/{jsonable_encoder(location_id)}",
             method="DELETE",
             params={
-                "external_id": external_id,
+                "workspace_id": workspace_id,
             },
             request_options=request_options,
         )
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    PublicLocationResponse,
+                    DeletePublicLocationApiV2PublicLocationsLocationIdDelete200Envelope,
                     construct_type(
-                        type_=PublicLocationResponse,  # type: ignore
+                        type_=DeletePublicLocationApiV2PublicLocationsLocationIdDelete200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return AsyncHttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 403:
-                raise ForbiddenError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 409:
-                raise ConflictError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),

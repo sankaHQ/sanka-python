@@ -9,14 +9,27 @@ from ..core.http_response import AsyncHttpResponse, HttpResponse
 from ..core.jsonable_encoder import jsonable_encoder
 from ..core.request_options import RequestOptions
 from ..core.unchecked_base_model import construct_type
-from ..errors.bad_request_error import BadRequestError
-from ..errors.conflict_error import ConflictError
-from ..errors.forbidden_error import ForbiddenError
-from ..errors.internal_server_error import InternalServerError
-from ..errors.not_found_error import NotFoundError
-from ..types.case_schema import CaseSchema
-from ..types.public_case_pipeline_schema import PublicCasePipelineSchema
-from ..types.public_case_response import PublicCaseResponse
+from ..errors.unauthorized_error import UnauthorizedError
+from ..errors.unprocessable_entity_error import UnprocessableEntityError
+from ..types.create_public_deal_api_v_2_public_deals_post_200_envelope import (
+    CreatePublicDealApiV2PublicDealsPost200Envelope,
+)
+from ..types.delete_public_deal_api_v_2_public_deals_deal_id_delete_200_envelope import (
+    DeletePublicDealApiV2PublicDealsDealIdDelete200Envelope,
+)
+from ..types.error_envelope import ErrorEnvelope
+from ..types.get_public_deal_api_v_2_public_deals_deal_id_get_200_envelope import (
+    GetPublicDealApiV2PublicDealsDealIdGet200Envelope,
+)
+from ..types.list_public_deal_pipelines_api_v_2_public_deals_pipelines_get_200_envelope import (
+    ListPublicDealPipelinesApiV2PublicDealsPipelinesGet200Envelope,
+)
+from ..types.list_public_deals_api_v_2_public_deals_get_200_envelope import (
+    ListPublicDealsApiV2PublicDealsGet200Envelope,
+)
+from ..types.update_public_deal_api_v_2_public_deals_deal_id_put_200_envelope import (
+    UpdatePublicDealApiV2PublicDealsDealIdPut200Envelope,
+)
 
 # this is used as the default value for optional parameters
 OMIT = typing.cast(typing.Any, ...)
@@ -26,23 +39,44 @@ class RawDealsClient:
     def __init__(self, *, client_wrapper: SyncClientWrapper):
         self._client_wrapper = client_wrapper
 
-    def api_routers_v_1_cases_public_api_list_public_cases(
+    def list_public_deals_api(
         self,
         *,
         workspace_id: typing.Optional[str] = None,
-        lang: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = None,
+        search: typing.Optional[str] = None,
         language: typing.Optional[str] = None,
+        status: typing.Optional[str] = None,
+        usage_status: typing.Optional[str] = None,
+        page: typing.Optional[int] = None,
+        limit: typing.Optional[int] = None,
+        sort: typing.Optional[str] = None,
+        x_language: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> HttpResponse[typing.List[CaseSchema]]:
+    ) -> HttpResponse[ListPublicDealsApiV2PublicDealsGet200Envelope]:
         """
         Parameters
         ----------
         workspace_id : typing.Optional[str]
 
-        lang : typing.Optional[str]
+        view_id : typing.Optional[str]
+
+        search : typing.Optional[str]
 
         language : typing.Optional[str]
+
+        status : typing.Optional[str]
+
+        usage_status : typing.Optional[str]
+
+        page : typing.Optional[int]
+
+        limit : typing.Optional[int]
+
+        sort : typing.Optional[str]
+
+        x_language : typing.Optional[str]
 
         accept_language : typing.Optional[str]
 
@@ -51,18 +85,25 @@ class RawDealsClient:
 
         Returns
         -------
-        HttpResponse[typing.List[CaseSchema]]
-            OK
+        HttpResponse[ListPublicDealsApiV2PublicDealsGet200Envelope]
+            Object record list response
         """
         _response = self._client_wrapper.httpx_client.request(
-            "v1/public/deals",
+            "v2/public/deals",
             method="GET",
             params={
                 "workspace_id": workspace_id,
-                "lang": lang,
+                "view_id": view_id,
+                "search": search,
                 "language": language,
+                "status": status,
+                "usage_status": usage_status,
+                "page": page,
+                "limit": limit,
+                "sort": sort,
             },
             headers={
+                "X-Language": str(x_language) if x_language is not None else None,
                 "Accept-Language": str(accept_language) if accept_language is not None else None,
             },
             request_options=request_options,
@@ -70,88 +111,110 @@ class RawDealsClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    typing.List[CaseSchema],
+                    ListPublicDealsApiV2PublicDealsGet200Envelope,
                     construct_type(
-                        type_=typing.List[CaseSchema],  # type: ignore
+                        type_=ListPublicDealsApiV2PublicDealsGet200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
             _response_json = _response.json()
         except JSONDecodeError:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    def api_routers_v_1_cases_public_api_create_public_case(
+    def create_public_deal_api(
         self,
         *,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = OMIT,
+        form_view_id: typing.Optional[str] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
+        target: typing.Optional[str] = OMIT,
+        provider: typing.Optional[str] = OMIT,
+        channel_id: typing.Optional[str] = OMIT,
+        external_object_type: typing.Optional[str] = OMIT,
         external_id: typing.Optional[str] = OMIT,
-        name: typing.Optional[str] = OMIT,
-        status: typing.Optional[str] = OMIT,
-        stage: typing.Optional[str] = OMIT,
-        currency: typing.Optional[str] = OMIT,
-        value: typing.Optional[float] = OMIT,
-        pipeline_id: typing.Optional[str] = OMIT,
-        contact_id: typing.Optional[str] = OMIT,
-        contact_external_id: typing.Optional[str] = OMIT,
-        company_id: typing.Optional[str] = OMIT,
-        company_external_id: typing.Optional[str] = OMIT,
+        operation: typing.Optional[str] = OMIT,
+        dry_run: typing.Optional[bool] = OMIT,
+        confirm: typing.Optional[bool] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> HttpResponse[PublicCaseResponse]:
+    ) -> HttpResponse[CreatePublicDealApiV2PublicDealsPost200Envelope]:
         """
-        Creates or updates a deal in Sanka for the authenticated public channel. Connected integrations such as HubSpot sync separately; this endpoint does not guarantee an immediate downstream write.
-
         Parameters
         ----------
+        workspace_id : typing.Optional[str]
+
+        view_id : typing.Optional[str]
+
+        form_view_id : typing.Optional[str]
+
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
+
+        target : typing.Optional[str]
+
+        provider : typing.Optional[str]
+
+        channel_id : typing.Optional[str]
+
+        external_object_type : typing.Optional[str]
+
         external_id : typing.Optional[str]
-            External reference for the upstream system. Uniqueness is scoped to the authenticated public channel.
 
-        name : typing.Optional[str]
+        operation : typing.Optional[str]
 
-        status : typing.Optional[str]
+        dry_run : typing.Optional[bool]
 
-        stage : typing.Optional[str]
-            Deal stage internal value. The value must belong to the selected pipeline or the workspace default pipeline.
-
-        currency : typing.Optional[str]
-
-        value : typing.Optional[float]
-            Deal value expressed in the request currency.
-
-        pipeline_id : typing.Optional[str]
-            Pipeline identifier to validate and assign the stage against. When omitted, the deal stays on its current pipeline or uses the default workspace pipeline.
-
-        contact_id : typing.Optional[str]
-
-        contact_external_id : typing.Optional[str]
-
-        company_id : typing.Optional[str]
-
-        company_external_id : typing.Optional[str]
+        confirm : typing.Optional[bool]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        HttpResponse[PublicCaseResponse]
-            OK
+        HttpResponse[CreatePublicDealApiV2PublicDealsPost200Envelope]
+            Successful Response
         """
         _response = self._client_wrapper.httpx_client.request(
-            "v1/public/deals",
+            "v2/public/deals",
             method="POST",
+            params={
+                "workspace_id": workspace_id,
+            },
             json={
-                "externalId": external_id,
-                "name": name,
-                "status": status,
-                "stage": stage,
-                "currency": currency,
-                "value": value,
-                "pipelineId": pipeline_id,
-                "contactId": contact_id,
-                "contactExternalId": contact_external_id,
-                "companyId": company_id,
-                "companyExternalId": company_external_id,
+                "view_id": view_id,
+                "form_view_id": form_view_id,
+                "properties": properties,
+                "target": target,
+                "provider": provider,
+                "channel_id": channel_id,
+                "external_object_type": external_object_type,
+                "external_id": external_id,
+                "operation": operation,
+                "dry_run": dry_run,
+                "confirm": confirm,
             },
             headers={
                 "content-type": "application/json",
@@ -162,53 +225,31 @@ class RawDealsClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    PublicCaseResponse,
+                    CreatePublicDealApiV2PublicDealsPost200Envelope,
                     construct_type(
-                        type_=PublicCaseResponse,  # type: ignore
+                        type_=CreatePublicDealApiV2PublicDealsPost200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return HttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 403:
-                raise ForbiddenError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -218,9 +259,9 @@ class RawDealsClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    def api_routers_v_1_cases_public_api_list_public_case_pipelines(
+    def list_public_deal_pipelines_api(
         self, *, workspace_id: typing.Optional[str] = None, request_options: typing.Optional[RequestOptions] = None
-    ) -> HttpResponse[typing.List[PublicCasePipelineSchema]]:
+    ) -> HttpResponse[ListPublicDealPipelinesApiV2PublicDealsPipelinesGet200Envelope]:
         """
         Parameters
         ----------
@@ -231,11 +272,11 @@ class RawDealsClient:
 
         Returns
         -------
-        HttpResponse[typing.List[PublicCasePipelineSchema]]
-            OK
+        HttpResponse[ListPublicDealPipelinesApiV2PublicDealsPipelinesGet200Envelope]
+            Successful Response
         """
         _response = self._client_wrapper.httpx_client.request(
-            "v1/public/deals/pipelines",
+            "v2/public/deals/pipelines",
             method="GET",
             params={
                 "workspace_id": workspace_id,
@@ -245,53 +286,31 @@ class RawDealsClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    typing.List[PublicCasePipelineSchema],
+                    ListPublicDealPipelinesApiV2PublicDealsPipelinesGet200Envelope,
                     construct_type(
-                        type_=typing.List[PublicCasePipelineSchema],  # type: ignore
+                        type_=ListPublicDealPipelinesApiV2PublicDealsPipelinesGet200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return HttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 403:
-                raise ForbiddenError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -301,100 +320,76 @@ class RawDealsClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    def api_routers_v_1_cases_public_api_get_public_case(
+    def get_public_deal_api(
         self,
-        case_id: str,
+        deal_id: str,
         *,
         external_id: typing.Optional[str] = None,
-        lang: typing.Optional[str] = None,
-        language: typing.Optional[str] = None,
-        accept_language: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = None,
+        form_view_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> HttpResponse[CaseSchema]:
+    ) -> HttpResponse[GetPublicDealApiV2PublicDealsDealIdGet200Envelope]:
         """
         Parameters
         ----------
-        case_id : str
+        deal_id : str
 
         external_id : typing.Optional[str]
 
-        lang : typing.Optional[str]
+        workspace_id : typing.Optional[str]
 
-        language : typing.Optional[str]
+        view_id : typing.Optional[str]
 
-        accept_language : typing.Optional[str]
+        form_view_id : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        HttpResponse[CaseSchema]
-            OK
+        HttpResponse[GetPublicDealApiV2PublicDealsDealIdGet200Envelope]
+            Object record detail response. The base detail payload is intentionally thin; drawer sections load through scoped endpoints.
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"v1/public/deals/{jsonable_encoder(case_id)}",
+            f"v2/public/deals/{jsonable_encoder(deal_id)}",
             method="GET",
             params={
                 "external_id": external_id,
-                "lang": lang,
-                "language": language,
-            },
-            headers={
-                "Accept-Language": str(accept_language) if accept_language is not None else None,
+                "workspace_id": workspace_id,
+                "view_id": view_id,
+                "form_view_id": form_view_id,
             },
             request_options=request_options,
         )
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    CaseSchema,
+                    GetPublicDealApiV2PublicDealsDealIdGet200Envelope,
                     construct_type(
-                        type_=CaseSchema,  # type: ignore
+                        type_=GetPublicDealApiV2PublicDealsDealIdGet200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return HttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 403:
-                raise ForbiddenError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -404,85 +399,83 @@ class RawDealsClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    def api_routers_v_1_cases_public_api_update_public_case(
+    def update_public_deal_api(
         self,
-        case_id: str,
+        deal_id: str,
         *,
         external_id: typing.Optional[str] = None,
-        public_case_request_external_id: typing.Optional[str] = OMIT,
-        name: typing.Optional[str] = OMIT,
-        status: typing.Optional[str] = OMIT,
-        stage: typing.Optional[str] = OMIT,
-        currency: typing.Optional[str] = OMIT,
-        value: typing.Optional[float] = OMIT,
-        pipeline_id: typing.Optional[str] = OMIT,
-        contact_id: typing.Optional[str] = OMIT,
-        contact_external_id: typing.Optional[str] = OMIT,
-        company_id: typing.Optional[str] = OMIT,
-        company_external_id: typing.Optional[str] = OMIT,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = OMIT,
+        form_view_id: typing.Optional[str] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
+        target: typing.Optional[str] = OMIT,
+        provider: typing.Optional[str] = OMIT,
+        channel_id: typing.Optional[str] = OMIT,
+        external_object_type: typing.Optional[str] = OMIT,
+        public_object_record_mutation_request_external_id: typing.Optional[str] = OMIT,
+        operation: typing.Optional[str] = OMIT,
+        dry_run: typing.Optional[bool] = OMIT,
+        confirm: typing.Optional[bool] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> HttpResponse[PublicCaseResponse]:
+    ) -> HttpResponse[UpdatePublicDealApiV2PublicDealsDealIdPut200Envelope]:
         """
-        Updates a deal in Sanka for the authenticated public channel. Connected integrations such as HubSpot sync separately; this endpoint does not guarantee an immediate downstream write.
-
         Parameters
         ----------
-        case_id : str
+        deal_id : str
 
         external_id : typing.Optional[str]
 
-        public_case_request_external_id : typing.Optional[str]
-            External reference for the upstream system. Uniqueness is scoped to the authenticated public channel.
+        workspace_id : typing.Optional[str]
 
-        name : typing.Optional[str]
+        view_id : typing.Optional[str]
 
-        status : typing.Optional[str]
+        form_view_id : typing.Optional[str]
 
-        stage : typing.Optional[str]
-            Deal stage internal value. The value must belong to the selected pipeline or the workspace default pipeline.
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
 
-        currency : typing.Optional[str]
+        target : typing.Optional[str]
 
-        value : typing.Optional[float]
-            Deal value expressed in the request currency.
+        provider : typing.Optional[str]
 
-        pipeline_id : typing.Optional[str]
-            Pipeline identifier to validate and assign the stage against. When omitted, the deal stays on its current pipeline or uses the default workspace pipeline.
+        channel_id : typing.Optional[str]
 
-        contact_id : typing.Optional[str]
+        external_object_type : typing.Optional[str]
 
-        contact_external_id : typing.Optional[str]
+        public_object_record_mutation_request_external_id : typing.Optional[str]
 
-        company_id : typing.Optional[str]
+        operation : typing.Optional[str]
 
-        company_external_id : typing.Optional[str]
+        dry_run : typing.Optional[bool]
+
+        confirm : typing.Optional[bool]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        HttpResponse[PublicCaseResponse]
-            OK
+        HttpResponse[UpdatePublicDealApiV2PublicDealsDealIdPut200Envelope]
+            Successful Response
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"v1/public/deals/{jsonable_encoder(case_id)}",
+            f"v2/public/deals/{jsonable_encoder(deal_id)}",
             method="PUT",
             params={
                 "external_id": external_id,
+                "workspace_id": workspace_id,
             },
             json={
-                "externalId": external_id,
-                "name": name,
-                "status": status,
-                "stage": stage,
-                "currency": currency,
-                "value": value,
-                "pipelineId": pipeline_id,
-                "contactId": contact_id,
-                "contactExternalId": contact_external_id,
-                "companyId": company_id,
-                "companyExternalId": company_external_id,
+                "view_id": view_id,
+                "form_view_id": form_view_id,
+                "properties": properties,
+                "target": target,
+                "provider": provider,
+                "channel_id": channel_id,
+                "external_object_type": external_object_type,
+                "external_id": external_id,
+                "operation": operation,
+                "dry_run": dry_run,
+                "confirm": confirm,
             },
             headers={
                 "content-type": "application/json",
@@ -493,64 +486,31 @@ class RawDealsClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    PublicCaseResponse,
+                    UpdatePublicDealApiV2PublicDealsDealIdPut200Envelope,
                     construct_type(
-                        type_=PublicCaseResponse,  # type: ignore
+                        type_=UpdatePublicDealApiV2PublicDealsDealIdPut200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return HttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 403:
-                raise ForbiddenError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 409:
-                raise ConflictError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -560,97 +520,92 @@ class RawDealsClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    def api_routers_v_1_cases_public_api_delete_public_case(
+    def delete_public_deal_api(
         self,
-        case_id: str,
+        deal_id: str,
         *,
         external_id: typing.Optional[str] = None,
+        target: typing.Optional[str] = None,
+        provider: typing.Optional[str] = None,
+        channel_id: typing.Optional[str] = None,
+        external_object_type: typing.Optional[str] = None,
+        dry_run: typing.Optional[bool] = None,
+        confirm: typing.Optional[bool] = None,
+        workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> HttpResponse[PublicCaseResponse]:
+    ) -> HttpResponse[DeletePublicDealApiV2PublicDealsDealIdDelete200Envelope]:
         """
         Parameters
         ----------
-        case_id : str
+        deal_id : str
 
         external_id : typing.Optional[str]
+
+        target : typing.Optional[str]
+
+        provider : typing.Optional[str]
+
+        channel_id : typing.Optional[str]
+
+        external_object_type : typing.Optional[str]
+
+        dry_run : typing.Optional[bool]
+
+        confirm : typing.Optional[bool]
+
+        workspace_id : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        HttpResponse[PublicCaseResponse]
-            OK
+        HttpResponse[DeletePublicDealApiV2PublicDealsDealIdDelete200Envelope]
+            Successful Response
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"v1/public/deals/{jsonable_encoder(case_id)}",
+            f"v2/public/deals/{jsonable_encoder(deal_id)}",
             method="DELETE",
             params={
                 "external_id": external_id,
+                "target": target,
+                "provider": provider,
+                "channel_id": channel_id,
+                "external_object_type": external_object_type,
+                "dry_run": dry_run,
+                "confirm": confirm,
+                "workspace_id": workspace_id,
             },
             request_options=request_options,
         )
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    PublicCaseResponse,
+                    DeletePublicDealApiV2PublicDealsDealIdDelete200Envelope,
                     construct_type(
-                        type_=PublicCaseResponse,  # type: ignore
+                        type_=DeletePublicDealApiV2PublicDealsDealIdDelete200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return HttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 403:
-                raise ForbiddenError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 409:
-                raise ConflictError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -665,23 +620,44 @@ class AsyncRawDealsClient:
     def __init__(self, *, client_wrapper: AsyncClientWrapper):
         self._client_wrapper = client_wrapper
 
-    async def api_routers_v_1_cases_public_api_list_public_cases(
+    async def list_public_deals_api(
         self,
         *,
         workspace_id: typing.Optional[str] = None,
-        lang: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = None,
+        search: typing.Optional[str] = None,
         language: typing.Optional[str] = None,
+        status: typing.Optional[str] = None,
+        usage_status: typing.Optional[str] = None,
+        page: typing.Optional[int] = None,
+        limit: typing.Optional[int] = None,
+        sort: typing.Optional[str] = None,
+        x_language: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> AsyncHttpResponse[typing.List[CaseSchema]]:
+    ) -> AsyncHttpResponse[ListPublicDealsApiV2PublicDealsGet200Envelope]:
         """
         Parameters
         ----------
         workspace_id : typing.Optional[str]
 
-        lang : typing.Optional[str]
+        view_id : typing.Optional[str]
+
+        search : typing.Optional[str]
 
         language : typing.Optional[str]
+
+        status : typing.Optional[str]
+
+        usage_status : typing.Optional[str]
+
+        page : typing.Optional[int]
+
+        limit : typing.Optional[int]
+
+        sort : typing.Optional[str]
+
+        x_language : typing.Optional[str]
 
         accept_language : typing.Optional[str]
 
@@ -690,18 +666,25 @@ class AsyncRawDealsClient:
 
         Returns
         -------
-        AsyncHttpResponse[typing.List[CaseSchema]]
-            OK
+        AsyncHttpResponse[ListPublicDealsApiV2PublicDealsGet200Envelope]
+            Object record list response
         """
         _response = await self._client_wrapper.httpx_client.request(
-            "v1/public/deals",
+            "v2/public/deals",
             method="GET",
             params={
                 "workspace_id": workspace_id,
-                "lang": lang,
+                "view_id": view_id,
+                "search": search,
                 "language": language,
+                "status": status,
+                "usage_status": usage_status,
+                "page": page,
+                "limit": limit,
+                "sort": sort,
             },
             headers={
+                "X-Language": str(x_language) if x_language is not None else None,
                 "Accept-Language": str(accept_language) if accept_language is not None else None,
             },
             request_options=request_options,
@@ -709,88 +692,110 @@ class AsyncRawDealsClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    typing.List[CaseSchema],
+                    ListPublicDealsApiV2PublicDealsGet200Envelope,
                     construct_type(
-                        type_=typing.List[CaseSchema],  # type: ignore
+                        type_=ListPublicDealsApiV2PublicDealsGet200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
             _response_json = _response.json()
         except JSONDecodeError:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    async def api_routers_v_1_cases_public_api_create_public_case(
+    async def create_public_deal_api(
         self,
         *,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = OMIT,
+        form_view_id: typing.Optional[str] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
+        target: typing.Optional[str] = OMIT,
+        provider: typing.Optional[str] = OMIT,
+        channel_id: typing.Optional[str] = OMIT,
+        external_object_type: typing.Optional[str] = OMIT,
         external_id: typing.Optional[str] = OMIT,
-        name: typing.Optional[str] = OMIT,
-        status: typing.Optional[str] = OMIT,
-        stage: typing.Optional[str] = OMIT,
-        currency: typing.Optional[str] = OMIT,
-        value: typing.Optional[float] = OMIT,
-        pipeline_id: typing.Optional[str] = OMIT,
-        contact_id: typing.Optional[str] = OMIT,
-        contact_external_id: typing.Optional[str] = OMIT,
-        company_id: typing.Optional[str] = OMIT,
-        company_external_id: typing.Optional[str] = OMIT,
+        operation: typing.Optional[str] = OMIT,
+        dry_run: typing.Optional[bool] = OMIT,
+        confirm: typing.Optional[bool] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> AsyncHttpResponse[PublicCaseResponse]:
+    ) -> AsyncHttpResponse[CreatePublicDealApiV2PublicDealsPost200Envelope]:
         """
-        Creates or updates a deal in Sanka for the authenticated public channel. Connected integrations such as HubSpot sync separately; this endpoint does not guarantee an immediate downstream write.
-
         Parameters
         ----------
+        workspace_id : typing.Optional[str]
+
+        view_id : typing.Optional[str]
+
+        form_view_id : typing.Optional[str]
+
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
+
+        target : typing.Optional[str]
+
+        provider : typing.Optional[str]
+
+        channel_id : typing.Optional[str]
+
+        external_object_type : typing.Optional[str]
+
         external_id : typing.Optional[str]
-            External reference for the upstream system. Uniqueness is scoped to the authenticated public channel.
 
-        name : typing.Optional[str]
+        operation : typing.Optional[str]
 
-        status : typing.Optional[str]
+        dry_run : typing.Optional[bool]
 
-        stage : typing.Optional[str]
-            Deal stage internal value. The value must belong to the selected pipeline or the workspace default pipeline.
-
-        currency : typing.Optional[str]
-
-        value : typing.Optional[float]
-            Deal value expressed in the request currency.
-
-        pipeline_id : typing.Optional[str]
-            Pipeline identifier to validate and assign the stage against. When omitted, the deal stays on its current pipeline or uses the default workspace pipeline.
-
-        contact_id : typing.Optional[str]
-
-        contact_external_id : typing.Optional[str]
-
-        company_id : typing.Optional[str]
-
-        company_external_id : typing.Optional[str]
+        confirm : typing.Optional[bool]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        AsyncHttpResponse[PublicCaseResponse]
-            OK
+        AsyncHttpResponse[CreatePublicDealApiV2PublicDealsPost200Envelope]
+            Successful Response
         """
         _response = await self._client_wrapper.httpx_client.request(
-            "v1/public/deals",
+            "v2/public/deals",
             method="POST",
+            params={
+                "workspace_id": workspace_id,
+            },
             json={
-                "externalId": external_id,
-                "name": name,
-                "status": status,
-                "stage": stage,
-                "currency": currency,
-                "value": value,
-                "pipelineId": pipeline_id,
-                "contactId": contact_id,
-                "contactExternalId": contact_external_id,
-                "companyId": company_id,
-                "companyExternalId": company_external_id,
+                "view_id": view_id,
+                "form_view_id": form_view_id,
+                "properties": properties,
+                "target": target,
+                "provider": provider,
+                "channel_id": channel_id,
+                "external_object_type": external_object_type,
+                "external_id": external_id,
+                "operation": operation,
+                "dry_run": dry_run,
+                "confirm": confirm,
             },
             headers={
                 "content-type": "application/json",
@@ -801,53 +806,31 @@ class AsyncRawDealsClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    PublicCaseResponse,
+                    CreatePublicDealApiV2PublicDealsPost200Envelope,
                     construct_type(
-                        type_=PublicCaseResponse,  # type: ignore
+                        type_=CreatePublicDealApiV2PublicDealsPost200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return AsyncHttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 403:
-                raise ForbiddenError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -857,9 +840,9 @@ class AsyncRawDealsClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    async def api_routers_v_1_cases_public_api_list_public_case_pipelines(
+    async def list_public_deal_pipelines_api(
         self, *, workspace_id: typing.Optional[str] = None, request_options: typing.Optional[RequestOptions] = None
-    ) -> AsyncHttpResponse[typing.List[PublicCasePipelineSchema]]:
+    ) -> AsyncHttpResponse[ListPublicDealPipelinesApiV2PublicDealsPipelinesGet200Envelope]:
         """
         Parameters
         ----------
@@ -870,11 +853,11 @@ class AsyncRawDealsClient:
 
         Returns
         -------
-        AsyncHttpResponse[typing.List[PublicCasePipelineSchema]]
-            OK
+        AsyncHttpResponse[ListPublicDealPipelinesApiV2PublicDealsPipelinesGet200Envelope]
+            Successful Response
         """
         _response = await self._client_wrapper.httpx_client.request(
-            "v1/public/deals/pipelines",
+            "v2/public/deals/pipelines",
             method="GET",
             params={
                 "workspace_id": workspace_id,
@@ -884,53 +867,31 @@ class AsyncRawDealsClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    typing.List[PublicCasePipelineSchema],
+                    ListPublicDealPipelinesApiV2PublicDealsPipelinesGet200Envelope,
                     construct_type(
-                        type_=typing.List[PublicCasePipelineSchema],  # type: ignore
+                        type_=ListPublicDealPipelinesApiV2PublicDealsPipelinesGet200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return AsyncHttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 403:
-                raise ForbiddenError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -940,100 +901,76 @@ class AsyncRawDealsClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    async def api_routers_v_1_cases_public_api_get_public_case(
+    async def get_public_deal_api(
         self,
-        case_id: str,
+        deal_id: str,
         *,
         external_id: typing.Optional[str] = None,
-        lang: typing.Optional[str] = None,
-        language: typing.Optional[str] = None,
-        accept_language: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = None,
+        form_view_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> AsyncHttpResponse[CaseSchema]:
+    ) -> AsyncHttpResponse[GetPublicDealApiV2PublicDealsDealIdGet200Envelope]:
         """
         Parameters
         ----------
-        case_id : str
+        deal_id : str
 
         external_id : typing.Optional[str]
 
-        lang : typing.Optional[str]
+        workspace_id : typing.Optional[str]
 
-        language : typing.Optional[str]
+        view_id : typing.Optional[str]
 
-        accept_language : typing.Optional[str]
+        form_view_id : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        AsyncHttpResponse[CaseSchema]
-            OK
+        AsyncHttpResponse[GetPublicDealApiV2PublicDealsDealIdGet200Envelope]
+            Object record detail response. The base detail payload is intentionally thin; drawer sections load through scoped endpoints.
         """
         _response = await self._client_wrapper.httpx_client.request(
-            f"v1/public/deals/{jsonable_encoder(case_id)}",
+            f"v2/public/deals/{jsonable_encoder(deal_id)}",
             method="GET",
             params={
                 "external_id": external_id,
-                "lang": lang,
-                "language": language,
-            },
-            headers={
-                "Accept-Language": str(accept_language) if accept_language is not None else None,
+                "workspace_id": workspace_id,
+                "view_id": view_id,
+                "form_view_id": form_view_id,
             },
             request_options=request_options,
         )
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    CaseSchema,
+                    GetPublicDealApiV2PublicDealsDealIdGet200Envelope,
                     construct_type(
-                        type_=CaseSchema,  # type: ignore
+                        type_=GetPublicDealApiV2PublicDealsDealIdGet200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return AsyncHttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 403:
-                raise ForbiddenError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -1043,85 +980,83 @@ class AsyncRawDealsClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    async def api_routers_v_1_cases_public_api_update_public_case(
+    async def update_public_deal_api(
         self,
-        case_id: str,
+        deal_id: str,
         *,
         external_id: typing.Optional[str] = None,
-        public_case_request_external_id: typing.Optional[str] = OMIT,
-        name: typing.Optional[str] = OMIT,
-        status: typing.Optional[str] = OMIT,
-        stage: typing.Optional[str] = OMIT,
-        currency: typing.Optional[str] = OMIT,
-        value: typing.Optional[float] = OMIT,
-        pipeline_id: typing.Optional[str] = OMIT,
-        contact_id: typing.Optional[str] = OMIT,
-        contact_external_id: typing.Optional[str] = OMIT,
-        company_id: typing.Optional[str] = OMIT,
-        company_external_id: typing.Optional[str] = OMIT,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = OMIT,
+        form_view_id: typing.Optional[str] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
+        target: typing.Optional[str] = OMIT,
+        provider: typing.Optional[str] = OMIT,
+        channel_id: typing.Optional[str] = OMIT,
+        external_object_type: typing.Optional[str] = OMIT,
+        public_object_record_mutation_request_external_id: typing.Optional[str] = OMIT,
+        operation: typing.Optional[str] = OMIT,
+        dry_run: typing.Optional[bool] = OMIT,
+        confirm: typing.Optional[bool] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> AsyncHttpResponse[PublicCaseResponse]:
+    ) -> AsyncHttpResponse[UpdatePublicDealApiV2PublicDealsDealIdPut200Envelope]:
         """
-        Updates a deal in Sanka for the authenticated public channel. Connected integrations such as HubSpot sync separately; this endpoint does not guarantee an immediate downstream write.
-
         Parameters
         ----------
-        case_id : str
+        deal_id : str
 
         external_id : typing.Optional[str]
 
-        public_case_request_external_id : typing.Optional[str]
-            External reference for the upstream system. Uniqueness is scoped to the authenticated public channel.
+        workspace_id : typing.Optional[str]
 
-        name : typing.Optional[str]
+        view_id : typing.Optional[str]
 
-        status : typing.Optional[str]
+        form_view_id : typing.Optional[str]
 
-        stage : typing.Optional[str]
-            Deal stage internal value. The value must belong to the selected pipeline or the workspace default pipeline.
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
 
-        currency : typing.Optional[str]
+        target : typing.Optional[str]
 
-        value : typing.Optional[float]
-            Deal value expressed in the request currency.
+        provider : typing.Optional[str]
 
-        pipeline_id : typing.Optional[str]
-            Pipeline identifier to validate and assign the stage against. When omitted, the deal stays on its current pipeline or uses the default workspace pipeline.
+        channel_id : typing.Optional[str]
 
-        contact_id : typing.Optional[str]
+        external_object_type : typing.Optional[str]
 
-        contact_external_id : typing.Optional[str]
+        public_object_record_mutation_request_external_id : typing.Optional[str]
 
-        company_id : typing.Optional[str]
+        operation : typing.Optional[str]
 
-        company_external_id : typing.Optional[str]
+        dry_run : typing.Optional[bool]
+
+        confirm : typing.Optional[bool]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        AsyncHttpResponse[PublicCaseResponse]
-            OK
+        AsyncHttpResponse[UpdatePublicDealApiV2PublicDealsDealIdPut200Envelope]
+            Successful Response
         """
         _response = await self._client_wrapper.httpx_client.request(
-            f"v1/public/deals/{jsonable_encoder(case_id)}",
+            f"v2/public/deals/{jsonable_encoder(deal_id)}",
             method="PUT",
             params={
                 "external_id": external_id,
+                "workspace_id": workspace_id,
             },
             json={
-                "externalId": external_id,
-                "name": name,
-                "status": status,
-                "stage": stage,
-                "currency": currency,
-                "value": value,
-                "pipelineId": pipeline_id,
-                "contactId": contact_id,
-                "contactExternalId": contact_external_id,
-                "companyId": company_id,
-                "companyExternalId": company_external_id,
+                "view_id": view_id,
+                "form_view_id": form_view_id,
+                "properties": properties,
+                "target": target,
+                "provider": provider,
+                "channel_id": channel_id,
+                "external_object_type": external_object_type,
+                "external_id": external_id,
+                "operation": operation,
+                "dry_run": dry_run,
+                "confirm": confirm,
             },
             headers={
                 "content-type": "application/json",
@@ -1132,64 +1067,31 @@ class AsyncRawDealsClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    PublicCaseResponse,
+                    UpdatePublicDealApiV2PublicDealsDealIdPut200Envelope,
                     construct_type(
-                        type_=PublicCaseResponse,  # type: ignore
+                        type_=UpdatePublicDealApiV2PublicDealsDealIdPut200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return AsyncHttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 403:
-                raise ForbiddenError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 409:
-                raise ConflictError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -1199,97 +1101,92 @@ class AsyncRawDealsClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    async def api_routers_v_1_cases_public_api_delete_public_case(
+    async def delete_public_deal_api(
         self,
-        case_id: str,
+        deal_id: str,
         *,
         external_id: typing.Optional[str] = None,
+        target: typing.Optional[str] = None,
+        provider: typing.Optional[str] = None,
+        channel_id: typing.Optional[str] = None,
+        external_object_type: typing.Optional[str] = None,
+        dry_run: typing.Optional[bool] = None,
+        confirm: typing.Optional[bool] = None,
+        workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> AsyncHttpResponse[PublicCaseResponse]:
+    ) -> AsyncHttpResponse[DeletePublicDealApiV2PublicDealsDealIdDelete200Envelope]:
         """
         Parameters
         ----------
-        case_id : str
+        deal_id : str
 
         external_id : typing.Optional[str]
+
+        target : typing.Optional[str]
+
+        provider : typing.Optional[str]
+
+        channel_id : typing.Optional[str]
+
+        external_object_type : typing.Optional[str]
+
+        dry_run : typing.Optional[bool]
+
+        confirm : typing.Optional[bool]
+
+        workspace_id : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        AsyncHttpResponse[PublicCaseResponse]
-            OK
+        AsyncHttpResponse[DeletePublicDealApiV2PublicDealsDealIdDelete200Envelope]
+            Successful Response
         """
         _response = await self._client_wrapper.httpx_client.request(
-            f"v1/public/deals/{jsonable_encoder(case_id)}",
+            f"v2/public/deals/{jsonable_encoder(deal_id)}",
             method="DELETE",
             params={
                 "external_id": external_id,
+                "target": target,
+                "provider": provider,
+                "channel_id": channel_id,
+                "external_object_type": external_object_type,
+                "dry_run": dry_run,
+                "confirm": confirm,
+                "workspace_id": workspace_id,
             },
             request_options=request_options,
         )
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    PublicCaseResponse,
+                    DeletePublicDealApiV2PublicDealsDealIdDelete200Envelope,
                     construct_type(
-                        type_=PublicCaseResponse,  # type: ignore
+                        type_=DeletePublicDealApiV2PublicDealsDealIdDelete200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return AsyncHttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 403:
-                raise ForbiddenError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 409:
-                raise ConflictError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),

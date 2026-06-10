@@ -4,8 +4,33 @@ import typing
 
 from ..core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ..core.request_options import RequestOptions
-from ..types.disbursement_schema import DisbursementSchema
-from ..types.public_disbursement_response import PublicDisbursementResponse
+from ..types.create_public_disbursement_allocation_api_v_2_public_disbursements_disbursement_id_allocations_post_200_envelope import (
+    CreatePublicDisbursementAllocationApiV2PublicDisbursementsDisbursementIdAllocationsPost200Envelope,
+)
+from ..types.create_public_disbursement_api_v_2_public_disbursements_post_200_envelope import (
+    CreatePublicDisbursementApiV2PublicDisbursementsPost200Envelope,
+)
+from ..types.delete_public_disbursement_allocation_api_v_2_public_disbursements_disbursement_id_allocations_allocation_id_delete_200_envelope import (
+    DeletePublicDisbursementAllocationApiV2PublicDisbursementsDisbursementIdAllocationsAllocationIdDelete200Envelope,
+)
+from ..types.delete_public_disbursement_api_v_2_public_disbursements_disbursement_id_delete_200_envelope import (
+    DeletePublicDisbursementApiV2PublicDisbursementsDisbursementIdDelete200Envelope,
+)
+from ..types.get_public_disbursement_api_v_2_public_disbursements_disbursement_id_get_200_envelope import (
+    GetPublicDisbursementApiV2PublicDisbursementsDisbursementIdGet200Envelope,
+)
+from ..types.list_public_disbursement_allocations_api_v_2_public_disbursements_disbursement_id_allocations_get_200_envelope import (
+    ListPublicDisbursementAllocationsApiV2PublicDisbursementsDisbursementIdAllocationsGet200Envelope,
+)
+from ..types.list_public_disbursements_api_v_2_public_disbursements_get_200_envelope import (
+    ListPublicDisbursementsApiV2PublicDisbursementsGet200Envelope,
+)
+from ..types.update_public_disbursement_allocation_api_v_2_public_disbursements_disbursement_id_allocations_allocation_id_patch_200_envelope import (
+    UpdatePublicDisbursementAllocationApiV2PublicDisbursementsDisbursementIdAllocationsAllocationIdPatch200Envelope,
+)
+from ..types.update_public_disbursement_api_v_2_public_disbursements_disbursement_id_put_200_envelope import (
+    UpdatePublicDisbursementApiV2PublicDisbursementsDisbursementIdPut200Envelope,
+)
 from .raw_client import AsyncRawDisbursementsClient, RawDisbursementsClient
 
 # this is used as the default value for optional parameters
@@ -27,23 +52,44 @@ class DisbursementsClient:
         """
         return self._raw_client
 
-    def api_routers_v_1_disbursements_public_api_list_workspace_disbursements(
+    def list_public_disbursements_api(
         self,
         *,
         workspace_id: typing.Optional[str] = None,
-        lang: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = None,
+        search: typing.Optional[str] = None,
         language: typing.Optional[str] = None,
+        status: typing.Optional[str] = None,
+        usage_status: typing.Optional[str] = None,
+        page: typing.Optional[int] = None,
+        limit: typing.Optional[int] = None,
+        sort: typing.Optional[str] = None,
+        x_language: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> typing.List[DisbursementSchema]:
+    ) -> ListPublicDisbursementsApiV2PublicDisbursementsGet200Envelope:
         """
         Parameters
         ----------
         workspace_id : typing.Optional[str]
 
-        lang : typing.Optional[str]
+        view_id : typing.Optional[str]
+
+        search : typing.Optional[str]
 
         language : typing.Optional[str]
+
+        status : typing.Optional[str]
+
+        usage_status : typing.Optional[str]
+
+        page : typing.Optional[int]
+
+        limit : typing.Optional[int]
+
+        sort : typing.Optional[str]
+
+        x_language : typing.Optional[str]
 
         accept_language : typing.Optional[str]
 
@@ -52,127 +98,244 @@ class DisbursementsClient:
 
         Returns
         -------
-        typing.List[DisbursementSchema]
-            OK
+        ListPublicDisbursementsApiV2PublicDisbursementsGet200Envelope
+            Object record list response
 
         Examples
         --------
         from sanka_sdk import SankaClient
 
         client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
-        client.disbursements.api_routers_v_1_disbursements_public_api_list_workspace_disbursements()
+        client.disbursements.list_public_disbursements_api()
         """
-        _response = self._raw_client.api_routers_v_1_disbursements_public_api_list_workspace_disbursements(
+        _response = self._raw_client.list_public_disbursements_api(
             workspace_id=workspace_id,
-            lang=lang,
+            view_id=view_id,
+            search=search,
             language=language,
+            status=status,
+            usage_status=usage_status,
+            page=page,
+            limit=limit,
+            sort=sort,
+            x_language=x_language,
             accept_language=accept_language,
             request_options=request_options,
         )
         return _response.data
 
-    def api_routers_v_1_disbursements_public_api_create_public_disbursement(
+    def create_public_disbursement_api(
         self,
         *,
-        external_id: typing.Optional[str] = OMIT,
-        contact_id: typing.Optional[str] = OMIT,
-        contact_external_id: typing.Optional[str] = OMIT,
-        company_id: typing.Optional[str] = OMIT,
-        company_external_id: typing.Optional[str] = OMIT,
-        start_date: typing.Optional[str] = OMIT,
-        status: typing.Optional[str] = OMIT,
-        currency: typing.Optional[str] = OMIT,
-        notes: typing.Optional[str] = OMIT,
-        tax_rate: typing.Optional[float] = OMIT,
-        tax_inclusive: typing.Optional[bool] = OMIT,
-        tax_option: typing.Optional[str] = OMIT,
-        total_price: typing.Optional[float] = OMIT,
-        total_price_without_tax: typing.Optional[float] = OMIT,
-        fee: typing.Optional[float] = OMIT,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = OMIT,
+        form_view_id: typing.Optional[str] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> PublicDisbursementResponse:
+    ) -> CreatePublicDisbursementApiV2PublicDisbursementsPost200Envelope:
         """
         Parameters
         ----------
-        external_id : typing.Optional[str]
+        workspace_id : typing.Optional[str]
 
-        contact_id : typing.Optional[str]
+        view_id : typing.Optional[str]
 
-        contact_external_id : typing.Optional[str]
+        form_view_id : typing.Optional[str]
 
-        company_id : typing.Optional[str]
-
-        company_external_id : typing.Optional[str]
-
-        start_date : typing.Optional[str]
-
-        status : typing.Optional[str]
-
-        currency : typing.Optional[str]
-
-        notes : typing.Optional[str]
-
-        tax_rate : typing.Optional[float]
-
-        tax_inclusive : typing.Optional[bool]
-
-        tax_option : typing.Optional[str]
-
-        total_price : typing.Optional[float]
-
-        total_price_without_tax : typing.Optional[float]
-
-        fee : typing.Optional[float]
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        PublicDisbursementResponse
-            OK
+        CreatePublicDisbursementApiV2PublicDisbursementsPost200Envelope
+            Successful Response
 
         Examples
         --------
         from sanka_sdk import SankaClient
 
         client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
-        client.disbursements.api_routers_v_1_disbursements_public_api_create_public_disbursement()
+        client.disbursements.create_public_disbursement_api()
         """
-        _response = self._raw_client.api_routers_v_1_disbursements_public_api_create_public_disbursement(
-            external_id=external_id,
-            contact_id=contact_id,
-            contact_external_id=contact_external_id,
-            company_id=company_id,
-            company_external_id=company_external_id,
-            start_date=start_date,
-            status=status,
-            currency=currency,
-            notes=notes,
-            tax_rate=tax_rate,
-            tax_inclusive=tax_inclusive,
-            tax_option=tax_option,
-            total_price=total_price,
-            total_price_without_tax=total_price_without_tax,
-            fee=fee,
+        _response = self._raw_client.create_public_disbursement_api(
+            workspace_id=workspace_id,
+            view_id=view_id,
+            form_view_id=form_view_id,
+            properties=properties,
             request_options=request_options,
         )
         return _response.data
 
-    def api_routers_v_1_disbursements_public_api_get_public_disbursement(
+    def get_public_disbursement_api(
+        self,
+        disbursement_id: str,
+        *,
+        external_id: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = None,
+        form_view_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> GetPublicDisbursementApiV2PublicDisbursementsDisbursementIdGet200Envelope:
+        """
+        Parameters
+        ----------
+        disbursement_id : str
+
+        external_id : typing.Optional[str]
+
+        workspace_id : typing.Optional[str]
+
+        view_id : typing.Optional[str]
+
+        form_view_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        GetPublicDisbursementApiV2PublicDisbursementsDisbursementIdGet200Envelope
+            Object record detail response. The base detail payload is intentionally thin; drawer sections load through scoped endpoints.
+
+        Examples
+        --------
+        from sanka_sdk import SankaClient
+
+        client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+        client.disbursements.get_public_disbursement_api(
+            disbursement_id="disbursement_id",
+        )
+        """
+        _response = self._raw_client.get_public_disbursement_api(
+            disbursement_id,
+            external_id=external_id,
+            workspace_id=workspace_id,
+            view_id=view_id,
+            form_view_id=form_view_id,
+            request_options=request_options,
+        )
+        return _response.data
+
+    def update_public_disbursement_api(
+        self,
+        disbursement_id: str,
+        *,
+        external_id: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = OMIT,
+        form_view_id: typing.Optional[str] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> UpdatePublicDisbursementApiV2PublicDisbursementsDisbursementIdPut200Envelope:
+        """
+        Parameters
+        ----------
+        disbursement_id : str
+
+        external_id : typing.Optional[str]
+
+        workspace_id : typing.Optional[str]
+
+        view_id : typing.Optional[str]
+
+        form_view_id : typing.Optional[str]
+
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        UpdatePublicDisbursementApiV2PublicDisbursementsDisbursementIdPut200Envelope
+            Successful Response
+
+        Examples
+        --------
+        from sanka_sdk import SankaClient
+
+        client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+        client.disbursements.update_public_disbursement_api(
+            disbursement_id="disbursement_id",
+        )
+        """
+        _response = self._raw_client.update_public_disbursement_api(
+            disbursement_id,
+            external_id=external_id,
+            workspace_id=workspace_id,
+            view_id=view_id,
+            form_view_id=form_view_id,
+            properties=properties,
+            request_options=request_options,
+        )
+        return _response.data
+
+    def delete_public_disbursement_api(
+        self,
+        disbursement_id: str,
+        *,
+        external_id: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> DeletePublicDisbursementApiV2PublicDisbursementsDisbursementIdDelete200Envelope:
+        """
+        Parameters
+        ----------
+        disbursement_id : str
+
+        external_id : typing.Optional[str]
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        DeletePublicDisbursementApiV2PublicDisbursementsDisbursementIdDelete200Envelope
+            Successful Response
+
+        Examples
+        --------
+        from sanka_sdk import SankaClient
+
+        client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+        client.disbursements.delete_public_disbursement_api(
+            disbursement_id="disbursement_id",
+        )
+        """
+        _response = self._raw_client.delete_public_disbursement_api(
+            disbursement_id, external_id=external_id, workspace_id=workspace_id, request_options=request_options
+        )
+        return _response.data
+
+    def list_public_disbursement_allocations_api(
         self,
         disbursement_id: str,
         *,
         external_id: typing.Optional[str] = None,
         lang: typing.Optional[str] = None,
         language: typing.Optional[str] = None,
-        accept_language: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> DisbursementSchema:
+    ) -> ListPublicDisbursementAllocationsApiV2PublicDisbursementsDisbursementIdAllocationsGet200Envelope:
         """
         Parameters
         ----------
@@ -184,168 +347,218 @@ class DisbursementsClient:
 
         language : typing.Optional[str]
 
-        accept_language : typing.Optional[str]
+        workspace_id : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        DisbursementSchema
-            OK
+        ListPublicDisbursementAllocationsApiV2PublicDisbursementsDisbursementIdAllocationsGet200Envelope
+            Successful Response
 
         Examples
         --------
         from sanka_sdk import SankaClient
 
         client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
-        client.disbursements.api_routers_v_1_disbursements_public_api_get_public_disbursement(
+        client.disbursements.list_public_disbursement_allocations_api(
             disbursement_id="disbursement_id",
         )
         """
-        _response = self._raw_client.api_routers_v_1_disbursements_public_api_get_public_disbursement(
+        _response = self._raw_client.list_public_disbursement_allocations_api(
             disbursement_id,
             external_id=external_id,
             lang=lang,
             language=language,
-            accept_language=accept_language,
+            workspace_id=workspace_id,
             request_options=request_options,
         )
         return _response.data
 
-    def api_routers_v_1_disbursements_public_api_update_public_disbursement(
+    def create_public_disbursement_allocation_api(
         self,
         disbursement_id: str,
         *,
-        external_id: typing.Optional[str] = OMIT,
-        contact_id: typing.Optional[str] = OMIT,
-        contact_external_id: typing.Optional[str] = OMIT,
-        company_id: typing.Optional[str] = OMIT,
-        company_external_id: typing.Optional[str] = OMIT,
-        start_date: typing.Optional[str] = OMIT,
-        status: typing.Optional[str] = OMIT,
-        currency: typing.Optional[str] = OMIT,
-        notes: typing.Optional[str] = OMIT,
-        tax_rate: typing.Optional[float] = OMIT,
-        tax_inclusive: typing.Optional[bool] = OMIT,
-        tax_option: typing.Optional[str] = OMIT,
-        total_price: typing.Optional[float] = OMIT,
-        total_price_without_tax: typing.Optional[float] = OMIT,
-        fee: typing.Optional[float] = OMIT,
+        request: typing.Dict[str, typing.Optional[typing.Any]],
+        external_id: typing.Optional[str] = None,
+        lang: typing.Optional[str] = None,
+        language: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> PublicDisbursementResponse:
+    ) -> CreatePublicDisbursementAllocationApiV2PublicDisbursementsDisbursementIdAllocationsPost200Envelope:
         """
         Parameters
         ----------
         disbursement_id : str
 
+        request : typing.Dict[str, typing.Optional[typing.Any]]
+
         external_id : typing.Optional[str]
 
-        contact_id : typing.Optional[str]
+        lang : typing.Optional[str]
 
-        contact_external_id : typing.Optional[str]
+        language : typing.Optional[str]
 
-        company_id : typing.Optional[str]
-
-        company_external_id : typing.Optional[str]
-
-        start_date : typing.Optional[str]
-
-        status : typing.Optional[str]
-
-        currency : typing.Optional[str]
-
-        notes : typing.Optional[str]
-
-        tax_rate : typing.Optional[float]
-
-        tax_inclusive : typing.Optional[bool]
-
-        tax_option : typing.Optional[str]
-
-        total_price : typing.Optional[float]
-
-        total_price_without_tax : typing.Optional[float]
-
-        fee : typing.Optional[float]
+        workspace_id : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        PublicDisbursementResponse
-            OK
+        CreatePublicDisbursementAllocationApiV2PublicDisbursementsDisbursementIdAllocationsPost200Envelope
+            Successful Response
 
         Examples
         --------
         from sanka_sdk import SankaClient
 
         client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
-        client.disbursements.api_routers_v_1_disbursements_public_api_update_public_disbursement(
+        client.disbursements.create_public_disbursement_allocation_api(
             disbursement_id="disbursement_id",
+            request={"key": "value"},
         )
         """
-        _response = self._raw_client.api_routers_v_1_disbursements_public_api_update_public_disbursement(
+        _response = self._raw_client.create_public_disbursement_allocation_api(
             disbursement_id,
+            request=request,
             external_id=external_id,
-            contact_id=contact_id,
-            contact_external_id=contact_external_id,
-            company_id=company_id,
-            company_external_id=company_external_id,
-            start_date=start_date,
-            status=status,
-            currency=currency,
-            notes=notes,
-            tax_rate=tax_rate,
-            tax_inclusive=tax_inclusive,
-            tax_option=tax_option,
-            total_price=total_price,
-            total_price_without_tax=total_price_without_tax,
-            fee=fee,
+            lang=lang,
+            language=language,
+            workspace_id=workspace_id,
             request_options=request_options,
         )
         return _response.data
 
-    def api_routers_v_1_disbursements_public_api_delete_public_disbursement(
+    def delete_public_disbursement_allocation_api(
         self,
         disbursement_id: str,
+        allocation_id: str,
         *,
         external_id: typing.Optional[str] = None,
+        lang: typing.Optional[str] = None,
+        language: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> PublicDisbursementResponse:
+    ) -> (
+        DeletePublicDisbursementAllocationApiV2PublicDisbursementsDisbursementIdAllocationsAllocationIdDelete200Envelope
+    ):
         """
         Parameters
         ----------
         disbursement_id : str
 
+        allocation_id : str
+
         external_id : typing.Optional[str]
+
+        lang : typing.Optional[str]
+
+        language : typing.Optional[str]
+
+        workspace_id : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        PublicDisbursementResponse
-            OK
+        DeletePublicDisbursementAllocationApiV2PublicDisbursementsDisbursementIdAllocationsAllocationIdDelete200Envelope
+            Successful Response
 
         Examples
         --------
         from sanka_sdk import SankaClient
 
         client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
-        client.disbursements.api_routers_v_1_disbursements_public_api_delete_public_disbursement(
+        client.disbursements.delete_public_disbursement_allocation_api(
             disbursement_id="disbursement_id",
+            allocation_id="allocation_id",
         )
         """
-        _response = self._raw_client.api_routers_v_1_disbursements_public_api_delete_public_disbursement(
-            disbursement_id, external_id=external_id, request_options=request_options
+        _response = self._raw_client.delete_public_disbursement_allocation_api(
+            disbursement_id,
+            allocation_id,
+            external_id=external_id,
+            lang=lang,
+            language=language,
+            workspace_id=workspace_id,
+            request_options=request_options,
+        )
+        return _response.data
+
+    def update_public_disbursement_allocation_api(
+        self,
+        disbursement_id: str,
+        allocation_id: str,
+        *,
+        request: typing.Dict[str, typing.Optional[typing.Any]],
+        external_id: typing.Optional[str] = None,
+        lang: typing.Optional[str] = None,
+        language: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> (
+        UpdatePublicDisbursementAllocationApiV2PublicDisbursementsDisbursementIdAllocationsAllocationIdPatch200Envelope
+    ):
+        """
+        Parameters
+        ----------
+        disbursement_id : str
+
+        allocation_id : str
+
+        request : typing.Dict[str, typing.Optional[typing.Any]]
+
+        external_id : typing.Optional[str]
+
+        lang : typing.Optional[str]
+
+        language : typing.Optional[str]
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        UpdatePublicDisbursementAllocationApiV2PublicDisbursementsDisbursementIdAllocationsAllocationIdPatch200Envelope
+            Successful Response
+
+        Examples
+        --------
+        from sanka_sdk import SankaClient
+
+        client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+        client.disbursements.update_public_disbursement_allocation_api(
+            disbursement_id="disbursement_id",
+            allocation_id="allocation_id",
+            request={"key": "value"},
+        )
+        """
+        _response = self._raw_client.update_public_disbursement_allocation_api(
+            disbursement_id,
+            allocation_id,
+            request=request,
+            external_id=external_id,
+            lang=lang,
+            language=language,
+            workspace_id=workspace_id,
+            request_options=request_options,
         )
         return _response.data
 
@@ -365,23 +578,44 @@ class AsyncDisbursementsClient:
         """
         return self._raw_client
 
-    async def api_routers_v_1_disbursements_public_api_list_workspace_disbursements(
+    async def list_public_disbursements_api(
         self,
         *,
         workspace_id: typing.Optional[str] = None,
-        lang: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = None,
+        search: typing.Optional[str] = None,
         language: typing.Optional[str] = None,
+        status: typing.Optional[str] = None,
+        usage_status: typing.Optional[str] = None,
+        page: typing.Optional[int] = None,
+        limit: typing.Optional[int] = None,
+        sort: typing.Optional[str] = None,
+        x_language: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> typing.List[DisbursementSchema]:
+    ) -> ListPublicDisbursementsApiV2PublicDisbursementsGet200Envelope:
         """
         Parameters
         ----------
         workspace_id : typing.Optional[str]
 
-        lang : typing.Optional[str]
+        view_id : typing.Optional[str]
+
+        search : typing.Optional[str]
 
         language : typing.Optional[str]
+
+        status : typing.Optional[str]
+
+        usage_status : typing.Optional[str]
+
+        page : typing.Optional[int]
+
+        limit : typing.Optional[int]
+
+        sort : typing.Optional[str]
+
+        x_language : typing.Optional[str]
 
         accept_language : typing.Optional[str]
 
@@ -390,8 +624,8 @@ class AsyncDisbursementsClient:
 
         Returns
         -------
-        typing.List[DisbursementSchema]
-            OK
+        ListPublicDisbursementsApiV2PublicDisbursementsGet200Envelope
+            Object record list response
 
         Examples
         --------
@@ -400,85 +634,60 @@ class AsyncDisbursementsClient:
         from sanka_sdk import AsyncSankaClient
 
         client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
 
 
         async def main() -> None:
-            await client.disbursements.api_routers_v_1_disbursements_public_api_list_workspace_disbursements()
+            await client.disbursements.list_public_disbursements_api()
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.api_routers_v_1_disbursements_public_api_list_workspace_disbursements(
+        _response = await self._raw_client.list_public_disbursements_api(
             workspace_id=workspace_id,
-            lang=lang,
+            view_id=view_id,
+            search=search,
             language=language,
+            status=status,
+            usage_status=usage_status,
+            page=page,
+            limit=limit,
+            sort=sort,
+            x_language=x_language,
             accept_language=accept_language,
             request_options=request_options,
         )
         return _response.data
 
-    async def api_routers_v_1_disbursements_public_api_create_public_disbursement(
+    async def create_public_disbursement_api(
         self,
         *,
-        external_id: typing.Optional[str] = OMIT,
-        contact_id: typing.Optional[str] = OMIT,
-        contact_external_id: typing.Optional[str] = OMIT,
-        company_id: typing.Optional[str] = OMIT,
-        company_external_id: typing.Optional[str] = OMIT,
-        start_date: typing.Optional[str] = OMIT,
-        status: typing.Optional[str] = OMIT,
-        currency: typing.Optional[str] = OMIT,
-        notes: typing.Optional[str] = OMIT,
-        tax_rate: typing.Optional[float] = OMIT,
-        tax_inclusive: typing.Optional[bool] = OMIT,
-        tax_option: typing.Optional[str] = OMIT,
-        total_price: typing.Optional[float] = OMIT,
-        total_price_without_tax: typing.Optional[float] = OMIT,
-        fee: typing.Optional[float] = OMIT,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = OMIT,
+        form_view_id: typing.Optional[str] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> PublicDisbursementResponse:
+    ) -> CreatePublicDisbursementApiV2PublicDisbursementsPost200Envelope:
         """
         Parameters
         ----------
-        external_id : typing.Optional[str]
+        workspace_id : typing.Optional[str]
 
-        contact_id : typing.Optional[str]
+        view_id : typing.Optional[str]
 
-        contact_external_id : typing.Optional[str]
+        form_view_id : typing.Optional[str]
 
-        company_id : typing.Optional[str]
-
-        company_external_id : typing.Optional[str]
-
-        start_date : typing.Optional[str]
-
-        status : typing.Optional[str]
-
-        currency : typing.Optional[str]
-
-        notes : typing.Optional[str]
-
-        tax_rate : typing.Optional[float]
-
-        tax_inclusive : typing.Optional[bool]
-
-        tax_option : typing.Optional[str]
-
-        total_price : typing.Optional[float]
-
-        total_price_without_tax : typing.Optional[float]
-
-        fee : typing.Optional[float]
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        PublicDisbursementResponse
-            OK
+        CreatePublicDisbursementApiV2PublicDisbursementsPost200Envelope
+            Successful Response
 
         Examples
         --------
@@ -487,46 +696,212 @@ class AsyncDisbursementsClient:
         from sanka_sdk import AsyncSankaClient
 
         client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
 
 
         async def main() -> None:
-            await client.disbursements.api_routers_v_1_disbursements_public_api_create_public_disbursement()
+            await client.disbursements.create_public_disbursement_api()
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.api_routers_v_1_disbursements_public_api_create_public_disbursement(
-            external_id=external_id,
-            contact_id=contact_id,
-            contact_external_id=contact_external_id,
-            company_id=company_id,
-            company_external_id=company_external_id,
-            start_date=start_date,
-            status=status,
-            currency=currency,
-            notes=notes,
-            tax_rate=tax_rate,
-            tax_inclusive=tax_inclusive,
-            tax_option=tax_option,
-            total_price=total_price,
-            total_price_without_tax=total_price_without_tax,
-            fee=fee,
+        _response = await self._raw_client.create_public_disbursement_api(
+            workspace_id=workspace_id,
+            view_id=view_id,
+            form_view_id=form_view_id,
+            properties=properties,
             request_options=request_options,
         )
         return _response.data
 
-    async def api_routers_v_1_disbursements_public_api_get_public_disbursement(
+    async def get_public_disbursement_api(
+        self,
+        disbursement_id: str,
+        *,
+        external_id: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = None,
+        form_view_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> GetPublicDisbursementApiV2PublicDisbursementsDisbursementIdGet200Envelope:
+        """
+        Parameters
+        ----------
+        disbursement_id : str
+
+        external_id : typing.Optional[str]
+
+        workspace_id : typing.Optional[str]
+
+        view_id : typing.Optional[str]
+
+        form_view_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        GetPublicDisbursementApiV2PublicDisbursementsDisbursementIdGet200Envelope
+            Object record detail response. The base detail payload is intentionally thin; drawer sections load through scoped endpoints.
+
+        Examples
+        --------
+        import asyncio
+
+        from sanka_sdk import AsyncSankaClient
+
+        client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.disbursements.get_public_disbursement_api(
+                disbursement_id="disbursement_id",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.get_public_disbursement_api(
+            disbursement_id,
+            external_id=external_id,
+            workspace_id=workspace_id,
+            view_id=view_id,
+            form_view_id=form_view_id,
+            request_options=request_options,
+        )
+        return _response.data
+
+    async def update_public_disbursement_api(
+        self,
+        disbursement_id: str,
+        *,
+        external_id: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = OMIT,
+        form_view_id: typing.Optional[str] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> UpdatePublicDisbursementApiV2PublicDisbursementsDisbursementIdPut200Envelope:
+        """
+        Parameters
+        ----------
+        disbursement_id : str
+
+        external_id : typing.Optional[str]
+
+        workspace_id : typing.Optional[str]
+
+        view_id : typing.Optional[str]
+
+        form_view_id : typing.Optional[str]
+
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        UpdatePublicDisbursementApiV2PublicDisbursementsDisbursementIdPut200Envelope
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sanka_sdk import AsyncSankaClient
+
+        client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.disbursements.update_public_disbursement_api(
+                disbursement_id="disbursement_id",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.update_public_disbursement_api(
+            disbursement_id,
+            external_id=external_id,
+            workspace_id=workspace_id,
+            view_id=view_id,
+            form_view_id=form_view_id,
+            properties=properties,
+            request_options=request_options,
+        )
+        return _response.data
+
+    async def delete_public_disbursement_api(
+        self,
+        disbursement_id: str,
+        *,
+        external_id: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> DeletePublicDisbursementApiV2PublicDisbursementsDisbursementIdDelete200Envelope:
+        """
+        Parameters
+        ----------
+        disbursement_id : str
+
+        external_id : typing.Optional[str]
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        DeletePublicDisbursementApiV2PublicDisbursementsDisbursementIdDelete200Envelope
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sanka_sdk import AsyncSankaClient
+
+        client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.disbursements.delete_public_disbursement_api(
+                disbursement_id="disbursement_id",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.delete_public_disbursement_api(
+            disbursement_id, external_id=external_id, workspace_id=workspace_id, request_options=request_options
+        )
+        return _response.data
+
+    async def list_public_disbursement_allocations_api(
         self,
         disbursement_id: str,
         *,
         external_id: typing.Optional[str] = None,
         lang: typing.Optional[str] = None,
         language: typing.Optional[str] = None,
-        accept_language: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> DisbursementSchema:
+    ) -> ListPublicDisbursementAllocationsApiV2PublicDisbursementsDisbursementIdAllocationsGet200Envelope:
         """
         Parameters
         ----------
@@ -538,15 +913,15 @@ class AsyncDisbursementsClient:
 
         language : typing.Optional[str]
 
-        accept_language : typing.Optional[str]
+        workspace_id : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        DisbursementSchema
-            OK
+        ListPublicDisbursementAllocationsApiV2PublicDisbursementsDisbursementIdAllocationsGet200Envelope
+            Successful Response
 
         Examples
         --------
@@ -555,91 +930,62 @@ class AsyncDisbursementsClient:
         from sanka_sdk import AsyncSankaClient
 
         client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
 
 
         async def main() -> None:
-            await client.disbursements.api_routers_v_1_disbursements_public_api_get_public_disbursement(
+            await client.disbursements.list_public_disbursement_allocations_api(
                 disbursement_id="disbursement_id",
             )
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.api_routers_v_1_disbursements_public_api_get_public_disbursement(
+        _response = await self._raw_client.list_public_disbursement_allocations_api(
             disbursement_id,
             external_id=external_id,
             lang=lang,
             language=language,
-            accept_language=accept_language,
+            workspace_id=workspace_id,
             request_options=request_options,
         )
         return _response.data
 
-    async def api_routers_v_1_disbursements_public_api_update_public_disbursement(
+    async def create_public_disbursement_allocation_api(
         self,
         disbursement_id: str,
         *,
-        external_id: typing.Optional[str] = OMIT,
-        contact_id: typing.Optional[str] = OMIT,
-        contact_external_id: typing.Optional[str] = OMIT,
-        company_id: typing.Optional[str] = OMIT,
-        company_external_id: typing.Optional[str] = OMIT,
-        start_date: typing.Optional[str] = OMIT,
-        status: typing.Optional[str] = OMIT,
-        currency: typing.Optional[str] = OMIT,
-        notes: typing.Optional[str] = OMIT,
-        tax_rate: typing.Optional[float] = OMIT,
-        tax_inclusive: typing.Optional[bool] = OMIT,
-        tax_option: typing.Optional[str] = OMIT,
-        total_price: typing.Optional[float] = OMIT,
-        total_price_without_tax: typing.Optional[float] = OMIT,
-        fee: typing.Optional[float] = OMIT,
+        request: typing.Dict[str, typing.Optional[typing.Any]],
+        external_id: typing.Optional[str] = None,
+        lang: typing.Optional[str] = None,
+        language: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> PublicDisbursementResponse:
+    ) -> CreatePublicDisbursementAllocationApiV2PublicDisbursementsDisbursementIdAllocationsPost200Envelope:
         """
         Parameters
         ----------
         disbursement_id : str
 
+        request : typing.Dict[str, typing.Optional[typing.Any]]
+
         external_id : typing.Optional[str]
 
-        contact_id : typing.Optional[str]
+        lang : typing.Optional[str]
 
-        contact_external_id : typing.Optional[str]
+        language : typing.Optional[str]
 
-        company_id : typing.Optional[str]
-
-        company_external_id : typing.Optional[str]
-
-        start_date : typing.Optional[str]
-
-        status : typing.Optional[str]
-
-        currency : typing.Optional[str]
-
-        notes : typing.Optional[str]
-
-        tax_rate : typing.Optional[float]
-
-        tax_inclusive : typing.Optional[bool]
-
-        tax_option : typing.Optional[str]
-
-        total_price : typing.Optional[float]
-
-        total_price_without_tax : typing.Optional[float]
-
-        fee : typing.Optional[float]
+        workspace_id : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        PublicDisbursementResponse
-            OK
+        CreatePublicDisbursementAllocationApiV2PublicDisbursementsDisbursementIdAllocationsPost200Envelope
+            Successful Response
 
         Examples
         --------
@@ -648,60 +994,66 @@ class AsyncDisbursementsClient:
         from sanka_sdk import AsyncSankaClient
 
         client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
 
 
         async def main() -> None:
-            await client.disbursements.api_routers_v_1_disbursements_public_api_update_public_disbursement(
+            await client.disbursements.create_public_disbursement_allocation_api(
                 disbursement_id="disbursement_id",
+                request={"key": "value"},
             )
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.api_routers_v_1_disbursements_public_api_update_public_disbursement(
+        _response = await self._raw_client.create_public_disbursement_allocation_api(
             disbursement_id,
+            request=request,
             external_id=external_id,
-            contact_id=contact_id,
-            contact_external_id=contact_external_id,
-            company_id=company_id,
-            company_external_id=company_external_id,
-            start_date=start_date,
-            status=status,
-            currency=currency,
-            notes=notes,
-            tax_rate=tax_rate,
-            tax_inclusive=tax_inclusive,
-            tax_option=tax_option,
-            total_price=total_price,
-            total_price_without_tax=total_price_without_tax,
-            fee=fee,
+            lang=lang,
+            language=language,
+            workspace_id=workspace_id,
             request_options=request_options,
         )
         return _response.data
 
-    async def api_routers_v_1_disbursements_public_api_delete_public_disbursement(
+    async def delete_public_disbursement_allocation_api(
         self,
         disbursement_id: str,
+        allocation_id: str,
         *,
         external_id: typing.Optional[str] = None,
+        lang: typing.Optional[str] = None,
+        language: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> PublicDisbursementResponse:
+    ) -> (
+        DeletePublicDisbursementAllocationApiV2PublicDisbursementsDisbursementIdAllocationsAllocationIdDelete200Envelope
+    ):
         """
         Parameters
         ----------
         disbursement_id : str
 
+        allocation_id : str
+
         external_id : typing.Optional[str]
+
+        lang : typing.Optional[str]
+
+        language : typing.Optional[str]
+
+        workspace_id : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        PublicDisbursementResponse
-            OK
+        DeletePublicDisbursementAllocationApiV2PublicDisbursementsDisbursementIdAllocationsAllocationIdDelete200Envelope
+            Successful Response
 
         Examples
         --------
@@ -710,19 +1062,100 @@ class AsyncDisbursementsClient:
         from sanka_sdk import AsyncSankaClient
 
         client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
 
 
         async def main() -> None:
-            await client.disbursements.api_routers_v_1_disbursements_public_api_delete_public_disbursement(
+            await client.disbursements.delete_public_disbursement_allocation_api(
                 disbursement_id="disbursement_id",
+                allocation_id="allocation_id",
             )
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.api_routers_v_1_disbursements_public_api_delete_public_disbursement(
-            disbursement_id, external_id=external_id, request_options=request_options
+        _response = await self._raw_client.delete_public_disbursement_allocation_api(
+            disbursement_id,
+            allocation_id,
+            external_id=external_id,
+            lang=lang,
+            language=language,
+            workspace_id=workspace_id,
+            request_options=request_options,
+        )
+        return _response.data
+
+    async def update_public_disbursement_allocation_api(
+        self,
+        disbursement_id: str,
+        allocation_id: str,
+        *,
+        request: typing.Dict[str, typing.Optional[typing.Any]],
+        external_id: typing.Optional[str] = None,
+        lang: typing.Optional[str] = None,
+        language: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> (
+        UpdatePublicDisbursementAllocationApiV2PublicDisbursementsDisbursementIdAllocationsAllocationIdPatch200Envelope
+    ):
+        """
+        Parameters
+        ----------
+        disbursement_id : str
+
+        allocation_id : str
+
+        request : typing.Dict[str, typing.Optional[typing.Any]]
+
+        external_id : typing.Optional[str]
+
+        lang : typing.Optional[str]
+
+        language : typing.Optional[str]
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        UpdatePublicDisbursementAllocationApiV2PublicDisbursementsDisbursementIdAllocationsAllocationIdPatch200Envelope
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sanka_sdk import AsyncSankaClient
+
+        client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.disbursements.update_public_disbursement_allocation_api(
+                disbursement_id="disbursement_id",
+                allocation_id="allocation_id",
+                request={"key": "value"},
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.update_public_disbursement_allocation_api(
+            disbursement_id,
+            allocation_id,
+            request=request,
+            external_id=external_id,
+            lang=lang,
+            language=language,
+            workspace_id=workspace_id,
+            request_options=request_options,
         )
         return _response.data

@@ -4,8 +4,21 @@ import typing
 
 from ..core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ..core.request_options import RequestOptions
-from ..types.public_item_response import PublicItemResponse
-from ..types.shop_turbo_item_schema import ShopTurboItemSchema
+from ..types.create_public_item_api_v_2_public_items_post_200_envelope import (
+    CreatePublicItemApiV2PublicItemsPost200Envelope,
+)
+from ..types.delete_public_item_api_v_2_public_items_item_id_delete_200_envelope import (
+    DeletePublicItemApiV2PublicItemsItemIdDelete200Envelope,
+)
+from ..types.get_public_item_api_v_2_public_items_item_id_get_200_envelope import (
+    GetPublicItemApiV2PublicItemsItemIdGet200Envelope,
+)
+from ..types.list_public_items_api_v_2_public_items_get_200_envelope import (
+    ListPublicItemsApiV2PublicItemsGet200Envelope,
+)
+from ..types.update_public_item_api_v_2_public_items_item_id_put_200_envelope import (
+    UpdatePublicItemApiV2PublicItemsItemIdPut200Envelope,
+)
 from .raw_client import AsyncRawItemsClient, RawItemsClient
 
 # this is used as the default value for optional parameters
@@ -27,23 +40,44 @@ class ItemsClient:
         """
         return self._raw_client
 
-    def api_routers_v_1_items_public_api_list_workspace_items(
+    def list_public_items_api(
         self,
         *,
         workspace_id: typing.Optional[str] = None,
-        lang: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = None,
+        search: typing.Optional[str] = None,
         language: typing.Optional[str] = None,
+        status: typing.Optional[str] = None,
+        usage_status: typing.Optional[str] = None,
+        page: typing.Optional[int] = None,
+        limit: typing.Optional[int] = None,
+        sort: typing.Optional[str] = None,
+        x_language: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> typing.List[ShopTurboItemSchema]:
+    ) -> ListPublicItemsApiV2PublicItemsGet200Envelope:
         """
         Parameters
         ----------
         workspace_id : typing.Optional[str]
 
-        lang : typing.Optional[str]
+        view_id : typing.Optional[str]
+
+        search : typing.Optional[str]
 
         language : typing.Optional[str]
+
+        status : typing.Optional[str]
+
+        usage_status : typing.Optional[str]
+
+        page : typing.Optional[int]
+
+        limit : typing.Optional[int]
+
+        sort : typing.Optional[str]
+
+        x_language : typing.Optional[str]
 
         accept_language : typing.Optional[str]
 
@@ -52,98 +86,92 @@ class ItemsClient:
 
         Returns
         -------
-        typing.List[ShopTurboItemSchema]
-            OK
+        ListPublicItemsApiV2PublicItemsGet200Envelope
+            Object record list response
 
         Examples
         --------
         from sanka_sdk import SankaClient
 
         client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
-        client.items.api_routers_v_1_items_public_api_list_workspace_items()
+        client.items.list_public_items_api()
         """
-        _response = self._raw_client.api_routers_v_1_items_public_api_list_workspace_items(
+        _response = self._raw_client.list_public_items_api(
             workspace_id=workspace_id,
-            lang=lang,
+            view_id=view_id,
+            search=search,
             language=language,
+            status=status,
+            usage_status=usage_status,
+            page=page,
+            limit=limit,
+            sort=sort,
+            x_language=x_language,
             accept_language=accept_language,
             request_options=request_options,
         )
         return _response.data
 
-    def api_routers_v_1_items_public_api_create_public_item(
+    def create_public_item_api(
         self,
         *,
-        external_id: str,
-        name: typing.Optional[str] = OMIT,
-        description: typing.Optional[str] = OMIT,
-        currency: typing.Optional[str] = OMIT,
-        price: typing.Optional[float] = OMIT,
-        purchase_price: typing.Optional[float] = OMIT,
-        tax: typing.Optional[float] = OMIT,
-        status: typing.Optional[str] = OMIT,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = OMIT,
+        form_view_id: typing.Optional[str] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> PublicItemResponse:
+    ) -> CreatePublicItemApiV2PublicItemsPost200Envelope:
         """
         Parameters
         ----------
-        external_id : str
+        workspace_id : typing.Optional[str]
 
-        name : typing.Optional[str]
+        view_id : typing.Optional[str]
 
-        description : typing.Optional[str]
+        form_view_id : typing.Optional[str]
 
-        currency : typing.Optional[str]
-
-        price : typing.Optional[float]
-
-        purchase_price : typing.Optional[float]
-
-        tax : typing.Optional[float]
-
-        status : typing.Optional[str]
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        PublicItemResponse
-            OK
+        CreatePublicItemApiV2PublicItemsPost200Envelope
+            Successful Response
 
         Examples
         --------
         from sanka_sdk import SankaClient
 
         client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
-        client.items.api_routers_v_1_items_public_api_create_public_item(
-            external_id="externalId",
-        )
+        client.items.create_public_item_api()
         """
-        _response = self._raw_client.api_routers_v_1_items_public_api_create_public_item(
-            external_id=external_id,
-            name=name,
-            description=description,
-            currency=currency,
-            price=price,
-            purchase_price=purchase_price,
-            tax=tax,
-            status=status,
+        _response = self._raw_client.create_public_item_api(
+            workspace_id=workspace_id,
+            view_id=view_id,
+            form_view_id=form_view_id,
+            properties=properties,
             request_options=request_options,
         )
         return _response.data
 
-    def api_routers_v_1_items_public_api_get_public_item(
+    def get_public_item_api(
         self,
         item_id: str,
         *,
         external_id: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = None,
+        form_view_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> ShopTurboItemSchema:
+    ) -> GetPublicItemApiV2PublicItemsItemIdGet200Envelope:
         """
         Parameters
         ----------
@@ -151,106 +179,53 @@ class ItemsClient:
 
         external_id : typing.Optional[str]
 
-        request_options : typing.Optional[RequestOptions]
-            Request-specific configuration.
+        workspace_id : typing.Optional[str]
 
-        Returns
-        -------
-        ShopTurboItemSchema
-            OK
+        view_id : typing.Optional[str]
 
-        Examples
-        --------
-        from sanka_sdk import SankaClient
-
-        client = SankaClient(
-            token="YOUR_TOKEN",
-        )
-        client.items.api_routers_v_1_items_public_api_get_public_item(
-            item_id="item_id",
-        )
-        """
-        _response = self._raw_client.api_routers_v_1_items_public_api_get_public_item(
-            item_id, external_id=external_id, request_options=request_options
-        )
-        return _response.data
-
-    def api_routers_v_1_items_public_api_update_public_item(
-        self,
-        item_id: str,
-        *,
-        external_id: str,
-        name: typing.Optional[str] = OMIT,
-        description: typing.Optional[str] = OMIT,
-        currency: typing.Optional[str] = OMIT,
-        price: typing.Optional[float] = OMIT,
-        purchase_price: typing.Optional[float] = OMIT,
-        tax: typing.Optional[float] = OMIT,
-        status: typing.Optional[str] = OMIT,
-        request_options: typing.Optional[RequestOptions] = None,
-    ) -> PublicItemResponse:
-        """
-        Parameters
-        ----------
-        item_id : str
-
-        external_id : str
-
-        name : typing.Optional[str]
-
-        description : typing.Optional[str]
-
-        currency : typing.Optional[str]
-
-        price : typing.Optional[float]
-
-        purchase_price : typing.Optional[float]
-
-        tax : typing.Optional[float]
-
-        status : typing.Optional[str]
+        form_view_id : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        PublicItemResponse
-            OK
+        GetPublicItemApiV2PublicItemsItemIdGet200Envelope
+            Object record detail response. The base detail payload is intentionally thin; drawer sections load through scoped endpoints.
 
         Examples
         --------
         from sanka_sdk import SankaClient
 
         client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
-        client.items.api_routers_v_1_items_public_api_update_public_item(
+        client.items.get_public_item_api(
             item_id="item_id",
-            external_id="externalId",
         )
         """
-        _response = self._raw_client.api_routers_v_1_items_public_api_update_public_item(
+        _response = self._raw_client.get_public_item_api(
             item_id,
             external_id=external_id,
-            name=name,
-            description=description,
-            currency=currency,
-            price=price,
-            purchase_price=purchase_price,
-            tax=tax,
-            status=status,
+            workspace_id=workspace_id,
+            view_id=view_id,
+            form_view_id=form_view_id,
             request_options=request_options,
         )
         return _response.data
 
-    def api_routers_v_1_items_public_api_delete_public_item(
+    def update_public_item_api(
         self,
         item_id: str,
         *,
         external_id: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = OMIT,
+        form_view_id: typing.Optional[str] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> PublicItemResponse:
+    ) -> UpdatePublicItemApiV2PublicItemsItemIdPut200Envelope:
         """
         Parameters
         ----------
@@ -258,27 +233,84 @@ class ItemsClient:
 
         external_id : typing.Optional[str]
 
+        workspace_id : typing.Optional[str]
+
+        view_id : typing.Optional[str]
+
+        form_view_id : typing.Optional[str]
+
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        PublicItemResponse
-            OK
+        UpdatePublicItemApiV2PublicItemsItemIdPut200Envelope
+            Successful Response
 
         Examples
         --------
         from sanka_sdk import SankaClient
 
         client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
-        client.items.api_routers_v_1_items_public_api_delete_public_item(
+        client.items.update_public_item_api(
             item_id="item_id",
         )
         """
-        _response = self._raw_client.api_routers_v_1_items_public_api_delete_public_item(
-            item_id, external_id=external_id, request_options=request_options
+        _response = self._raw_client.update_public_item_api(
+            item_id,
+            external_id=external_id,
+            workspace_id=workspace_id,
+            view_id=view_id,
+            form_view_id=form_view_id,
+            properties=properties,
+            request_options=request_options,
+        )
+        return _response.data
+
+    def delete_public_item_api(
+        self,
+        item_id: str,
+        *,
+        external_id: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> DeletePublicItemApiV2PublicItemsItemIdDelete200Envelope:
+        """
+        Parameters
+        ----------
+        item_id : str
+
+        external_id : typing.Optional[str]
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        DeletePublicItemApiV2PublicItemsItemIdDelete200Envelope
+            Successful Response
+
+        Examples
+        --------
+        from sanka_sdk import SankaClient
+
+        client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+        client.items.delete_public_item_api(
+            item_id="item_id",
+        )
+        """
+        _response = self._raw_client.delete_public_item_api(
+            item_id, external_id=external_id, workspace_id=workspace_id, request_options=request_options
         )
         return _response.data
 
@@ -298,23 +330,44 @@ class AsyncItemsClient:
         """
         return self._raw_client
 
-    async def api_routers_v_1_items_public_api_list_workspace_items(
+    async def list_public_items_api(
         self,
         *,
         workspace_id: typing.Optional[str] = None,
-        lang: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = None,
+        search: typing.Optional[str] = None,
         language: typing.Optional[str] = None,
+        status: typing.Optional[str] = None,
+        usage_status: typing.Optional[str] = None,
+        page: typing.Optional[int] = None,
+        limit: typing.Optional[int] = None,
+        sort: typing.Optional[str] = None,
+        x_language: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> typing.List[ShopTurboItemSchema]:
+    ) -> ListPublicItemsApiV2PublicItemsGet200Envelope:
         """
         Parameters
         ----------
         workspace_id : typing.Optional[str]
 
-        lang : typing.Optional[str]
+        view_id : typing.Optional[str]
+
+        search : typing.Optional[str]
 
         language : typing.Optional[str]
+
+        status : typing.Optional[str]
+
+        usage_status : typing.Optional[str]
+
+        page : typing.Optional[int]
+
+        limit : typing.Optional[int]
+
+        sort : typing.Optional[str]
+
+        x_language : typing.Optional[str]
 
         accept_language : typing.Optional[str]
 
@@ -323,8 +376,8 @@ class AsyncItemsClient:
 
         Returns
         -------
-        typing.List[ShopTurboItemSchema]
-            OK
+        ListPublicItemsApiV2PublicItemsGet200Envelope
+            Object record list response
 
         Examples
         --------
@@ -333,64 +386,60 @@ class AsyncItemsClient:
         from sanka_sdk import AsyncSankaClient
 
         client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
 
 
         async def main() -> None:
-            await client.items.api_routers_v_1_items_public_api_list_workspace_items()
+            await client.items.list_public_items_api()
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.api_routers_v_1_items_public_api_list_workspace_items(
+        _response = await self._raw_client.list_public_items_api(
             workspace_id=workspace_id,
-            lang=lang,
+            view_id=view_id,
+            search=search,
             language=language,
+            status=status,
+            usage_status=usage_status,
+            page=page,
+            limit=limit,
+            sort=sort,
+            x_language=x_language,
             accept_language=accept_language,
             request_options=request_options,
         )
         return _response.data
 
-    async def api_routers_v_1_items_public_api_create_public_item(
+    async def create_public_item_api(
         self,
         *,
-        external_id: str,
-        name: typing.Optional[str] = OMIT,
-        description: typing.Optional[str] = OMIT,
-        currency: typing.Optional[str] = OMIT,
-        price: typing.Optional[float] = OMIT,
-        purchase_price: typing.Optional[float] = OMIT,
-        tax: typing.Optional[float] = OMIT,
-        status: typing.Optional[str] = OMIT,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = OMIT,
+        form_view_id: typing.Optional[str] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> PublicItemResponse:
+    ) -> CreatePublicItemApiV2PublicItemsPost200Envelope:
         """
         Parameters
         ----------
-        external_id : str
+        workspace_id : typing.Optional[str]
 
-        name : typing.Optional[str]
+        view_id : typing.Optional[str]
 
-        description : typing.Optional[str]
+        form_view_id : typing.Optional[str]
 
-        currency : typing.Optional[str]
-
-        price : typing.Optional[float]
-
-        purchase_price : typing.Optional[float]
-
-        tax : typing.Optional[float]
-
-        status : typing.Optional[str]
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        PublicItemResponse
-            OK
+        CreatePublicItemApiV2PublicItemsPost200Envelope
+            Successful Response
 
         Examples
         --------
@@ -399,38 +448,36 @@ class AsyncItemsClient:
         from sanka_sdk import AsyncSankaClient
 
         client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
 
 
         async def main() -> None:
-            await client.items.api_routers_v_1_items_public_api_create_public_item(
-                external_id="externalId",
-            )
+            await client.items.create_public_item_api()
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.api_routers_v_1_items_public_api_create_public_item(
-            external_id=external_id,
-            name=name,
-            description=description,
-            currency=currency,
-            price=price,
-            purchase_price=purchase_price,
-            tax=tax,
-            status=status,
+        _response = await self._raw_client.create_public_item_api(
+            workspace_id=workspace_id,
+            view_id=view_id,
+            form_view_id=form_view_id,
+            properties=properties,
             request_options=request_options,
         )
         return _response.data
 
-    async def api_routers_v_1_items_public_api_get_public_item(
+    async def get_public_item_api(
         self,
         item_id: str,
         *,
         external_id: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = None,
+        form_view_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> ShopTurboItemSchema:
+    ) -> GetPublicItemApiV2PublicItemsItemIdGet200Envelope:
         """
         Parameters
         ----------
@@ -438,13 +485,19 @@ class AsyncItemsClient:
 
         external_id : typing.Optional[str]
 
+        workspace_id : typing.Optional[str]
+
+        view_id : typing.Optional[str]
+
+        form_view_id : typing.Optional[str]
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        ShopTurboItemSchema
-            OK
+        GetPublicItemApiV2PublicItemsItemIdGet200Envelope
+            Object record detail response. The base detail payload is intentionally thin; drawer sections load through scoped endpoints.
 
         Examples
         --------
@@ -453,107 +506,40 @@ class AsyncItemsClient:
         from sanka_sdk import AsyncSankaClient
 
         client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
 
 
         async def main() -> None:
-            await client.items.api_routers_v_1_items_public_api_get_public_item(
+            await client.items.get_public_item_api(
                 item_id="item_id",
             )
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.api_routers_v_1_items_public_api_get_public_item(
-            item_id, external_id=external_id, request_options=request_options
-        )
-        return _response.data
-
-    async def api_routers_v_1_items_public_api_update_public_item(
-        self,
-        item_id: str,
-        *,
-        external_id: str,
-        name: typing.Optional[str] = OMIT,
-        description: typing.Optional[str] = OMIT,
-        currency: typing.Optional[str] = OMIT,
-        price: typing.Optional[float] = OMIT,
-        purchase_price: typing.Optional[float] = OMIT,
-        tax: typing.Optional[float] = OMIT,
-        status: typing.Optional[str] = OMIT,
-        request_options: typing.Optional[RequestOptions] = None,
-    ) -> PublicItemResponse:
-        """
-        Parameters
-        ----------
-        item_id : str
-
-        external_id : str
-
-        name : typing.Optional[str]
-
-        description : typing.Optional[str]
-
-        currency : typing.Optional[str]
-
-        price : typing.Optional[float]
-
-        purchase_price : typing.Optional[float]
-
-        tax : typing.Optional[float]
-
-        status : typing.Optional[str]
-
-        request_options : typing.Optional[RequestOptions]
-            Request-specific configuration.
-
-        Returns
-        -------
-        PublicItemResponse
-            OK
-
-        Examples
-        --------
-        import asyncio
-
-        from sanka_sdk import AsyncSankaClient
-
-        client = AsyncSankaClient(
-            token="YOUR_TOKEN",
-        )
-
-
-        async def main() -> None:
-            await client.items.api_routers_v_1_items_public_api_update_public_item(
-                item_id="item_id",
-                external_id="externalId",
-            )
-
-
-        asyncio.run(main())
-        """
-        _response = await self._raw_client.api_routers_v_1_items_public_api_update_public_item(
+        _response = await self._raw_client.get_public_item_api(
             item_id,
             external_id=external_id,
-            name=name,
-            description=description,
-            currency=currency,
-            price=price,
-            purchase_price=purchase_price,
-            tax=tax,
-            status=status,
+            workspace_id=workspace_id,
+            view_id=view_id,
+            form_view_id=form_view_id,
             request_options=request_options,
         )
         return _response.data
 
-    async def api_routers_v_1_items_public_api_delete_public_item(
+    async def update_public_item_api(
         self,
         item_id: str,
         *,
         external_id: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = OMIT,
+        form_view_id: typing.Optional[str] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> PublicItemResponse:
+    ) -> UpdatePublicItemApiV2PublicItemsItemIdPut200Envelope:
         """
         Parameters
         ----------
@@ -561,13 +547,21 @@ class AsyncItemsClient:
 
         external_id : typing.Optional[str]
 
+        workspace_id : typing.Optional[str]
+
+        view_id : typing.Optional[str]
+
+        form_view_id : typing.Optional[str]
+
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        PublicItemResponse
-            OK
+        UpdatePublicItemApiV2PublicItemsItemIdPut200Envelope
+            Successful Response
 
         Examples
         --------
@@ -576,19 +570,76 @@ class AsyncItemsClient:
         from sanka_sdk import AsyncSankaClient
 
         client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
 
 
         async def main() -> None:
-            await client.items.api_routers_v_1_items_public_api_delete_public_item(
+            await client.items.update_public_item_api(
                 item_id="item_id",
             )
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.api_routers_v_1_items_public_api_delete_public_item(
-            item_id, external_id=external_id, request_options=request_options
+        _response = await self._raw_client.update_public_item_api(
+            item_id,
+            external_id=external_id,
+            workspace_id=workspace_id,
+            view_id=view_id,
+            form_view_id=form_view_id,
+            properties=properties,
+            request_options=request_options,
+        )
+        return _response.data
+
+    async def delete_public_item_api(
+        self,
+        item_id: str,
+        *,
+        external_id: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> DeletePublicItemApiV2PublicItemsItemIdDelete200Envelope:
+        """
+        Parameters
+        ----------
+        item_id : str
+
+        external_id : typing.Optional[str]
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        DeletePublicItemApiV2PublicItemsItemIdDelete200Envelope
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sanka_sdk import AsyncSankaClient
+
+        client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.items.delete_public_item_api(
+                item_id="item_id",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.delete_public_item_api(
+            item_id, external_id=external_id, workspace_id=workspace_id, request_options=request_options
         )
         return _response.data

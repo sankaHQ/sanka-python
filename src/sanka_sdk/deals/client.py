@@ -4,9 +4,24 @@ import typing
 
 from ..core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ..core.request_options import RequestOptions
-from ..types.case_schema import CaseSchema
-from ..types.public_case_pipeline_schema import PublicCasePipelineSchema
-from ..types.public_case_response import PublicCaseResponse
+from ..types.create_public_deal_api_v_2_public_deals_post_200_envelope import (
+    CreatePublicDealApiV2PublicDealsPost200Envelope,
+)
+from ..types.delete_public_deal_api_v_2_public_deals_deal_id_delete_200_envelope import (
+    DeletePublicDealApiV2PublicDealsDealIdDelete200Envelope,
+)
+from ..types.get_public_deal_api_v_2_public_deals_deal_id_get_200_envelope import (
+    GetPublicDealApiV2PublicDealsDealIdGet200Envelope,
+)
+from ..types.list_public_deal_pipelines_api_v_2_public_deals_pipelines_get_200_envelope import (
+    ListPublicDealPipelinesApiV2PublicDealsPipelinesGet200Envelope,
+)
+from ..types.list_public_deals_api_v_2_public_deals_get_200_envelope import (
+    ListPublicDealsApiV2PublicDealsGet200Envelope,
+)
+from ..types.update_public_deal_api_v_2_public_deals_deal_id_put_200_envelope import (
+    UpdatePublicDealApiV2PublicDealsDealIdPut200Envelope,
+)
 from .raw_client import AsyncRawDealsClient, RawDealsClient
 
 # this is used as the default value for optional parameters
@@ -28,23 +43,44 @@ class DealsClient:
         """
         return self._raw_client
 
-    def api_routers_v_1_cases_public_api_list_public_cases(
+    def list_public_deals_api(
         self,
         *,
         workspace_id: typing.Optional[str] = None,
-        lang: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = None,
+        search: typing.Optional[str] = None,
         language: typing.Optional[str] = None,
+        status: typing.Optional[str] = None,
+        usage_status: typing.Optional[str] = None,
+        page: typing.Optional[int] = None,
+        limit: typing.Optional[int] = None,
+        sort: typing.Optional[str] = None,
+        x_language: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> typing.List[CaseSchema]:
+    ) -> ListPublicDealsApiV2PublicDealsGet200Envelope:
         """
         Parameters
         ----------
         workspace_id : typing.Optional[str]
 
-        lang : typing.Optional[str]
+        view_id : typing.Optional[str]
+
+        search : typing.Optional[str]
 
         language : typing.Optional[str]
+
+        status : typing.Optional[str]
+
+        usage_status : typing.Optional[str]
+
+        page : typing.Optional[int]
+
+        limit : typing.Optional[int]
+
+        sort : typing.Optional[str]
+
+        x_language : typing.Optional[str]
 
         accept_language : typing.Optional[str]
 
@@ -53,110 +89,117 @@ class DealsClient:
 
         Returns
         -------
-        typing.List[CaseSchema]
-            OK
+        ListPublicDealsApiV2PublicDealsGet200Envelope
+            Object record list response
 
         Examples
         --------
         from sanka_sdk import SankaClient
 
         client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
-        client.deals.api_routers_v_1_cases_public_api_list_public_cases()
+        client.deals.list_public_deals_api()
         """
-        _response = self._raw_client.api_routers_v_1_cases_public_api_list_public_cases(
+        _response = self._raw_client.list_public_deals_api(
             workspace_id=workspace_id,
-            lang=lang,
+            view_id=view_id,
+            search=search,
             language=language,
+            status=status,
+            usage_status=usage_status,
+            page=page,
+            limit=limit,
+            sort=sort,
+            x_language=x_language,
             accept_language=accept_language,
             request_options=request_options,
         )
         return _response.data
 
-    def api_routers_v_1_cases_public_api_create_public_case(
+    def create_public_deal_api(
         self,
         *,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = OMIT,
+        form_view_id: typing.Optional[str] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
+        target: typing.Optional[str] = OMIT,
+        provider: typing.Optional[str] = OMIT,
+        channel_id: typing.Optional[str] = OMIT,
+        external_object_type: typing.Optional[str] = OMIT,
         external_id: typing.Optional[str] = OMIT,
-        name: typing.Optional[str] = OMIT,
-        status: typing.Optional[str] = OMIT,
-        stage: typing.Optional[str] = OMIT,
-        currency: typing.Optional[str] = OMIT,
-        value: typing.Optional[float] = OMIT,
-        pipeline_id: typing.Optional[str] = OMIT,
-        contact_id: typing.Optional[str] = OMIT,
-        contact_external_id: typing.Optional[str] = OMIT,
-        company_id: typing.Optional[str] = OMIT,
-        company_external_id: typing.Optional[str] = OMIT,
+        operation: typing.Optional[str] = OMIT,
+        dry_run: typing.Optional[bool] = OMIT,
+        confirm: typing.Optional[bool] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> PublicCaseResponse:
+    ) -> CreatePublicDealApiV2PublicDealsPost200Envelope:
         """
-        Creates or updates a deal in Sanka for the authenticated public channel. Connected integrations such as HubSpot sync separately; this endpoint does not guarantee an immediate downstream write.
-
         Parameters
         ----------
+        workspace_id : typing.Optional[str]
+
+        view_id : typing.Optional[str]
+
+        form_view_id : typing.Optional[str]
+
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
+
+        target : typing.Optional[str]
+
+        provider : typing.Optional[str]
+
+        channel_id : typing.Optional[str]
+
+        external_object_type : typing.Optional[str]
+
         external_id : typing.Optional[str]
-            External reference for the upstream system. Uniqueness is scoped to the authenticated public channel.
 
-        name : typing.Optional[str]
+        operation : typing.Optional[str]
 
-        status : typing.Optional[str]
+        dry_run : typing.Optional[bool]
 
-        stage : typing.Optional[str]
-            Deal stage internal value. The value must belong to the selected pipeline or the workspace default pipeline.
-
-        currency : typing.Optional[str]
-
-        value : typing.Optional[float]
-            Deal value expressed in the request currency.
-
-        pipeline_id : typing.Optional[str]
-            Pipeline identifier to validate and assign the stage against. When omitted, the deal stays on its current pipeline or uses the default workspace pipeline.
-
-        contact_id : typing.Optional[str]
-
-        contact_external_id : typing.Optional[str]
-
-        company_id : typing.Optional[str]
-
-        company_external_id : typing.Optional[str]
+        confirm : typing.Optional[bool]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        PublicCaseResponse
-            OK
+        CreatePublicDealApiV2PublicDealsPost200Envelope
+            Successful Response
 
         Examples
         --------
         from sanka_sdk import SankaClient
 
         client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
-        client.deals.api_routers_v_1_cases_public_api_create_public_case()
+        client.deals.create_public_deal_api()
         """
-        _response = self._raw_client.api_routers_v_1_cases_public_api_create_public_case(
+        _response = self._raw_client.create_public_deal_api(
+            workspace_id=workspace_id,
+            view_id=view_id,
+            form_view_id=form_view_id,
+            properties=properties,
+            target=target,
+            provider=provider,
+            channel_id=channel_id,
+            external_object_type=external_object_type,
             external_id=external_id,
-            name=name,
-            status=status,
-            stage=stage,
-            currency=currency,
-            value=value,
-            pipeline_id=pipeline_id,
-            contact_id=contact_id,
-            contact_external_id=contact_external_id,
-            company_id=company_id,
-            company_external_id=company_external_id,
+            operation=operation,
+            dry_run=dry_run,
+            confirm=confirm,
             request_options=request_options,
         )
         return _response.data
 
-    def api_routers_v_1_cases_public_api_list_public_case_pipelines(
+    def list_public_deal_pipelines_api(
         self, *, workspace_id: typing.Optional[str] = None, request_options: typing.Optional[RequestOptions] = None
-    ) -> typing.List[PublicCasePipelineSchema]:
+    ) -> ListPublicDealPipelinesApiV2PublicDealsPipelinesGet200Envelope:
         """
         Parameters
         ----------
@@ -167,200 +210,232 @@ class DealsClient:
 
         Returns
         -------
-        typing.List[PublicCasePipelineSchema]
-            OK
+        ListPublicDealPipelinesApiV2PublicDealsPipelinesGet200Envelope
+            Successful Response
 
         Examples
         --------
         from sanka_sdk import SankaClient
 
         client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
-        client.deals.api_routers_v_1_cases_public_api_list_public_case_pipelines()
+        client.deals.list_public_deal_pipelines_api()
         """
-        _response = self._raw_client.api_routers_v_1_cases_public_api_list_public_case_pipelines(
+        _response = self._raw_client.list_public_deal_pipelines_api(
             workspace_id=workspace_id, request_options=request_options
         )
         return _response.data
 
-    def api_routers_v_1_cases_public_api_get_public_case(
+    def get_public_deal_api(
         self,
-        case_id: str,
+        deal_id: str,
         *,
         external_id: typing.Optional[str] = None,
-        lang: typing.Optional[str] = None,
-        language: typing.Optional[str] = None,
-        accept_language: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = None,
+        form_view_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> CaseSchema:
+    ) -> GetPublicDealApiV2PublicDealsDealIdGet200Envelope:
         """
         Parameters
         ----------
-        case_id : str
+        deal_id : str
 
         external_id : typing.Optional[str]
 
-        lang : typing.Optional[str]
+        workspace_id : typing.Optional[str]
 
-        language : typing.Optional[str]
+        view_id : typing.Optional[str]
 
-        accept_language : typing.Optional[str]
+        form_view_id : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        CaseSchema
-            OK
+        GetPublicDealApiV2PublicDealsDealIdGet200Envelope
+            Object record detail response. The base detail payload is intentionally thin; drawer sections load through scoped endpoints.
 
         Examples
         --------
         from sanka_sdk import SankaClient
 
         client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
-        client.deals.api_routers_v_1_cases_public_api_get_public_case(
-            case_id="case_id",
+        client.deals.get_public_deal_api(
+            deal_id="deal_id",
         )
         """
-        _response = self._raw_client.api_routers_v_1_cases_public_api_get_public_case(
-            case_id,
+        _response = self._raw_client.get_public_deal_api(
+            deal_id,
             external_id=external_id,
-            lang=lang,
-            language=language,
-            accept_language=accept_language,
+            workspace_id=workspace_id,
+            view_id=view_id,
+            form_view_id=form_view_id,
             request_options=request_options,
         )
         return _response.data
 
-    def api_routers_v_1_cases_public_api_update_public_case(
+    def update_public_deal_api(
         self,
-        case_id: str,
+        deal_id: str,
         *,
         external_id: typing.Optional[str] = None,
-        public_case_request_external_id: typing.Optional[str] = OMIT,
-        name: typing.Optional[str] = OMIT,
-        status: typing.Optional[str] = OMIT,
-        stage: typing.Optional[str] = OMIT,
-        currency: typing.Optional[str] = OMIT,
-        value: typing.Optional[float] = OMIT,
-        pipeline_id: typing.Optional[str] = OMIT,
-        contact_id: typing.Optional[str] = OMIT,
-        contact_external_id: typing.Optional[str] = OMIT,
-        company_id: typing.Optional[str] = OMIT,
-        company_external_id: typing.Optional[str] = OMIT,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = OMIT,
+        form_view_id: typing.Optional[str] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
+        target: typing.Optional[str] = OMIT,
+        provider: typing.Optional[str] = OMIT,
+        channel_id: typing.Optional[str] = OMIT,
+        external_object_type: typing.Optional[str] = OMIT,
+        public_object_record_mutation_request_external_id: typing.Optional[str] = OMIT,
+        operation: typing.Optional[str] = OMIT,
+        dry_run: typing.Optional[bool] = OMIT,
+        confirm: typing.Optional[bool] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> PublicCaseResponse:
+    ) -> UpdatePublicDealApiV2PublicDealsDealIdPut200Envelope:
         """
-        Updates a deal in Sanka for the authenticated public channel. Connected integrations such as HubSpot sync separately; this endpoint does not guarantee an immediate downstream write.
-
         Parameters
         ----------
-        case_id : str
+        deal_id : str
 
         external_id : typing.Optional[str]
 
-        public_case_request_external_id : typing.Optional[str]
-            External reference for the upstream system. Uniqueness is scoped to the authenticated public channel.
+        workspace_id : typing.Optional[str]
 
-        name : typing.Optional[str]
+        view_id : typing.Optional[str]
 
-        status : typing.Optional[str]
+        form_view_id : typing.Optional[str]
 
-        stage : typing.Optional[str]
-            Deal stage internal value. The value must belong to the selected pipeline or the workspace default pipeline.
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
 
-        currency : typing.Optional[str]
+        target : typing.Optional[str]
 
-        value : typing.Optional[float]
-            Deal value expressed in the request currency.
+        provider : typing.Optional[str]
 
-        pipeline_id : typing.Optional[str]
-            Pipeline identifier to validate and assign the stage against. When omitted, the deal stays on its current pipeline or uses the default workspace pipeline.
+        channel_id : typing.Optional[str]
 
-        contact_id : typing.Optional[str]
+        external_object_type : typing.Optional[str]
 
-        contact_external_id : typing.Optional[str]
+        public_object_record_mutation_request_external_id : typing.Optional[str]
 
-        company_id : typing.Optional[str]
+        operation : typing.Optional[str]
 
-        company_external_id : typing.Optional[str]
+        dry_run : typing.Optional[bool]
+
+        confirm : typing.Optional[bool]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        PublicCaseResponse
-            OK
+        UpdatePublicDealApiV2PublicDealsDealIdPut200Envelope
+            Successful Response
 
         Examples
         --------
         from sanka_sdk import SankaClient
 
         client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
-        client.deals.api_routers_v_1_cases_public_api_update_public_case(
-            case_id="case_id",
+        client.deals.update_public_deal_api(
+            deal_id="deal_id",
         )
         """
-        _response = self._raw_client.api_routers_v_1_cases_public_api_update_public_case(
-            case_id,
+        _response = self._raw_client.update_public_deal_api(
+            deal_id,
             external_id=external_id,
-            public_case_request_external_id=public_case_request_external_id,
-            name=name,
-            status=status,
-            stage=stage,
-            currency=currency,
-            value=value,
-            pipeline_id=pipeline_id,
-            contact_id=contact_id,
-            contact_external_id=contact_external_id,
-            company_id=company_id,
-            company_external_id=company_external_id,
+            workspace_id=workspace_id,
+            view_id=view_id,
+            form_view_id=form_view_id,
+            properties=properties,
+            target=target,
+            provider=provider,
+            channel_id=channel_id,
+            external_object_type=external_object_type,
+            public_object_record_mutation_request_external_id=public_object_record_mutation_request_external_id,
+            operation=operation,
+            dry_run=dry_run,
+            confirm=confirm,
             request_options=request_options,
         )
         return _response.data
 
-    def api_routers_v_1_cases_public_api_delete_public_case(
+    def delete_public_deal_api(
         self,
-        case_id: str,
+        deal_id: str,
         *,
         external_id: typing.Optional[str] = None,
+        target: typing.Optional[str] = None,
+        provider: typing.Optional[str] = None,
+        channel_id: typing.Optional[str] = None,
+        external_object_type: typing.Optional[str] = None,
+        dry_run: typing.Optional[bool] = None,
+        confirm: typing.Optional[bool] = None,
+        workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> PublicCaseResponse:
+    ) -> DeletePublicDealApiV2PublicDealsDealIdDelete200Envelope:
         """
         Parameters
         ----------
-        case_id : str
+        deal_id : str
 
         external_id : typing.Optional[str]
+
+        target : typing.Optional[str]
+
+        provider : typing.Optional[str]
+
+        channel_id : typing.Optional[str]
+
+        external_object_type : typing.Optional[str]
+
+        dry_run : typing.Optional[bool]
+
+        confirm : typing.Optional[bool]
+
+        workspace_id : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        PublicCaseResponse
-            OK
+        DeletePublicDealApiV2PublicDealsDealIdDelete200Envelope
+            Successful Response
 
         Examples
         --------
         from sanka_sdk import SankaClient
 
         client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
-        client.deals.api_routers_v_1_cases_public_api_delete_public_case(
-            case_id="case_id",
+        client.deals.delete_public_deal_api(
+            deal_id="deal_id",
         )
         """
-        _response = self._raw_client.api_routers_v_1_cases_public_api_delete_public_case(
-            case_id, external_id=external_id, request_options=request_options
+        _response = self._raw_client.delete_public_deal_api(
+            deal_id,
+            external_id=external_id,
+            target=target,
+            provider=provider,
+            channel_id=channel_id,
+            external_object_type=external_object_type,
+            dry_run=dry_run,
+            confirm=confirm,
+            workspace_id=workspace_id,
+            request_options=request_options,
         )
         return _response.data
 
@@ -380,23 +455,44 @@ class AsyncDealsClient:
         """
         return self._raw_client
 
-    async def api_routers_v_1_cases_public_api_list_public_cases(
+    async def list_public_deals_api(
         self,
         *,
         workspace_id: typing.Optional[str] = None,
-        lang: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = None,
+        search: typing.Optional[str] = None,
         language: typing.Optional[str] = None,
+        status: typing.Optional[str] = None,
+        usage_status: typing.Optional[str] = None,
+        page: typing.Optional[int] = None,
+        limit: typing.Optional[int] = None,
+        sort: typing.Optional[str] = None,
+        x_language: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> typing.List[CaseSchema]:
+    ) -> ListPublicDealsApiV2PublicDealsGet200Envelope:
         """
         Parameters
         ----------
         workspace_id : typing.Optional[str]
 
-        lang : typing.Optional[str]
+        view_id : typing.Optional[str]
+
+        search : typing.Optional[str]
 
         language : typing.Optional[str]
+
+        status : typing.Optional[str]
+
+        usage_status : typing.Optional[str]
+
+        page : typing.Optional[int]
+
+        limit : typing.Optional[int]
+
+        sort : typing.Optional[str]
+
+        x_language : typing.Optional[str]
 
         accept_language : typing.Optional[str]
 
@@ -405,8 +501,8 @@ class AsyncDealsClient:
 
         Returns
         -------
-        typing.List[CaseSchema]
-            OK
+        ListPublicDealsApiV2PublicDealsGet200Envelope
+            Object record list response
 
         Examples
         --------
@@ -415,79 +511,84 @@ class AsyncDealsClient:
         from sanka_sdk import AsyncSankaClient
 
         client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
 
 
         async def main() -> None:
-            await client.deals.api_routers_v_1_cases_public_api_list_public_cases()
+            await client.deals.list_public_deals_api()
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.api_routers_v_1_cases_public_api_list_public_cases(
+        _response = await self._raw_client.list_public_deals_api(
             workspace_id=workspace_id,
-            lang=lang,
+            view_id=view_id,
+            search=search,
             language=language,
+            status=status,
+            usage_status=usage_status,
+            page=page,
+            limit=limit,
+            sort=sort,
+            x_language=x_language,
             accept_language=accept_language,
             request_options=request_options,
         )
         return _response.data
 
-    async def api_routers_v_1_cases_public_api_create_public_case(
+    async def create_public_deal_api(
         self,
         *,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = OMIT,
+        form_view_id: typing.Optional[str] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
+        target: typing.Optional[str] = OMIT,
+        provider: typing.Optional[str] = OMIT,
+        channel_id: typing.Optional[str] = OMIT,
+        external_object_type: typing.Optional[str] = OMIT,
         external_id: typing.Optional[str] = OMIT,
-        name: typing.Optional[str] = OMIT,
-        status: typing.Optional[str] = OMIT,
-        stage: typing.Optional[str] = OMIT,
-        currency: typing.Optional[str] = OMIT,
-        value: typing.Optional[float] = OMIT,
-        pipeline_id: typing.Optional[str] = OMIT,
-        contact_id: typing.Optional[str] = OMIT,
-        contact_external_id: typing.Optional[str] = OMIT,
-        company_id: typing.Optional[str] = OMIT,
-        company_external_id: typing.Optional[str] = OMIT,
+        operation: typing.Optional[str] = OMIT,
+        dry_run: typing.Optional[bool] = OMIT,
+        confirm: typing.Optional[bool] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> PublicCaseResponse:
+    ) -> CreatePublicDealApiV2PublicDealsPost200Envelope:
         """
-        Creates or updates a deal in Sanka for the authenticated public channel. Connected integrations such as HubSpot sync separately; this endpoint does not guarantee an immediate downstream write.
-
         Parameters
         ----------
+        workspace_id : typing.Optional[str]
+
+        view_id : typing.Optional[str]
+
+        form_view_id : typing.Optional[str]
+
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
+
+        target : typing.Optional[str]
+
+        provider : typing.Optional[str]
+
+        channel_id : typing.Optional[str]
+
+        external_object_type : typing.Optional[str]
+
         external_id : typing.Optional[str]
-            External reference for the upstream system. Uniqueness is scoped to the authenticated public channel.
 
-        name : typing.Optional[str]
+        operation : typing.Optional[str]
 
-        status : typing.Optional[str]
+        dry_run : typing.Optional[bool]
 
-        stage : typing.Optional[str]
-            Deal stage internal value. The value must belong to the selected pipeline or the workspace default pipeline.
-
-        currency : typing.Optional[str]
-
-        value : typing.Optional[float]
-            Deal value expressed in the request currency.
-
-        pipeline_id : typing.Optional[str]
-            Pipeline identifier to validate and assign the stage against. When omitted, the deal stays on its current pipeline or uses the default workspace pipeline.
-
-        contact_id : typing.Optional[str]
-
-        contact_external_id : typing.Optional[str]
-
-        company_id : typing.Optional[str]
-
-        company_external_id : typing.Optional[str]
+        confirm : typing.Optional[bool]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        PublicCaseResponse
-            OK
+        CreatePublicDealApiV2PublicDealsPost200Envelope
+            Successful Response
 
         Examples
         --------
@@ -496,35 +597,37 @@ class AsyncDealsClient:
         from sanka_sdk import AsyncSankaClient
 
         client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
 
 
         async def main() -> None:
-            await client.deals.api_routers_v_1_cases_public_api_create_public_case()
+            await client.deals.create_public_deal_api()
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.api_routers_v_1_cases_public_api_create_public_case(
+        _response = await self._raw_client.create_public_deal_api(
+            workspace_id=workspace_id,
+            view_id=view_id,
+            form_view_id=form_view_id,
+            properties=properties,
+            target=target,
+            provider=provider,
+            channel_id=channel_id,
+            external_object_type=external_object_type,
             external_id=external_id,
-            name=name,
-            status=status,
-            stage=stage,
-            currency=currency,
-            value=value,
-            pipeline_id=pipeline_id,
-            contact_id=contact_id,
-            contact_external_id=contact_external_id,
-            company_id=company_id,
-            company_external_id=company_external_id,
+            operation=operation,
+            dry_run=dry_run,
+            confirm=confirm,
             request_options=request_options,
         )
         return _response.data
 
-    async def api_routers_v_1_cases_public_api_list_public_case_pipelines(
+    async def list_public_deal_pipelines_api(
         self, *, workspace_id: typing.Optional[str] = None, request_options: typing.Optional[RequestOptions] = None
-    ) -> typing.List[PublicCasePipelineSchema]:
+    ) -> ListPublicDealPipelinesApiV2PublicDealsPipelinesGet200Envelope:
         """
         Parameters
         ----------
@@ -535,8 +638,8 @@ class AsyncDealsClient:
 
         Returns
         -------
-        typing.List[PublicCasePipelineSchema]
-            OK
+        ListPublicDealPipelinesApiV2PublicDealsPipelinesGet200Envelope
+            Successful Response
 
         Examples
         --------
@@ -545,51 +648,52 @@ class AsyncDealsClient:
         from sanka_sdk import AsyncSankaClient
 
         client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
 
 
         async def main() -> None:
-            await client.deals.api_routers_v_1_cases_public_api_list_public_case_pipelines()
+            await client.deals.list_public_deal_pipelines_api()
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.api_routers_v_1_cases_public_api_list_public_case_pipelines(
+        _response = await self._raw_client.list_public_deal_pipelines_api(
             workspace_id=workspace_id, request_options=request_options
         )
         return _response.data
 
-    async def api_routers_v_1_cases_public_api_get_public_case(
+    async def get_public_deal_api(
         self,
-        case_id: str,
+        deal_id: str,
         *,
         external_id: typing.Optional[str] = None,
-        lang: typing.Optional[str] = None,
-        language: typing.Optional[str] = None,
-        accept_language: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = None,
+        form_view_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> CaseSchema:
+    ) -> GetPublicDealApiV2PublicDealsDealIdGet200Envelope:
         """
         Parameters
         ----------
-        case_id : str
+        deal_id : str
 
         external_id : typing.Optional[str]
 
-        lang : typing.Optional[str]
+        workspace_id : typing.Optional[str]
 
-        language : typing.Optional[str]
+        view_id : typing.Optional[str]
 
-        accept_language : typing.Optional[str]
+        form_view_id : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        CaseSchema
-            OK
+        GetPublicDealApiV2PublicDealsDealIdGet200Envelope
+            Object record detail response. The base detail payload is intentionally thin; drawer sections load through scoped endpoints.
 
         Examples
         --------
@@ -598,88 +702,86 @@ class AsyncDealsClient:
         from sanka_sdk import AsyncSankaClient
 
         client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
 
 
         async def main() -> None:
-            await client.deals.api_routers_v_1_cases_public_api_get_public_case(
-                case_id="case_id",
+            await client.deals.get_public_deal_api(
+                deal_id="deal_id",
             )
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.api_routers_v_1_cases_public_api_get_public_case(
-            case_id,
+        _response = await self._raw_client.get_public_deal_api(
+            deal_id,
             external_id=external_id,
-            lang=lang,
-            language=language,
-            accept_language=accept_language,
+            workspace_id=workspace_id,
+            view_id=view_id,
+            form_view_id=form_view_id,
             request_options=request_options,
         )
         return _response.data
 
-    async def api_routers_v_1_cases_public_api_update_public_case(
+    async def update_public_deal_api(
         self,
-        case_id: str,
+        deal_id: str,
         *,
         external_id: typing.Optional[str] = None,
-        public_case_request_external_id: typing.Optional[str] = OMIT,
-        name: typing.Optional[str] = OMIT,
-        status: typing.Optional[str] = OMIT,
-        stage: typing.Optional[str] = OMIT,
-        currency: typing.Optional[str] = OMIT,
-        value: typing.Optional[float] = OMIT,
-        pipeline_id: typing.Optional[str] = OMIT,
-        contact_id: typing.Optional[str] = OMIT,
-        contact_external_id: typing.Optional[str] = OMIT,
-        company_id: typing.Optional[str] = OMIT,
-        company_external_id: typing.Optional[str] = OMIT,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = OMIT,
+        form_view_id: typing.Optional[str] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
+        target: typing.Optional[str] = OMIT,
+        provider: typing.Optional[str] = OMIT,
+        channel_id: typing.Optional[str] = OMIT,
+        external_object_type: typing.Optional[str] = OMIT,
+        public_object_record_mutation_request_external_id: typing.Optional[str] = OMIT,
+        operation: typing.Optional[str] = OMIT,
+        dry_run: typing.Optional[bool] = OMIT,
+        confirm: typing.Optional[bool] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> PublicCaseResponse:
+    ) -> UpdatePublicDealApiV2PublicDealsDealIdPut200Envelope:
         """
-        Updates a deal in Sanka for the authenticated public channel. Connected integrations such as HubSpot sync separately; this endpoint does not guarantee an immediate downstream write.
-
         Parameters
         ----------
-        case_id : str
+        deal_id : str
 
         external_id : typing.Optional[str]
 
-        public_case_request_external_id : typing.Optional[str]
-            External reference for the upstream system. Uniqueness is scoped to the authenticated public channel.
+        workspace_id : typing.Optional[str]
 
-        name : typing.Optional[str]
+        view_id : typing.Optional[str]
 
-        status : typing.Optional[str]
+        form_view_id : typing.Optional[str]
 
-        stage : typing.Optional[str]
-            Deal stage internal value. The value must belong to the selected pipeline or the workspace default pipeline.
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
 
-        currency : typing.Optional[str]
+        target : typing.Optional[str]
 
-        value : typing.Optional[float]
-            Deal value expressed in the request currency.
+        provider : typing.Optional[str]
 
-        pipeline_id : typing.Optional[str]
-            Pipeline identifier to validate and assign the stage against. When omitted, the deal stays on its current pipeline or uses the default workspace pipeline.
+        channel_id : typing.Optional[str]
 
-        contact_id : typing.Optional[str]
+        external_object_type : typing.Optional[str]
 
-        contact_external_id : typing.Optional[str]
+        public_object_record_mutation_request_external_id : typing.Optional[str]
 
-        company_id : typing.Optional[str]
+        operation : typing.Optional[str]
 
-        company_external_id : typing.Optional[str]
+        dry_run : typing.Optional[bool]
+
+        confirm : typing.Optional[bool]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        PublicCaseResponse
-            OK
+        UpdatePublicDealApiV2PublicDealsDealIdPut200Envelope
+            Successful Response
 
         Examples
         --------
@@ -688,57 +790,80 @@ class AsyncDealsClient:
         from sanka_sdk import AsyncSankaClient
 
         client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
 
 
         async def main() -> None:
-            await client.deals.api_routers_v_1_cases_public_api_update_public_case(
-                case_id="case_id",
+            await client.deals.update_public_deal_api(
+                deal_id="deal_id",
             )
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.api_routers_v_1_cases_public_api_update_public_case(
-            case_id,
+        _response = await self._raw_client.update_public_deal_api(
+            deal_id,
             external_id=external_id,
-            public_case_request_external_id=public_case_request_external_id,
-            name=name,
-            status=status,
-            stage=stage,
-            currency=currency,
-            value=value,
-            pipeline_id=pipeline_id,
-            contact_id=contact_id,
-            contact_external_id=contact_external_id,
-            company_id=company_id,
-            company_external_id=company_external_id,
+            workspace_id=workspace_id,
+            view_id=view_id,
+            form_view_id=form_view_id,
+            properties=properties,
+            target=target,
+            provider=provider,
+            channel_id=channel_id,
+            external_object_type=external_object_type,
+            public_object_record_mutation_request_external_id=public_object_record_mutation_request_external_id,
+            operation=operation,
+            dry_run=dry_run,
+            confirm=confirm,
             request_options=request_options,
         )
         return _response.data
 
-    async def api_routers_v_1_cases_public_api_delete_public_case(
+    async def delete_public_deal_api(
         self,
-        case_id: str,
+        deal_id: str,
         *,
         external_id: typing.Optional[str] = None,
+        target: typing.Optional[str] = None,
+        provider: typing.Optional[str] = None,
+        channel_id: typing.Optional[str] = None,
+        external_object_type: typing.Optional[str] = None,
+        dry_run: typing.Optional[bool] = None,
+        confirm: typing.Optional[bool] = None,
+        workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> PublicCaseResponse:
+    ) -> DeletePublicDealApiV2PublicDealsDealIdDelete200Envelope:
         """
         Parameters
         ----------
-        case_id : str
+        deal_id : str
 
         external_id : typing.Optional[str]
+
+        target : typing.Optional[str]
+
+        provider : typing.Optional[str]
+
+        channel_id : typing.Optional[str]
+
+        external_object_type : typing.Optional[str]
+
+        dry_run : typing.Optional[bool]
+
+        confirm : typing.Optional[bool]
+
+        workspace_id : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        PublicCaseResponse
-            OK
+        DeletePublicDealApiV2PublicDealsDealIdDelete200Envelope
+            Successful Response
 
         Examples
         --------
@@ -747,19 +872,29 @@ class AsyncDealsClient:
         from sanka_sdk import AsyncSankaClient
 
         client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
 
 
         async def main() -> None:
-            await client.deals.api_routers_v_1_cases_public_api_delete_public_case(
-                case_id="case_id",
+            await client.deals.delete_public_deal_api(
+                deal_id="deal_id",
             )
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.api_routers_v_1_cases_public_api_delete_public_case(
-            case_id, external_id=external_id, request_options=request_options
+        _response = await self._raw_client.delete_public_deal_api(
+            deal_id,
+            external_id=external_id,
+            target=target,
+            provider=provider,
+            channel_id=channel_id,
+            external_object_type=external_object_type,
+            dry_run=dry_run,
+            confirm=confirm,
+            workspace_id=workspace_id,
+            request_options=request_options,
         )
         return _response.data

@@ -2,10 +2,27 @@
 
 import typing
 
+from .. import core
 from ..core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ..core.request_options import RequestOptions
-from ..types.public_purchase_order_response import PublicPurchaseOrderResponse
-from ..types.purchase_order_schema import PurchaseOrderSchema
+from ..types.create_public_purchase_order_api_v_2_public_purchase_orders_post_200_envelope import (
+    CreatePublicPurchaseOrderApiV2PublicPurchaseOrdersPost200Envelope,
+)
+from ..types.delete_public_purchase_order_api_v_2_public_purchase_orders_purchase_order_id_delete_200_envelope import (
+    DeletePublicPurchaseOrderApiV2PublicPurchaseOrdersPurchaseOrderIdDelete200Envelope,
+)
+from ..types.get_public_purchase_order_api_v_2_public_purchase_orders_purchase_order_id_get_200_envelope import (
+    GetPublicPurchaseOrderApiV2PublicPurchaseOrdersPurchaseOrderIdGet200Envelope,
+)
+from ..types.list_public_purchase_orders_api_v_2_public_purchase_orders_get_200_envelope import (
+    ListPublicPurchaseOrdersApiV2PublicPurchaseOrdersGet200Envelope,
+)
+from ..types.update_public_purchase_order_api_v_2_public_purchase_orders_purchase_order_id_put_200_envelope import (
+    UpdatePublicPurchaseOrderApiV2PublicPurchaseOrdersPurchaseOrderIdPut200Envelope,
+)
+from ..types.upload_public_purchase_order_file_api_v_2_public_purchase_orders_files_post_200_envelope import (
+    UploadPublicPurchaseOrderFileApiV2PublicPurchaseOrdersFilesPost200Envelope,
+)
 from .raw_client import AsyncRawPurchaseOrdersClient, RawPurchaseOrdersClient
 
 # this is used as the default value for optional parameters
@@ -27,23 +44,44 @@ class PurchaseOrdersClient:
         """
         return self._raw_client
 
-    def api_routers_v_1_purchase_orders_public_api_list_workspace_purchase_orders(
+    def list_public_purchase_orders_api(
         self,
         *,
         workspace_id: typing.Optional[str] = None,
-        lang: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = None,
+        search: typing.Optional[str] = None,
         language: typing.Optional[str] = None,
+        status: typing.Optional[str] = None,
+        usage_status: typing.Optional[str] = None,
+        page: typing.Optional[int] = None,
+        limit: typing.Optional[int] = None,
+        sort: typing.Optional[str] = None,
+        x_language: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> typing.List[PurchaseOrderSchema]:
+    ) -> ListPublicPurchaseOrdersApiV2PublicPurchaseOrdersGet200Envelope:
         """
         Parameters
         ----------
         workspace_id : typing.Optional[str]
 
-        lang : typing.Optional[str]
+        view_id : typing.Optional[str]
+
+        search : typing.Optional[str]
 
         language : typing.Optional[str]
+
+        status : typing.Optional[str]
+
+        usage_status : typing.Optional[str]
+
+        page : typing.Optional[int]
+
+        limit : typing.Optional[int]
+
+        sort : typing.Optional[str]
+
+        x_language : typing.Optional[str]
 
         accept_language : typing.Optional[str]
 
@@ -52,119 +90,284 @@ class PurchaseOrdersClient:
 
         Returns
         -------
-        typing.List[PurchaseOrderSchema]
-            OK
+        ListPublicPurchaseOrdersApiV2PublicPurchaseOrdersGet200Envelope
+            Object record list response
 
         Examples
         --------
         from sanka_sdk import SankaClient
 
         client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
-        client.purchase_orders.api_routers_v_1_purchase_orders_public_api_list_workspace_purchase_orders()
+        client.purchase_orders.list_public_purchase_orders_api()
         """
-        _response = self._raw_client.api_routers_v_1_purchase_orders_public_api_list_workspace_purchase_orders(
+        _response = self._raw_client.list_public_purchase_orders_api(
             workspace_id=workspace_id,
-            lang=lang,
+            view_id=view_id,
+            search=search,
             language=language,
+            status=status,
+            usage_status=usage_status,
+            page=page,
+            limit=limit,
+            sort=sort,
+            x_language=x_language,
             accept_language=accept_language,
             request_options=request_options,
         )
         return _response.data
 
-    def api_routers_v_1_purchase_orders_public_api_create_public_purchase_order(
+    def create_public_purchase_order_api(
         self,
         *,
-        external_id: typing.Optional[str] = OMIT,
-        contact_id: typing.Optional[str] = OMIT,
-        contact_external_id: typing.Optional[str] = OMIT,
-        company_id: typing.Optional[str] = OMIT,
-        company_external_id: typing.Optional[str] = OMIT,
-        date: typing.Optional[str] = OMIT,
-        status: typing.Optional[str] = OMIT,
-        currency: typing.Optional[str] = OMIT,
-        notes: typing.Optional[str] = OMIT,
-        tax_rate: typing.Optional[float] = OMIT,
-        tax_option: typing.Optional[str] = OMIT,
-        total_price: typing.Optional[float] = OMIT,
-        total_price_without_tax: typing.Optional[float] = OMIT,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = OMIT,
+        form_view_id: typing.Optional[str] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> PublicPurchaseOrderResponse:
+    ) -> CreatePublicPurchaseOrderApiV2PublicPurchaseOrdersPost200Envelope:
         """
         Parameters
         ----------
-        external_id : typing.Optional[str]
+        workspace_id : typing.Optional[str]
 
-        contact_id : typing.Optional[str]
+        view_id : typing.Optional[str]
 
-        contact_external_id : typing.Optional[str]
+        form_view_id : typing.Optional[str]
 
-        company_id : typing.Optional[str]
-
-        company_external_id : typing.Optional[str]
-
-        date : typing.Optional[str]
-
-        status : typing.Optional[str]
-
-        currency : typing.Optional[str]
-
-        notes : typing.Optional[str]
-
-        tax_rate : typing.Optional[float]
-
-        tax_option : typing.Optional[str]
-
-        total_price : typing.Optional[float]
-
-        total_price_without_tax : typing.Optional[float]
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        PublicPurchaseOrderResponse
-            OK
+        CreatePublicPurchaseOrderApiV2PublicPurchaseOrdersPost200Envelope
+            Successful Response
 
         Examples
         --------
         from sanka_sdk import SankaClient
 
         client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
-        client.purchase_orders.api_routers_v_1_purchase_orders_public_api_create_public_purchase_order()
+        client.purchase_orders.create_public_purchase_order_api()
         """
-        _response = self._raw_client.api_routers_v_1_purchase_orders_public_api_create_public_purchase_order(
-            external_id=external_id,
-            contact_id=contact_id,
-            contact_external_id=contact_external_id,
-            company_id=company_id,
-            company_external_id=company_external_id,
-            date=date,
-            status=status,
-            currency=currency,
-            notes=notes,
-            tax_rate=tax_rate,
-            tax_option=tax_option,
-            total_price=total_price,
-            total_price_without_tax=total_price_without_tax,
+        _response = self._raw_client.create_public_purchase_order_api(
+            workspace_id=workspace_id,
+            view_id=view_id,
+            form_view_id=form_view_id,
+            properties=properties,
             request_options=request_options,
         )
         return _response.data
 
-    def api_routers_v_1_purchase_orders_public_api_get_public_purchase_order(
+    def upload_public_purchase_order_file_api(
+        self,
+        *,
+        file: core.File,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> UploadPublicPurchaseOrderFileApiV2PublicPurchaseOrdersFilesPost200Envelope:
+        """
+        Parameters
+        ----------
+        file : core.File
+            See core.File for more documentation
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        UploadPublicPurchaseOrderFileApiV2PublicPurchaseOrdersFilesPost200Envelope
+            Successful Response
+
+        Examples
+        --------
+        from sanka_sdk import SankaClient
+
+        client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+        client.purchase_orders.upload_public_purchase_order_file_api()
+        """
+        _response = self._raw_client.upload_public_purchase_order_file_api(
+            file=file, workspace_id=workspace_id, request_options=request_options
+        )
+        return _response.data
+
+    def get_public_purchase_order_api(
         self,
         purchase_order_id: str,
         *,
         external_id: typing.Optional[str] = None,
-        lang: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = None,
+        form_view_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> GetPublicPurchaseOrderApiV2PublicPurchaseOrdersPurchaseOrderIdGet200Envelope:
+        """
+        Parameters
+        ----------
+        purchase_order_id : str
+
+        external_id : typing.Optional[str]
+
+        workspace_id : typing.Optional[str]
+
+        view_id : typing.Optional[str]
+
+        form_view_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        GetPublicPurchaseOrderApiV2PublicPurchaseOrdersPurchaseOrderIdGet200Envelope
+            Object record detail response. The base detail payload is intentionally thin; drawer sections load through scoped endpoints.
+
+        Examples
+        --------
+        from sanka_sdk import SankaClient
+
+        client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+        client.purchase_orders.get_public_purchase_order_api(
+            purchase_order_id="purchase_order_id",
+        )
+        """
+        _response = self._raw_client.get_public_purchase_order_api(
+            purchase_order_id,
+            external_id=external_id,
+            workspace_id=workspace_id,
+            view_id=view_id,
+            form_view_id=form_view_id,
+            request_options=request_options,
+        )
+        return _response.data
+
+    def update_public_purchase_order_api(
+        self,
+        purchase_order_id: str,
+        *,
+        external_id: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = OMIT,
+        form_view_id: typing.Optional[str] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> UpdatePublicPurchaseOrderApiV2PublicPurchaseOrdersPurchaseOrderIdPut200Envelope:
+        """
+        Parameters
+        ----------
+        purchase_order_id : str
+
+        external_id : typing.Optional[str]
+
+        workspace_id : typing.Optional[str]
+
+        view_id : typing.Optional[str]
+
+        form_view_id : typing.Optional[str]
+
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        UpdatePublicPurchaseOrderApiV2PublicPurchaseOrdersPurchaseOrderIdPut200Envelope
+            Successful Response
+
+        Examples
+        --------
+        from sanka_sdk import SankaClient
+
+        client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+        client.purchase_orders.update_public_purchase_order_api(
+            purchase_order_id="purchase_order_id",
+        )
+        """
+        _response = self._raw_client.update_public_purchase_order_api(
+            purchase_order_id,
+            external_id=external_id,
+            workspace_id=workspace_id,
+            view_id=view_id,
+            form_view_id=form_view_id,
+            properties=properties,
+            request_options=request_options,
+        )
+        return _response.data
+
+    def delete_public_purchase_order_api(
+        self,
+        purchase_order_id: str,
+        *,
+        external_id: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> DeletePublicPurchaseOrderApiV2PublicPurchaseOrdersPurchaseOrderIdDelete200Envelope:
+        """
+        Parameters
+        ----------
+        purchase_order_id : str
+
+        external_id : typing.Optional[str]
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        DeletePublicPurchaseOrderApiV2PublicPurchaseOrdersPurchaseOrderIdDelete200Envelope
+            Successful Response
+
+        Examples
+        --------
+        from sanka_sdk import SankaClient
+
+        client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+        client.purchase_orders.delete_public_purchase_order_api(
+            purchase_order_id="purchase_order_id",
+        )
+        """
+        _response = self._raw_client.delete_public_purchase_order_api(
+            purchase_order_id, external_id=external_id, workspace_id=workspace_id, request_options=request_options
+        )
+        return _response.data
+
+    def download_public_purchase_order_pdf_api(
+        self,
+        purchase_order_id: str,
+        *,
+        external_id: typing.Optional[str] = None,
+        template_id: typing.Optional[str] = None,
+        template_select: typing.Optional[str] = None,
         language: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> PurchaseOrderSchema:
+    ) -> typing.Iterator[bytes]:
         """
         Parameters
         ----------
@@ -172,166 +375,47 @@ class PurchaseOrdersClient:
 
         external_id : typing.Optional[str]
 
-        lang : typing.Optional[str]
+        template_id : typing.Optional[str]
+
+        template_select : typing.Optional[str]
 
         language : typing.Optional[str]
+
+        workspace_id : typing.Optional[str]
 
         accept_language : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
-            Request-specific configuration.
+            Request-specific configuration. You can pass in configuration such as `chunk_size`, and more to customize the request and response.
 
         Returns
         -------
-        PurchaseOrderSchema
-            OK
+        typing.Iterator[bytes]
+            PDF document
 
         Examples
         --------
         from sanka_sdk import SankaClient
 
         client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
-        client.purchase_orders.api_routers_v_1_purchase_orders_public_api_get_public_purchase_order(
+        client.purchase_orders.download_public_purchase_order_pdf_api(
             purchase_order_id="purchase_order_id",
         )
         """
-        _response = self._raw_client.api_routers_v_1_purchase_orders_public_api_get_public_purchase_order(
+        with self._raw_client.download_public_purchase_order_pdf_api(
             purchase_order_id,
             external_id=external_id,
-            lang=lang,
+            template_id=template_id,
+            template_select=template_select,
             language=language,
+            workspace_id=workspace_id,
             accept_language=accept_language,
             request_options=request_options,
-        )
-        return _response.data
-
-    def api_routers_v_1_purchase_orders_public_api_update_public_purchase_order(
-        self,
-        purchase_order_id: str,
-        *,
-        external_id: typing.Optional[str] = OMIT,
-        contact_id: typing.Optional[str] = OMIT,
-        contact_external_id: typing.Optional[str] = OMIT,
-        company_id: typing.Optional[str] = OMIT,
-        company_external_id: typing.Optional[str] = OMIT,
-        date: typing.Optional[str] = OMIT,
-        status: typing.Optional[str] = OMIT,
-        currency: typing.Optional[str] = OMIT,
-        notes: typing.Optional[str] = OMIT,
-        tax_rate: typing.Optional[float] = OMIT,
-        tax_option: typing.Optional[str] = OMIT,
-        total_price: typing.Optional[float] = OMIT,
-        total_price_without_tax: typing.Optional[float] = OMIT,
-        request_options: typing.Optional[RequestOptions] = None,
-    ) -> PublicPurchaseOrderResponse:
-        """
-        Parameters
-        ----------
-        purchase_order_id : str
-
-        external_id : typing.Optional[str]
-
-        contact_id : typing.Optional[str]
-
-        contact_external_id : typing.Optional[str]
-
-        company_id : typing.Optional[str]
-
-        company_external_id : typing.Optional[str]
-
-        date : typing.Optional[str]
-
-        status : typing.Optional[str]
-
-        currency : typing.Optional[str]
-
-        notes : typing.Optional[str]
-
-        tax_rate : typing.Optional[float]
-
-        tax_option : typing.Optional[str]
-
-        total_price : typing.Optional[float]
-
-        total_price_without_tax : typing.Optional[float]
-
-        request_options : typing.Optional[RequestOptions]
-            Request-specific configuration.
-
-        Returns
-        -------
-        PublicPurchaseOrderResponse
-            OK
-
-        Examples
-        --------
-        from sanka_sdk import SankaClient
-
-        client = SankaClient(
-            token="YOUR_TOKEN",
-        )
-        client.purchase_orders.api_routers_v_1_purchase_orders_public_api_update_public_purchase_order(
-            purchase_order_id="purchase_order_id",
-        )
-        """
-        _response = self._raw_client.api_routers_v_1_purchase_orders_public_api_update_public_purchase_order(
-            purchase_order_id,
-            external_id=external_id,
-            contact_id=contact_id,
-            contact_external_id=contact_external_id,
-            company_id=company_id,
-            company_external_id=company_external_id,
-            date=date,
-            status=status,
-            currency=currency,
-            notes=notes,
-            tax_rate=tax_rate,
-            tax_option=tax_option,
-            total_price=total_price,
-            total_price_without_tax=total_price_without_tax,
-            request_options=request_options,
-        )
-        return _response.data
-
-    def api_routers_v_1_purchase_orders_public_api_delete_public_purchase_order(
-        self,
-        purchase_order_id: str,
-        *,
-        external_id: typing.Optional[str] = None,
-        request_options: typing.Optional[RequestOptions] = None,
-    ) -> PublicPurchaseOrderResponse:
-        """
-        Parameters
-        ----------
-        purchase_order_id : str
-
-        external_id : typing.Optional[str]
-
-        request_options : typing.Optional[RequestOptions]
-            Request-specific configuration.
-
-        Returns
-        -------
-        PublicPurchaseOrderResponse
-            OK
-
-        Examples
-        --------
-        from sanka_sdk import SankaClient
-
-        client = SankaClient(
-            token="YOUR_TOKEN",
-        )
-        client.purchase_orders.api_routers_v_1_purchase_orders_public_api_delete_public_purchase_order(
-            purchase_order_id="purchase_order_id",
-        )
-        """
-        _response = self._raw_client.api_routers_v_1_purchase_orders_public_api_delete_public_purchase_order(
-            purchase_order_id, external_id=external_id, request_options=request_options
-        )
-        return _response.data
+        ) as r:
+            yield from r.data
 
 
 class AsyncPurchaseOrdersClient:
@@ -349,23 +433,44 @@ class AsyncPurchaseOrdersClient:
         """
         return self._raw_client
 
-    async def api_routers_v_1_purchase_orders_public_api_list_workspace_purchase_orders(
+    async def list_public_purchase_orders_api(
         self,
         *,
         workspace_id: typing.Optional[str] = None,
-        lang: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = None,
+        search: typing.Optional[str] = None,
         language: typing.Optional[str] = None,
+        status: typing.Optional[str] = None,
+        usage_status: typing.Optional[str] = None,
+        page: typing.Optional[int] = None,
+        limit: typing.Optional[int] = None,
+        sort: typing.Optional[str] = None,
+        x_language: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> typing.List[PurchaseOrderSchema]:
+    ) -> ListPublicPurchaseOrdersApiV2PublicPurchaseOrdersGet200Envelope:
         """
         Parameters
         ----------
         workspace_id : typing.Optional[str]
 
-        lang : typing.Optional[str]
+        view_id : typing.Optional[str]
+
+        search : typing.Optional[str]
 
         language : typing.Optional[str]
+
+        status : typing.Optional[str]
+
+        usage_status : typing.Optional[str]
+
+        page : typing.Optional[int]
+
+        limit : typing.Optional[int]
+
+        sort : typing.Optional[str]
+
+        x_language : typing.Optional[str]
 
         accept_language : typing.Optional[str]
 
@@ -374,8 +479,8 @@ class AsyncPurchaseOrdersClient:
 
         Returns
         -------
-        typing.List[PurchaseOrderSchema]
-            OK
+        ListPublicPurchaseOrdersApiV2PublicPurchaseOrdersGet200Envelope
+            Object record list response
 
         Examples
         --------
@@ -384,79 +489,60 @@ class AsyncPurchaseOrdersClient:
         from sanka_sdk import AsyncSankaClient
 
         client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
 
 
         async def main() -> None:
-            await client.purchase_orders.api_routers_v_1_purchase_orders_public_api_list_workspace_purchase_orders()
+            await client.purchase_orders.list_public_purchase_orders_api()
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.api_routers_v_1_purchase_orders_public_api_list_workspace_purchase_orders(
+        _response = await self._raw_client.list_public_purchase_orders_api(
             workspace_id=workspace_id,
-            lang=lang,
+            view_id=view_id,
+            search=search,
             language=language,
+            status=status,
+            usage_status=usage_status,
+            page=page,
+            limit=limit,
+            sort=sort,
+            x_language=x_language,
             accept_language=accept_language,
             request_options=request_options,
         )
         return _response.data
 
-    async def api_routers_v_1_purchase_orders_public_api_create_public_purchase_order(
+    async def create_public_purchase_order_api(
         self,
         *,
-        external_id: typing.Optional[str] = OMIT,
-        contact_id: typing.Optional[str] = OMIT,
-        contact_external_id: typing.Optional[str] = OMIT,
-        company_id: typing.Optional[str] = OMIT,
-        company_external_id: typing.Optional[str] = OMIT,
-        date: typing.Optional[str] = OMIT,
-        status: typing.Optional[str] = OMIT,
-        currency: typing.Optional[str] = OMIT,
-        notes: typing.Optional[str] = OMIT,
-        tax_rate: typing.Optional[float] = OMIT,
-        tax_option: typing.Optional[str] = OMIT,
-        total_price: typing.Optional[float] = OMIT,
-        total_price_without_tax: typing.Optional[float] = OMIT,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = OMIT,
+        form_view_id: typing.Optional[str] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> PublicPurchaseOrderResponse:
+    ) -> CreatePublicPurchaseOrderApiV2PublicPurchaseOrdersPost200Envelope:
         """
         Parameters
         ----------
-        external_id : typing.Optional[str]
+        workspace_id : typing.Optional[str]
 
-        contact_id : typing.Optional[str]
+        view_id : typing.Optional[str]
 
-        contact_external_id : typing.Optional[str]
+        form_view_id : typing.Optional[str]
 
-        company_id : typing.Optional[str]
-
-        company_external_id : typing.Optional[str]
-
-        date : typing.Optional[str]
-
-        status : typing.Optional[str]
-
-        currency : typing.Optional[str]
-
-        notes : typing.Optional[str]
-
-        tax_rate : typing.Optional[float]
-
-        tax_option : typing.Optional[str]
-
-        total_price : typing.Optional[float]
-
-        total_price_without_tax : typing.Optional[float]
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        PublicPurchaseOrderResponse
-            OK
+        CreatePublicPurchaseOrderApiV2PublicPurchaseOrdersPost200Envelope
+            Successful Response
 
         Examples
         --------
@@ -465,44 +551,260 @@ class AsyncPurchaseOrdersClient:
         from sanka_sdk import AsyncSankaClient
 
         client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
 
 
         async def main() -> None:
-            await client.purchase_orders.api_routers_v_1_purchase_orders_public_api_create_public_purchase_order()
+            await client.purchase_orders.create_public_purchase_order_api()
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.api_routers_v_1_purchase_orders_public_api_create_public_purchase_order(
-            external_id=external_id,
-            contact_id=contact_id,
-            contact_external_id=contact_external_id,
-            company_id=company_id,
-            company_external_id=company_external_id,
-            date=date,
-            status=status,
-            currency=currency,
-            notes=notes,
-            tax_rate=tax_rate,
-            tax_option=tax_option,
-            total_price=total_price,
-            total_price_without_tax=total_price_without_tax,
+        _response = await self._raw_client.create_public_purchase_order_api(
+            workspace_id=workspace_id,
+            view_id=view_id,
+            form_view_id=form_view_id,
+            properties=properties,
             request_options=request_options,
         )
         return _response.data
 
-    async def api_routers_v_1_purchase_orders_public_api_get_public_purchase_order(
+    async def upload_public_purchase_order_file_api(
+        self,
+        *,
+        file: core.File,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> UploadPublicPurchaseOrderFileApiV2PublicPurchaseOrdersFilesPost200Envelope:
+        """
+        Parameters
+        ----------
+        file : core.File
+            See core.File for more documentation
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        UploadPublicPurchaseOrderFileApiV2PublicPurchaseOrdersFilesPost200Envelope
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sanka_sdk import AsyncSankaClient
+
+        client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.purchase_orders.upload_public_purchase_order_file_api()
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.upload_public_purchase_order_file_api(
+            file=file, workspace_id=workspace_id, request_options=request_options
+        )
+        return _response.data
+
+    async def get_public_purchase_order_api(
         self,
         purchase_order_id: str,
         *,
         external_id: typing.Optional[str] = None,
-        lang: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = None,
+        form_view_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> GetPublicPurchaseOrderApiV2PublicPurchaseOrdersPurchaseOrderIdGet200Envelope:
+        """
+        Parameters
+        ----------
+        purchase_order_id : str
+
+        external_id : typing.Optional[str]
+
+        workspace_id : typing.Optional[str]
+
+        view_id : typing.Optional[str]
+
+        form_view_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        GetPublicPurchaseOrderApiV2PublicPurchaseOrdersPurchaseOrderIdGet200Envelope
+            Object record detail response. The base detail payload is intentionally thin; drawer sections load through scoped endpoints.
+
+        Examples
+        --------
+        import asyncio
+
+        from sanka_sdk import AsyncSankaClient
+
+        client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.purchase_orders.get_public_purchase_order_api(
+                purchase_order_id="purchase_order_id",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.get_public_purchase_order_api(
+            purchase_order_id,
+            external_id=external_id,
+            workspace_id=workspace_id,
+            view_id=view_id,
+            form_view_id=form_view_id,
+            request_options=request_options,
+        )
+        return _response.data
+
+    async def update_public_purchase_order_api(
+        self,
+        purchase_order_id: str,
+        *,
+        external_id: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = OMIT,
+        form_view_id: typing.Optional[str] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> UpdatePublicPurchaseOrderApiV2PublicPurchaseOrdersPurchaseOrderIdPut200Envelope:
+        """
+        Parameters
+        ----------
+        purchase_order_id : str
+
+        external_id : typing.Optional[str]
+
+        workspace_id : typing.Optional[str]
+
+        view_id : typing.Optional[str]
+
+        form_view_id : typing.Optional[str]
+
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        UpdatePublicPurchaseOrderApiV2PublicPurchaseOrdersPurchaseOrderIdPut200Envelope
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sanka_sdk import AsyncSankaClient
+
+        client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.purchase_orders.update_public_purchase_order_api(
+                purchase_order_id="purchase_order_id",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.update_public_purchase_order_api(
+            purchase_order_id,
+            external_id=external_id,
+            workspace_id=workspace_id,
+            view_id=view_id,
+            form_view_id=form_view_id,
+            properties=properties,
+            request_options=request_options,
+        )
+        return _response.data
+
+    async def delete_public_purchase_order_api(
+        self,
+        purchase_order_id: str,
+        *,
+        external_id: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> DeletePublicPurchaseOrderApiV2PublicPurchaseOrdersPurchaseOrderIdDelete200Envelope:
+        """
+        Parameters
+        ----------
+        purchase_order_id : str
+
+        external_id : typing.Optional[str]
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        DeletePublicPurchaseOrderApiV2PublicPurchaseOrdersPurchaseOrderIdDelete200Envelope
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sanka_sdk import AsyncSankaClient
+
+        client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.purchase_orders.delete_public_purchase_order_api(
+                purchase_order_id="purchase_order_id",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.delete_public_purchase_order_api(
+            purchase_order_id, external_id=external_id, workspace_id=workspace_id, request_options=request_options
+        )
+        return _response.data
+
+    async def download_public_purchase_order_pdf_api(
+        self,
+        purchase_order_id: str,
+        *,
+        external_id: typing.Optional[str] = None,
+        template_id: typing.Optional[str] = None,
+        template_select: typing.Optional[str] = None,
         language: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> PurchaseOrderSchema:
+    ) -> typing.AsyncIterator[bytes]:
         """
         Parameters
         ----------
@@ -510,19 +812,23 @@ class AsyncPurchaseOrdersClient:
 
         external_id : typing.Optional[str]
 
-        lang : typing.Optional[str]
+        template_id : typing.Optional[str]
+
+        template_select : typing.Optional[str]
 
         language : typing.Optional[str]
+
+        workspace_id : typing.Optional[str]
 
         accept_language : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
-            Request-specific configuration.
+            Request-specific configuration. You can pass in configuration such as `chunk_size`, and more to customize the request and response.
 
         Returns
         -------
-        PurchaseOrderSchema
-            OK
+        typing.AsyncIterator[bytes]
+            PDF document
 
         Examples
         --------
@@ -531,166 +837,28 @@ class AsyncPurchaseOrdersClient:
         from sanka_sdk import AsyncSankaClient
 
         client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
 
 
         async def main() -> None:
-            await client.purchase_orders.api_routers_v_1_purchase_orders_public_api_get_public_purchase_order(
+            await client.purchase_orders.download_public_purchase_order_pdf_api(
                 purchase_order_id="purchase_order_id",
             )
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.api_routers_v_1_purchase_orders_public_api_get_public_purchase_order(
+        async with self._raw_client.download_public_purchase_order_pdf_api(
             purchase_order_id,
             external_id=external_id,
-            lang=lang,
+            template_id=template_id,
+            template_select=template_select,
             language=language,
+            workspace_id=workspace_id,
             accept_language=accept_language,
             request_options=request_options,
-        )
-        return _response.data
-
-    async def api_routers_v_1_purchase_orders_public_api_update_public_purchase_order(
-        self,
-        purchase_order_id: str,
-        *,
-        external_id: typing.Optional[str] = OMIT,
-        contact_id: typing.Optional[str] = OMIT,
-        contact_external_id: typing.Optional[str] = OMIT,
-        company_id: typing.Optional[str] = OMIT,
-        company_external_id: typing.Optional[str] = OMIT,
-        date: typing.Optional[str] = OMIT,
-        status: typing.Optional[str] = OMIT,
-        currency: typing.Optional[str] = OMIT,
-        notes: typing.Optional[str] = OMIT,
-        tax_rate: typing.Optional[float] = OMIT,
-        tax_option: typing.Optional[str] = OMIT,
-        total_price: typing.Optional[float] = OMIT,
-        total_price_without_tax: typing.Optional[float] = OMIT,
-        request_options: typing.Optional[RequestOptions] = None,
-    ) -> PublicPurchaseOrderResponse:
-        """
-        Parameters
-        ----------
-        purchase_order_id : str
-
-        external_id : typing.Optional[str]
-
-        contact_id : typing.Optional[str]
-
-        contact_external_id : typing.Optional[str]
-
-        company_id : typing.Optional[str]
-
-        company_external_id : typing.Optional[str]
-
-        date : typing.Optional[str]
-
-        status : typing.Optional[str]
-
-        currency : typing.Optional[str]
-
-        notes : typing.Optional[str]
-
-        tax_rate : typing.Optional[float]
-
-        tax_option : typing.Optional[str]
-
-        total_price : typing.Optional[float]
-
-        total_price_without_tax : typing.Optional[float]
-
-        request_options : typing.Optional[RequestOptions]
-            Request-specific configuration.
-
-        Returns
-        -------
-        PublicPurchaseOrderResponse
-            OK
-
-        Examples
-        --------
-        import asyncio
-
-        from sanka_sdk import AsyncSankaClient
-
-        client = AsyncSankaClient(
-            token="YOUR_TOKEN",
-        )
-
-
-        async def main() -> None:
-            await client.purchase_orders.api_routers_v_1_purchase_orders_public_api_update_public_purchase_order(
-                purchase_order_id="purchase_order_id",
-            )
-
-
-        asyncio.run(main())
-        """
-        _response = await self._raw_client.api_routers_v_1_purchase_orders_public_api_update_public_purchase_order(
-            purchase_order_id,
-            external_id=external_id,
-            contact_id=contact_id,
-            contact_external_id=contact_external_id,
-            company_id=company_id,
-            company_external_id=company_external_id,
-            date=date,
-            status=status,
-            currency=currency,
-            notes=notes,
-            tax_rate=tax_rate,
-            tax_option=tax_option,
-            total_price=total_price,
-            total_price_without_tax=total_price_without_tax,
-            request_options=request_options,
-        )
-        return _response.data
-
-    async def api_routers_v_1_purchase_orders_public_api_delete_public_purchase_order(
-        self,
-        purchase_order_id: str,
-        *,
-        external_id: typing.Optional[str] = None,
-        request_options: typing.Optional[RequestOptions] = None,
-    ) -> PublicPurchaseOrderResponse:
-        """
-        Parameters
-        ----------
-        purchase_order_id : str
-
-        external_id : typing.Optional[str]
-
-        request_options : typing.Optional[RequestOptions]
-            Request-specific configuration.
-
-        Returns
-        -------
-        PublicPurchaseOrderResponse
-            OK
-
-        Examples
-        --------
-        import asyncio
-
-        from sanka_sdk import AsyncSankaClient
-
-        client = AsyncSankaClient(
-            token="YOUR_TOKEN",
-        )
-
-
-        async def main() -> None:
-            await client.purchase_orders.api_routers_v_1_purchase_orders_public_api_delete_public_purchase_order(
-                purchase_order_id="purchase_order_id",
-            )
-
-
-        asyncio.run(main())
-        """
-        _response = await self._raw_client.api_routers_v_1_purchase_orders_public_api_delete_public_purchase_order(
-            purchase_order_id, external_id=external_id, request_options=request_options
-        )
-        return _response.data
+        ) as r:
+            async for _chunk in r.data:
+                yield _chunk

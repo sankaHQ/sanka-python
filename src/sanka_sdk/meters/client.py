@@ -4,8 +4,21 @@ import typing
 
 from ..core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ..core.request_options import RequestOptions
-from ..types.commerce_meter_schema import CommerceMeterSchema
-from ..types.public_meter_response import PublicMeterResponse
+from ..types.create_public_meter_api_v_2_public_meters_post_200_envelope import (
+    CreatePublicMeterApiV2PublicMetersPost200Envelope,
+)
+from ..types.delete_public_meter_api_v_2_public_meters_meter_id_delete_200_envelope import (
+    DeletePublicMeterApiV2PublicMetersMeterIdDelete200Envelope,
+)
+from ..types.get_public_meter_api_v_2_public_meters_meter_id_get_200_envelope import (
+    GetPublicMeterApiV2PublicMetersMeterIdGet200Envelope,
+)
+from ..types.list_public_meters_api_v_2_public_meters_get_200_envelope import (
+    ListPublicMetersApiV2PublicMetersGet200Envelope,
+)
+from ..types.update_public_meter_api_v_2_public_meters_meter_id_put_200_envelope import (
+    UpdatePublicMeterApiV2PublicMetersMeterIdPut200Envelope,
+)
 from .raw_client import AsyncRawMetersClient, RawMetersClient
 
 # this is used as the default value for optional parameters
@@ -27,23 +40,44 @@ class MetersClient:
         """
         return self._raw_client
 
-    def api_routers_v_1_meters_public_api_list_workspace_meters(
+    def list_public_meters_api(
         self,
         *,
         workspace_id: typing.Optional[str] = None,
-        lang: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = None,
+        search: typing.Optional[str] = None,
         language: typing.Optional[str] = None,
+        status: typing.Optional[str] = None,
+        usage_status: typing.Optional[str] = None,
+        page: typing.Optional[int] = None,
+        limit: typing.Optional[int] = None,
+        sort: typing.Optional[str] = None,
+        x_language: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> typing.List[CommerceMeterSchema]:
+    ) -> ListPublicMetersApiV2PublicMetersGet200Envelope:
         """
         Parameters
         ----------
         workspace_id : typing.Optional[str]
 
-        lang : typing.Optional[str]
+        view_id : typing.Optional[str]
+
+        search : typing.Optional[str]
 
         language : typing.Optional[str]
+
+        status : typing.Optional[str]
+
+        usage_status : typing.Optional[str]
+
+        page : typing.Optional[int]
+
+        limit : typing.Optional[int]
+
+        sort : typing.Optional[str]
+
+        x_language : typing.Optional[str]
 
         accept_language : typing.Optional[str]
 
@@ -52,115 +86,124 @@ class MetersClient:
 
         Returns
         -------
-        typing.List[CommerceMeterSchema]
-            OK
+        ListPublicMetersApiV2PublicMetersGet200Envelope
+            Object record list response
 
         Examples
         --------
         from sanka_sdk import SankaClient
 
         client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
-        client.meters.api_routers_v_1_meters_public_api_list_workspace_meters()
+        client.meters.list_public_meters_api()
         """
-        _response = self._raw_client.api_routers_v_1_meters_public_api_list_workspace_meters(
+        _response = self._raw_client.list_public_meters_api(
             workspace_id=workspace_id,
-            lang=lang,
+            view_id=view_id,
+            search=search,
             language=language,
+            status=status,
+            usage_status=usage_status,
+            page=page,
+            limit=limit,
+            sort=sort,
+            x_language=x_language,
             accept_language=accept_language,
             request_options=request_options,
         )
         return _response.data
 
-    def api_routers_v_1_meters_public_api_create_public_meter(
+    def create_public_meter_api(
         self,
         *,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = OMIT,
+        form_view_id: typing.Optional[str] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
+        target: typing.Optional[str] = OMIT,
+        provider: typing.Optional[str] = OMIT,
+        channel_id: typing.Optional[str] = OMIT,
+        external_object_type: typing.Optional[str] = OMIT,
         external_id: typing.Optional[str] = OMIT,
-        contact_id: typing.Optional[str] = OMIT,
-        contact_external_id: typing.Optional[str] = OMIT,
-        company_id: typing.Optional[str] = OMIT,
-        company_external_id: typing.Optional[str] = OMIT,
-        item_id: typing.Optional[str] = OMIT,
-        item_external_id: typing.Optional[str] = OMIT,
-        subscription_id: typing.Optional[str] = OMIT,
-        subscription_external_id: typing.Optional[str] = OMIT,
-        usage: typing.Optional[float] = OMIT,
-        usage_status: typing.Optional[str] = OMIT,
-        usage_at: typing.Optional[str] = OMIT,
+        operation: typing.Optional[str] = OMIT,
+        dry_run: typing.Optional[bool] = OMIT,
+        confirm: typing.Optional[bool] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> PublicMeterResponse:
+    ) -> CreatePublicMeterApiV2PublicMetersPost200Envelope:
         """
         Parameters
         ----------
+        workspace_id : typing.Optional[str]
+
+        view_id : typing.Optional[str]
+
+        form_view_id : typing.Optional[str]
+
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
+
+        target : typing.Optional[str]
+
+        provider : typing.Optional[str]
+
+        channel_id : typing.Optional[str]
+
+        external_object_type : typing.Optional[str]
+
         external_id : typing.Optional[str]
 
-        contact_id : typing.Optional[str]
+        operation : typing.Optional[str]
 
-        contact_external_id : typing.Optional[str]
+        dry_run : typing.Optional[bool]
 
-        company_id : typing.Optional[str]
-
-        company_external_id : typing.Optional[str]
-
-        item_id : typing.Optional[str]
-
-        item_external_id : typing.Optional[str]
-
-        subscription_id : typing.Optional[str]
-
-        subscription_external_id : typing.Optional[str]
-
-        usage : typing.Optional[float]
-
-        usage_status : typing.Optional[str]
-
-        usage_at : typing.Optional[str]
+        confirm : typing.Optional[bool]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        PublicMeterResponse
-            OK
+        CreatePublicMeterApiV2PublicMetersPost200Envelope
+            Successful Response
 
         Examples
         --------
         from sanka_sdk import SankaClient
 
         client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
-        client.meters.api_routers_v_1_meters_public_api_create_public_meter()
+        client.meters.create_public_meter_api()
         """
-        _response = self._raw_client.api_routers_v_1_meters_public_api_create_public_meter(
+        _response = self._raw_client.create_public_meter_api(
+            workspace_id=workspace_id,
+            view_id=view_id,
+            form_view_id=form_view_id,
+            properties=properties,
+            target=target,
+            provider=provider,
+            channel_id=channel_id,
+            external_object_type=external_object_type,
             external_id=external_id,
-            contact_id=contact_id,
-            contact_external_id=contact_external_id,
-            company_id=company_id,
-            company_external_id=company_external_id,
-            item_id=item_id,
-            item_external_id=item_external_id,
-            subscription_id=subscription_id,
-            subscription_external_id=subscription_external_id,
-            usage=usage,
-            usage_status=usage_status,
-            usage_at=usage_at,
+            operation=operation,
+            dry_run=dry_run,
+            confirm=confirm,
             request_options=request_options,
         )
         return _response.data
 
-    def api_routers_v_1_meters_public_api_get_public_meter(
+    def get_public_meter_api(
         self,
         meter_id: str,
         *,
         external_id: typing.Optional[str] = None,
-        lang: typing.Optional[str] = None,
-        language: typing.Optional[str] = None,
-        accept_language: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = None,
+        form_view_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> CommerceMeterSchema:
+    ) -> GetPublicMeterApiV2PublicMetersMeterIdGet200Envelope:
         """
         Parameters
         ----------
@@ -168,60 +211,61 @@ class MetersClient:
 
         external_id : typing.Optional[str]
 
-        lang : typing.Optional[str]
+        workspace_id : typing.Optional[str]
 
-        language : typing.Optional[str]
+        view_id : typing.Optional[str]
 
-        accept_language : typing.Optional[str]
+        form_view_id : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        CommerceMeterSchema
-            OK
+        GetPublicMeterApiV2PublicMetersMeterIdGet200Envelope
+            Object record detail response. The base detail payload is intentionally thin; drawer sections load through scoped endpoints.
 
         Examples
         --------
         from sanka_sdk import SankaClient
 
         client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
-        client.meters.api_routers_v_1_meters_public_api_get_public_meter(
+        client.meters.get_public_meter_api(
             meter_id="meter_id",
         )
         """
-        _response = self._raw_client.api_routers_v_1_meters_public_api_get_public_meter(
+        _response = self._raw_client.get_public_meter_api(
             meter_id,
             external_id=external_id,
-            lang=lang,
-            language=language,
-            accept_language=accept_language,
+            workspace_id=workspace_id,
+            view_id=view_id,
+            form_view_id=form_view_id,
             request_options=request_options,
         )
         return _response.data
 
-    def api_routers_v_1_meters_public_api_update_public_meter(
+    def update_public_meter_api(
         self,
         meter_id: str,
         *,
         external_id: typing.Optional[str] = None,
-        public_meter_request_external_id: typing.Optional[str] = OMIT,
-        contact_id: typing.Optional[str] = OMIT,
-        contact_external_id: typing.Optional[str] = OMIT,
-        company_id: typing.Optional[str] = OMIT,
-        company_external_id: typing.Optional[str] = OMIT,
-        item_id: typing.Optional[str] = OMIT,
-        item_external_id: typing.Optional[str] = OMIT,
-        subscription_id: typing.Optional[str] = OMIT,
-        subscription_external_id: typing.Optional[str] = OMIT,
-        usage: typing.Optional[float] = OMIT,
-        usage_status: typing.Optional[str] = OMIT,
-        usage_at: typing.Optional[str] = OMIT,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = OMIT,
+        form_view_id: typing.Optional[str] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
+        target: typing.Optional[str] = OMIT,
+        provider: typing.Optional[str] = OMIT,
+        channel_id: typing.Optional[str] = OMIT,
+        external_object_type: typing.Optional[str] = OMIT,
+        public_object_record_mutation_request_external_id: typing.Optional[str] = OMIT,
+        operation: typing.Optional[str] = OMIT,
+        dry_run: typing.Optional[bool] = OMIT,
+        confirm: typing.Optional[bool] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> PublicMeterResponse:
+    ) -> UpdatePublicMeterApiV2PublicMetersMeterIdPut200Envelope:
         """
         Parameters
         ----------
@@ -229,75 +273,77 @@ class MetersClient:
 
         external_id : typing.Optional[str]
 
-        public_meter_request_external_id : typing.Optional[str]
+        workspace_id : typing.Optional[str]
 
-        contact_id : typing.Optional[str]
+        view_id : typing.Optional[str]
 
-        contact_external_id : typing.Optional[str]
+        form_view_id : typing.Optional[str]
 
-        company_id : typing.Optional[str]
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
 
-        company_external_id : typing.Optional[str]
+        target : typing.Optional[str]
 
-        item_id : typing.Optional[str]
+        provider : typing.Optional[str]
 
-        item_external_id : typing.Optional[str]
+        channel_id : typing.Optional[str]
 
-        subscription_id : typing.Optional[str]
+        external_object_type : typing.Optional[str]
 
-        subscription_external_id : typing.Optional[str]
+        public_object_record_mutation_request_external_id : typing.Optional[str]
 
-        usage : typing.Optional[float]
+        operation : typing.Optional[str]
 
-        usage_status : typing.Optional[str]
+        dry_run : typing.Optional[bool]
 
-        usage_at : typing.Optional[str]
+        confirm : typing.Optional[bool]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        PublicMeterResponse
-            OK
+        UpdatePublicMeterApiV2PublicMetersMeterIdPut200Envelope
+            Successful Response
 
         Examples
         --------
         from sanka_sdk import SankaClient
 
         client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
-        client.meters.api_routers_v_1_meters_public_api_update_public_meter(
+        client.meters.update_public_meter_api(
             meter_id="meter_id",
         )
         """
-        _response = self._raw_client.api_routers_v_1_meters_public_api_update_public_meter(
+        _response = self._raw_client.update_public_meter_api(
             meter_id,
             external_id=external_id,
-            public_meter_request_external_id=public_meter_request_external_id,
-            contact_id=contact_id,
-            contact_external_id=contact_external_id,
-            company_id=company_id,
-            company_external_id=company_external_id,
-            item_id=item_id,
-            item_external_id=item_external_id,
-            subscription_id=subscription_id,
-            subscription_external_id=subscription_external_id,
-            usage=usage,
-            usage_status=usage_status,
-            usage_at=usage_at,
+            workspace_id=workspace_id,
+            view_id=view_id,
+            form_view_id=form_view_id,
+            properties=properties,
+            target=target,
+            provider=provider,
+            channel_id=channel_id,
+            external_object_type=external_object_type,
+            public_object_record_mutation_request_external_id=public_object_record_mutation_request_external_id,
+            operation=operation,
+            dry_run=dry_run,
+            confirm=confirm,
             request_options=request_options,
         )
         return _response.data
 
-    def api_routers_v_1_meters_public_api_delete_public_meter(
+    def delete_public_meter_api(
         self,
         meter_id: str,
         *,
         external_id: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> PublicMeterResponse:
+    ) -> DeletePublicMeterApiV2PublicMetersMeterIdDelete200Envelope:
         """
         Parameters
         ----------
@@ -305,27 +351,30 @@ class MetersClient:
 
         external_id : typing.Optional[str]
 
+        workspace_id : typing.Optional[str]
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        PublicMeterResponse
-            OK
+        DeletePublicMeterApiV2PublicMetersMeterIdDelete200Envelope
+            Successful Response
 
         Examples
         --------
         from sanka_sdk import SankaClient
 
         client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
-        client.meters.api_routers_v_1_meters_public_api_delete_public_meter(
+        client.meters.delete_public_meter_api(
             meter_id="meter_id",
         )
         """
-        _response = self._raw_client.api_routers_v_1_meters_public_api_delete_public_meter(
-            meter_id, external_id=external_id, request_options=request_options
+        _response = self._raw_client.delete_public_meter_api(
+            meter_id, external_id=external_id, workspace_id=workspace_id, request_options=request_options
         )
         return _response.data
 
@@ -345,23 +394,44 @@ class AsyncMetersClient:
         """
         return self._raw_client
 
-    async def api_routers_v_1_meters_public_api_list_workspace_meters(
+    async def list_public_meters_api(
         self,
         *,
         workspace_id: typing.Optional[str] = None,
-        lang: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = None,
+        search: typing.Optional[str] = None,
         language: typing.Optional[str] = None,
+        status: typing.Optional[str] = None,
+        usage_status: typing.Optional[str] = None,
+        page: typing.Optional[int] = None,
+        limit: typing.Optional[int] = None,
+        sort: typing.Optional[str] = None,
+        x_language: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> typing.List[CommerceMeterSchema]:
+    ) -> ListPublicMetersApiV2PublicMetersGet200Envelope:
         """
         Parameters
         ----------
         workspace_id : typing.Optional[str]
 
-        lang : typing.Optional[str]
+        view_id : typing.Optional[str]
+
+        search : typing.Optional[str]
 
         language : typing.Optional[str]
+
+        status : typing.Optional[str]
+
+        usage_status : typing.Optional[str]
+
+        page : typing.Optional[int]
+
+        limit : typing.Optional[int]
+
+        sort : typing.Optional[str]
+
+        x_language : typing.Optional[str]
 
         accept_language : typing.Optional[str]
 
@@ -370,8 +440,8 @@ class AsyncMetersClient:
 
         Returns
         -------
-        typing.List[CommerceMeterSchema]
-            OK
+        ListPublicMetersApiV2PublicMetersGet200Envelope
+            Object record list response
 
         Examples
         --------
@@ -380,76 +450,84 @@ class AsyncMetersClient:
         from sanka_sdk import AsyncSankaClient
 
         client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
 
 
         async def main() -> None:
-            await client.meters.api_routers_v_1_meters_public_api_list_workspace_meters()
+            await client.meters.list_public_meters_api()
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.api_routers_v_1_meters_public_api_list_workspace_meters(
+        _response = await self._raw_client.list_public_meters_api(
             workspace_id=workspace_id,
-            lang=lang,
+            view_id=view_id,
+            search=search,
             language=language,
+            status=status,
+            usage_status=usage_status,
+            page=page,
+            limit=limit,
+            sort=sort,
+            x_language=x_language,
             accept_language=accept_language,
             request_options=request_options,
         )
         return _response.data
 
-    async def api_routers_v_1_meters_public_api_create_public_meter(
+    async def create_public_meter_api(
         self,
         *,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = OMIT,
+        form_view_id: typing.Optional[str] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
+        target: typing.Optional[str] = OMIT,
+        provider: typing.Optional[str] = OMIT,
+        channel_id: typing.Optional[str] = OMIT,
+        external_object_type: typing.Optional[str] = OMIT,
         external_id: typing.Optional[str] = OMIT,
-        contact_id: typing.Optional[str] = OMIT,
-        contact_external_id: typing.Optional[str] = OMIT,
-        company_id: typing.Optional[str] = OMIT,
-        company_external_id: typing.Optional[str] = OMIT,
-        item_id: typing.Optional[str] = OMIT,
-        item_external_id: typing.Optional[str] = OMIT,
-        subscription_id: typing.Optional[str] = OMIT,
-        subscription_external_id: typing.Optional[str] = OMIT,
-        usage: typing.Optional[float] = OMIT,
-        usage_status: typing.Optional[str] = OMIT,
-        usage_at: typing.Optional[str] = OMIT,
+        operation: typing.Optional[str] = OMIT,
+        dry_run: typing.Optional[bool] = OMIT,
+        confirm: typing.Optional[bool] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> PublicMeterResponse:
+    ) -> CreatePublicMeterApiV2PublicMetersPost200Envelope:
         """
         Parameters
         ----------
+        workspace_id : typing.Optional[str]
+
+        view_id : typing.Optional[str]
+
+        form_view_id : typing.Optional[str]
+
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
+
+        target : typing.Optional[str]
+
+        provider : typing.Optional[str]
+
+        channel_id : typing.Optional[str]
+
+        external_object_type : typing.Optional[str]
+
         external_id : typing.Optional[str]
 
-        contact_id : typing.Optional[str]
+        operation : typing.Optional[str]
 
-        contact_external_id : typing.Optional[str]
+        dry_run : typing.Optional[bool]
 
-        company_id : typing.Optional[str]
-
-        company_external_id : typing.Optional[str]
-
-        item_id : typing.Optional[str]
-
-        item_external_id : typing.Optional[str]
-
-        subscription_id : typing.Optional[str]
-
-        subscription_external_id : typing.Optional[str]
-
-        usage : typing.Optional[float]
-
-        usage_status : typing.Optional[str]
-
-        usage_at : typing.Optional[str]
+        confirm : typing.Optional[bool]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        PublicMeterResponse
-            OK
+        CreatePublicMeterApiV2PublicMetersPost200Envelope
+            Successful Response
 
         Examples
         --------
@@ -458,43 +536,44 @@ class AsyncMetersClient:
         from sanka_sdk import AsyncSankaClient
 
         client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
 
 
         async def main() -> None:
-            await client.meters.api_routers_v_1_meters_public_api_create_public_meter()
+            await client.meters.create_public_meter_api()
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.api_routers_v_1_meters_public_api_create_public_meter(
+        _response = await self._raw_client.create_public_meter_api(
+            workspace_id=workspace_id,
+            view_id=view_id,
+            form_view_id=form_view_id,
+            properties=properties,
+            target=target,
+            provider=provider,
+            channel_id=channel_id,
+            external_object_type=external_object_type,
             external_id=external_id,
-            contact_id=contact_id,
-            contact_external_id=contact_external_id,
-            company_id=company_id,
-            company_external_id=company_external_id,
-            item_id=item_id,
-            item_external_id=item_external_id,
-            subscription_id=subscription_id,
-            subscription_external_id=subscription_external_id,
-            usage=usage,
-            usage_status=usage_status,
-            usage_at=usage_at,
+            operation=operation,
+            dry_run=dry_run,
+            confirm=confirm,
             request_options=request_options,
         )
         return _response.data
 
-    async def api_routers_v_1_meters_public_api_get_public_meter(
+    async def get_public_meter_api(
         self,
         meter_id: str,
         *,
         external_id: typing.Optional[str] = None,
-        lang: typing.Optional[str] = None,
-        language: typing.Optional[str] = None,
-        accept_language: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = None,
+        form_view_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> CommerceMeterSchema:
+    ) -> GetPublicMeterApiV2PublicMetersMeterIdGet200Envelope:
         """
         Parameters
         ----------
@@ -502,19 +581,19 @@ class AsyncMetersClient:
 
         external_id : typing.Optional[str]
 
-        lang : typing.Optional[str]
+        workspace_id : typing.Optional[str]
 
-        language : typing.Optional[str]
+        view_id : typing.Optional[str]
 
-        accept_language : typing.Optional[str]
+        form_view_id : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        CommerceMeterSchema
-            OK
+        GetPublicMeterApiV2PublicMetersMeterIdGet200Envelope
+            Object record detail response. The base detail payload is intentionally thin; drawer sections load through scoped endpoints.
 
         Examples
         --------
@@ -523,47 +602,48 @@ class AsyncMetersClient:
         from sanka_sdk import AsyncSankaClient
 
         client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
 
 
         async def main() -> None:
-            await client.meters.api_routers_v_1_meters_public_api_get_public_meter(
+            await client.meters.get_public_meter_api(
                 meter_id="meter_id",
             )
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.api_routers_v_1_meters_public_api_get_public_meter(
+        _response = await self._raw_client.get_public_meter_api(
             meter_id,
             external_id=external_id,
-            lang=lang,
-            language=language,
-            accept_language=accept_language,
+            workspace_id=workspace_id,
+            view_id=view_id,
+            form_view_id=form_view_id,
             request_options=request_options,
         )
         return _response.data
 
-    async def api_routers_v_1_meters_public_api_update_public_meter(
+    async def update_public_meter_api(
         self,
         meter_id: str,
         *,
         external_id: typing.Optional[str] = None,
-        public_meter_request_external_id: typing.Optional[str] = OMIT,
-        contact_id: typing.Optional[str] = OMIT,
-        contact_external_id: typing.Optional[str] = OMIT,
-        company_id: typing.Optional[str] = OMIT,
-        company_external_id: typing.Optional[str] = OMIT,
-        item_id: typing.Optional[str] = OMIT,
-        item_external_id: typing.Optional[str] = OMIT,
-        subscription_id: typing.Optional[str] = OMIT,
-        subscription_external_id: typing.Optional[str] = OMIT,
-        usage: typing.Optional[float] = OMIT,
-        usage_status: typing.Optional[str] = OMIT,
-        usage_at: typing.Optional[str] = OMIT,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = OMIT,
+        form_view_id: typing.Optional[str] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
+        target: typing.Optional[str] = OMIT,
+        provider: typing.Optional[str] = OMIT,
+        channel_id: typing.Optional[str] = OMIT,
+        external_object_type: typing.Optional[str] = OMIT,
+        public_object_record_mutation_request_external_id: typing.Optional[str] = OMIT,
+        operation: typing.Optional[str] = OMIT,
+        dry_run: typing.Optional[bool] = OMIT,
+        confirm: typing.Optional[bool] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> PublicMeterResponse:
+    ) -> UpdatePublicMeterApiV2PublicMetersMeterIdPut200Envelope:
         """
         Parameters
         ----------
@@ -571,37 +651,37 @@ class AsyncMetersClient:
 
         external_id : typing.Optional[str]
 
-        public_meter_request_external_id : typing.Optional[str]
+        workspace_id : typing.Optional[str]
 
-        contact_id : typing.Optional[str]
+        view_id : typing.Optional[str]
 
-        contact_external_id : typing.Optional[str]
+        form_view_id : typing.Optional[str]
 
-        company_id : typing.Optional[str]
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
 
-        company_external_id : typing.Optional[str]
+        target : typing.Optional[str]
 
-        item_id : typing.Optional[str]
+        provider : typing.Optional[str]
 
-        item_external_id : typing.Optional[str]
+        channel_id : typing.Optional[str]
 
-        subscription_id : typing.Optional[str]
+        external_object_type : typing.Optional[str]
 
-        subscription_external_id : typing.Optional[str]
+        public_object_record_mutation_request_external_id : typing.Optional[str]
 
-        usage : typing.Optional[float]
+        operation : typing.Optional[str]
 
-        usage_status : typing.Optional[str]
+        dry_run : typing.Optional[bool]
 
-        usage_at : typing.Optional[str]
+        confirm : typing.Optional[bool]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        PublicMeterResponse
-            OK
+        UpdatePublicMeterApiV2PublicMetersMeterIdPut200Envelope
+            Successful Response
 
         Examples
         --------
@@ -610,44 +690,46 @@ class AsyncMetersClient:
         from sanka_sdk import AsyncSankaClient
 
         client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
 
 
         async def main() -> None:
-            await client.meters.api_routers_v_1_meters_public_api_update_public_meter(
+            await client.meters.update_public_meter_api(
                 meter_id="meter_id",
             )
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.api_routers_v_1_meters_public_api_update_public_meter(
+        _response = await self._raw_client.update_public_meter_api(
             meter_id,
             external_id=external_id,
-            public_meter_request_external_id=public_meter_request_external_id,
-            contact_id=contact_id,
-            contact_external_id=contact_external_id,
-            company_id=company_id,
-            company_external_id=company_external_id,
-            item_id=item_id,
-            item_external_id=item_external_id,
-            subscription_id=subscription_id,
-            subscription_external_id=subscription_external_id,
-            usage=usage,
-            usage_status=usage_status,
-            usage_at=usage_at,
+            workspace_id=workspace_id,
+            view_id=view_id,
+            form_view_id=form_view_id,
+            properties=properties,
+            target=target,
+            provider=provider,
+            channel_id=channel_id,
+            external_object_type=external_object_type,
+            public_object_record_mutation_request_external_id=public_object_record_mutation_request_external_id,
+            operation=operation,
+            dry_run=dry_run,
+            confirm=confirm,
             request_options=request_options,
         )
         return _response.data
 
-    async def api_routers_v_1_meters_public_api_delete_public_meter(
+    async def delete_public_meter_api(
         self,
         meter_id: str,
         *,
         external_id: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> PublicMeterResponse:
+    ) -> DeletePublicMeterApiV2PublicMetersMeterIdDelete200Envelope:
         """
         Parameters
         ----------
@@ -655,13 +737,15 @@ class AsyncMetersClient:
 
         external_id : typing.Optional[str]
 
+        workspace_id : typing.Optional[str]
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        PublicMeterResponse
-            OK
+        DeletePublicMeterApiV2PublicMetersMeterIdDelete200Envelope
+            Successful Response
 
         Examples
         --------
@@ -670,19 +754,20 @@ class AsyncMetersClient:
         from sanka_sdk import AsyncSankaClient
 
         client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
 
 
         async def main() -> None:
-            await client.meters.api_routers_v_1_meters_public_api_delete_public_meter(
+            await client.meters.delete_public_meter_api(
                 meter_id="meter_id",
             )
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.api_routers_v_1_meters_public_api_delete_public_meter(
-            meter_id, external_id=external_id, request_options=request_options
+        _response = await self._raw_client.delete_public_meter_api(
+            meter_id, external_id=external_id, workspace_id=workspace_id, request_options=request_options
         )
         return _response.data

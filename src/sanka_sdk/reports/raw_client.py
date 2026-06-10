@@ -10,17 +10,26 @@ from ..core.jsonable_encoder import jsonable_encoder
 from ..core.request_options import RequestOptions
 from ..core.serialization import convert_and_respect_annotation_metadata
 from ..core.unchecked_base_model import construct_type
-from ..errors.bad_request_error import BadRequestError
 from ..errors.forbidden_error import ForbiddenError
-from ..errors.internal_server_error import InternalServerError
-from ..errors.not_found_error import NotFoundError
-from ..types.public_create_report_response import PublicCreateReportResponse
-from ..types.public_delete_report_response import PublicDeleteReportResponse
-from ..types.public_report_detail_schema import PublicReportDetailSchema
-from ..types.public_report_list_item_schema import PublicReportListItemSchema
-from ..types.public_report_metadata_request import PublicReportMetadataRequest
-from ..types.public_report_panel_request import PublicReportPanelRequest
-from ..types.public_update_report_metadata_request import PublicUpdateReportMetadataRequest
+from ..errors.unauthorized_error import UnauthorizedError
+from ..errors.unprocessable_entity_error import UnprocessableEntityError
+from ..types.create_public_report_api_v_2_public_reports_post_200_envelope import (
+    CreatePublicReportApiV2PublicReportsPost200Envelope,
+)
+from ..types.delete_public_report_api_v_2_public_reports_report_id_delete_200_envelope import (
+    DeletePublicReportApiV2PublicReportsReportIdDelete200Envelope,
+)
+from ..types.error_envelope import ErrorEnvelope
+from ..types.get_public_report_api_v_2_public_reports_report_id_get_200_envelope import (
+    GetPublicReportApiV2PublicReportsReportIdGet200Envelope,
+)
+from ..types.list_public_reports_api_v_2_public_reports_get_200_envelope import (
+    ListPublicReportsApiV2PublicReportsGet200Envelope,
+)
+from ..types.report_metric_mutation_item import ReportMetricMutationItem
+from ..types.update_public_report_api_v_2_public_reports_report_id_put_200_envelope import (
+    UpdatePublicReportApiV2PublicReportsReportIdPut200Envelope,
+)
 
 # this is used as the default value for optional parameters
 OMIT = typing.cast(typing.Any, ...)
@@ -30,12 +39,21 @@ class RawReportsClient:
     def __init__(self, *, client_wrapper: SyncClientWrapper):
         self._client_wrapper = client_wrapper
 
-    def api_routers_v_1_reports_public_api_list_public_reports(
-        self, *, workspace_id: typing.Optional[str] = None, request_options: typing.Optional[RequestOptions] = None
-    ) -> HttpResponse[typing.List[PublicReportListItemSchema]]:
+    def list_public_reports_api(
+        self,
+        *,
+        page: typing.Optional[int] = None,
+        limit: typing.Optional[int] = None,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> HttpResponse[ListPublicReportsApiV2PublicReportsGet200Envelope]:
         """
         Parameters
         ----------
+        page : typing.Optional[int]
+
+        limit : typing.Optional[int]
+
         workspace_id : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
@@ -43,13 +61,15 @@ class RawReportsClient:
 
         Returns
         -------
-        HttpResponse[typing.List[PublicReportListItemSchema]]
-            OK
+        HttpResponse[ListPublicReportsApiV2PublicReportsGet200Envelope]
+            Successful Response
         """
         _response = self._client_wrapper.httpx_client.request(
-            "v1/public/reports",
+            "v2/public/reports",
             method="GET",
             params={
+                "page": page,
+                "limit": limit,
                 "workspace_id": workspace_id,
             },
             request_options=request_options,
@@ -57,20 +77,20 @@ class RawReportsClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    typing.List[PublicReportListItemSchema],
+                    ListPublicReportsApiV2PublicReportsGet200Envelope,
                     construct_type(
-                        type_=typing.List[PublicReportListItemSchema],  # type: ignore
+                        type_=ListPublicReportsApiV2PublicReportsGet200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return HttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -79,31 +99,20 @@ class RawReportsClient:
                 raise ForbiddenError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 404:
-                raise NotFoundError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -113,42 +122,110 @@ class RawReportsClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    def api_routers_v_1_reports_public_api_create_public_report(
+    def create_public_report_api(
         self,
         *,
-        report_metadata: PublicReportMetadataRequest,
-        panels: typing.Optional[typing.Sequence[PublicReportPanelRequest]] = OMIT,
-        create_default_panel: typing.Optional[bool] = OMIT,
+        name: str,
+        panel_type: str,
+        workspace_id: typing.Optional[str] = None,
+        description: typing.Optional[str] = OMIT,
+        description_ja: typing.Optional[str] = OMIT,
+        data_source_type: typing.Optional[str] = OMIT,
+        object_sources: typing.Optional[typing.Sequence[str]] = OMIT,
+        breakdown: typing.Optional[str] = OMIT,
+        x_axis: typing.Optional[str] = OMIT,
+        owner_id: typing.Optional[str] = OMIT,
+        dashboard_id: typing.Optional[str] = OMIT,
+        update_dashboard_assignment: typing.Optional[bool] = OMIT,
+        is_forecast: typing.Optional[bool] = OMIT,
+        is_stacked_chart: typing.Optional[bool] = OMIT,
+        is_realtime: typing.Optional[bool] = OMIT,
+        ratio: typing.Optional[int] = OMIT,
+        filter: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
+        meta_data: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
+        metrics: typing.Optional[typing.Sequence[ReportMetricMutationItem]] = OMIT,
+        advanced: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> HttpResponse[PublicCreateReportResponse]:
+    ) -> HttpResponse[CreatePublicReportApiV2PublicReportsPost200Envelope]:
         """
         Parameters
         ----------
-        report_metadata : PublicReportMetadataRequest
+        name : str
 
-        panels : typing.Optional[typing.Sequence[PublicReportPanelRequest]]
+        panel_type : str
 
-        create_default_panel : typing.Optional[bool]
+        workspace_id : typing.Optional[str]
+
+        description : typing.Optional[str]
+
+        description_ja : typing.Optional[str]
+
+        data_source_type : typing.Optional[str]
+
+        object_sources : typing.Optional[typing.Sequence[str]]
+
+        breakdown : typing.Optional[str]
+
+        x_axis : typing.Optional[str]
+
+        owner_id : typing.Optional[str]
+
+        dashboard_id : typing.Optional[str]
+
+        update_dashboard_assignment : typing.Optional[bool]
+
+        is_forecast : typing.Optional[bool]
+
+        is_stacked_chart : typing.Optional[bool]
+
+        is_realtime : typing.Optional[bool]
+
+        ratio : typing.Optional[int]
+
+        filter : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
+
+        meta_data : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
+
+        metrics : typing.Optional[typing.Sequence[ReportMetricMutationItem]]
+
+        advanced : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        HttpResponse[PublicCreateReportResponse]
-            OK
+        HttpResponse[CreatePublicReportApiV2PublicReportsPost200Envelope]
+            Successful Response
         """
         _response = self._client_wrapper.httpx_client.request(
-            "v1/public/reports",
+            "v2/public/reports",
             method="POST",
+            params={
+                "workspace_id": workspace_id,
+            },
             json={
-                "reportMetadata": convert_and_respect_annotation_metadata(
-                    object_=report_metadata, annotation=PublicReportMetadataRequest, direction="write"
+                "name": name,
+                "description": description,
+                "description_ja": description_ja,
+                "panel_type": panel_type,
+                "data_source_type": data_source_type,
+                "object_sources": object_sources,
+                "breakdown": breakdown,
+                "x_axis": x_axis,
+                "owner_id": owner_id,
+                "dashboard_id": dashboard_id,
+                "update_dashboard_assignment": update_dashboard_assignment,
+                "is_forecast": is_forecast,
+                "is_stacked_chart": is_stacked_chart,
+                "is_realtime": is_realtime,
+                "ratio": ratio,
+                "filter": filter,
+                "meta_data": meta_data,
+                "metrics": convert_and_respect_annotation_metadata(
+                    object_=metrics, annotation=typing.Sequence[ReportMetricMutationItem], direction="write"
                 ),
-                "panels": convert_and_respect_annotation_metadata(
-                    object_=panels, annotation=typing.Sequence[PublicReportPanelRequest], direction="write"
-                ),
-                "createDefaultPanel": create_default_panel,
+                "advanced": advanced,
             },
             headers={
                 "content-type": "application/json",
@@ -159,20 +236,20 @@ class RawReportsClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    PublicCreateReportResponse,
+                    CreatePublicReportApiV2PublicReportsPost200Envelope,
                     construct_type(
-                        type_=PublicCreateReportResponse,  # type: ignore
+                        type_=CreatePublicReportApiV2PublicReportsPost200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return HttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -181,31 +258,20 @@ class RawReportsClient:
                 raise ForbiddenError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 404:
-                raise NotFoundError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -215,13 +281,13 @@ class RawReportsClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    def api_routers_v_1_reports_public_api_get_public_report(
+    def get_public_report_api(
         self,
         report_id: str,
         *,
         workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> HttpResponse[PublicReportDetailSchema]:
+    ) -> HttpResponse[GetPublicReportApiV2PublicReportsReportIdGet200Envelope]:
         """
         Parameters
         ----------
@@ -234,11 +300,11 @@ class RawReportsClient:
 
         Returns
         -------
-        HttpResponse[PublicReportDetailSchema]
-            OK
+        HttpResponse[GetPublicReportApiV2PublicReportsReportIdGet200Envelope]
+            Successful Response
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"v1/public/reports/{jsonable_encoder(report_id)}",
+            f"v2/public/reports/{jsonable_encoder(report_id)}",
             method="GET",
             params={
                 "workspace_id": workspace_id,
@@ -248,20 +314,20 @@ class RawReportsClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    PublicReportDetailSchema,
+                    GetPublicReportApiV2PublicReportsReportIdGet200Envelope,
                     construct_type(
-                        type_=PublicReportDetailSchema,  # type: ignore
+                        type_=GetPublicReportApiV2PublicReportsReportIdGet200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return HttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -270,31 +336,20 @@ class RawReportsClient:
                 raise ForbiddenError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 404:
-                raise NotFoundError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -304,16 +359,32 @@ class RawReportsClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    def api_routers_v_1_reports_public_api_update_public_report(
+    def update_public_report_api(
         self,
         report_id: str,
         *,
         workspace_id: typing.Optional[str] = None,
-        report_metadata: typing.Optional[PublicUpdateReportMetadataRequest] = OMIT,
-        panels: typing.Optional[typing.Sequence[PublicReportPanelRequest]] = OMIT,
-        create_default_panel: typing.Optional[bool] = OMIT,
+        name: typing.Optional[str] = OMIT,
+        description: typing.Optional[str] = OMIT,
+        description_ja: typing.Optional[str] = OMIT,
+        panel_type: typing.Optional[str] = OMIT,
+        data_source_type: typing.Optional[str] = OMIT,
+        object_sources: typing.Optional[typing.Sequence[str]] = OMIT,
+        breakdown: typing.Optional[str] = OMIT,
+        x_axis: typing.Optional[str] = OMIT,
+        owner_id: typing.Optional[str] = OMIT,
+        dashboard_id: typing.Optional[str] = OMIT,
+        update_dashboard_assignment: typing.Optional[bool] = OMIT,
+        is_forecast: typing.Optional[bool] = OMIT,
+        is_stacked_chart: typing.Optional[bool] = OMIT,
+        is_realtime: typing.Optional[bool] = OMIT,
+        ratio: typing.Optional[int] = OMIT,
+        filter: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
+        meta_data: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
+        metrics: typing.Optional[typing.Sequence[ReportMetricMutationItem]] = OMIT,
+        advanced: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> HttpResponse[PublicCreateReportResponse]:
+    ) -> HttpResponse[UpdatePublicReportApiV2PublicReportsReportIdPut200Envelope]:
         """
         Parameters
         ----------
@@ -321,36 +392,82 @@ class RawReportsClient:
 
         workspace_id : typing.Optional[str]
 
-        report_metadata : typing.Optional[PublicUpdateReportMetadataRequest]
+        name : typing.Optional[str]
 
-        panels : typing.Optional[typing.Sequence[PublicReportPanelRequest]]
+        description : typing.Optional[str]
 
-        create_default_panel : typing.Optional[bool]
+        description_ja : typing.Optional[str]
+
+        panel_type : typing.Optional[str]
+
+        data_source_type : typing.Optional[str]
+
+        object_sources : typing.Optional[typing.Sequence[str]]
+
+        breakdown : typing.Optional[str]
+
+        x_axis : typing.Optional[str]
+
+        owner_id : typing.Optional[str]
+
+        dashboard_id : typing.Optional[str]
+
+        update_dashboard_assignment : typing.Optional[bool]
+
+        is_forecast : typing.Optional[bool]
+
+        is_stacked_chart : typing.Optional[bool]
+
+        is_realtime : typing.Optional[bool]
+
+        ratio : typing.Optional[int]
+
+        filter : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
+
+        meta_data : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
+
+        metrics : typing.Optional[typing.Sequence[ReportMetricMutationItem]]
+
+        advanced : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        HttpResponse[PublicCreateReportResponse]
-            OK
+        HttpResponse[UpdatePublicReportApiV2PublicReportsReportIdPut200Envelope]
+            Successful Response
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"v1/public/reports/{jsonable_encoder(report_id)}",
+            f"v2/public/reports/{jsonable_encoder(report_id)}",
             method="PUT",
             params={
                 "workspace_id": workspace_id,
             },
             json={
-                "reportMetadata": convert_and_respect_annotation_metadata(
-                    object_=report_metadata, annotation=PublicUpdateReportMetadataRequest, direction="write"
-                ),
-                "panels": convert_and_respect_annotation_metadata(
-                    object_=panels,
-                    annotation=typing.Optional[typing.Sequence[PublicReportPanelRequest]],
+                "name": name,
+                "description": description,
+                "description_ja": description_ja,
+                "panel_type": panel_type,
+                "data_source_type": data_source_type,
+                "object_sources": object_sources,
+                "breakdown": breakdown,
+                "x_axis": x_axis,
+                "owner_id": owner_id,
+                "dashboard_id": dashboard_id,
+                "update_dashboard_assignment": update_dashboard_assignment,
+                "is_forecast": is_forecast,
+                "is_stacked_chart": is_stacked_chart,
+                "is_realtime": is_realtime,
+                "ratio": ratio,
+                "filter": filter,
+                "meta_data": meta_data,
+                "metrics": convert_and_respect_annotation_metadata(
+                    object_=metrics,
+                    annotation=typing.Optional[typing.Sequence[ReportMetricMutationItem]],
                     direction="write",
                 ),
-                "createDefaultPanel": create_default_panel,
+                "advanced": advanced,
             },
             headers={
                 "content-type": "application/json",
@@ -361,20 +478,20 @@ class RawReportsClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    PublicCreateReportResponse,
+                    UpdatePublicReportApiV2PublicReportsReportIdPut200Envelope,
                     construct_type(
-                        type_=PublicCreateReportResponse,  # type: ignore
+                        type_=UpdatePublicReportApiV2PublicReportsReportIdPut200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return HttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -383,31 +500,20 @@ class RawReportsClient:
                 raise ForbiddenError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 404:
-                raise NotFoundError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -417,13 +523,13 @@ class RawReportsClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    def api_routers_v_1_reports_public_api_delete_public_report(
+    def delete_public_report_api(
         self,
         report_id: str,
         *,
         workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> HttpResponse[PublicDeleteReportResponse]:
+    ) -> HttpResponse[DeletePublicReportApiV2PublicReportsReportIdDelete200Envelope]:
         """
         Parameters
         ----------
@@ -436,11 +542,11 @@ class RawReportsClient:
 
         Returns
         -------
-        HttpResponse[PublicDeleteReportResponse]
-            OK
+        HttpResponse[DeletePublicReportApiV2PublicReportsReportIdDelete200Envelope]
+            Successful Response
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"v1/public/reports/{jsonable_encoder(report_id)}",
+            f"v2/public/reports/{jsonable_encoder(report_id)}",
             method="DELETE",
             params={
                 "workspace_id": workspace_id,
@@ -450,20 +556,20 @@ class RawReportsClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    PublicDeleteReportResponse,
+                    DeletePublicReportApiV2PublicReportsReportIdDelete200Envelope,
                     construct_type(
-                        type_=PublicDeleteReportResponse,  # type: ignore
+                        type_=DeletePublicReportApiV2PublicReportsReportIdDelete200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return HttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -472,31 +578,20 @@ class RawReportsClient:
                 raise ForbiddenError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 404:
-                raise NotFoundError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -511,12 +606,21 @@ class AsyncRawReportsClient:
     def __init__(self, *, client_wrapper: AsyncClientWrapper):
         self._client_wrapper = client_wrapper
 
-    async def api_routers_v_1_reports_public_api_list_public_reports(
-        self, *, workspace_id: typing.Optional[str] = None, request_options: typing.Optional[RequestOptions] = None
-    ) -> AsyncHttpResponse[typing.List[PublicReportListItemSchema]]:
+    async def list_public_reports_api(
+        self,
+        *,
+        page: typing.Optional[int] = None,
+        limit: typing.Optional[int] = None,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> AsyncHttpResponse[ListPublicReportsApiV2PublicReportsGet200Envelope]:
         """
         Parameters
         ----------
+        page : typing.Optional[int]
+
+        limit : typing.Optional[int]
+
         workspace_id : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
@@ -524,13 +628,15 @@ class AsyncRawReportsClient:
 
         Returns
         -------
-        AsyncHttpResponse[typing.List[PublicReportListItemSchema]]
-            OK
+        AsyncHttpResponse[ListPublicReportsApiV2PublicReportsGet200Envelope]
+            Successful Response
         """
         _response = await self._client_wrapper.httpx_client.request(
-            "v1/public/reports",
+            "v2/public/reports",
             method="GET",
             params={
+                "page": page,
+                "limit": limit,
                 "workspace_id": workspace_id,
             },
             request_options=request_options,
@@ -538,20 +644,20 @@ class AsyncRawReportsClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    typing.List[PublicReportListItemSchema],
+                    ListPublicReportsApiV2PublicReportsGet200Envelope,
                     construct_type(
-                        type_=typing.List[PublicReportListItemSchema],  # type: ignore
+                        type_=ListPublicReportsApiV2PublicReportsGet200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return AsyncHttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -560,31 +666,20 @@ class AsyncRawReportsClient:
                 raise ForbiddenError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 404:
-                raise NotFoundError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -594,42 +689,110 @@ class AsyncRawReportsClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    async def api_routers_v_1_reports_public_api_create_public_report(
+    async def create_public_report_api(
         self,
         *,
-        report_metadata: PublicReportMetadataRequest,
-        panels: typing.Optional[typing.Sequence[PublicReportPanelRequest]] = OMIT,
-        create_default_panel: typing.Optional[bool] = OMIT,
+        name: str,
+        panel_type: str,
+        workspace_id: typing.Optional[str] = None,
+        description: typing.Optional[str] = OMIT,
+        description_ja: typing.Optional[str] = OMIT,
+        data_source_type: typing.Optional[str] = OMIT,
+        object_sources: typing.Optional[typing.Sequence[str]] = OMIT,
+        breakdown: typing.Optional[str] = OMIT,
+        x_axis: typing.Optional[str] = OMIT,
+        owner_id: typing.Optional[str] = OMIT,
+        dashboard_id: typing.Optional[str] = OMIT,
+        update_dashboard_assignment: typing.Optional[bool] = OMIT,
+        is_forecast: typing.Optional[bool] = OMIT,
+        is_stacked_chart: typing.Optional[bool] = OMIT,
+        is_realtime: typing.Optional[bool] = OMIT,
+        ratio: typing.Optional[int] = OMIT,
+        filter: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
+        meta_data: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
+        metrics: typing.Optional[typing.Sequence[ReportMetricMutationItem]] = OMIT,
+        advanced: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> AsyncHttpResponse[PublicCreateReportResponse]:
+    ) -> AsyncHttpResponse[CreatePublicReportApiV2PublicReportsPost200Envelope]:
         """
         Parameters
         ----------
-        report_metadata : PublicReportMetadataRequest
+        name : str
 
-        panels : typing.Optional[typing.Sequence[PublicReportPanelRequest]]
+        panel_type : str
 
-        create_default_panel : typing.Optional[bool]
+        workspace_id : typing.Optional[str]
+
+        description : typing.Optional[str]
+
+        description_ja : typing.Optional[str]
+
+        data_source_type : typing.Optional[str]
+
+        object_sources : typing.Optional[typing.Sequence[str]]
+
+        breakdown : typing.Optional[str]
+
+        x_axis : typing.Optional[str]
+
+        owner_id : typing.Optional[str]
+
+        dashboard_id : typing.Optional[str]
+
+        update_dashboard_assignment : typing.Optional[bool]
+
+        is_forecast : typing.Optional[bool]
+
+        is_stacked_chart : typing.Optional[bool]
+
+        is_realtime : typing.Optional[bool]
+
+        ratio : typing.Optional[int]
+
+        filter : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
+
+        meta_data : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
+
+        metrics : typing.Optional[typing.Sequence[ReportMetricMutationItem]]
+
+        advanced : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        AsyncHttpResponse[PublicCreateReportResponse]
-            OK
+        AsyncHttpResponse[CreatePublicReportApiV2PublicReportsPost200Envelope]
+            Successful Response
         """
         _response = await self._client_wrapper.httpx_client.request(
-            "v1/public/reports",
+            "v2/public/reports",
             method="POST",
+            params={
+                "workspace_id": workspace_id,
+            },
             json={
-                "reportMetadata": convert_and_respect_annotation_metadata(
-                    object_=report_metadata, annotation=PublicReportMetadataRequest, direction="write"
+                "name": name,
+                "description": description,
+                "description_ja": description_ja,
+                "panel_type": panel_type,
+                "data_source_type": data_source_type,
+                "object_sources": object_sources,
+                "breakdown": breakdown,
+                "x_axis": x_axis,
+                "owner_id": owner_id,
+                "dashboard_id": dashboard_id,
+                "update_dashboard_assignment": update_dashboard_assignment,
+                "is_forecast": is_forecast,
+                "is_stacked_chart": is_stacked_chart,
+                "is_realtime": is_realtime,
+                "ratio": ratio,
+                "filter": filter,
+                "meta_data": meta_data,
+                "metrics": convert_and_respect_annotation_metadata(
+                    object_=metrics, annotation=typing.Sequence[ReportMetricMutationItem], direction="write"
                 ),
-                "panels": convert_and_respect_annotation_metadata(
-                    object_=panels, annotation=typing.Sequence[PublicReportPanelRequest], direction="write"
-                ),
-                "createDefaultPanel": create_default_panel,
+                "advanced": advanced,
             },
             headers={
                 "content-type": "application/json",
@@ -640,20 +803,20 @@ class AsyncRawReportsClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    PublicCreateReportResponse,
+                    CreatePublicReportApiV2PublicReportsPost200Envelope,
                     construct_type(
-                        type_=PublicCreateReportResponse,  # type: ignore
+                        type_=CreatePublicReportApiV2PublicReportsPost200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return AsyncHttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -662,31 +825,20 @@ class AsyncRawReportsClient:
                 raise ForbiddenError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 404:
-                raise NotFoundError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -696,13 +848,13 @@ class AsyncRawReportsClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    async def api_routers_v_1_reports_public_api_get_public_report(
+    async def get_public_report_api(
         self,
         report_id: str,
         *,
         workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> AsyncHttpResponse[PublicReportDetailSchema]:
+    ) -> AsyncHttpResponse[GetPublicReportApiV2PublicReportsReportIdGet200Envelope]:
         """
         Parameters
         ----------
@@ -715,11 +867,11 @@ class AsyncRawReportsClient:
 
         Returns
         -------
-        AsyncHttpResponse[PublicReportDetailSchema]
-            OK
+        AsyncHttpResponse[GetPublicReportApiV2PublicReportsReportIdGet200Envelope]
+            Successful Response
         """
         _response = await self._client_wrapper.httpx_client.request(
-            f"v1/public/reports/{jsonable_encoder(report_id)}",
+            f"v2/public/reports/{jsonable_encoder(report_id)}",
             method="GET",
             params={
                 "workspace_id": workspace_id,
@@ -729,20 +881,20 @@ class AsyncRawReportsClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    PublicReportDetailSchema,
+                    GetPublicReportApiV2PublicReportsReportIdGet200Envelope,
                     construct_type(
-                        type_=PublicReportDetailSchema,  # type: ignore
+                        type_=GetPublicReportApiV2PublicReportsReportIdGet200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return AsyncHttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -751,31 +903,20 @@ class AsyncRawReportsClient:
                 raise ForbiddenError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 404:
-                raise NotFoundError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -785,16 +926,32 @@ class AsyncRawReportsClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    async def api_routers_v_1_reports_public_api_update_public_report(
+    async def update_public_report_api(
         self,
         report_id: str,
         *,
         workspace_id: typing.Optional[str] = None,
-        report_metadata: typing.Optional[PublicUpdateReportMetadataRequest] = OMIT,
-        panels: typing.Optional[typing.Sequence[PublicReportPanelRequest]] = OMIT,
-        create_default_panel: typing.Optional[bool] = OMIT,
+        name: typing.Optional[str] = OMIT,
+        description: typing.Optional[str] = OMIT,
+        description_ja: typing.Optional[str] = OMIT,
+        panel_type: typing.Optional[str] = OMIT,
+        data_source_type: typing.Optional[str] = OMIT,
+        object_sources: typing.Optional[typing.Sequence[str]] = OMIT,
+        breakdown: typing.Optional[str] = OMIT,
+        x_axis: typing.Optional[str] = OMIT,
+        owner_id: typing.Optional[str] = OMIT,
+        dashboard_id: typing.Optional[str] = OMIT,
+        update_dashboard_assignment: typing.Optional[bool] = OMIT,
+        is_forecast: typing.Optional[bool] = OMIT,
+        is_stacked_chart: typing.Optional[bool] = OMIT,
+        is_realtime: typing.Optional[bool] = OMIT,
+        ratio: typing.Optional[int] = OMIT,
+        filter: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
+        meta_data: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
+        metrics: typing.Optional[typing.Sequence[ReportMetricMutationItem]] = OMIT,
+        advanced: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> AsyncHttpResponse[PublicCreateReportResponse]:
+    ) -> AsyncHttpResponse[UpdatePublicReportApiV2PublicReportsReportIdPut200Envelope]:
         """
         Parameters
         ----------
@@ -802,36 +959,82 @@ class AsyncRawReportsClient:
 
         workspace_id : typing.Optional[str]
 
-        report_metadata : typing.Optional[PublicUpdateReportMetadataRequest]
+        name : typing.Optional[str]
 
-        panels : typing.Optional[typing.Sequence[PublicReportPanelRequest]]
+        description : typing.Optional[str]
 
-        create_default_panel : typing.Optional[bool]
+        description_ja : typing.Optional[str]
+
+        panel_type : typing.Optional[str]
+
+        data_source_type : typing.Optional[str]
+
+        object_sources : typing.Optional[typing.Sequence[str]]
+
+        breakdown : typing.Optional[str]
+
+        x_axis : typing.Optional[str]
+
+        owner_id : typing.Optional[str]
+
+        dashboard_id : typing.Optional[str]
+
+        update_dashboard_assignment : typing.Optional[bool]
+
+        is_forecast : typing.Optional[bool]
+
+        is_stacked_chart : typing.Optional[bool]
+
+        is_realtime : typing.Optional[bool]
+
+        ratio : typing.Optional[int]
+
+        filter : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
+
+        meta_data : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
+
+        metrics : typing.Optional[typing.Sequence[ReportMetricMutationItem]]
+
+        advanced : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        AsyncHttpResponse[PublicCreateReportResponse]
-            OK
+        AsyncHttpResponse[UpdatePublicReportApiV2PublicReportsReportIdPut200Envelope]
+            Successful Response
         """
         _response = await self._client_wrapper.httpx_client.request(
-            f"v1/public/reports/{jsonable_encoder(report_id)}",
+            f"v2/public/reports/{jsonable_encoder(report_id)}",
             method="PUT",
             params={
                 "workspace_id": workspace_id,
             },
             json={
-                "reportMetadata": convert_and_respect_annotation_metadata(
-                    object_=report_metadata, annotation=PublicUpdateReportMetadataRequest, direction="write"
-                ),
-                "panels": convert_and_respect_annotation_metadata(
-                    object_=panels,
-                    annotation=typing.Optional[typing.Sequence[PublicReportPanelRequest]],
+                "name": name,
+                "description": description,
+                "description_ja": description_ja,
+                "panel_type": panel_type,
+                "data_source_type": data_source_type,
+                "object_sources": object_sources,
+                "breakdown": breakdown,
+                "x_axis": x_axis,
+                "owner_id": owner_id,
+                "dashboard_id": dashboard_id,
+                "update_dashboard_assignment": update_dashboard_assignment,
+                "is_forecast": is_forecast,
+                "is_stacked_chart": is_stacked_chart,
+                "is_realtime": is_realtime,
+                "ratio": ratio,
+                "filter": filter,
+                "meta_data": meta_data,
+                "metrics": convert_and_respect_annotation_metadata(
+                    object_=metrics,
+                    annotation=typing.Optional[typing.Sequence[ReportMetricMutationItem]],
                     direction="write",
                 ),
-                "createDefaultPanel": create_default_panel,
+                "advanced": advanced,
             },
             headers={
                 "content-type": "application/json",
@@ -842,20 +1045,20 @@ class AsyncRawReportsClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    PublicCreateReportResponse,
+                    UpdatePublicReportApiV2PublicReportsReportIdPut200Envelope,
                     construct_type(
-                        type_=PublicCreateReportResponse,  # type: ignore
+                        type_=UpdatePublicReportApiV2PublicReportsReportIdPut200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return AsyncHttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -864,31 +1067,20 @@ class AsyncRawReportsClient:
                 raise ForbiddenError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 404:
-                raise NotFoundError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -898,13 +1090,13 @@ class AsyncRawReportsClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    async def api_routers_v_1_reports_public_api_delete_public_report(
+    async def delete_public_report_api(
         self,
         report_id: str,
         *,
         workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> AsyncHttpResponse[PublicDeleteReportResponse]:
+    ) -> AsyncHttpResponse[DeletePublicReportApiV2PublicReportsReportIdDelete200Envelope]:
         """
         Parameters
         ----------
@@ -917,11 +1109,11 @@ class AsyncRawReportsClient:
 
         Returns
         -------
-        AsyncHttpResponse[PublicDeleteReportResponse]
-            OK
+        AsyncHttpResponse[DeletePublicReportApiV2PublicReportsReportIdDelete200Envelope]
+            Successful Response
         """
         _response = await self._client_wrapper.httpx_client.request(
-            f"v1/public/reports/{jsonable_encoder(report_id)}",
+            f"v2/public/reports/{jsonable_encoder(report_id)}",
             method="DELETE",
             params={
                 "workspace_id": workspace_id,
@@ -931,20 +1123,20 @@ class AsyncRawReportsClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    PublicDeleteReportResponse,
+                    DeletePublicReportApiV2PublicReportsReportIdDelete200Envelope,
                     construct_type(
-                        type_=PublicDeleteReportResponse,  # type: ignore
+                        type_=DeletePublicReportApiV2PublicReportsReportIdDelete200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return AsyncHttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -953,31 +1145,20 @@ class AsyncRawReportsClient:
                 raise ForbiddenError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 404:
-                raise NotFoundError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),

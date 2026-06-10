@@ -9,13 +9,24 @@ from ..core.http_response import AsyncHttpResponse, HttpResponse
 from ..core.jsonable_encoder import jsonable_encoder
 from ..core.request_options import RequestOptions
 from ..core.unchecked_base_model import construct_type
-from ..errors.bad_request_error import BadRequestError
-from ..errors.conflict_error import ConflictError
-from ..errors.forbidden_error import ForbiddenError
-from ..errors.internal_server_error import InternalServerError
-from ..errors.not_found_error import NotFoundError
-from ..types.public_inventory_response import PublicInventoryResponse
-from ..types.shop_turbo_inventory_schema import ShopTurboInventorySchema
+from ..errors.unauthorized_error import UnauthorizedError
+from ..errors.unprocessable_entity_error import UnprocessableEntityError
+from ..types.create_public_inventory_api_v_2_public_inventories_post_200_envelope import (
+    CreatePublicInventoryApiV2PublicInventoriesPost200Envelope,
+)
+from ..types.delete_public_inventory_api_v_2_public_inventories_inventory_id_delete_200_envelope import (
+    DeletePublicInventoryApiV2PublicInventoriesInventoryIdDelete200Envelope,
+)
+from ..types.error_envelope import ErrorEnvelope
+from ..types.get_public_inventory_api_v_2_public_inventories_inventory_id_get_200_envelope import (
+    GetPublicInventoryApiV2PublicInventoriesInventoryIdGet200Envelope,
+)
+from ..types.list_public_inventories_api_v_2_public_inventories_get_200_envelope import (
+    ListPublicInventoriesApiV2PublicInventoriesGet200Envelope,
+)
+from ..types.update_public_inventory_api_v_2_public_inventories_inventory_id_put_200_envelope import (
+    UpdatePublicInventoryApiV2PublicInventoriesInventoryIdPut200Envelope,
+)
 
 # this is used as the default value for optional parameters
 OMIT = typing.cast(typing.Any, ...)
@@ -25,24 +36,45 @@ class RawInventoriesClient:
     def __init__(self, *, client_wrapper: SyncClientWrapper):
         self._client_wrapper = client_wrapper
 
-    def api_routers_v_1_inventories_public_api_list_workspace_inventories(
+    def list_public_inventories_api(
         self,
         *,
         workspace_id: typing.Optional[str] = None,
-        lang: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = None,
+        search: typing.Optional[str] = None,
         language: typing.Optional[str] = None,
+        status: typing.Optional[str] = None,
+        usage_status: typing.Optional[str] = None,
+        page: typing.Optional[int] = None,
+        limit: typing.Optional[int] = None,
+        sort: typing.Optional[str] = None,
+        x_language: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> HttpResponse[typing.List[ShopTurboInventorySchema]]:
+    ) -> HttpResponse[ListPublicInventoriesApiV2PublicInventoriesGet200Envelope]:
         """
         Parameters
         ----------
         workspace_id : typing.Optional[str]
 
-        lang : typing.Optional[str]
+        view_id : typing.Optional[str]
+
+        search : typing.Optional[str]
 
         language : typing.Optional[str]
 
+        status : typing.Optional[str]
+
+        usage_status : typing.Optional[str]
+
+        page : typing.Optional[int]
+
+        limit : typing.Optional[int]
+
+        sort : typing.Optional[str]
+
+        x_language : typing.Optional[str]
+
         accept_language : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
@@ -50,18 +82,25 @@ class RawInventoriesClient:
 
         Returns
         -------
-        HttpResponse[typing.List[ShopTurboInventorySchema]]
-            OK
+        HttpResponse[ListPublicInventoriesApiV2PublicInventoriesGet200Envelope]
+            Object record list response
         """
         _response = self._client_wrapper.httpx_client.request(
-            "v1/public/inventories",
+            "v2/public/inventories",
             method="GET",
             params={
                 "workspace_id": workspace_id,
-                "lang": lang,
+                "view_id": view_id,
+                "search": search,
                 "language": language,
+                "status": status,
+                "usage_status": usage_status,
+                "page": page,
+                "limit": limit,
+                "sort": sort,
             },
             headers={
+                "X-Language": str(x_language) if x_language is not None else None,
                 "Accept-Language": str(accept_language) if accept_language is not None else None,
             },
             request_options=request_options,
@@ -69,82 +108,110 @@ class RawInventoriesClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    typing.List[ShopTurboInventorySchema],
+                    ListPublicInventoriesApiV2PublicInventoriesGet200Envelope,
                     construct_type(
-                        type_=typing.List[ShopTurboInventorySchema],  # type: ignore
+                        type_=ListPublicInventoriesApiV2PublicInventoriesGet200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
             _response_json = _response.json()
         except JSONDecodeError:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    def api_routers_v_1_inventories_public_api_create_public_inventory(
+    def create_public_inventory_api(
         self,
         *,
-        external_id: str,
-        name: typing.Optional[str] = OMIT,
-        item_id: typing.Optional[str] = OMIT,
-        item_external_id: typing.Optional[str] = OMIT,
-        status: typing.Optional[str] = OMIT,
-        inventory_status: typing.Optional[str] = OMIT,
-        currency: typing.Optional[str] = OMIT,
-        unit_price: typing.Optional[float] = OMIT,
-        initial_value: typing.Optional[int] = OMIT,
-        date: typing.Optional[str] = OMIT,
-        warehouse_id: typing.Optional[str] = OMIT,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = OMIT,
+        form_view_id: typing.Optional[str] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
+        target: typing.Optional[str] = OMIT,
+        provider: typing.Optional[str] = OMIT,
+        channel_id: typing.Optional[str] = OMIT,
+        external_object_type: typing.Optional[str] = OMIT,
+        external_id: typing.Optional[str] = OMIT,
+        operation: typing.Optional[str] = OMIT,
+        dry_run: typing.Optional[bool] = OMIT,
+        confirm: typing.Optional[bool] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> HttpResponse[PublicInventoryResponse]:
+    ) -> HttpResponse[CreatePublicInventoryApiV2PublicInventoriesPost200Envelope]:
         """
         Parameters
         ----------
-        external_id : str
+        workspace_id : typing.Optional[str]
 
-        name : typing.Optional[str]
+        view_id : typing.Optional[str]
 
-        item_id : typing.Optional[str]
+        form_view_id : typing.Optional[str]
 
-        item_external_id : typing.Optional[str]
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
 
-        status : typing.Optional[str]
+        target : typing.Optional[str]
 
-        inventory_status : typing.Optional[str]
+        provider : typing.Optional[str]
 
-        currency : typing.Optional[str]
+        channel_id : typing.Optional[str]
 
-        unit_price : typing.Optional[float]
+        external_object_type : typing.Optional[str]
 
-        initial_value : typing.Optional[int]
+        external_id : typing.Optional[str]
 
-        date : typing.Optional[str]
+        operation : typing.Optional[str]
 
-        warehouse_id : typing.Optional[str]
+        dry_run : typing.Optional[bool]
+
+        confirm : typing.Optional[bool]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        HttpResponse[PublicInventoryResponse]
-            OK
+        HttpResponse[CreatePublicInventoryApiV2PublicInventoriesPost200Envelope]
+            Successful Response
         """
         _response = self._client_wrapper.httpx_client.request(
-            "v1/public/inventories",
+            "v2/public/inventories",
             method="POST",
+            params={
+                "workspace_id": workspace_id,
+            },
             json={
-                "externalId": external_id,
-                "name": name,
-                "itemId": item_id,
-                "itemExternalId": item_external_id,
-                "status": status,
-                "inventoryStatus": inventory_status,
-                "currency": currency,
-                "unitPrice": unit_price,
-                "initialValue": initial_value,
-                "date": date,
-                "warehouseId": warehouse_id,
+                "view_id": view_id,
+                "form_view_id": form_view_id,
+                "properties": properties,
+                "target": target,
+                "provider": provider,
+                "channel_id": channel_id,
+                "external_object_type": external_object_type,
+                "external_id": external_id,
+                "operation": operation,
+                "dry_run": dry_run,
+                "confirm": confirm,
             },
             headers={
                 "content-type": "application/json",
@@ -155,53 +222,31 @@ class RawInventoriesClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    PublicInventoryResponse,
+                    CreatePublicInventoryApiV2PublicInventoriesPost200Envelope,
                     construct_type(
-                        type_=PublicInventoryResponse,  # type: ignore
+                        type_=CreatePublicInventoryApiV2PublicInventoriesPost200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return HttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 403:
-                raise ForbiddenError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -211,14 +256,16 @@ class RawInventoriesClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    def api_routers_v_1_inventories_public_api_get_public_inventory(
+    def get_public_inventory_api(
         self,
         inventory_id: str,
         *,
         external_id: typing.Optional[str] = None,
-        accept_language: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = None,
+        form_view_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> HttpResponse[ShopTurboInventorySchema]:
+    ) -> HttpResponse[GetPublicInventoryApiV2PublicInventoriesInventoryIdGet200Envelope]:
         """
         Parameters
         ----------
@@ -226,66 +273,59 @@ class RawInventoriesClient:
 
         external_id : typing.Optional[str]
 
-        accept_language : typing.Optional[str]
+        workspace_id : typing.Optional[str]
+
+        view_id : typing.Optional[str]
+
+        form_view_id : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        HttpResponse[ShopTurboInventorySchema]
-            OK
+        HttpResponse[GetPublicInventoryApiV2PublicInventoriesInventoryIdGet200Envelope]
+            Object record detail response. The base detail payload is intentionally thin; drawer sections load through scoped endpoints.
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"v1/public/inventories/{jsonable_encoder(inventory_id)}",
+            f"v2/public/inventories/{jsonable_encoder(inventory_id)}",
             method="GET",
             params={
                 "external_id": external_id,
-            },
-            headers={
-                "Accept-Language": str(accept_language) if accept_language is not None else None,
+                "workspace_id": workspace_id,
+                "view_id": view_id,
+                "form_view_id": form_view_id,
             },
             request_options=request_options,
         )
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    ShopTurboInventorySchema,
+                    GetPublicInventoryApiV2PublicInventoriesInventoryIdGet200Envelope,
                     construct_type(
-                        type_=ShopTurboInventorySchema,  # type: ignore
+                        type_=GetPublicInventoryApiV2PublicInventoriesInventoryIdGet200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return HttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 404:
-                raise NotFoundError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -295,73 +335,83 @@ class RawInventoriesClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    def api_routers_v_1_inventories_public_api_update_public_inventory(
+    def update_public_inventory_api(
         self,
         inventory_id: str,
         *,
-        external_id: str,
-        name: typing.Optional[str] = OMIT,
-        item_id: typing.Optional[str] = OMIT,
-        item_external_id: typing.Optional[str] = OMIT,
-        status: typing.Optional[str] = OMIT,
-        inventory_status: typing.Optional[str] = OMIT,
-        currency: typing.Optional[str] = OMIT,
-        unit_price: typing.Optional[float] = OMIT,
-        initial_value: typing.Optional[int] = OMIT,
-        date: typing.Optional[str] = OMIT,
-        warehouse_id: typing.Optional[str] = OMIT,
+        external_id: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = OMIT,
+        form_view_id: typing.Optional[str] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
+        target: typing.Optional[str] = OMIT,
+        provider: typing.Optional[str] = OMIT,
+        channel_id: typing.Optional[str] = OMIT,
+        external_object_type: typing.Optional[str] = OMIT,
+        public_object_record_mutation_request_external_id: typing.Optional[str] = OMIT,
+        operation: typing.Optional[str] = OMIT,
+        dry_run: typing.Optional[bool] = OMIT,
+        confirm: typing.Optional[bool] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> HttpResponse[PublicInventoryResponse]:
+    ) -> HttpResponse[UpdatePublicInventoryApiV2PublicInventoriesInventoryIdPut200Envelope]:
         """
         Parameters
         ----------
         inventory_id : str
 
-        external_id : str
+        external_id : typing.Optional[str]
 
-        name : typing.Optional[str]
+        workspace_id : typing.Optional[str]
 
-        item_id : typing.Optional[str]
+        view_id : typing.Optional[str]
 
-        item_external_id : typing.Optional[str]
+        form_view_id : typing.Optional[str]
 
-        status : typing.Optional[str]
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
 
-        inventory_status : typing.Optional[str]
+        target : typing.Optional[str]
 
-        currency : typing.Optional[str]
+        provider : typing.Optional[str]
 
-        unit_price : typing.Optional[float]
+        channel_id : typing.Optional[str]
 
-        initial_value : typing.Optional[int]
+        external_object_type : typing.Optional[str]
 
-        date : typing.Optional[str]
+        public_object_record_mutation_request_external_id : typing.Optional[str]
 
-        warehouse_id : typing.Optional[str]
+        operation : typing.Optional[str]
+
+        dry_run : typing.Optional[bool]
+
+        confirm : typing.Optional[bool]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        HttpResponse[PublicInventoryResponse]
-            OK
+        HttpResponse[UpdatePublicInventoryApiV2PublicInventoriesInventoryIdPut200Envelope]
+            Successful Response
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"v1/public/inventories/{jsonable_encoder(inventory_id)}",
+            f"v2/public/inventories/{jsonable_encoder(inventory_id)}",
             method="PUT",
+            params={
+                "external_id": external_id,
+                "workspace_id": workspace_id,
+            },
             json={
-                "externalId": external_id,
-                "name": name,
-                "itemId": item_id,
-                "itemExternalId": item_external_id,
-                "status": status,
-                "inventoryStatus": inventory_status,
-                "currency": currency,
-                "unitPrice": unit_price,
-                "initialValue": initial_value,
-                "date": date,
-                "warehouseId": warehouse_id,
+                "view_id": view_id,
+                "form_view_id": form_view_id,
+                "properties": properties,
+                "target": target,
+                "provider": provider,
+                "channel_id": channel_id,
+                "external_object_type": external_object_type,
+                "external_id": external_id,
+                "operation": operation,
+                "dry_run": dry_run,
+                "confirm": confirm,
             },
             headers={
                 "content-type": "application/json",
@@ -372,64 +422,31 @@ class RawInventoriesClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    PublicInventoryResponse,
+                    UpdatePublicInventoryApiV2PublicInventoriesInventoryIdPut200Envelope,
                     construct_type(
-                        type_=PublicInventoryResponse,  # type: ignore
+                        type_=UpdatePublicInventoryApiV2PublicInventoriesInventoryIdPut200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return HttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 403:
-                raise ForbiddenError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 409:
-                raise ConflictError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -439,13 +456,14 @@ class RawInventoriesClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    def api_routers_v_1_inventories_public_api_delete_public_inventory(
+    def delete_public_inventory_api(
         self,
         inventory_id: str,
         *,
         external_id: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> HttpResponse[PublicInventoryResponse]:
+    ) -> HttpResponse[DeletePublicInventoryApiV2PublicInventoriesInventoryIdDelete200Envelope]:
         """
         Parameters
         ----------
@@ -453,83 +471,53 @@ class RawInventoriesClient:
 
         external_id : typing.Optional[str]
 
+        workspace_id : typing.Optional[str]
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        HttpResponse[PublicInventoryResponse]
-            OK
+        HttpResponse[DeletePublicInventoryApiV2PublicInventoriesInventoryIdDelete200Envelope]
+            Successful Response
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"v1/public/inventories/{jsonable_encoder(inventory_id)}",
+            f"v2/public/inventories/{jsonable_encoder(inventory_id)}",
             method="DELETE",
             params={
                 "external_id": external_id,
+                "workspace_id": workspace_id,
             },
             request_options=request_options,
         )
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    PublicInventoryResponse,
+                    DeletePublicInventoryApiV2PublicInventoriesInventoryIdDelete200Envelope,
                     construct_type(
-                        type_=PublicInventoryResponse,  # type: ignore
+                        type_=DeletePublicInventoryApiV2PublicInventoriesInventoryIdDelete200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return HttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 403:
-                raise ForbiddenError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 409:
-                raise ConflictError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -544,24 +532,45 @@ class AsyncRawInventoriesClient:
     def __init__(self, *, client_wrapper: AsyncClientWrapper):
         self._client_wrapper = client_wrapper
 
-    async def api_routers_v_1_inventories_public_api_list_workspace_inventories(
+    async def list_public_inventories_api(
         self,
         *,
         workspace_id: typing.Optional[str] = None,
-        lang: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = None,
+        search: typing.Optional[str] = None,
         language: typing.Optional[str] = None,
+        status: typing.Optional[str] = None,
+        usage_status: typing.Optional[str] = None,
+        page: typing.Optional[int] = None,
+        limit: typing.Optional[int] = None,
+        sort: typing.Optional[str] = None,
+        x_language: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> AsyncHttpResponse[typing.List[ShopTurboInventorySchema]]:
+    ) -> AsyncHttpResponse[ListPublicInventoriesApiV2PublicInventoriesGet200Envelope]:
         """
         Parameters
         ----------
         workspace_id : typing.Optional[str]
 
-        lang : typing.Optional[str]
+        view_id : typing.Optional[str]
+
+        search : typing.Optional[str]
 
         language : typing.Optional[str]
 
+        status : typing.Optional[str]
+
+        usage_status : typing.Optional[str]
+
+        page : typing.Optional[int]
+
+        limit : typing.Optional[int]
+
+        sort : typing.Optional[str]
+
+        x_language : typing.Optional[str]
+
         accept_language : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
@@ -569,18 +578,25 @@ class AsyncRawInventoriesClient:
 
         Returns
         -------
-        AsyncHttpResponse[typing.List[ShopTurboInventorySchema]]
-            OK
+        AsyncHttpResponse[ListPublicInventoriesApiV2PublicInventoriesGet200Envelope]
+            Object record list response
         """
         _response = await self._client_wrapper.httpx_client.request(
-            "v1/public/inventories",
+            "v2/public/inventories",
             method="GET",
             params={
                 "workspace_id": workspace_id,
-                "lang": lang,
+                "view_id": view_id,
+                "search": search,
                 "language": language,
+                "status": status,
+                "usage_status": usage_status,
+                "page": page,
+                "limit": limit,
+                "sort": sort,
             },
             headers={
+                "X-Language": str(x_language) if x_language is not None else None,
                 "Accept-Language": str(accept_language) if accept_language is not None else None,
             },
             request_options=request_options,
@@ -588,82 +604,110 @@ class AsyncRawInventoriesClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    typing.List[ShopTurboInventorySchema],
+                    ListPublicInventoriesApiV2PublicInventoriesGet200Envelope,
                     construct_type(
-                        type_=typing.List[ShopTurboInventorySchema],  # type: ignore
+                        type_=ListPublicInventoriesApiV2PublicInventoriesGet200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
             _response_json = _response.json()
         except JSONDecodeError:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    async def api_routers_v_1_inventories_public_api_create_public_inventory(
+    async def create_public_inventory_api(
         self,
         *,
-        external_id: str,
-        name: typing.Optional[str] = OMIT,
-        item_id: typing.Optional[str] = OMIT,
-        item_external_id: typing.Optional[str] = OMIT,
-        status: typing.Optional[str] = OMIT,
-        inventory_status: typing.Optional[str] = OMIT,
-        currency: typing.Optional[str] = OMIT,
-        unit_price: typing.Optional[float] = OMIT,
-        initial_value: typing.Optional[int] = OMIT,
-        date: typing.Optional[str] = OMIT,
-        warehouse_id: typing.Optional[str] = OMIT,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = OMIT,
+        form_view_id: typing.Optional[str] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
+        target: typing.Optional[str] = OMIT,
+        provider: typing.Optional[str] = OMIT,
+        channel_id: typing.Optional[str] = OMIT,
+        external_object_type: typing.Optional[str] = OMIT,
+        external_id: typing.Optional[str] = OMIT,
+        operation: typing.Optional[str] = OMIT,
+        dry_run: typing.Optional[bool] = OMIT,
+        confirm: typing.Optional[bool] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> AsyncHttpResponse[PublicInventoryResponse]:
+    ) -> AsyncHttpResponse[CreatePublicInventoryApiV2PublicInventoriesPost200Envelope]:
         """
         Parameters
         ----------
-        external_id : str
+        workspace_id : typing.Optional[str]
 
-        name : typing.Optional[str]
+        view_id : typing.Optional[str]
 
-        item_id : typing.Optional[str]
+        form_view_id : typing.Optional[str]
 
-        item_external_id : typing.Optional[str]
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
 
-        status : typing.Optional[str]
+        target : typing.Optional[str]
 
-        inventory_status : typing.Optional[str]
+        provider : typing.Optional[str]
 
-        currency : typing.Optional[str]
+        channel_id : typing.Optional[str]
 
-        unit_price : typing.Optional[float]
+        external_object_type : typing.Optional[str]
 
-        initial_value : typing.Optional[int]
+        external_id : typing.Optional[str]
 
-        date : typing.Optional[str]
+        operation : typing.Optional[str]
 
-        warehouse_id : typing.Optional[str]
+        dry_run : typing.Optional[bool]
+
+        confirm : typing.Optional[bool]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        AsyncHttpResponse[PublicInventoryResponse]
-            OK
+        AsyncHttpResponse[CreatePublicInventoryApiV2PublicInventoriesPost200Envelope]
+            Successful Response
         """
         _response = await self._client_wrapper.httpx_client.request(
-            "v1/public/inventories",
+            "v2/public/inventories",
             method="POST",
+            params={
+                "workspace_id": workspace_id,
+            },
             json={
-                "externalId": external_id,
-                "name": name,
-                "itemId": item_id,
-                "itemExternalId": item_external_id,
-                "status": status,
-                "inventoryStatus": inventory_status,
-                "currency": currency,
-                "unitPrice": unit_price,
-                "initialValue": initial_value,
-                "date": date,
-                "warehouseId": warehouse_id,
+                "view_id": view_id,
+                "form_view_id": form_view_id,
+                "properties": properties,
+                "target": target,
+                "provider": provider,
+                "channel_id": channel_id,
+                "external_object_type": external_object_type,
+                "external_id": external_id,
+                "operation": operation,
+                "dry_run": dry_run,
+                "confirm": confirm,
             },
             headers={
                 "content-type": "application/json",
@@ -674,53 +718,31 @@ class AsyncRawInventoriesClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    PublicInventoryResponse,
+                    CreatePublicInventoryApiV2PublicInventoriesPost200Envelope,
                     construct_type(
-                        type_=PublicInventoryResponse,  # type: ignore
+                        type_=CreatePublicInventoryApiV2PublicInventoriesPost200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return AsyncHttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 403:
-                raise ForbiddenError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -730,14 +752,16 @@ class AsyncRawInventoriesClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    async def api_routers_v_1_inventories_public_api_get_public_inventory(
+    async def get_public_inventory_api(
         self,
         inventory_id: str,
         *,
         external_id: typing.Optional[str] = None,
-        accept_language: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = None,
+        form_view_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> AsyncHttpResponse[ShopTurboInventorySchema]:
+    ) -> AsyncHttpResponse[GetPublicInventoryApiV2PublicInventoriesInventoryIdGet200Envelope]:
         """
         Parameters
         ----------
@@ -745,66 +769,59 @@ class AsyncRawInventoriesClient:
 
         external_id : typing.Optional[str]
 
-        accept_language : typing.Optional[str]
+        workspace_id : typing.Optional[str]
+
+        view_id : typing.Optional[str]
+
+        form_view_id : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        AsyncHttpResponse[ShopTurboInventorySchema]
-            OK
+        AsyncHttpResponse[GetPublicInventoryApiV2PublicInventoriesInventoryIdGet200Envelope]
+            Object record detail response. The base detail payload is intentionally thin; drawer sections load through scoped endpoints.
         """
         _response = await self._client_wrapper.httpx_client.request(
-            f"v1/public/inventories/{jsonable_encoder(inventory_id)}",
+            f"v2/public/inventories/{jsonable_encoder(inventory_id)}",
             method="GET",
             params={
                 "external_id": external_id,
-            },
-            headers={
-                "Accept-Language": str(accept_language) if accept_language is not None else None,
+                "workspace_id": workspace_id,
+                "view_id": view_id,
+                "form_view_id": form_view_id,
             },
             request_options=request_options,
         )
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    ShopTurboInventorySchema,
+                    GetPublicInventoryApiV2PublicInventoriesInventoryIdGet200Envelope,
                     construct_type(
-                        type_=ShopTurboInventorySchema,  # type: ignore
+                        type_=GetPublicInventoryApiV2PublicInventoriesInventoryIdGet200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return AsyncHttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 404:
-                raise NotFoundError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -814,73 +831,83 @@ class AsyncRawInventoriesClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    async def api_routers_v_1_inventories_public_api_update_public_inventory(
+    async def update_public_inventory_api(
         self,
         inventory_id: str,
         *,
-        external_id: str,
-        name: typing.Optional[str] = OMIT,
-        item_id: typing.Optional[str] = OMIT,
-        item_external_id: typing.Optional[str] = OMIT,
-        status: typing.Optional[str] = OMIT,
-        inventory_status: typing.Optional[str] = OMIT,
-        currency: typing.Optional[str] = OMIT,
-        unit_price: typing.Optional[float] = OMIT,
-        initial_value: typing.Optional[int] = OMIT,
-        date: typing.Optional[str] = OMIT,
-        warehouse_id: typing.Optional[str] = OMIT,
+        external_id: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = OMIT,
+        form_view_id: typing.Optional[str] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
+        target: typing.Optional[str] = OMIT,
+        provider: typing.Optional[str] = OMIT,
+        channel_id: typing.Optional[str] = OMIT,
+        external_object_type: typing.Optional[str] = OMIT,
+        public_object_record_mutation_request_external_id: typing.Optional[str] = OMIT,
+        operation: typing.Optional[str] = OMIT,
+        dry_run: typing.Optional[bool] = OMIT,
+        confirm: typing.Optional[bool] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> AsyncHttpResponse[PublicInventoryResponse]:
+    ) -> AsyncHttpResponse[UpdatePublicInventoryApiV2PublicInventoriesInventoryIdPut200Envelope]:
         """
         Parameters
         ----------
         inventory_id : str
 
-        external_id : str
+        external_id : typing.Optional[str]
 
-        name : typing.Optional[str]
+        workspace_id : typing.Optional[str]
 
-        item_id : typing.Optional[str]
+        view_id : typing.Optional[str]
 
-        item_external_id : typing.Optional[str]
+        form_view_id : typing.Optional[str]
 
-        status : typing.Optional[str]
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
 
-        inventory_status : typing.Optional[str]
+        target : typing.Optional[str]
 
-        currency : typing.Optional[str]
+        provider : typing.Optional[str]
 
-        unit_price : typing.Optional[float]
+        channel_id : typing.Optional[str]
 
-        initial_value : typing.Optional[int]
+        external_object_type : typing.Optional[str]
 
-        date : typing.Optional[str]
+        public_object_record_mutation_request_external_id : typing.Optional[str]
 
-        warehouse_id : typing.Optional[str]
+        operation : typing.Optional[str]
+
+        dry_run : typing.Optional[bool]
+
+        confirm : typing.Optional[bool]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        AsyncHttpResponse[PublicInventoryResponse]
-            OK
+        AsyncHttpResponse[UpdatePublicInventoryApiV2PublicInventoriesInventoryIdPut200Envelope]
+            Successful Response
         """
         _response = await self._client_wrapper.httpx_client.request(
-            f"v1/public/inventories/{jsonable_encoder(inventory_id)}",
+            f"v2/public/inventories/{jsonable_encoder(inventory_id)}",
             method="PUT",
+            params={
+                "external_id": external_id,
+                "workspace_id": workspace_id,
+            },
             json={
-                "externalId": external_id,
-                "name": name,
-                "itemId": item_id,
-                "itemExternalId": item_external_id,
-                "status": status,
-                "inventoryStatus": inventory_status,
-                "currency": currency,
-                "unitPrice": unit_price,
-                "initialValue": initial_value,
-                "date": date,
-                "warehouseId": warehouse_id,
+                "view_id": view_id,
+                "form_view_id": form_view_id,
+                "properties": properties,
+                "target": target,
+                "provider": provider,
+                "channel_id": channel_id,
+                "external_object_type": external_object_type,
+                "external_id": external_id,
+                "operation": operation,
+                "dry_run": dry_run,
+                "confirm": confirm,
             },
             headers={
                 "content-type": "application/json",
@@ -891,64 +918,31 @@ class AsyncRawInventoriesClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    PublicInventoryResponse,
+                    UpdatePublicInventoryApiV2PublicInventoriesInventoryIdPut200Envelope,
                     construct_type(
-                        type_=PublicInventoryResponse,  # type: ignore
+                        type_=UpdatePublicInventoryApiV2PublicInventoriesInventoryIdPut200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return AsyncHttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 403:
-                raise ForbiddenError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 409:
-                raise ConflictError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -958,13 +952,14 @@ class AsyncRawInventoriesClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    async def api_routers_v_1_inventories_public_api_delete_public_inventory(
+    async def delete_public_inventory_api(
         self,
         inventory_id: str,
         *,
         external_id: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> AsyncHttpResponse[PublicInventoryResponse]:
+    ) -> AsyncHttpResponse[DeletePublicInventoryApiV2PublicInventoriesInventoryIdDelete200Envelope]:
         """
         Parameters
         ----------
@@ -972,83 +967,53 @@ class AsyncRawInventoriesClient:
 
         external_id : typing.Optional[str]
 
+        workspace_id : typing.Optional[str]
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        AsyncHttpResponse[PublicInventoryResponse]
-            OK
+        AsyncHttpResponse[DeletePublicInventoryApiV2PublicInventoriesInventoryIdDelete200Envelope]
+            Successful Response
         """
         _response = await self._client_wrapper.httpx_client.request(
-            f"v1/public/inventories/{jsonable_encoder(inventory_id)}",
+            f"v2/public/inventories/{jsonable_encoder(inventory_id)}",
             method="DELETE",
             params={
                 "external_id": external_id,
+                "workspace_id": workspace_id,
             },
             request_options=request_options,
         )
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    PublicInventoryResponse,
+                    DeletePublicInventoryApiV2PublicInventoriesInventoryIdDelete200Envelope,
                     construct_type(
-                        type_=PublicInventoryResponse,  # type: ignore
+                        type_=DeletePublicInventoryApiV2PublicInventoriesInventoryIdDelete200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return AsyncHttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 403:
-                raise ForbiddenError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 409:
-                raise ConflictError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),

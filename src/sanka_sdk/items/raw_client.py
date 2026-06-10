@@ -9,13 +9,24 @@ from ..core.http_response import AsyncHttpResponse, HttpResponse
 from ..core.jsonable_encoder import jsonable_encoder
 from ..core.request_options import RequestOptions
 from ..core.unchecked_base_model import construct_type
-from ..errors.bad_request_error import BadRequestError
-from ..errors.conflict_error import ConflictError
-from ..errors.forbidden_error import ForbiddenError
-from ..errors.internal_server_error import InternalServerError
-from ..errors.not_found_error import NotFoundError
-from ..types.public_item_response import PublicItemResponse
-from ..types.shop_turbo_item_schema import ShopTurboItemSchema
+from ..errors.unauthorized_error import UnauthorizedError
+from ..errors.unprocessable_entity_error import UnprocessableEntityError
+from ..types.create_public_item_api_v_2_public_items_post_200_envelope import (
+    CreatePublicItemApiV2PublicItemsPost200Envelope,
+)
+from ..types.delete_public_item_api_v_2_public_items_item_id_delete_200_envelope import (
+    DeletePublicItemApiV2PublicItemsItemIdDelete200Envelope,
+)
+from ..types.error_envelope import ErrorEnvelope
+from ..types.get_public_item_api_v_2_public_items_item_id_get_200_envelope import (
+    GetPublicItemApiV2PublicItemsItemIdGet200Envelope,
+)
+from ..types.list_public_items_api_v_2_public_items_get_200_envelope import (
+    ListPublicItemsApiV2PublicItemsGet200Envelope,
+)
+from ..types.update_public_item_api_v_2_public_items_item_id_put_200_envelope import (
+    UpdatePublicItemApiV2PublicItemsItemIdPut200Envelope,
+)
 
 # this is used as the default value for optional parameters
 OMIT = typing.cast(typing.Any, ...)
@@ -25,23 +36,44 @@ class RawItemsClient:
     def __init__(self, *, client_wrapper: SyncClientWrapper):
         self._client_wrapper = client_wrapper
 
-    def api_routers_v_1_items_public_api_list_workspace_items(
+    def list_public_items_api(
         self,
         *,
         workspace_id: typing.Optional[str] = None,
-        lang: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = None,
+        search: typing.Optional[str] = None,
         language: typing.Optional[str] = None,
+        status: typing.Optional[str] = None,
+        usage_status: typing.Optional[str] = None,
+        page: typing.Optional[int] = None,
+        limit: typing.Optional[int] = None,
+        sort: typing.Optional[str] = None,
+        x_language: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> HttpResponse[typing.List[ShopTurboItemSchema]]:
+    ) -> HttpResponse[ListPublicItemsApiV2PublicItemsGet200Envelope]:
         """
         Parameters
         ----------
         workspace_id : typing.Optional[str]
 
-        lang : typing.Optional[str]
+        view_id : typing.Optional[str]
+
+        search : typing.Optional[str]
 
         language : typing.Optional[str]
+
+        status : typing.Optional[str]
+
+        usage_status : typing.Optional[str]
+
+        page : typing.Optional[int]
+
+        limit : typing.Optional[int]
+
+        sort : typing.Optional[str]
+
+        x_language : typing.Optional[str]
 
         accept_language : typing.Optional[str]
 
@@ -50,18 +82,25 @@ class RawItemsClient:
 
         Returns
         -------
-        HttpResponse[typing.List[ShopTurboItemSchema]]
-            OK
+        HttpResponse[ListPublicItemsApiV2PublicItemsGet200Envelope]
+            Object record list response
         """
         _response = self._client_wrapper.httpx_client.request(
-            "v1/public/items",
+            "v2/public/items",
             method="GET",
             params={
                 "workspace_id": workspace_id,
-                "lang": lang,
+                "view_id": view_id,
+                "search": search,
                 "language": language,
+                "status": status,
+                "usage_status": usage_status,
+                "page": page,
+                "limit": limit,
+                "sort": sort,
             },
             headers={
+                "X-Language": str(x_language) if x_language is not None else None,
                 "Accept-Language": str(accept_language) if accept_language is not None else None,
             },
             request_options=request_options,
@@ -69,70 +108,78 @@ class RawItemsClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    typing.List[ShopTurboItemSchema],
+                    ListPublicItemsApiV2PublicItemsGet200Envelope,
                     construct_type(
-                        type_=typing.List[ShopTurboItemSchema],  # type: ignore
+                        type_=ListPublicItemsApiV2PublicItemsGet200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
             _response_json = _response.json()
         except JSONDecodeError:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    def api_routers_v_1_items_public_api_create_public_item(
+    def create_public_item_api(
         self,
         *,
-        external_id: str,
-        name: typing.Optional[str] = OMIT,
-        description: typing.Optional[str] = OMIT,
-        currency: typing.Optional[str] = OMIT,
-        price: typing.Optional[float] = OMIT,
-        purchase_price: typing.Optional[float] = OMIT,
-        tax: typing.Optional[float] = OMIT,
-        status: typing.Optional[str] = OMIT,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = OMIT,
+        form_view_id: typing.Optional[str] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> HttpResponse[PublicItemResponse]:
+    ) -> HttpResponse[CreatePublicItemApiV2PublicItemsPost200Envelope]:
         """
         Parameters
         ----------
-        external_id : str
+        workspace_id : typing.Optional[str]
 
-        name : typing.Optional[str]
+        view_id : typing.Optional[str]
 
-        description : typing.Optional[str]
+        form_view_id : typing.Optional[str]
 
-        currency : typing.Optional[str]
-
-        price : typing.Optional[float]
-
-        purchase_price : typing.Optional[float]
-
-        tax : typing.Optional[float]
-
-        status : typing.Optional[str]
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        HttpResponse[PublicItemResponse]
-            OK
+        HttpResponse[CreatePublicItemApiV2PublicItemsPost200Envelope]
+            Successful Response
         """
         _response = self._client_wrapper.httpx_client.request(
-            "v1/public/items",
+            "v2/public/items",
             method="POST",
+            params={
+                "workspace_id": workspace_id,
+            },
             json={
-                "externalId": external_id,
-                "name": name,
-                "description": description,
-                "currency": currency,
-                "price": price,
-                "purchasePrice": purchase_price,
-                "tax": tax,
-                "status": status,
+                "view_id": view_id,
+                "form_view_id": form_view_id,
+                "properties": properties,
             },
             headers={
                 "content-type": "application/json",
@@ -143,53 +190,31 @@ class RawItemsClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    PublicItemResponse,
+                    CreatePublicItemApiV2PublicItemsPost200Envelope,
                     construct_type(
-                        type_=PublicItemResponse,  # type: ignore
+                        type_=CreatePublicItemApiV2PublicItemsPost200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return HttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 403:
-                raise ForbiddenError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -199,13 +224,16 @@ class RawItemsClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    def api_routers_v_1_items_public_api_get_public_item(
+    def get_public_item_api(
         self,
         item_id: str,
         *,
         external_id: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = None,
+        form_view_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> HttpResponse[ShopTurboItemSchema]:
+    ) -> HttpResponse[GetPublicItemApiV2PublicItemsItemIdGet200Envelope]:
         """
         Parameters
         ----------
@@ -213,61 +241,59 @@ class RawItemsClient:
 
         external_id : typing.Optional[str]
 
+        workspace_id : typing.Optional[str]
+
+        view_id : typing.Optional[str]
+
+        form_view_id : typing.Optional[str]
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        HttpResponse[ShopTurboItemSchema]
-            OK
+        HttpResponse[GetPublicItemApiV2PublicItemsItemIdGet200Envelope]
+            Object record detail response. The base detail payload is intentionally thin; drawer sections load through scoped endpoints.
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"v1/public/items/{jsonable_encoder(item_id)}",
+            f"v2/public/items/{jsonable_encoder(item_id)}",
             method="GET",
             params={
                 "external_id": external_id,
+                "workspace_id": workspace_id,
+                "view_id": view_id,
+                "form_view_id": form_view_id,
             },
             request_options=request_options,
         )
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    ShopTurboItemSchema,
+                    GetPublicItemApiV2PublicItemsItemIdGet200Envelope,
                     construct_type(
-                        type_=ShopTurboItemSchema,  # type: ignore
+                        type_=GetPublicItemApiV2PublicItemsItemIdGet200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return HttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 404:
-                raise NotFoundError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -277,61 +303,51 @@ class RawItemsClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    def api_routers_v_1_items_public_api_update_public_item(
+    def update_public_item_api(
         self,
         item_id: str,
         *,
-        external_id: str,
-        name: typing.Optional[str] = OMIT,
-        description: typing.Optional[str] = OMIT,
-        currency: typing.Optional[str] = OMIT,
-        price: typing.Optional[float] = OMIT,
-        purchase_price: typing.Optional[float] = OMIT,
-        tax: typing.Optional[float] = OMIT,
-        status: typing.Optional[str] = OMIT,
+        external_id: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = OMIT,
+        form_view_id: typing.Optional[str] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> HttpResponse[PublicItemResponse]:
+    ) -> HttpResponse[UpdatePublicItemApiV2PublicItemsItemIdPut200Envelope]:
         """
         Parameters
         ----------
         item_id : str
 
-        external_id : str
+        external_id : typing.Optional[str]
 
-        name : typing.Optional[str]
+        workspace_id : typing.Optional[str]
 
-        description : typing.Optional[str]
+        view_id : typing.Optional[str]
 
-        currency : typing.Optional[str]
+        form_view_id : typing.Optional[str]
 
-        price : typing.Optional[float]
-
-        purchase_price : typing.Optional[float]
-
-        tax : typing.Optional[float]
-
-        status : typing.Optional[str]
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        HttpResponse[PublicItemResponse]
-            OK
+        HttpResponse[UpdatePublicItemApiV2PublicItemsItemIdPut200Envelope]
+            Successful Response
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"v1/public/items/{jsonable_encoder(item_id)}",
+            f"v2/public/items/{jsonable_encoder(item_id)}",
             method="PUT",
+            params={
+                "external_id": external_id,
+                "workspace_id": workspace_id,
+            },
             json={
-                "externalId": external_id,
-                "name": name,
-                "description": description,
-                "currency": currency,
-                "price": price,
-                "purchasePrice": purchase_price,
-                "tax": tax,
-                "status": status,
+                "view_id": view_id,
+                "form_view_id": form_view_id,
+                "properties": properties,
             },
             headers={
                 "content-type": "application/json",
@@ -342,64 +358,31 @@ class RawItemsClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    PublicItemResponse,
+                    UpdatePublicItemApiV2PublicItemsItemIdPut200Envelope,
                     construct_type(
-                        type_=PublicItemResponse,  # type: ignore
+                        type_=UpdatePublicItemApiV2PublicItemsItemIdPut200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return HttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 403:
-                raise ForbiddenError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 409:
-                raise ConflictError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -409,13 +392,14 @@ class RawItemsClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    def api_routers_v_1_items_public_api_delete_public_item(
+    def delete_public_item_api(
         self,
         item_id: str,
         *,
         external_id: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> HttpResponse[PublicItemResponse]:
+    ) -> HttpResponse[DeletePublicItemApiV2PublicItemsItemIdDelete200Envelope]:
         """
         Parameters
         ----------
@@ -423,83 +407,53 @@ class RawItemsClient:
 
         external_id : typing.Optional[str]
 
+        workspace_id : typing.Optional[str]
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        HttpResponse[PublicItemResponse]
-            OK
+        HttpResponse[DeletePublicItemApiV2PublicItemsItemIdDelete200Envelope]
+            Successful Response
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"v1/public/items/{jsonable_encoder(item_id)}",
+            f"v2/public/items/{jsonable_encoder(item_id)}",
             method="DELETE",
             params={
                 "external_id": external_id,
+                "workspace_id": workspace_id,
             },
             request_options=request_options,
         )
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    PublicItemResponse,
+                    DeletePublicItemApiV2PublicItemsItemIdDelete200Envelope,
                     construct_type(
-                        type_=PublicItemResponse,  # type: ignore
+                        type_=DeletePublicItemApiV2PublicItemsItemIdDelete200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return HttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 403:
-                raise ForbiddenError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 409:
-                raise ConflictError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -514,23 +468,44 @@ class AsyncRawItemsClient:
     def __init__(self, *, client_wrapper: AsyncClientWrapper):
         self._client_wrapper = client_wrapper
 
-    async def api_routers_v_1_items_public_api_list_workspace_items(
+    async def list_public_items_api(
         self,
         *,
         workspace_id: typing.Optional[str] = None,
-        lang: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = None,
+        search: typing.Optional[str] = None,
         language: typing.Optional[str] = None,
+        status: typing.Optional[str] = None,
+        usage_status: typing.Optional[str] = None,
+        page: typing.Optional[int] = None,
+        limit: typing.Optional[int] = None,
+        sort: typing.Optional[str] = None,
+        x_language: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> AsyncHttpResponse[typing.List[ShopTurboItemSchema]]:
+    ) -> AsyncHttpResponse[ListPublicItemsApiV2PublicItemsGet200Envelope]:
         """
         Parameters
         ----------
         workspace_id : typing.Optional[str]
 
-        lang : typing.Optional[str]
+        view_id : typing.Optional[str]
+
+        search : typing.Optional[str]
 
         language : typing.Optional[str]
+
+        status : typing.Optional[str]
+
+        usage_status : typing.Optional[str]
+
+        page : typing.Optional[int]
+
+        limit : typing.Optional[int]
+
+        sort : typing.Optional[str]
+
+        x_language : typing.Optional[str]
 
         accept_language : typing.Optional[str]
 
@@ -539,18 +514,25 @@ class AsyncRawItemsClient:
 
         Returns
         -------
-        AsyncHttpResponse[typing.List[ShopTurboItemSchema]]
-            OK
+        AsyncHttpResponse[ListPublicItemsApiV2PublicItemsGet200Envelope]
+            Object record list response
         """
         _response = await self._client_wrapper.httpx_client.request(
-            "v1/public/items",
+            "v2/public/items",
             method="GET",
             params={
                 "workspace_id": workspace_id,
-                "lang": lang,
+                "view_id": view_id,
+                "search": search,
                 "language": language,
+                "status": status,
+                "usage_status": usage_status,
+                "page": page,
+                "limit": limit,
+                "sort": sort,
             },
             headers={
+                "X-Language": str(x_language) if x_language is not None else None,
                 "Accept-Language": str(accept_language) if accept_language is not None else None,
             },
             request_options=request_options,
@@ -558,70 +540,78 @@ class AsyncRawItemsClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    typing.List[ShopTurboItemSchema],
+                    ListPublicItemsApiV2PublicItemsGet200Envelope,
                     construct_type(
-                        type_=typing.List[ShopTurboItemSchema],  # type: ignore
+                        type_=ListPublicItemsApiV2PublicItemsGet200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
             _response_json = _response.json()
         except JSONDecodeError:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    async def api_routers_v_1_items_public_api_create_public_item(
+    async def create_public_item_api(
         self,
         *,
-        external_id: str,
-        name: typing.Optional[str] = OMIT,
-        description: typing.Optional[str] = OMIT,
-        currency: typing.Optional[str] = OMIT,
-        price: typing.Optional[float] = OMIT,
-        purchase_price: typing.Optional[float] = OMIT,
-        tax: typing.Optional[float] = OMIT,
-        status: typing.Optional[str] = OMIT,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = OMIT,
+        form_view_id: typing.Optional[str] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> AsyncHttpResponse[PublicItemResponse]:
+    ) -> AsyncHttpResponse[CreatePublicItemApiV2PublicItemsPost200Envelope]:
         """
         Parameters
         ----------
-        external_id : str
+        workspace_id : typing.Optional[str]
 
-        name : typing.Optional[str]
+        view_id : typing.Optional[str]
 
-        description : typing.Optional[str]
+        form_view_id : typing.Optional[str]
 
-        currency : typing.Optional[str]
-
-        price : typing.Optional[float]
-
-        purchase_price : typing.Optional[float]
-
-        tax : typing.Optional[float]
-
-        status : typing.Optional[str]
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        AsyncHttpResponse[PublicItemResponse]
-            OK
+        AsyncHttpResponse[CreatePublicItemApiV2PublicItemsPost200Envelope]
+            Successful Response
         """
         _response = await self._client_wrapper.httpx_client.request(
-            "v1/public/items",
+            "v2/public/items",
             method="POST",
+            params={
+                "workspace_id": workspace_id,
+            },
             json={
-                "externalId": external_id,
-                "name": name,
-                "description": description,
-                "currency": currency,
-                "price": price,
-                "purchasePrice": purchase_price,
-                "tax": tax,
-                "status": status,
+                "view_id": view_id,
+                "form_view_id": form_view_id,
+                "properties": properties,
             },
             headers={
                 "content-type": "application/json",
@@ -632,53 +622,31 @@ class AsyncRawItemsClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    PublicItemResponse,
+                    CreatePublicItemApiV2PublicItemsPost200Envelope,
                     construct_type(
-                        type_=PublicItemResponse,  # type: ignore
+                        type_=CreatePublicItemApiV2PublicItemsPost200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return AsyncHttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 403:
-                raise ForbiddenError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -688,13 +656,16 @@ class AsyncRawItemsClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    async def api_routers_v_1_items_public_api_get_public_item(
+    async def get_public_item_api(
         self,
         item_id: str,
         *,
         external_id: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = None,
+        form_view_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> AsyncHttpResponse[ShopTurboItemSchema]:
+    ) -> AsyncHttpResponse[GetPublicItemApiV2PublicItemsItemIdGet200Envelope]:
         """
         Parameters
         ----------
@@ -702,61 +673,59 @@ class AsyncRawItemsClient:
 
         external_id : typing.Optional[str]
 
+        workspace_id : typing.Optional[str]
+
+        view_id : typing.Optional[str]
+
+        form_view_id : typing.Optional[str]
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        AsyncHttpResponse[ShopTurboItemSchema]
-            OK
+        AsyncHttpResponse[GetPublicItemApiV2PublicItemsItemIdGet200Envelope]
+            Object record detail response. The base detail payload is intentionally thin; drawer sections load through scoped endpoints.
         """
         _response = await self._client_wrapper.httpx_client.request(
-            f"v1/public/items/{jsonable_encoder(item_id)}",
+            f"v2/public/items/{jsonable_encoder(item_id)}",
             method="GET",
             params={
                 "external_id": external_id,
+                "workspace_id": workspace_id,
+                "view_id": view_id,
+                "form_view_id": form_view_id,
             },
             request_options=request_options,
         )
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    ShopTurboItemSchema,
+                    GetPublicItemApiV2PublicItemsItemIdGet200Envelope,
                     construct_type(
-                        type_=ShopTurboItemSchema,  # type: ignore
+                        type_=GetPublicItemApiV2PublicItemsItemIdGet200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return AsyncHttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 404:
-                raise NotFoundError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -766,61 +735,51 @@ class AsyncRawItemsClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    async def api_routers_v_1_items_public_api_update_public_item(
+    async def update_public_item_api(
         self,
         item_id: str,
         *,
-        external_id: str,
-        name: typing.Optional[str] = OMIT,
-        description: typing.Optional[str] = OMIT,
-        currency: typing.Optional[str] = OMIT,
-        price: typing.Optional[float] = OMIT,
-        purchase_price: typing.Optional[float] = OMIT,
-        tax: typing.Optional[float] = OMIT,
-        status: typing.Optional[str] = OMIT,
+        external_id: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = OMIT,
+        form_view_id: typing.Optional[str] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> AsyncHttpResponse[PublicItemResponse]:
+    ) -> AsyncHttpResponse[UpdatePublicItemApiV2PublicItemsItemIdPut200Envelope]:
         """
         Parameters
         ----------
         item_id : str
 
-        external_id : str
+        external_id : typing.Optional[str]
 
-        name : typing.Optional[str]
+        workspace_id : typing.Optional[str]
 
-        description : typing.Optional[str]
+        view_id : typing.Optional[str]
 
-        currency : typing.Optional[str]
+        form_view_id : typing.Optional[str]
 
-        price : typing.Optional[float]
-
-        purchase_price : typing.Optional[float]
-
-        tax : typing.Optional[float]
-
-        status : typing.Optional[str]
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        AsyncHttpResponse[PublicItemResponse]
-            OK
+        AsyncHttpResponse[UpdatePublicItemApiV2PublicItemsItemIdPut200Envelope]
+            Successful Response
         """
         _response = await self._client_wrapper.httpx_client.request(
-            f"v1/public/items/{jsonable_encoder(item_id)}",
+            f"v2/public/items/{jsonable_encoder(item_id)}",
             method="PUT",
+            params={
+                "external_id": external_id,
+                "workspace_id": workspace_id,
+            },
             json={
-                "externalId": external_id,
-                "name": name,
-                "description": description,
-                "currency": currency,
-                "price": price,
-                "purchasePrice": purchase_price,
-                "tax": tax,
-                "status": status,
+                "view_id": view_id,
+                "form_view_id": form_view_id,
+                "properties": properties,
             },
             headers={
                 "content-type": "application/json",
@@ -831,64 +790,31 @@ class AsyncRawItemsClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    PublicItemResponse,
+                    UpdatePublicItemApiV2PublicItemsItemIdPut200Envelope,
                     construct_type(
-                        type_=PublicItemResponse,  # type: ignore
+                        type_=UpdatePublicItemApiV2PublicItemsItemIdPut200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return AsyncHttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 403:
-                raise ForbiddenError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 409:
-                raise ConflictError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -898,13 +824,14 @@ class AsyncRawItemsClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    async def api_routers_v_1_items_public_api_delete_public_item(
+    async def delete_public_item_api(
         self,
         item_id: str,
         *,
         external_id: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> AsyncHttpResponse[PublicItemResponse]:
+    ) -> AsyncHttpResponse[DeletePublicItemApiV2PublicItemsItemIdDelete200Envelope]:
         """
         Parameters
         ----------
@@ -912,83 +839,53 @@ class AsyncRawItemsClient:
 
         external_id : typing.Optional[str]
 
+        workspace_id : typing.Optional[str]
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        AsyncHttpResponse[PublicItemResponse]
-            OK
+        AsyncHttpResponse[DeletePublicItemApiV2PublicItemsItemIdDelete200Envelope]
+            Successful Response
         """
         _response = await self._client_wrapper.httpx_client.request(
-            f"v1/public/items/{jsonable_encoder(item_id)}",
+            f"v2/public/items/{jsonable_encoder(item_id)}",
             method="DELETE",
             params={
                 "external_id": external_id,
+                "workspace_id": workspace_id,
             },
             request_options=request_options,
         )
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    PublicItemResponse,
+                    DeletePublicItemApiV2PublicItemsItemIdDelete200Envelope,
                     construct_type(
-                        type_=PublicItemResponse,  # type: ignore
+                        type_=DeletePublicItemApiV2PublicItemsItemIdDelete200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return AsyncHttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 403:
-                raise ForbiddenError(
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Optional[typing.Any],
+                        ErrorEnvelope,
                         construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 409:
-                raise ConflictError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Optional[typing.Any],
-                        construct_type(
-                            type_=typing.Optional[typing.Any],  # type: ignore
+                            type_=ErrorEnvelope,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),

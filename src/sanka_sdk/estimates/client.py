@@ -2,10 +2,27 @@
 
 import typing
 
+from .. import core
 from ..core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ..core.request_options import RequestOptions
-from ..types.estimate_schema import EstimateSchema
-from ..types.public_estimate_response import PublicEstimateResponse
+from ..types.create_public_estimate_api_v_2_public_estimates_post_200_envelope import (
+    CreatePublicEstimateApiV2PublicEstimatesPost200Envelope,
+)
+from ..types.delete_public_estimate_api_v_2_public_estimates_estimate_id_delete_200_envelope import (
+    DeletePublicEstimateApiV2PublicEstimatesEstimateIdDelete200Envelope,
+)
+from ..types.get_public_estimate_api_v_2_public_estimates_estimate_id_get_200_envelope import (
+    GetPublicEstimateApiV2PublicEstimatesEstimateIdGet200Envelope,
+)
+from ..types.list_public_estimates_api_v_2_public_estimates_get_200_envelope import (
+    ListPublicEstimatesApiV2PublicEstimatesGet200Envelope,
+)
+from ..types.update_public_estimate_api_v_2_public_estimates_estimate_id_put_200_envelope import (
+    UpdatePublicEstimateApiV2PublicEstimatesEstimateIdPut200Envelope,
+)
+from ..types.upload_public_estimate_file_api_v_2_public_estimates_files_post_200_envelope import (
+    UploadPublicEstimateFileApiV2PublicEstimatesFilesPost200Envelope,
+)
 from .raw_client import AsyncRawEstimatesClient, RawEstimatesClient
 
 # this is used as the default value for optional parameters
@@ -27,23 +44,44 @@ class EstimatesClient:
         """
         return self._raw_client
 
-    def api_routers_v_1_estimates_public_api_list_workspace_estimates(
+    def list_public_estimates_api(
         self,
         *,
         workspace_id: typing.Optional[str] = None,
-        lang: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = None,
+        search: typing.Optional[str] = None,
         language: typing.Optional[str] = None,
+        status: typing.Optional[str] = None,
+        usage_status: typing.Optional[str] = None,
+        page: typing.Optional[int] = None,
+        limit: typing.Optional[int] = None,
+        sort: typing.Optional[str] = None,
+        x_language: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> typing.List[EstimateSchema]:
+    ) -> ListPublicEstimatesApiV2PublicEstimatesGet200Envelope:
         """
         Parameters
         ----------
         workspace_id : typing.Optional[str]
 
-        lang : typing.Optional[str]
+        view_id : typing.Optional[str]
+
+        search : typing.Optional[str]
 
         language : typing.Optional[str]
+
+        status : typing.Optional[str]
+
+        usage_status : typing.Optional[str]
+
+        page : typing.Optional[int]
+
+        limit : typing.Optional[int]
+
+        sort : typing.Optional[str]
+
+        x_language : typing.Optional[str]
 
         accept_language : typing.Optional[str]
 
@@ -52,127 +90,284 @@ class EstimatesClient:
 
         Returns
         -------
-        typing.List[EstimateSchema]
-            OK
+        ListPublicEstimatesApiV2PublicEstimatesGet200Envelope
+            Object record list response
 
         Examples
         --------
         from sanka_sdk import SankaClient
 
         client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
-        client.estimates.api_routers_v_1_estimates_public_api_list_workspace_estimates()
+        client.estimates.list_public_estimates_api()
         """
-        _response = self._raw_client.api_routers_v_1_estimates_public_api_list_workspace_estimates(
+        _response = self._raw_client.list_public_estimates_api(
             workspace_id=workspace_id,
-            lang=lang,
+            view_id=view_id,
+            search=search,
             language=language,
+            status=status,
+            usage_status=usage_status,
+            page=page,
+            limit=limit,
+            sort=sort,
+            x_language=x_language,
             accept_language=accept_language,
             request_options=request_options,
         )
         return _response.data
 
-    def api_routers_v_1_estimates_public_api_create_public_estimate(
+    def create_public_estimate_api(
         self,
         *,
-        external_id: typing.Optional[str] = OMIT,
-        contact_id: typing.Optional[str] = OMIT,
-        contact_external_id: typing.Optional[str] = OMIT,
-        company_id: typing.Optional[str] = OMIT,
-        company_external_id: typing.Optional[str] = OMIT,
-        start_date: typing.Optional[str] = OMIT,
-        due_date: typing.Optional[str] = OMIT,
-        status: typing.Optional[str] = OMIT,
-        currency: typing.Optional[str] = OMIT,
-        notes: typing.Optional[str] = OMIT,
-        tax_rate: typing.Optional[float] = OMIT,
-        tax_inclusive: typing.Optional[bool] = OMIT,
-        tax_option: typing.Optional[str] = OMIT,
-        total_price: typing.Optional[float] = OMIT,
-        total_price_without_tax: typing.Optional[float] = OMIT,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = OMIT,
+        form_view_id: typing.Optional[str] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> PublicEstimateResponse:
+    ) -> CreatePublicEstimateApiV2PublicEstimatesPost200Envelope:
         """
         Parameters
         ----------
-        external_id : typing.Optional[str]
+        workspace_id : typing.Optional[str]
 
-        contact_id : typing.Optional[str]
+        view_id : typing.Optional[str]
 
-        contact_external_id : typing.Optional[str]
+        form_view_id : typing.Optional[str]
 
-        company_id : typing.Optional[str]
-
-        company_external_id : typing.Optional[str]
-
-        start_date : typing.Optional[str]
-
-        due_date : typing.Optional[str]
-
-        status : typing.Optional[str]
-
-        currency : typing.Optional[str]
-
-        notes : typing.Optional[str]
-
-        tax_rate : typing.Optional[float]
-
-        tax_inclusive : typing.Optional[bool]
-
-        tax_option : typing.Optional[str]
-
-        total_price : typing.Optional[float]
-
-        total_price_without_tax : typing.Optional[float]
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        PublicEstimateResponse
-            OK
+        CreatePublicEstimateApiV2PublicEstimatesPost200Envelope
+            Successful Response
 
         Examples
         --------
         from sanka_sdk import SankaClient
 
         client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
-        client.estimates.api_routers_v_1_estimates_public_api_create_public_estimate()
+        client.estimates.create_public_estimate_api()
         """
-        _response = self._raw_client.api_routers_v_1_estimates_public_api_create_public_estimate(
-            external_id=external_id,
-            contact_id=contact_id,
-            contact_external_id=contact_external_id,
-            company_id=company_id,
-            company_external_id=company_external_id,
-            start_date=start_date,
-            due_date=due_date,
-            status=status,
-            currency=currency,
-            notes=notes,
-            tax_rate=tax_rate,
-            tax_inclusive=tax_inclusive,
-            tax_option=tax_option,
-            total_price=total_price,
-            total_price_without_tax=total_price_without_tax,
+        _response = self._raw_client.create_public_estimate_api(
+            workspace_id=workspace_id,
+            view_id=view_id,
+            form_view_id=form_view_id,
+            properties=properties,
             request_options=request_options,
         )
         return _response.data
 
-    def api_routers_v_1_estimates_public_api_get_public_estimate(
+    def upload_public_estimate_file_api(
+        self,
+        *,
+        file: core.File,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> UploadPublicEstimateFileApiV2PublicEstimatesFilesPost200Envelope:
+        """
+        Parameters
+        ----------
+        file : core.File
+            See core.File for more documentation
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        UploadPublicEstimateFileApiV2PublicEstimatesFilesPost200Envelope
+            Successful Response
+
+        Examples
+        --------
+        from sanka_sdk import SankaClient
+
+        client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+        client.estimates.upload_public_estimate_file_api()
+        """
+        _response = self._raw_client.upload_public_estimate_file_api(
+            file=file, workspace_id=workspace_id, request_options=request_options
+        )
+        return _response.data
+
+    def get_public_estimate_api(
         self,
         estimate_id: str,
         *,
         external_id: typing.Optional[str] = None,
-        lang: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = None,
+        form_view_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> GetPublicEstimateApiV2PublicEstimatesEstimateIdGet200Envelope:
+        """
+        Parameters
+        ----------
+        estimate_id : str
+
+        external_id : typing.Optional[str]
+
+        workspace_id : typing.Optional[str]
+
+        view_id : typing.Optional[str]
+
+        form_view_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        GetPublicEstimateApiV2PublicEstimatesEstimateIdGet200Envelope
+            Object record detail response. The base detail payload is intentionally thin; drawer sections load through scoped endpoints.
+
+        Examples
+        --------
+        from sanka_sdk import SankaClient
+
+        client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+        client.estimates.get_public_estimate_api(
+            estimate_id="estimate_id",
+        )
+        """
+        _response = self._raw_client.get_public_estimate_api(
+            estimate_id,
+            external_id=external_id,
+            workspace_id=workspace_id,
+            view_id=view_id,
+            form_view_id=form_view_id,
+            request_options=request_options,
+        )
+        return _response.data
+
+    def update_public_estimate_api(
+        self,
+        estimate_id: str,
+        *,
+        external_id: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = OMIT,
+        form_view_id: typing.Optional[str] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> UpdatePublicEstimateApiV2PublicEstimatesEstimateIdPut200Envelope:
+        """
+        Parameters
+        ----------
+        estimate_id : str
+
+        external_id : typing.Optional[str]
+
+        workspace_id : typing.Optional[str]
+
+        view_id : typing.Optional[str]
+
+        form_view_id : typing.Optional[str]
+
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        UpdatePublicEstimateApiV2PublicEstimatesEstimateIdPut200Envelope
+            Successful Response
+
+        Examples
+        --------
+        from sanka_sdk import SankaClient
+
+        client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+        client.estimates.update_public_estimate_api(
+            estimate_id="estimate_id",
+        )
+        """
+        _response = self._raw_client.update_public_estimate_api(
+            estimate_id,
+            external_id=external_id,
+            workspace_id=workspace_id,
+            view_id=view_id,
+            form_view_id=form_view_id,
+            properties=properties,
+            request_options=request_options,
+        )
+        return _response.data
+
+    def delete_public_estimate_api(
+        self,
+        estimate_id: str,
+        *,
+        external_id: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> DeletePublicEstimateApiV2PublicEstimatesEstimateIdDelete200Envelope:
+        """
+        Parameters
+        ----------
+        estimate_id : str
+
+        external_id : typing.Optional[str]
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        DeletePublicEstimateApiV2PublicEstimatesEstimateIdDelete200Envelope
+            Successful Response
+
+        Examples
+        --------
+        from sanka_sdk import SankaClient
+
+        client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+        client.estimates.delete_public_estimate_api(
+            estimate_id="estimate_id",
+        )
+        """
+        _response = self._raw_client.delete_public_estimate_api(
+            estimate_id, external_id=external_id, workspace_id=workspace_id, request_options=request_options
+        )
+        return _response.data
+
+    def download_public_estimate_pdf_api(
+        self,
+        estimate_id: str,
+        *,
+        external_id: typing.Optional[str] = None,
+        template_id: typing.Optional[str] = None,
+        template_select: typing.Optional[str] = None,
         language: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> EstimateSchema:
+    ) -> typing.Iterator[bytes]:
         """
         Parameters
         ----------
@@ -180,174 +375,47 @@ class EstimatesClient:
 
         external_id : typing.Optional[str]
 
-        lang : typing.Optional[str]
+        template_id : typing.Optional[str]
+
+        template_select : typing.Optional[str]
 
         language : typing.Optional[str]
+
+        workspace_id : typing.Optional[str]
 
         accept_language : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
-            Request-specific configuration.
+            Request-specific configuration. You can pass in configuration such as `chunk_size`, and more to customize the request and response.
 
         Returns
         -------
-        EstimateSchema
-            OK
+        typing.Iterator[bytes]
+            PDF document
 
         Examples
         --------
         from sanka_sdk import SankaClient
 
         client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
-        client.estimates.api_routers_v_1_estimates_public_api_get_public_estimate(
+        client.estimates.download_public_estimate_pdf_api(
             estimate_id="estimate_id",
         )
         """
-        _response = self._raw_client.api_routers_v_1_estimates_public_api_get_public_estimate(
+        with self._raw_client.download_public_estimate_pdf_api(
             estimate_id,
             external_id=external_id,
-            lang=lang,
+            template_id=template_id,
+            template_select=template_select,
             language=language,
+            workspace_id=workspace_id,
             accept_language=accept_language,
             request_options=request_options,
-        )
-        return _response.data
-
-    def api_routers_v_1_estimates_public_api_update_public_estimate(
-        self,
-        estimate_id: str,
-        *,
-        external_id: typing.Optional[str] = OMIT,
-        contact_id: typing.Optional[str] = OMIT,
-        contact_external_id: typing.Optional[str] = OMIT,
-        company_id: typing.Optional[str] = OMIT,
-        company_external_id: typing.Optional[str] = OMIT,
-        start_date: typing.Optional[str] = OMIT,
-        due_date: typing.Optional[str] = OMIT,
-        status: typing.Optional[str] = OMIT,
-        currency: typing.Optional[str] = OMIT,
-        notes: typing.Optional[str] = OMIT,
-        tax_rate: typing.Optional[float] = OMIT,
-        tax_inclusive: typing.Optional[bool] = OMIT,
-        tax_option: typing.Optional[str] = OMIT,
-        total_price: typing.Optional[float] = OMIT,
-        total_price_without_tax: typing.Optional[float] = OMIT,
-        request_options: typing.Optional[RequestOptions] = None,
-    ) -> PublicEstimateResponse:
-        """
-        Parameters
-        ----------
-        estimate_id : str
-
-        external_id : typing.Optional[str]
-
-        contact_id : typing.Optional[str]
-
-        contact_external_id : typing.Optional[str]
-
-        company_id : typing.Optional[str]
-
-        company_external_id : typing.Optional[str]
-
-        start_date : typing.Optional[str]
-
-        due_date : typing.Optional[str]
-
-        status : typing.Optional[str]
-
-        currency : typing.Optional[str]
-
-        notes : typing.Optional[str]
-
-        tax_rate : typing.Optional[float]
-
-        tax_inclusive : typing.Optional[bool]
-
-        tax_option : typing.Optional[str]
-
-        total_price : typing.Optional[float]
-
-        total_price_without_tax : typing.Optional[float]
-
-        request_options : typing.Optional[RequestOptions]
-            Request-specific configuration.
-
-        Returns
-        -------
-        PublicEstimateResponse
-            OK
-
-        Examples
-        --------
-        from sanka_sdk import SankaClient
-
-        client = SankaClient(
-            token="YOUR_TOKEN",
-        )
-        client.estimates.api_routers_v_1_estimates_public_api_update_public_estimate(
-            estimate_id="estimate_id",
-        )
-        """
-        _response = self._raw_client.api_routers_v_1_estimates_public_api_update_public_estimate(
-            estimate_id,
-            external_id=external_id,
-            contact_id=contact_id,
-            contact_external_id=contact_external_id,
-            company_id=company_id,
-            company_external_id=company_external_id,
-            start_date=start_date,
-            due_date=due_date,
-            status=status,
-            currency=currency,
-            notes=notes,
-            tax_rate=tax_rate,
-            tax_inclusive=tax_inclusive,
-            tax_option=tax_option,
-            total_price=total_price,
-            total_price_without_tax=total_price_without_tax,
-            request_options=request_options,
-        )
-        return _response.data
-
-    def api_routers_v_1_estimates_public_api_delete_public_estimate(
-        self,
-        estimate_id: str,
-        *,
-        external_id: typing.Optional[str] = None,
-        request_options: typing.Optional[RequestOptions] = None,
-    ) -> PublicEstimateResponse:
-        """
-        Parameters
-        ----------
-        estimate_id : str
-
-        external_id : typing.Optional[str]
-
-        request_options : typing.Optional[RequestOptions]
-            Request-specific configuration.
-
-        Returns
-        -------
-        PublicEstimateResponse
-            OK
-
-        Examples
-        --------
-        from sanka_sdk import SankaClient
-
-        client = SankaClient(
-            token="YOUR_TOKEN",
-        )
-        client.estimates.api_routers_v_1_estimates_public_api_delete_public_estimate(
-            estimate_id="estimate_id",
-        )
-        """
-        _response = self._raw_client.api_routers_v_1_estimates_public_api_delete_public_estimate(
-            estimate_id, external_id=external_id, request_options=request_options
-        )
-        return _response.data
+        ) as r:
+            yield from r.data
 
 
 class AsyncEstimatesClient:
@@ -365,23 +433,44 @@ class AsyncEstimatesClient:
         """
         return self._raw_client
 
-    async def api_routers_v_1_estimates_public_api_list_workspace_estimates(
+    async def list_public_estimates_api(
         self,
         *,
         workspace_id: typing.Optional[str] = None,
-        lang: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = None,
+        search: typing.Optional[str] = None,
         language: typing.Optional[str] = None,
+        status: typing.Optional[str] = None,
+        usage_status: typing.Optional[str] = None,
+        page: typing.Optional[int] = None,
+        limit: typing.Optional[int] = None,
+        sort: typing.Optional[str] = None,
+        x_language: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> typing.List[EstimateSchema]:
+    ) -> ListPublicEstimatesApiV2PublicEstimatesGet200Envelope:
         """
         Parameters
         ----------
         workspace_id : typing.Optional[str]
 
-        lang : typing.Optional[str]
+        view_id : typing.Optional[str]
+
+        search : typing.Optional[str]
 
         language : typing.Optional[str]
+
+        status : typing.Optional[str]
+
+        usage_status : typing.Optional[str]
+
+        page : typing.Optional[int]
+
+        limit : typing.Optional[int]
+
+        sort : typing.Optional[str]
+
+        x_language : typing.Optional[str]
 
         accept_language : typing.Optional[str]
 
@@ -390,8 +479,8 @@ class AsyncEstimatesClient:
 
         Returns
         -------
-        typing.List[EstimateSchema]
-            OK
+        ListPublicEstimatesApiV2PublicEstimatesGet200Envelope
+            Object record list response
 
         Examples
         --------
@@ -400,85 +489,60 @@ class AsyncEstimatesClient:
         from sanka_sdk import AsyncSankaClient
 
         client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
 
 
         async def main() -> None:
-            await client.estimates.api_routers_v_1_estimates_public_api_list_workspace_estimates()
+            await client.estimates.list_public_estimates_api()
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.api_routers_v_1_estimates_public_api_list_workspace_estimates(
+        _response = await self._raw_client.list_public_estimates_api(
             workspace_id=workspace_id,
-            lang=lang,
+            view_id=view_id,
+            search=search,
             language=language,
+            status=status,
+            usage_status=usage_status,
+            page=page,
+            limit=limit,
+            sort=sort,
+            x_language=x_language,
             accept_language=accept_language,
             request_options=request_options,
         )
         return _response.data
 
-    async def api_routers_v_1_estimates_public_api_create_public_estimate(
+    async def create_public_estimate_api(
         self,
         *,
-        external_id: typing.Optional[str] = OMIT,
-        contact_id: typing.Optional[str] = OMIT,
-        contact_external_id: typing.Optional[str] = OMIT,
-        company_id: typing.Optional[str] = OMIT,
-        company_external_id: typing.Optional[str] = OMIT,
-        start_date: typing.Optional[str] = OMIT,
-        due_date: typing.Optional[str] = OMIT,
-        status: typing.Optional[str] = OMIT,
-        currency: typing.Optional[str] = OMIT,
-        notes: typing.Optional[str] = OMIT,
-        tax_rate: typing.Optional[float] = OMIT,
-        tax_inclusive: typing.Optional[bool] = OMIT,
-        tax_option: typing.Optional[str] = OMIT,
-        total_price: typing.Optional[float] = OMIT,
-        total_price_without_tax: typing.Optional[float] = OMIT,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = OMIT,
+        form_view_id: typing.Optional[str] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> PublicEstimateResponse:
+    ) -> CreatePublicEstimateApiV2PublicEstimatesPost200Envelope:
         """
         Parameters
         ----------
-        external_id : typing.Optional[str]
+        workspace_id : typing.Optional[str]
 
-        contact_id : typing.Optional[str]
+        view_id : typing.Optional[str]
 
-        contact_external_id : typing.Optional[str]
+        form_view_id : typing.Optional[str]
 
-        company_id : typing.Optional[str]
-
-        company_external_id : typing.Optional[str]
-
-        start_date : typing.Optional[str]
-
-        due_date : typing.Optional[str]
-
-        status : typing.Optional[str]
-
-        currency : typing.Optional[str]
-
-        notes : typing.Optional[str]
-
-        tax_rate : typing.Optional[float]
-
-        tax_inclusive : typing.Optional[bool]
-
-        tax_option : typing.Optional[str]
-
-        total_price : typing.Optional[float]
-
-        total_price_without_tax : typing.Optional[float]
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        PublicEstimateResponse
-            OK
+        CreatePublicEstimateApiV2PublicEstimatesPost200Envelope
+            Successful Response
 
         Examples
         --------
@@ -487,46 +551,260 @@ class AsyncEstimatesClient:
         from sanka_sdk import AsyncSankaClient
 
         client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
 
 
         async def main() -> None:
-            await client.estimates.api_routers_v_1_estimates_public_api_create_public_estimate()
+            await client.estimates.create_public_estimate_api()
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.api_routers_v_1_estimates_public_api_create_public_estimate(
-            external_id=external_id,
-            contact_id=contact_id,
-            contact_external_id=contact_external_id,
-            company_id=company_id,
-            company_external_id=company_external_id,
-            start_date=start_date,
-            due_date=due_date,
-            status=status,
-            currency=currency,
-            notes=notes,
-            tax_rate=tax_rate,
-            tax_inclusive=tax_inclusive,
-            tax_option=tax_option,
-            total_price=total_price,
-            total_price_without_tax=total_price_without_tax,
+        _response = await self._raw_client.create_public_estimate_api(
+            workspace_id=workspace_id,
+            view_id=view_id,
+            form_view_id=form_view_id,
+            properties=properties,
             request_options=request_options,
         )
         return _response.data
 
-    async def api_routers_v_1_estimates_public_api_get_public_estimate(
+    async def upload_public_estimate_file_api(
+        self,
+        *,
+        file: core.File,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> UploadPublicEstimateFileApiV2PublicEstimatesFilesPost200Envelope:
+        """
+        Parameters
+        ----------
+        file : core.File
+            See core.File for more documentation
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        UploadPublicEstimateFileApiV2PublicEstimatesFilesPost200Envelope
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sanka_sdk import AsyncSankaClient
+
+        client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.estimates.upload_public_estimate_file_api()
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.upload_public_estimate_file_api(
+            file=file, workspace_id=workspace_id, request_options=request_options
+        )
+        return _response.data
+
+    async def get_public_estimate_api(
         self,
         estimate_id: str,
         *,
         external_id: typing.Optional[str] = None,
-        lang: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = None,
+        form_view_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> GetPublicEstimateApiV2PublicEstimatesEstimateIdGet200Envelope:
+        """
+        Parameters
+        ----------
+        estimate_id : str
+
+        external_id : typing.Optional[str]
+
+        workspace_id : typing.Optional[str]
+
+        view_id : typing.Optional[str]
+
+        form_view_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        GetPublicEstimateApiV2PublicEstimatesEstimateIdGet200Envelope
+            Object record detail response. The base detail payload is intentionally thin; drawer sections load through scoped endpoints.
+
+        Examples
+        --------
+        import asyncio
+
+        from sanka_sdk import AsyncSankaClient
+
+        client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.estimates.get_public_estimate_api(
+                estimate_id="estimate_id",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.get_public_estimate_api(
+            estimate_id,
+            external_id=external_id,
+            workspace_id=workspace_id,
+            view_id=view_id,
+            form_view_id=form_view_id,
+            request_options=request_options,
+        )
+        return _response.data
+
+    async def update_public_estimate_api(
+        self,
+        estimate_id: str,
+        *,
+        external_id: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = OMIT,
+        form_view_id: typing.Optional[str] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> UpdatePublicEstimateApiV2PublicEstimatesEstimateIdPut200Envelope:
+        """
+        Parameters
+        ----------
+        estimate_id : str
+
+        external_id : typing.Optional[str]
+
+        workspace_id : typing.Optional[str]
+
+        view_id : typing.Optional[str]
+
+        form_view_id : typing.Optional[str]
+
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        UpdatePublicEstimateApiV2PublicEstimatesEstimateIdPut200Envelope
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sanka_sdk import AsyncSankaClient
+
+        client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.estimates.update_public_estimate_api(
+                estimate_id="estimate_id",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.update_public_estimate_api(
+            estimate_id,
+            external_id=external_id,
+            workspace_id=workspace_id,
+            view_id=view_id,
+            form_view_id=form_view_id,
+            properties=properties,
+            request_options=request_options,
+        )
+        return _response.data
+
+    async def delete_public_estimate_api(
+        self,
+        estimate_id: str,
+        *,
+        external_id: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> DeletePublicEstimateApiV2PublicEstimatesEstimateIdDelete200Envelope:
+        """
+        Parameters
+        ----------
+        estimate_id : str
+
+        external_id : typing.Optional[str]
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        DeletePublicEstimateApiV2PublicEstimatesEstimateIdDelete200Envelope
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sanka_sdk import AsyncSankaClient
+
+        client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.estimates.delete_public_estimate_api(
+                estimate_id="estimate_id",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.delete_public_estimate_api(
+            estimate_id, external_id=external_id, workspace_id=workspace_id, request_options=request_options
+        )
+        return _response.data
+
+    async def download_public_estimate_pdf_api(
+        self,
+        estimate_id: str,
+        *,
+        external_id: typing.Optional[str] = None,
+        template_id: typing.Optional[str] = None,
+        template_select: typing.Optional[str] = None,
         language: typing.Optional[str] = None,
+        workspace_id: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> EstimateSchema:
+    ) -> typing.AsyncIterator[bytes]:
         """
         Parameters
         ----------
@@ -534,19 +812,23 @@ class AsyncEstimatesClient:
 
         external_id : typing.Optional[str]
 
-        lang : typing.Optional[str]
+        template_id : typing.Optional[str]
+
+        template_select : typing.Optional[str]
 
         language : typing.Optional[str]
+
+        workspace_id : typing.Optional[str]
 
         accept_language : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
-            Request-specific configuration.
+            Request-specific configuration. You can pass in configuration such as `chunk_size`, and more to customize the request and response.
 
         Returns
         -------
-        EstimateSchema
-            OK
+        typing.AsyncIterator[bytes]
+            PDF document
 
         Examples
         --------
@@ -555,174 +837,28 @@ class AsyncEstimatesClient:
         from sanka_sdk import AsyncSankaClient
 
         client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
 
 
         async def main() -> None:
-            await client.estimates.api_routers_v_1_estimates_public_api_get_public_estimate(
+            await client.estimates.download_public_estimate_pdf_api(
                 estimate_id="estimate_id",
             )
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.api_routers_v_1_estimates_public_api_get_public_estimate(
+        async with self._raw_client.download_public_estimate_pdf_api(
             estimate_id,
             external_id=external_id,
-            lang=lang,
+            template_id=template_id,
+            template_select=template_select,
             language=language,
+            workspace_id=workspace_id,
             accept_language=accept_language,
             request_options=request_options,
-        )
-        return _response.data
-
-    async def api_routers_v_1_estimates_public_api_update_public_estimate(
-        self,
-        estimate_id: str,
-        *,
-        external_id: typing.Optional[str] = OMIT,
-        contact_id: typing.Optional[str] = OMIT,
-        contact_external_id: typing.Optional[str] = OMIT,
-        company_id: typing.Optional[str] = OMIT,
-        company_external_id: typing.Optional[str] = OMIT,
-        start_date: typing.Optional[str] = OMIT,
-        due_date: typing.Optional[str] = OMIT,
-        status: typing.Optional[str] = OMIT,
-        currency: typing.Optional[str] = OMIT,
-        notes: typing.Optional[str] = OMIT,
-        tax_rate: typing.Optional[float] = OMIT,
-        tax_inclusive: typing.Optional[bool] = OMIT,
-        tax_option: typing.Optional[str] = OMIT,
-        total_price: typing.Optional[float] = OMIT,
-        total_price_without_tax: typing.Optional[float] = OMIT,
-        request_options: typing.Optional[RequestOptions] = None,
-    ) -> PublicEstimateResponse:
-        """
-        Parameters
-        ----------
-        estimate_id : str
-
-        external_id : typing.Optional[str]
-
-        contact_id : typing.Optional[str]
-
-        contact_external_id : typing.Optional[str]
-
-        company_id : typing.Optional[str]
-
-        company_external_id : typing.Optional[str]
-
-        start_date : typing.Optional[str]
-
-        due_date : typing.Optional[str]
-
-        status : typing.Optional[str]
-
-        currency : typing.Optional[str]
-
-        notes : typing.Optional[str]
-
-        tax_rate : typing.Optional[float]
-
-        tax_inclusive : typing.Optional[bool]
-
-        tax_option : typing.Optional[str]
-
-        total_price : typing.Optional[float]
-
-        total_price_without_tax : typing.Optional[float]
-
-        request_options : typing.Optional[RequestOptions]
-            Request-specific configuration.
-
-        Returns
-        -------
-        PublicEstimateResponse
-            OK
-
-        Examples
-        --------
-        import asyncio
-
-        from sanka_sdk import AsyncSankaClient
-
-        client = AsyncSankaClient(
-            token="YOUR_TOKEN",
-        )
-
-
-        async def main() -> None:
-            await client.estimates.api_routers_v_1_estimates_public_api_update_public_estimate(
-                estimate_id="estimate_id",
-            )
-
-
-        asyncio.run(main())
-        """
-        _response = await self._raw_client.api_routers_v_1_estimates_public_api_update_public_estimate(
-            estimate_id,
-            external_id=external_id,
-            contact_id=contact_id,
-            contact_external_id=contact_external_id,
-            company_id=company_id,
-            company_external_id=company_external_id,
-            start_date=start_date,
-            due_date=due_date,
-            status=status,
-            currency=currency,
-            notes=notes,
-            tax_rate=tax_rate,
-            tax_inclusive=tax_inclusive,
-            tax_option=tax_option,
-            total_price=total_price,
-            total_price_without_tax=total_price_without_tax,
-            request_options=request_options,
-        )
-        return _response.data
-
-    async def api_routers_v_1_estimates_public_api_delete_public_estimate(
-        self,
-        estimate_id: str,
-        *,
-        external_id: typing.Optional[str] = None,
-        request_options: typing.Optional[RequestOptions] = None,
-    ) -> PublicEstimateResponse:
-        """
-        Parameters
-        ----------
-        estimate_id : str
-
-        external_id : typing.Optional[str]
-
-        request_options : typing.Optional[RequestOptions]
-            Request-specific configuration.
-
-        Returns
-        -------
-        PublicEstimateResponse
-            OK
-
-        Examples
-        --------
-        import asyncio
-
-        from sanka_sdk import AsyncSankaClient
-
-        client = AsyncSankaClient(
-            token="YOUR_TOKEN",
-        )
-
-
-        async def main() -> None:
-            await client.estimates.api_routers_v_1_estimates_public_api_delete_public_estimate(
-                estimate_id="estimate_id",
-            )
-
-
-        asyncio.run(main())
-        """
-        _response = await self._raw_client.api_routers_v_1_estimates_public_api_delete_public_estimate(
-            estimate_id, external_id=external_id, request_options=request_options
-        )
-        return _response.data
+        ) as r:
+            async for _chunk in r.data:
+                yield _chunk
