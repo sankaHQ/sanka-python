@@ -39,7 +39,10 @@ class RawImportsClient:
         self,
         *,
         object_type: typing.Optional[str] = None,
+        page: typing.Optional[int] = None,
         limit: typing.Optional[int] = None,
+        search_query: typing.Optional[str] = None,
+        q: typing.Optional[str] = None,
         workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[ListPublicImportJobsCompatApiV2PublicImportsGet200Envelope]:
@@ -48,7 +51,13 @@ class RawImportsClient:
         ----------
         object_type : typing.Optional[str]
 
+        page : typing.Optional[int]
+
         limit : typing.Optional[int]
+
+        search_query : typing.Optional[str]
+
+        q : typing.Optional[str]
 
         workspace_id : typing.Optional[str]
 
@@ -65,7 +74,10 @@ class RawImportsClient:
             method="GET",
             params={
                 "object_type": object_type,
+                "page": page,
                 "limit": limit,
+                "search_query": search_query,
+                "q": q,
                 "workspace_id": workspace_id,
             },
             request_options=request_options,
@@ -382,7 +394,10 @@ class AsyncRawImportsClient:
         self,
         *,
         object_type: typing.Optional[str] = None,
+        page: typing.Optional[int] = None,
         limit: typing.Optional[int] = None,
+        search_query: typing.Optional[str] = None,
+        q: typing.Optional[str] = None,
         workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[ListPublicImportJobsCompatApiV2PublicImportsGet200Envelope]:
@@ -391,7 +406,13 @@ class AsyncRawImportsClient:
         ----------
         object_type : typing.Optional[str]
 
+        page : typing.Optional[int]
+
         limit : typing.Optional[int]
+
+        search_query : typing.Optional[str]
+
+        q : typing.Optional[str]
 
         workspace_id : typing.Optional[str]
 
@@ -408,7 +429,10 @@ class AsyncRawImportsClient:
             method="GET",
             params={
                 "object_type": object_type,
+                "page": page,
                 "limit": limit,
+                "search_query": search_query,
+                "q": q,
                 "workspace_id": workspace_id,
             },
             request_options=request_options,

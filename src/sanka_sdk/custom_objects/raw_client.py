@@ -10,16 +10,38 @@ from ..core.jsonable_encoder import jsonable_encoder
 from ..core.request_options import RequestOptions
 from ..core.serialization import convert_and_respect_annotation_metadata
 from ..core.unchecked_base_model import construct_type
+from ..errors.forbidden_error import ForbiddenError
 from ..errors.unauthorized_error import UnauthorizedError
 from ..errors.unprocessable_entity_error import UnprocessableEntityError
+from ..types.activate_public_custom_object_record_api_v_2_public_custom_objects_custom_object_id_records_record_id_activate_post_200_envelope import (
+    ActivatePublicCustomObjectRecordApiV2PublicCustomObjectsCustomObjectIdRecordsRecordIdActivatePost200Envelope,
+)
+from ..types.archive_public_custom_object_record_api_v_2_public_custom_objects_custom_object_id_records_record_id_archive_post_200_envelope import (
+    ArchivePublicCustomObjectRecordApiV2PublicCustomObjectsCustomObjectIdRecordsRecordIdArchivePost200Envelope,
+)
 from ..types.archive_public_custom_object_record_compatibility_api_v_2_public_records_custom_objects_records_record_id_archive_post_200_envelope import (
     ArchivePublicCustomObjectRecordCompatibilityApiV2PublicRecordsCustomObjectsRecordsRecordIdArchivePost200Envelope,
+)
+from ..types.create_public_custom_object_record_api_v_2_public_custom_objects_custom_object_id_records_post_200_envelope import (
+    CreatePublicCustomObjectRecordApiV2PublicCustomObjectsCustomObjectIdRecordsPost200Envelope,
 )
 from ..types.create_public_custom_object_record_compatibility_api_v_2_public_records_custom_objects_records_post_200_envelope import (
     CreatePublicCustomObjectRecordCompatibilityApiV2PublicRecordsCustomObjectsRecordsPost200Envelope,
 )
+from ..types.delete_public_custom_object_record_api_v_2_public_custom_objects_custom_object_id_records_record_id_delete_200_envelope import (
+    DeletePublicCustomObjectRecordApiV2PublicCustomObjectsCustomObjectIdRecordsRecordIdDelete200Envelope,
+)
 from ..types.error_envelope import ErrorEnvelope
+from ..types.get_public_custom_object_record_api_v_2_public_custom_objects_custom_object_id_records_record_id_get_200_envelope import (
+    GetPublicCustomObjectRecordApiV2PublicCustomObjectsCustomObjectIdRecordsRecordIdGet200Envelope,
+)
+from ..types.list_public_custom_object_records_api_v_2_public_custom_objects_custom_object_id_records_get_200_envelope import (
+    ListPublicCustomObjectRecordsApiV2PublicCustomObjectsCustomObjectIdRecordsGet200Envelope,
+)
 from ..types.public_custom_object_record_mutation_request import PublicCustomObjectRecordMutationRequest
+from ..types.update_public_custom_object_record_api_v_2_public_custom_objects_custom_object_id_records_record_id_put_200_envelope import (
+    UpdatePublicCustomObjectRecordApiV2PublicCustomObjectsCustomObjectIdRecordsRecordIdPut200Envelope,
+)
 from ..types.update_public_custom_object_record_compatibility_api_v_2_public_records_custom_objects_records_record_id_post_200_envelope import (
     UpdatePublicCustomObjectRecordCompatibilityApiV2PublicRecordsCustomObjectsRecordsRecordIdPost200Envelope,
 )
@@ -31,6 +53,661 @@ OMIT = typing.cast(typing.Any, ...)
 class RawCustomObjectsClient:
     def __init__(self, *, client_wrapper: SyncClientWrapper):
         self._client_wrapper = client_wrapper
+
+    def list_public_custom_object_records_api(
+        self,
+        custom_object_id: str,
+        *,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = None,
+        search: typing.Optional[str] = None,
+        language: typing.Optional[str] = None,
+        status: typing.Optional[str] = None,
+        usage_status: typing.Optional[str] = None,
+        page: typing.Optional[int] = None,
+        limit: typing.Optional[int] = None,
+        sort: typing.Optional[str] = None,
+        x_language: typing.Optional[str] = None,
+        accept_language: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> HttpResponse[ListPublicCustomObjectRecordsApiV2PublicCustomObjectsCustomObjectIdRecordsGet200Envelope]:
+        """
+        Parameters
+        ----------
+        custom_object_id : str
+
+        workspace_id : typing.Optional[str]
+
+        view_id : typing.Optional[str]
+
+        search : typing.Optional[str]
+
+        language : typing.Optional[str]
+
+        status : typing.Optional[str]
+
+        usage_status : typing.Optional[str]
+
+        page : typing.Optional[int]
+
+        limit : typing.Optional[int]
+
+        sort : typing.Optional[str]
+
+        x_language : typing.Optional[str]
+
+        accept_language : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[ListPublicCustomObjectRecordsApiV2PublicCustomObjectsCustomObjectIdRecordsGet200Envelope]
+            Object record list response
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            f"v2/public/custom-objects/{jsonable_encoder(custom_object_id)}/records",
+            method="GET",
+            params={
+                "workspace_id": workspace_id,
+                "view_id": view_id,
+                "search": search,
+                "language": language,
+                "status": status,
+                "usage_status": usage_status,
+                "page": page,
+                "limit": limit,
+                "sort": sort,
+            },
+            headers={
+                "X-Language": str(x_language) if x_language is not None else None,
+                "Accept-Language": str(accept_language) if accept_language is not None else None,
+            },
+            request_options=request_options,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    ListPublicCustomObjectRecordsApiV2PublicCustomObjectsCustomObjectIdRecordsGet200Envelope,
+                    construct_type(
+                        type_=ListPublicCustomObjectRecordsApiV2PublicCustomObjectsCustomObjectIdRecordsGet200Envelope,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    def create_public_custom_object_record_api(
+        self,
+        custom_object_id: str,
+        *,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = OMIT,
+        form_view_id: typing.Optional[str] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> HttpResponse[CreatePublicCustomObjectRecordApiV2PublicCustomObjectsCustomObjectIdRecordsPost200Envelope]:
+        """
+        Parameters
+        ----------
+        custom_object_id : str
+
+        workspace_id : typing.Optional[str]
+
+        view_id : typing.Optional[str]
+
+        form_view_id : typing.Optional[str]
+
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[CreatePublicCustomObjectRecordApiV2PublicCustomObjectsCustomObjectIdRecordsPost200Envelope]
+            Successful Response
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            f"v2/public/custom-objects/{jsonable_encoder(custom_object_id)}/records",
+            method="POST",
+            params={
+                "workspace_id": workspace_id,
+            },
+            json={
+                "view_id": view_id,
+                "form_view_id": form_view_id,
+                "properties": properties,
+            },
+            headers={
+                "content-type": "application/json",
+            },
+            request_options=request_options,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    CreatePublicCustomObjectRecordApiV2PublicCustomObjectsCustomObjectIdRecordsPost200Envelope,
+                    construct_type(
+                        type_=CreatePublicCustomObjectRecordApiV2PublicCustomObjectsCustomObjectIdRecordsPost200Envelope,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    def get_public_custom_object_record_api(
+        self,
+        custom_object_id: str,
+        record_id: str,
+        *,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = None,
+        form_view_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> HttpResponse[GetPublicCustomObjectRecordApiV2PublicCustomObjectsCustomObjectIdRecordsRecordIdGet200Envelope]:
+        """
+        Parameters
+        ----------
+        custom_object_id : str
+
+        record_id : str
+
+        workspace_id : typing.Optional[str]
+
+        view_id : typing.Optional[str]
+
+        form_view_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[GetPublicCustomObjectRecordApiV2PublicCustomObjectsCustomObjectIdRecordsRecordIdGet200Envelope]
+            Object record detail response. The base detail payload is intentionally thin; drawer sections load through scoped endpoints.
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            f"v2/public/custom-objects/{jsonable_encoder(custom_object_id)}/records/{jsonable_encoder(record_id)}",
+            method="GET",
+            params={
+                "workspace_id": workspace_id,
+                "view_id": view_id,
+                "form_view_id": form_view_id,
+            },
+            request_options=request_options,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    GetPublicCustomObjectRecordApiV2PublicCustomObjectsCustomObjectIdRecordsRecordIdGet200Envelope,
+                    construct_type(
+                        type_=GetPublicCustomObjectRecordApiV2PublicCustomObjectsCustomObjectIdRecordsRecordIdGet200Envelope,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    def update_public_custom_object_record_api(
+        self,
+        custom_object_id: str,
+        record_id: str,
+        *,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = OMIT,
+        form_view_id: typing.Optional[str] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> HttpResponse[
+        UpdatePublicCustomObjectRecordApiV2PublicCustomObjectsCustomObjectIdRecordsRecordIdPut200Envelope
+    ]:
+        """
+        Parameters
+        ----------
+        custom_object_id : str
+
+        record_id : str
+
+        workspace_id : typing.Optional[str]
+
+        view_id : typing.Optional[str]
+
+        form_view_id : typing.Optional[str]
+
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[UpdatePublicCustomObjectRecordApiV2PublicCustomObjectsCustomObjectIdRecordsRecordIdPut200Envelope]
+            Successful Response
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            f"v2/public/custom-objects/{jsonable_encoder(custom_object_id)}/records/{jsonable_encoder(record_id)}",
+            method="PUT",
+            params={
+                "workspace_id": workspace_id,
+            },
+            json={
+                "view_id": view_id,
+                "form_view_id": form_view_id,
+                "properties": properties,
+            },
+            headers={
+                "content-type": "application/json",
+            },
+            request_options=request_options,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    UpdatePublicCustomObjectRecordApiV2PublicCustomObjectsCustomObjectIdRecordsRecordIdPut200Envelope,
+                    construct_type(
+                        type_=UpdatePublicCustomObjectRecordApiV2PublicCustomObjectsCustomObjectIdRecordsRecordIdPut200Envelope,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    def delete_public_custom_object_record_api(
+        self,
+        custom_object_id: str,
+        record_id: str,
+        *,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> HttpResponse[
+        DeletePublicCustomObjectRecordApiV2PublicCustomObjectsCustomObjectIdRecordsRecordIdDelete200Envelope
+    ]:
+        """
+        Parameters
+        ----------
+        custom_object_id : str
+
+        record_id : str
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[DeletePublicCustomObjectRecordApiV2PublicCustomObjectsCustomObjectIdRecordsRecordIdDelete200Envelope]
+            Successful Response
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            f"v2/public/custom-objects/{jsonable_encoder(custom_object_id)}/records/{jsonable_encoder(record_id)}",
+            method="DELETE",
+            params={
+                "workspace_id": workspace_id,
+            },
+            request_options=request_options,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    DeletePublicCustomObjectRecordApiV2PublicCustomObjectsCustomObjectIdRecordsRecordIdDelete200Envelope,
+                    construct_type(
+                        type_=DeletePublicCustomObjectRecordApiV2PublicCustomObjectsCustomObjectIdRecordsRecordIdDelete200Envelope,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    def archive_public_custom_object_record_api(
+        self,
+        custom_object_id: str,
+        record_id: str,
+        *,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> HttpResponse[
+        ArchivePublicCustomObjectRecordApiV2PublicCustomObjectsCustomObjectIdRecordsRecordIdArchivePost200Envelope
+    ]:
+        """
+        Parameters
+        ----------
+        custom_object_id : str
+
+        record_id : str
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[ArchivePublicCustomObjectRecordApiV2PublicCustomObjectsCustomObjectIdRecordsRecordIdArchivePost200Envelope]
+            Successful Response
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            f"v2/public/custom-objects/{jsonable_encoder(custom_object_id)}/records/{jsonable_encoder(record_id)}/archive",
+            method="POST",
+            params={
+                "workspace_id": workspace_id,
+            },
+            request_options=request_options,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    ArchivePublicCustomObjectRecordApiV2PublicCustomObjectsCustomObjectIdRecordsRecordIdArchivePost200Envelope,
+                    construct_type(
+                        type_=ArchivePublicCustomObjectRecordApiV2PublicCustomObjectsCustomObjectIdRecordsRecordIdArchivePost200Envelope,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    def activate_public_custom_object_record_api(
+        self,
+        custom_object_id: str,
+        record_id: str,
+        *,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> HttpResponse[
+        ActivatePublicCustomObjectRecordApiV2PublicCustomObjectsCustomObjectIdRecordsRecordIdActivatePost200Envelope
+    ]:
+        """
+        Parameters
+        ----------
+        custom_object_id : str
+
+        record_id : str
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[ActivatePublicCustomObjectRecordApiV2PublicCustomObjectsCustomObjectIdRecordsRecordIdActivatePost200Envelope]
+            Successful Response
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            f"v2/public/custom-objects/{jsonable_encoder(custom_object_id)}/records/{jsonable_encoder(record_id)}/activate",
+            method="POST",
+            params={
+                "workspace_id": workspace_id,
+            },
+            request_options=request_options,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    ActivatePublicCustomObjectRecordApiV2PublicCustomObjectsCustomObjectIdRecordsRecordIdActivatePost200Envelope,
+                    construct_type(
+                        type_=ActivatePublicCustomObjectRecordApiV2PublicCustomObjectsCustomObjectIdRecordsRecordIdActivatePost200Envelope,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
     def create_public_custom_object_record_compatibility_api(
         self,
@@ -292,6 +969,663 @@ class RawCustomObjectsClient:
 class AsyncRawCustomObjectsClient:
     def __init__(self, *, client_wrapper: AsyncClientWrapper):
         self._client_wrapper = client_wrapper
+
+    async def list_public_custom_object_records_api(
+        self,
+        custom_object_id: str,
+        *,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = None,
+        search: typing.Optional[str] = None,
+        language: typing.Optional[str] = None,
+        status: typing.Optional[str] = None,
+        usage_status: typing.Optional[str] = None,
+        page: typing.Optional[int] = None,
+        limit: typing.Optional[int] = None,
+        sort: typing.Optional[str] = None,
+        x_language: typing.Optional[str] = None,
+        accept_language: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> AsyncHttpResponse[ListPublicCustomObjectRecordsApiV2PublicCustomObjectsCustomObjectIdRecordsGet200Envelope]:
+        """
+        Parameters
+        ----------
+        custom_object_id : str
+
+        workspace_id : typing.Optional[str]
+
+        view_id : typing.Optional[str]
+
+        search : typing.Optional[str]
+
+        language : typing.Optional[str]
+
+        status : typing.Optional[str]
+
+        usage_status : typing.Optional[str]
+
+        page : typing.Optional[int]
+
+        limit : typing.Optional[int]
+
+        sort : typing.Optional[str]
+
+        x_language : typing.Optional[str]
+
+        accept_language : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[ListPublicCustomObjectRecordsApiV2PublicCustomObjectsCustomObjectIdRecordsGet200Envelope]
+            Object record list response
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            f"v2/public/custom-objects/{jsonable_encoder(custom_object_id)}/records",
+            method="GET",
+            params={
+                "workspace_id": workspace_id,
+                "view_id": view_id,
+                "search": search,
+                "language": language,
+                "status": status,
+                "usage_status": usage_status,
+                "page": page,
+                "limit": limit,
+                "sort": sort,
+            },
+            headers={
+                "X-Language": str(x_language) if x_language is not None else None,
+                "Accept-Language": str(accept_language) if accept_language is not None else None,
+            },
+            request_options=request_options,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    ListPublicCustomObjectRecordsApiV2PublicCustomObjectsCustomObjectIdRecordsGet200Envelope,
+                    construct_type(
+                        type_=ListPublicCustomObjectRecordsApiV2PublicCustomObjectsCustomObjectIdRecordsGet200Envelope,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    async def create_public_custom_object_record_api(
+        self,
+        custom_object_id: str,
+        *,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = OMIT,
+        form_view_id: typing.Optional[str] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> AsyncHttpResponse[CreatePublicCustomObjectRecordApiV2PublicCustomObjectsCustomObjectIdRecordsPost200Envelope]:
+        """
+        Parameters
+        ----------
+        custom_object_id : str
+
+        workspace_id : typing.Optional[str]
+
+        view_id : typing.Optional[str]
+
+        form_view_id : typing.Optional[str]
+
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[CreatePublicCustomObjectRecordApiV2PublicCustomObjectsCustomObjectIdRecordsPost200Envelope]
+            Successful Response
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            f"v2/public/custom-objects/{jsonable_encoder(custom_object_id)}/records",
+            method="POST",
+            params={
+                "workspace_id": workspace_id,
+            },
+            json={
+                "view_id": view_id,
+                "form_view_id": form_view_id,
+                "properties": properties,
+            },
+            headers={
+                "content-type": "application/json",
+            },
+            request_options=request_options,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    CreatePublicCustomObjectRecordApiV2PublicCustomObjectsCustomObjectIdRecordsPost200Envelope,
+                    construct_type(
+                        type_=CreatePublicCustomObjectRecordApiV2PublicCustomObjectsCustomObjectIdRecordsPost200Envelope,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    async def get_public_custom_object_record_api(
+        self,
+        custom_object_id: str,
+        record_id: str,
+        *,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = None,
+        form_view_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> AsyncHttpResponse[
+        GetPublicCustomObjectRecordApiV2PublicCustomObjectsCustomObjectIdRecordsRecordIdGet200Envelope
+    ]:
+        """
+        Parameters
+        ----------
+        custom_object_id : str
+
+        record_id : str
+
+        workspace_id : typing.Optional[str]
+
+        view_id : typing.Optional[str]
+
+        form_view_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[GetPublicCustomObjectRecordApiV2PublicCustomObjectsCustomObjectIdRecordsRecordIdGet200Envelope]
+            Object record detail response. The base detail payload is intentionally thin; drawer sections load through scoped endpoints.
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            f"v2/public/custom-objects/{jsonable_encoder(custom_object_id)}/records/{jsonable_encoder(record_id)}",
+            method="GET",
+            params={
+                "workspace_id": workspace_id,
+                "view_id": view_id,
+                "form_view_id": form_view_id,
+            },
+            request_options=request_options,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    GetPublicCustomObjectRecordApiV2PublicCustomObjectsCustomObjectIdRecordsRecordIdGet200Envelope,
+                    construct_type(
+                        type_=GetPublicCustomObjectRecordApiV2PublicCustomObjectsCustomObjectIdRecordsRecordIdGet200Envelope,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    async def update_public_custom_object_record_api(
+        self,
+        custom_object_id: str,
+        record_id: str,
+        *,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = OMIT,
+        form_view_id: typing.Optional[str] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> AsyncHttpResponse[
+        UpdatePublicCustomObjectRecordApiV2PublicCustomObjectsCustomObjectIdRecordsRecordIdPut200Envelope
+    ]:
+        """
+        Parameters
+        ----------
+        custom_object_id : str
+
+        record_id : str
+
+        workspace_id : typing.Optional[str]
+
+        view_id : typing.Optional[str]
+
+        form_view_id : typing.Optional[str]
+
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[UpdatePublicCustomObjectRecordApiV2PublicCustomObjectsCustomObjectIdRecordsRecordIdPut200Envelope]
+            Successful Response
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            f"v2/public/custom-objects/{jsonable_encoder(custom_object_id)}/records/{jsonable_encoder(record_id)}",
+            method="PUT",
+            params={
+                "workspace_id": workspace_id,
+            },
+            json={
+                "view_id": view_id,
+                "form_view_id": form_view_id,
+                "properties": properties,
+            },
+            headers={
+                "content-type": "application/json",
+            },
+            request_options=request_options,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    UpdatePublicCustomObjectRecordApiV2PublicCustomObjectsCustomObjectIdRecordsRecordIdPut200Envelope,
+                    construct_type(
+                        type_=UpdatePublicCustomObjectRecordApiV2PublicCustomObjectsCustomObjectIdRecordsRecordIdPut200Envelope,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    async def delete_public_custom_object_record_api(
+        self,
+        custom_object_id: str,
+        record_id: str,
+        *,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> AsyncHttpResponse[
+        DeletePublicCustomObjectRecordApiV2PublicCustomObjectsCustomObjectIdRecordsRecordIdDelete200Envelope
+    ]:
+        """
+        Parameters
+        ----------
+        custom_object_id : str
+
+        record_id : str
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[DeletePublicCustomObjectRecordApiV2PublicCustomObjectsCustomObjectIdRecordsRecordIdDelete200Envelope]
+            Successful Response
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            f"v2/public/custom-objects/{jsonable_encoder(custom_object_id)}/records/{jsonable_encoder(record_id)}",
+            method="DELETE",
+            params={
+                "workspace_id": workspace_id,
+            },
+            request_options=request_options,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    DeletePublicCustomObjectRecordApiV2PublicCustomObjectsCustomObjectIdRecordsRecordIdDelete200Envelope,
+                    construct_type(
+                        type_=DeletePublicCustomObjectRecordApiV2PublicCustomObjectsCustomObjectIdRecordsRecordIdDelete200Envelope,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    async def archive_public_custom_object_record_api(
+        self,
+        custom_object_id: str,
+        record_id: str,
+        *,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> AsyncHttpResponse[
+        ArchivePublicCustomObjectRecordApiV2PublicCustomObjectsCustomObjectIdRecordsRecordIdArchivePost200Envelope
+    ]:
+        """
+        Parameters
+        ----------
+        custom_object_id : str
+
+        record_id : str
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[ArchivePublicCustomObjectRecordApiV2PublicCustomObjectsCustomObjectIdRecordsRecordIdArchivePost200Envelope]
+            Successful Response
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            f"v2/public/custom-objects/{jsonable_encoder(custom_object_id)}/records/{jsonable_encoder(record_id)}/archive",
+            method="POST",
+            params={
+                "workspace_id": workspace_id,
+            },
+            request_options=request_options,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    ArchivePublicCustomObjectRecordApiV2PublicCustomObjectsCustomObjectIdRecordsRecordIdArchivePost200Envelope,
+                    construct_type(
+                        type_=ArchivePublicCustomObjectRecordApiV2PublicCustomObjectsCustomObjectIdRecordsRecordIdArchivePost200Envelope,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    async def activate_public_custom_object_record_api(
+        self,
+        custom_object_id: str,
+        record_id: str,
+        *,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> AsyncHttpResponse[
+        ActivatePublicCustomObjectRecordApiV2PublicCustomObjectsCustomObjectIdRecordsRecordIdActivatePost200Envelope
+    ]:
+        """
+        Parameters
+        ----------
+        custom_object_id : str
+
+        record_id : str
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[ActivatePublicCustomObjectRecordApiV2PublicCustomObjectsCustomObjectIdRecordsRecordIdActivatePost200Envelope]
+            Successful Response
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            f"v2/public/custom-objects/{jsonable_encoder(custom_object_id)}/records/{jsonable_encoder(record_id)}/activate",
+            method="POST",
+            params={
+                "workspace_id": workspace_id,
+            },
+            request_options=request_options,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    ActivatePublicCustomObjectRecordApiV2PublicCustomObjectsCustomObjectIdRecordsRecordIdActivatePost200Envelope,
+                    construct_type(
+                        type_=ActivatePublicCustomObjectRecordApiV2PublicCustomObjectsCustomObjectIdRecordsRecordIdActivatePost200Envelope,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
     async def create_public_custom_object_record_compatibility_api(
         self,

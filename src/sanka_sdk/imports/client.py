@@ -42,7 +42,10 @@ class ImportsClient:
         self,
         *,
         object_type: typing.Optional[str] = None,
+        page: typing.Optional[int] = None,
         limit: typing.Optional[int] = None,
+        search_query: typing.Optional[str] = None,
+        q: typing.Optional[str] = None,
         workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> ListPublicImportJobsCompatApiV2PublicImportsGet200Envelope:
@@ -51,7 +54,13 @@ class ImportsClient:
         ----------
         object_type : typing.Optional[str]
 
+        page : typing.Optional[int]
+
         limit : typing.Optional[int]
+
+        search_query : typing.Optional[str]
+
+        q : typing.Optional[str]
 
         workspace_id : typing.Optional[str]
 
@@ -74,7 +83,13 @@ class ImportsClient:
         client.imports.list_public_import_jobs_compat_api()
         """
         _response = self._raw_client.list_public_import_jobs_compat_api(
-            object_type=object_type, limit=limit, workspace_id=workspace_id, request_options=request_options
+            object_type=object_type,
+            page=page,
+            limit=limit,
+            search_query=search_query,
+            q=q,
+            workspace_id=workspace_id,
+            request_options=request_options,
         )
         return _response.data
 
@@ -273,7 +288,10 @@ class AsyncImportsClient:
         self,
         *,
         object_type: typing.Optional[str] = None,
+        page: typing.Optional[int] = None,
         limit: typing.Optional[int] = None,
+        search_query: typing.Optional[str] = None,
+        q: typing.Optional[str] = None,
         workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> ListPublicImportJobsCompatApiV2PublicImportsGet200Envelope:
@@ -282,7 +300,13 @@ class AsyncImportsClient:
         ----------
         object_type : typing.Optional[str]
 
+        page : typing.Optional[int]
+
         limit : typing.Optional[int]
+
+        search_query : typing.Optional[str]
+
+        q : typing.Optional[str]
 
         workspace_id : typing.Optional[str]
 
@@ -313,7 +337,13 @@ class AsyncImportsClient:
         asyncio.run(main())
         """
         _response = await self._raw_client.list_public_import_jobs_compat_api(
-            object_type=object_type, limit=limit, workspace_id=workspace_id, request_options=request_options
+            object_type=object_type,
+            page=page,
+            limit=limit,
+            search_query=search_query,
+            q=q,
+            workspace_id=workspace_id,
+            request_options=request_options,
         )
         return _response.data
 

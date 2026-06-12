@@ -4,11 +4,29 @@ import typing
 
 from ..core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ..core.request_options import RequestOptions
-from ..types.create_public_journal_statement_view_api_v_2_public_journals_views_post_200_envelope import (
-    CreatePublicJournalStatementViewApiV2PublicJournalsViewsPost200Envelope,
+from ..types.activate_public_journal_api_v_2_public_journals_journal_id_activate_post_200_envelope import (
+    ActivatePublicJournalApiV2PublicJournalsJournalIdActivatePost200Envelope,
+)
+from ..types.archive_public_journal_api_v_2_public_journals_journal_id_archive_post_200_envelope import (
+    ArchivePublicJournalApiV2PublicJournalsJournalIdArchivePost200Envelope,
+)
+from ..types.create_public_financial_statement_view_api_v_2_public_journals_views_post_200_envelope import (
+    CreatePublicFinancialStatementViewApiV2PublicJournalsViewsPost200Envelope,
+)
+from ..types.create_public_journal_api_v_2_public_journals_post_200_envelope import (
+    CreatePublicJournalApiV2PublicJournalsPost200Envelope,
+)
+from ..types.delete_public_journal_api_v_2_public_journals_journal_id_delete_200_envelope import (
+    DeletePublicJournalApiV2PublicJournalsJournalIdDelete200Envelope,
+)
+from ..types.get_public_journal_api_v_2_public_journals_journal_id_get_200_envelope import (
+    GetPublicJournalApiV2PublicJournalsJournalIdGet200Envelope,
 )
 from ..types.list_public_journals_api_v_2_public_journals_get_200_envelope import (
     ListPublicJournalsApiV2PublicJournalsGet200Envelope,
+)
+from ..types.update_public_journal_api_v_2_public_journals_journal_id_put_200_envelope import (
+    UpdatePublicJournalApiV2PublicJournalsJournalIdPut200Envelope,
 )
 from .raw_client import AsyncRawJournalsClient, RawJournalsClient
 
@@ -110,7 +128,58 @@ class JournalsClient:
         )
         return _response.data
 
-    def create_public_journal_statement_view_api(
+    def create_public_journal_api(
+        self,
+        *,
+        workspace_id: typing.Optional[str] = None,
+        data: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
+        journal_transactions: typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]] = OMIT,
+        form_set_id: typing.Optional[str] = OMIT,
+        view_id: typing.Optional[str] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> CreatePublicJournalApiV2PublicJournalsPost200Envelope:
+        """
+        Parameters
+        ----------
+        workspace_id : typing.Optional[str]
+
+        data : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
+
+        journal_transactions : typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]]
+
+        form_set_id : typing.Optional[str]
+
+        view_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        CreatePublicJournalApiV2PublicJournalsPost200Envelope
+            Successful Response
+
+        Examples
+        --------
+        from sanka_sdk import SankaClient
+
+        client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+        client.journals.create_public_journal_api()
+        """
+        _response = self._raw_client.create_public_journal_api(
+            workspace_id=workspace_id,
+            data=data,
+            journal_transactions=journal_transactions,
+            form_set_id=form_set_id,
+            view_id=view_id,
+            request_options=request_options,
+        )
+        return _response.data
+
+    def create_public_financial_statement_view_api(
         self,
         *,
         language: typing.Optional[str] = None,
@@ -126,7 +195,7 @@ class JournalsClient:
         include_preview: typing.Optional[bool] = OMIT,
         limit: typing.Optional[int] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> CreatePublicJournalStatementViewApiV2PublicJournalsViewsPost200Envelope:
+    ) -> CreatePublicFinancialStatementViewApiV2PublicJournalsViewsPost200Envelope:
         """
         Parameters
         ----------
@@ -159,7 +228,7 @@ class JournalsClient:
 
         Returns
         -------
-        CreatePublicJournalStatementViewApiV2PublicJournalsViewsPost200Envelope
+        CreatePublicFinancialStatementViewApiV2PublicJournalsViewsPost200Envelope
             Successful Response
 
         Examples
@@ -170,9 +239,9 @@ class JournalsClient:
             workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
-        client.journals.create_public_journal_statement_view_api()
+        client.journals.create_public_financial_statement_view_api()
         """
-        _response = self._raw_client.create_public_journal_statement_view_api(
+        _response = self._raw_client.create_public_financial_statement_view_api(
             language=language,
             accept_language_query=accept_language_query,
             workspace_id=workspace_id,
@@ -186,6 +255,225 @@ class JournalsClient:
             include_preview=include_preview,
             limit=limit,
             request_options=request_options,
+        )
+        return _response.data
+
+    def get_public_journal_api(
+        self,
+        journal_id: str,
+        *,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = None,
+        form_view_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> GetPublicJournalApiV2PublicJournalsJournalIdGet200Envelope:
+        """
+        Parameters
+        ----------
+        journal_id : str
+
+        workspace_id : typing.Optional[str]
+
+        view_id : typing.Optional[str]
+
+        form_view_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        GetPublicJournalApiV2PublicJournalsJournalIdGet200Envelope
+            Object record detail response. The base detail payload is intentionally thin; drawer sections load through scoped endpoints.
+
+        Examples
+        --------
+        from sanka_sdk import SankaClient
+
+        client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+        client.journals.get_public_journal_api(
+            journal_id="journal_id",
+        )
+        """
+        _response = self._raw_client.get_public_journal_api(
+            journal_id,
+            workspace_id=workspace_id,
+            view_id=view_id,
+            form_view_id=form_view_id,
+            request_options=request_options,
+        )
+        return _response.data
+
+    def update_public_journal_api(
+        self,
+        journal_id: str,
+        *,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = OMIT,
+        form_view_id: typing.Optional[str] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> UpdatePublicJournalApiV2PublicJournalsJournalIdPut200Envelope:
+        """
+        Parameters
+        ----------
+        journal_id : str
+
+        workspace_id : typing.Optional[str]
+
+        view_id : typing.Optional[str]
+
+        form_view_id : typing.Optional[str]
+
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        UpdatePublicJournalApiV2PublicJournalsJournalIdPut200Envelope
+            Successful Response
+
+        Examples
+        --------
+        from sanka_sdk import SankaClient
+
+        client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+        client.journals.update_public_journal_api(
+            journal_id="journal_id",
+        )
+        """
+        _response = self._raw_client.update_public_journal_api(
+            journal_id,
+            workspace_id=workspace_id,
+            view_id=view_id,
+            form_view_id=form_view_id,
+            properties=properties,
+            request_options=request_options,
+        )
+        return _response.data
+
+    def delete_public_journal_api(
+        self,
+        journal_id: str,
+        *,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> DeletePublicJournalApiV2PublicJournalsJournalIdDelete200Envelope:
+        """
+        Parameters
+        ----------
+        journal_id : str
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        DeletePublicJournalApiV2PublicJournalsJournalIdDelete200Envelope
+            Successful Response
+
+        Examples
+        --------
+        from sanka_sdk import SankaClient
+
+        client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+        client.journals.delete_public_journal_api(
+            journal_id="journal_id",
+        )
+        """
+        _response = self._raw_client.delete_public_journal_api(
+            journal_id, workspace_id=workspace_id, request_options=request_options
+        )
+        return _response.data
+
+    def archive_public_journal_api(
+        self,
+        journal_id: str,
+        *,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> ArchivePublicJournalApiV2PublicJournalsJournalIdArchivePost200Envelope:
+        """
+        Parameters
+        ----------
+        journal_id : str
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        ArchivePublicJournalApiV2PublicJournalsJournalIdArchivePost200Envelope
+            Successful Response
+
+        Examples
+        --------
+        from sanka_sdk import SankaClient
+
+        client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+        client.journals.archive_public_journal_api(
+            journal_id="journal_id",
+        )
+        """
+        _response = self._raw_client.archive_public_journal_api(
+            journal_id, workspace_id=workspace_id, request_options=request_options
+        )
+        return _response.data
+
+    def activate_public_journal_api(
+        self,
+        journal_id: str,
+        *,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> ActivatePublicJournalApiV2PublicJournalsJournalIdActivatePost200Envelope:
+        """
+        Parameters
+        ----------
+        journal_id : str
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        ActivatePublicJournalApiV2PublicJournalsJournalIdActivatePost200Envelope
+            Successful Response
+
+        Examples
+        --------
+        from sanka_sdk import SankaClient
+
+        client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+        client.journals.activate_public_journal_api(
+            journal_id="journal_id",
+        )
+        """
+        _response = self._raw_client.activate_public_journal_api(
+            journal_id, workspace_id=workspace_id, request_options=request_options
         )
         return _response.data
 
@@ -292,7 +580,66 @@ class AsyncJournalsClient:
         )
         return _response.data
 
-    async def create_public_journal_statement_view_api(
+    async def create_public_journal_api(
+        self,
+        *,
+        workspace_id: typing.Optional[str] = None,
+        data: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
+        journal_transactions: typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]] = OMIT,
+        form_set_id: typing.Optional[str] = OMIT,
+        view_id: typing.Optional[str] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> CreatePublicJournalApiV2PublicJournalsPost200Envelope:
+        """
+        Parameters
+        ----------
+        workspace_id : typing.Optional[str]
+
+        data : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
+
+        journal_transactions : typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]]
+
+        form_set_id : typing.Optional[str]
+
+        view_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        CreatePublicJournalApiV2PublicJournalsPost200Envelope
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sanka_sdk import AsyncSankaClient
+
+        client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.journals.create_public_journal_api()
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.create_public_journal_api(
+            workspace_id=workspace_id,
+            data=data,
+            journal_transactions=journal_transactions,
+            form_set_id=form_set_id,
+            view_id=view_id,
+            request_options=request_options,
+        )
+        return _response.data
+
+    async def create_public_financial_statement_view_api(
         self,
         *,
         language: typing.Optional[str] = None,
@@ -308,7 +655,7 @@ class AsyncJournalsClient:
         include_preview: typing.Optional[bool] = OMIT,
         limit: typing.Optional[int] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> CreatePublicJournalStatementViewApiV2PublicJournalsViewsPost200Envelope:
+    ) -> CreatePublicFinancialStatementViewApiV2PublicJournalsViewsPost200Envelope:
         """
         Parameters
         ----------
@@ -341,7 +688,7 @@ class AsyncJournalsClient:
 
         Returns
         -------
-        CreatePublicJournalStatementViewApiV2PublicJournalsViewsPost200Envelope
+        CreatePublicFinancialStatementViewApiV2PublicJournalsViewsPost200Envelope
             Successful Response
 
         Examples
@@ -357,12 +704,12 @@ class AsyncJournalsClient:
 
 
         async def main() -> None:
-            await client.journals.create_public_journal_statement_view_api()
+            await client.journals.create_public_financial_statement_view_api()
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.create_public_journal_statement_view_api(
+        _response = await self._raw_client.create_public_financial_statement_view_api(
             language=language,
             accept_language_query=accept_language_query,
             workspace_id=workspace_id,
@@ -376,5 +723,264 @@ class AsyncJournalsClient:
             include_preview=include_preview,
             limit=limit,
             request_options=request_options,
+        )
+        return _response.data
+
+    async def get_public_journal_api(
+        self,
+        journal_id: str,
+        *,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = None,
+        form_view_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> GetPublicJournalApiV2PublicJournalsJournalIdGet200Envelope:
+        """
+        Parameters
+        ----------
+        journal_id : str
+
+        workspace_id : typing.Optional[str]
+
+        view_id : typing.Optional[str]
+
+        form_view_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        GetPublicJournalApiV2PublicJournalsJournalIdGet200Envelope
+            Object record detail response. The base detail payload is intentionally thin; drawer sections load through scoped endpoints.
+
+        Examples
+        --------
+        import asyncio
+
+        from sanka_sdk import AsyncSankaClient
+
+        client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.journals.get_public_journal_api(
+                journal_id="journal_id",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.get_public_journal_api(
+            journal_id,
+            workspace_id=workspace_id,
+            view_id=view_id,
+            form_view_id=form_view_id,
+            request_options=request_options,
+        )
+        return _response.data
+
+    async def update_public_journal_api(
+        self,
+        journal_id: str,
+        *,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = OMIT,
+        form_view_id: typing.Optional[str] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> UpdatePublicJournalApiV2PublicJournalsJournalIdPut200Envelope:
+        """
+        Parameters
+        ----------
+        journal_id : str
+
+        workspace_id : typing.Optional[str]
+
+        view_id : typing.Optional[str]
+
+        form_view_id : typing.Optional[str]
+
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        UpdatePublicJournalApiV2PublicJournalsJournalIdPut200Envelope
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sanka_sdk import AsyncSankaClient
+
+        client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.journals.update_public_journal_api(
+                journal_id="journal_id",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.update_public_journal_api(
+            journal_id,
+            workspace_id=workspace_id,
+            view_id=view_id,
+            form_view_id=form_view_id,
+            properties=properties,
+            request_options=request_options,
+        )
+        return _response.data
+
+    async def delete_public_journal_api(
+        self,
+        journal_id: str,
+        *,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> DeletePublicJournalApiV2PublicJournalsJournalIdDelete200Envelope:
+        """
+        Parameters
+        ----------
+        journal_id : str
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        DeletePublicJournalApiV2PublicJournalsJournalIdDelete200Envelope
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sanka_sdk import AsyncSankaClient
+
+        client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.journals.delete_public_journal_api(
+                journal_id="journal_id",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.delete_public_journal_api(
+            journal_id, workspace_id=workspace_id, request_options=request_options
+        )
+        return _response.data
+
+    async def archive_public_journal_api(
+        self,
+        journal_id: str,
+        *,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> ArchivePublicJournalApiV2PublicJournalsJournalIdArchivePost200Envelope:
+        """
+        Parameters
+        ----------
+        journal_id : str
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        ArchivePublicJournalApiV2PublicJournalsJournalIdArchivePost200Envelope
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sanka_sdk import AsyncSankaClient
+
+        client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.journals.archive_public_journal_api(
+                journal_id="journal_id",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.archive_public_journal_api(
+            journal_id, workspace_id=workspace_id, request_options=request_options
+        )
+        return _response.data
+
+    async def activate_public_journal_api(
+        self,
+        journal_id: str,
+        *,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> ActivatePublicJournalApiV2PublicJournalsJournalIdActivatePost200Envelope:
+        """
+        Parameters
+        ----------
+        journal_id : str
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        ActivatePublicJournalApiV2PublicJournalsJournalIdActivatePost200Envelope
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sanka_sdk import AsyncSankaClient
+
+        client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.journals.activate_public_journal_api(
+                journal_id="journal_id",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.activate_public_journal_api(
+            journal_id, workspace_id=workspace_id, request_options=request_options
         )
         return _response.data
