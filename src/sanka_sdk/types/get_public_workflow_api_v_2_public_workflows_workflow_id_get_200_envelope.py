@@ -6,11 +6,12 @@ import pydantic
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.unchecked_base_model import UncheckedBaseModel
 from .envelope_meta import EnvelopeMeta
+from .workflow_detail_data import WorkflowDetailData
 
 
 class GetPublicWorkflowApiV2PublicWorkflowsWorkflowIdGet200Envelope(UncheckedBaseModel):
     success: typing.Literal[True] = True
-    data: typing.Dict[str, typing.Optional[typing.Any]]
+    data: WorkflowDetailData
     meta: EnvelopeMeta
 
     if IS_PYDANTIC_V2:

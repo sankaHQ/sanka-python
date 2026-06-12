@@ -4,13 +4,34 @@ import typing
 
 from ..core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ..core.request_options import RequestOptions
+from ..types.activate_public_custom_object_record_api_v_2_public_custom_objects_custom_object_id_records_record_id_activate_post_200_envelope import (
+    ActivatePublicCustomObjectRecordApiV2PublicCustomObjectsCustomObjectIdRecordsRecordIdActivatePost200Envelope,
+)
+from ..types.archive_public_custom_object_record_api_v_2_public_custom_objects_custom_object_id_records_record_id_archive_post_200_envelope import (
+    ArchivePublicCustomObjectRecordApiV2PublicCustomObjectsCustomObjectIdRecordsRecordIdArchivePost200Envelope,
+)
 from ..types.archive_public_custom_object_record_compatibility_api_v_2_public_records_custom_objects_records_record_id_archive_post_200_envelope import (
     ArchivePublicCustomObjectRecordCompatibilityApiV2PublicRecordsCustomObjectsRecordsRecordIdArchivePost200Envelope,
+)
+from ..types.create_public_custom_object_record_api_v_2_public_custom_objects_custom_object_id_records_post_200_envelope import (
+    CreatePublicCustomObjectRecordApiV2PublicCustomObjectsCustomObjectIdRecordsPost200Envelope,
 )
 from ..types.create_public_custom_object_record_compatibility_api_v_2_public_records_custom_objects_records_post_200_envelope import (
     CreatePublicCustomObjectRecordCompatibilityApiV2PublicRecordsCustomObjectsRecordsPost200Envelope,
 )
+from ..types.delete_public_custom_object_record_api_v_2_public_custom_objects_custom_object_id_records_record_id_delete_200_envelope import (
+    DeletePublicCustomObjectRecordApiV2PublicCustomObjectsCustomObjectIdRecordsRecordIdDelete200Envelope,
+)
+from ..types.get_public_custom_object_record_api_v_2_public_custom_objects_custom_object_id_records_record_id_get_200_envelope import (
+    GetPublicCustomObjectRecordApiV2PublicCustomObjectsCustomObjectIdRecordsRecordIdGet200Envelope,
+)
+from ..types.list_public_custom_object_records_api_v_2_public_custom_objects_custom_object_id_records_get_200_envelope import (
+    ListPublicCustomObjectRecordsApiV2PublicCustomObjectsCustomObjectIdRecordsGet200Envelope,
+)
 from ..types.public_custom_object_record_mutation_request import PublicCustomObjectRecordMutationRequest
+from ..types.update_public_custom_object_record_api_v_2_public_custom_objects_custom_object_id_records_record_id_put_200_envelope import (
+    UpdatePublicCustomObjectRecordApiV2PublicCustomObjectsCustomObjectIdRecordsRecordIdPut200Envelope,
+)
 from ..types.update_public_custom_object_record_compatibility_api_v_2_public_records_custom_objects_records_record_id_post_200_envelope import (
     UpdatePublicCustomObjectRecordCompatibilityApiV2PublicRecordsCustomObjectsRecordsRecordIdPost200Envelope,
 )
@@ -34,6 +55,381 @@ class CustomObjectsClient:
         RawCustomObjectsClient
         """
         return self._raw_client
+
+    def list_public_custom_object_records_api(
+        self,
+        custom_object_id: str,
+        *,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = None,
+        search: typing.Optional[str] = None,
+        language: typing.Optional[str] = None,
+        status: typing.Optional[str] = None,
+        usage_status: typing.Optional[str] = None,
+        page: typing.Optional[int] = None,
+        limit: typing.Optional[int] = None,
+        sort: typing.Optional[str] = None,
+        x_language: typing.Optional[str] = None,
+        accept_language: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> ListPublicCustomObjectRecordsApiV2PublicCustomObjectsCustomObjectIdRecordsGet200Envelope:
+        """
+        Parameters
+        ----------
+        custom_object_id : str
+
+        workspace_id : typing.Optional[str]
+
+        view_id : typing.Optional[str]
+
+        search : typing.Optional[str]
+
+        language : typing.Optional[str]
+
+        status : typing.Optional[str]
+
+        usage_status : typing.Optional[str]
+
+        page : typing.Optional[int]
+
+        limit : typing.Optional[int]
+
+        sort : typing.Optional[str]
+
+        x_language : typing.Optional[str]
+
+        accept_language : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        ListPublicCustomObjectRecordsApiV2PublicCustomObjectsCustomObjectIdRecordsGet200Envelope
+            Object record list response
+
+        Examples
+        --------
+        from sanka_sdk import SankaClient
+
+        client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+        client.custom_objects.list_public_custom_object_records_api(
+            custom_object_id="custom_object_id",
+        )
+        """
+        _response = self._raw_client.list_public_custom_object_records_api(
+            custom_object_id,
+            workspace_id=workspace_id,
+            view_id=view_id,
+            search=search,
+            language=language,
+            status=status,
+            usage_status=usage_status,
+            page=page,
+            limit=limit,
+            sort=sort,
+            x_language=x_language,
+            accept_language=accept_language,
+            request_options=request_options,
+        )
+        return _response.data
+
+    def create_public_custom_object_record_api(
+        self,
+        custom_object_id: str,
+        *,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = OMIT,
+        form_view_id: typing.Optional[str] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> CreatePublicCustomObjectRecordApiV2PublicCustomObjectsCustomObjectIdRecordsPost200Envelope:
+        """
+        Parameters
+        ----------
+        custom_object_id : str
+
+        workspace_id : typing.Optional[str]
+
+        view_id : typing.Optional[str]
+
+        form_view_id : typing.Optional[str]
+
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        CreatePublicCustomObjectRecordApiV2PublicCustomObjectsCustomObjectIdRecordsPost200Envelope
+            Successful Response
+
+        Examples
+        --------
+        from sanka_sdk import SankaClient
+
+        client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+        client.custom_objects.create_public_custom_object_record_api(
+            custom_object_id="custom_object_id",
+        )
+        """
+        _response = self._raw_client.create_public_custom_object_record_api(
+            custom_object_id,
+            workspace_id=workspace_id,
+            view_id=view_id,
+            form_view_id=form_view_id,
+            properties=properties,
+            request_options=request_options,
+        )
+        return _response.data
+
+    def get_public_custom_object_record_api(
+        self,
+        custom_object_id: str,
+        record_id: str,
+        *,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = None,
+        form_view_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> GetPublicCustomObjectRecordApiV2PublicCustomObjectsCustomObjectIdRecordsRecordIdGet200Envelope:
+        """
+        Parameters
+        ----------
+        custom_object_id : str
+
+        record_id : str
+
+        workspace_id : typing.Optional[str]
+
+        view_id : typing.Optional[str]
+
+        form_view_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        GetPublicCustomObjectRecordApiV2PublicCustomObjectsCustomObjectIdRecordsRecordIdGet200Envelope
+            Object record detail response. The base detail payload is intentionally thin; drawer sections load through scoped endpoints.
+
+        Examples
+        --------
+        from sanka_sdk import SankaClient
+
+        client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+        client.custom_objects.get_public_custom_object_record_api(
+            custom_object_id="custom_object_id",
+            record_id="record_id",
+        )
+        """
+        _response = self._raw_client.get_public_custom_object_record_api(
+            custom_object_id,
+            record_id,
+            workspace_id=workspace_id,
+            view_id=view_id,
+            form_view_id=form_view_id,
+            request_options=request_options,
+        )
+        return _response.data
+
+    def update_public_custom_object_record_api(
+        self,
+        custom_object_id: str,
+        record_id: str,
+        *,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = OMIT,
+        form_view_id: typing.Optional[str] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> UpdatePublicCustomObjectRecordApiV2PublicCustomObjectsCustomObjectIdRecordsRecordIdPut200Envelope:
+        """
+        Parameters
+        ----------
+        custom_object_id : str
+
+        record_id : str
+
+        workspace_id : typing.Optional[str]
+
+        view_id : typing.Optional[str]
+
+        form_view_id : typing.Optional[str]
+
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        UpdatePublicCustomObjectRecordApiV2PublicCustomObjectsCustomObjectIdRecordsRecordIdPut200Envelope
+            Successful Response
+
+        Examples
+        --------
+        from sanka_sdk import SankaClient
+
+        client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+        client.custom_objects.update_public_custom_object_record_api(
+            custom_object_id="custom_object_id",
+            record_id="record_id",
+        )
+        """
+        _response = self._raw_client.update_public_custom_object_record_api(
+            custom_object_id,
+            record_id,
+            workspace_id=workspace_id,
+            view_id=view_id,
+            form_view_id=form_view_id,
+            properties=properties,
+            request_options=request_options,
+        )
+        return _response.data
+
+    def delete_public_custom_object_record_api(
+        self,
+        custom_object_id: str,
+        record_id: str,
+        *,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> DeletePublicCustomObjectRecordApiV2PublicCustomObjectsCustomObjectIdRecordsRecordIdDelete200Envelope:
+        """
+        Parameters
+        ----------
+        custom_object_id : str
+
+        record_id : str
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        DeletePublicCustomObjectRecordApiV2PublicCustomObjectsCustomObjectIdRecordsRecordIdDelete200Envelope
+            Successful Response
+
+        Examples
+        --------
+        from sanka_sdk import SankaClient
+
+        client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+        client.custom_objects.delete_public_custom_object_record_api(
+            custom_object_id="custom_object_id",
+            record_id="record_id",
+        )
+        """
+        _response = self._raw_client.delete_public_custom_object_record_api(
+            custom_object_id, record_id, workspace_id=workspace_id, request_options=request_options
+        )
+        return _response.data
+
+    def archive_public_custom_object_record_api(
+        self,
+        custom_object_id: str,
+        record_id: str,
+        *,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> ArchivePublicCustomObjectRecordApiV2PublicCustomObjectsCustomObjectIdRecordsRecordIdArchivePost200Envelope:
+        """
+        Parameters
+        ----------
+        custom_object_id : str
+
+        record_id : str
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        ArchivePublicCustomObjectRecordApiV2PublicCustomObjectsCustomObjectIdRecordsRecordIdArchivePost200Envelope
+            Successful Response
+
+        Examples
+        --------
+        from sanka_sdk import SankaClient
+
+        client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+        client.custom_objects.archive_public_custom_object_record_api(
+            custom_object_id="custom_object_id",
+            record_id="record_id",
+        )
+        """
+        _response = self._raw_client.archive_public_custom_object_record_api(
+            custom_object_id, record_id, workspace_id=workspace_id, request_options=request_options
+        )
+        return _response.data
+
+    def activate_public_custom_object_record_api(
+        self,
+        custom_object_id: str,
+        record_id: str,
+        *,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> ActivatePublicCustomObjectRecordApiV2PublicCustomObjectsCustomObjectIdRecordsRecordIdActivatePost200Envelope:
+        """
+        Parameters
+        ----------
+        custom_object_id : str
+
+        record_id : str
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        ActivatePublicCustomObjectRecordApiV2PublicCustomObjectsCustomObjectIdRecordsRecordIdActivatePost200Envelope
+            Successful Response
+
+        Examples
+        --------
+        from sanka_sdk import SankaClient
+
+        client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+        client.custom_objects.activate_public_custom_object_record_api(
+            custom_object_id="custom_object_id",
+            record_id="record_id",
+        )
+        """
+        _response = self._raw_client.activate_public_custom_object_record_api(
+            custom_object_id, record_id, workspace_id=workspace_id, request_options=request_options
+        )
+        return _response.data
 
     def create_public_custom_object_record_compatibility_api(
         self,
@@ -203,6 +599,437 @@ class AsyncCustomObjectsClient:
         AsyncRawCustomObjectsClient
         """
         return self._raw_client
+
+    async def list_public_custom_object_records_api(
+        self,
+        custom_object_id: str,
+        *,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = None,
+        search: typing.Optional[str] = None,
+        language: typing.Optional[str] = None,
+        status: typing.Optional[str] = None,
+        usage_status: typing.Optional[str] = None,
+        page: typing.Optional[int] = None,
+        limit: typing.Optional[int] = None,
+        sort: typing.Optional[str] = None,
+        x_language: typing.Optional[str] = None,
+        accept_language: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> ListPublicCustomObjectRecordsApiV2PublicCustomObjectsCustomObjectIdRecordsGet200Envelope:
+        """
+        Parameters
+        ----------
+        custom_object_id : str
+
+        workspace_id : typing.Optional[str]
+
+        view_id : typing.Optional[str]
+
+        search : typing.Optional[str]
+
+        language : typing.Optional[str]
+
+        status : typing.Optional[str]
+
+        usage_status : typing.Optional[str]
+
+        page : typing.Optional[int]
+
+        limit : typing.Optional[int]
+
+        sort : typing.Optional[str]
+
+        x_language : typing.Optional[str]
+
+        accept_language : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        ListPublicCustomObjectRecordsApiV2PublicCustomObjectsCustomObjectIdRecordsGet200Envelope
+            Object record list response
+
+        Examples
+        --------
+        import asyncio
+
+        from sanka_sdk import AsyncSankaClient
+
+        client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.custom_objects.list_public_custom_object_records_api(
+                custom_object_id="custom_object_id",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.list_public_custom_object_records_api(
+            custom_object_id,
+            workspace_id=workspace_id,
+            view_id=view_id,
+            search=search,
+            language=language,
+            status=status,
+            usage_status=usage_status,
+            page=page,
+            limit=limit,
+            sort=sort,
+            x_language=x_language,
+            accept_language=accept_language,
+            request_options=request_options,
+        )
+        return _response.data
+
+    async def create_public_custom_object_record_api(
+        self,
+        custom_object_id: str,
+        *,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = OMIT,
+        form_view_id: typing.Optional[str] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> CreatePublicCustomObjectRecordApiV2PublicCustomObjectsCustomObjectIdRecordsPost200Envelope:
+        """
+        Parameters
+        ----------
+        custom_object_id : str
+
+        workspace_id : typing.Optional[str]
+
+        view_id : typing.Optional[str]
+
+        form_view_id : typing.Optional[str]
+
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        CreatePublicCustomObjectRecordApiV2PublicCustomObjectsCustomObjectIdRecordsPost200Envelope
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sanka_sdk import AsyncSankaClient
+
+        client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.custom_objects.create_public_custom_object_record_api(
+                custom_object_id="custom_object_id",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.create_public_custom_object_record_api(
+            custom_object_id,
+            workspace_id=workspace_id,
+            view_id=view_id,
+            form_view_id=form_view_id,
+            properties=properties,
+            request_options=request_options,
+        )
+        return _response.data
+
+    async def get_public_custom_object_record_api(
+        self,
+        custom_object_id: str,
+        record_id: str,
+        *,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = None,
+        form_view_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> GetPublicCustomObjectRecordApiV2PublicCustomObjectsCustomObjectIdRecordsRecordIdGet200Envelope:
+        """
+        Parameters
+        ----------
+        custom_object_id : str
+
+        record_id : str
+
+        workspace_id : typing.Optional[str]
+
+        view_id : typing.Optional[str]
+
+        form_view_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        GetPublicCustomObjectRecordApiV2PublicCustomObjectsCustomObjectIdRecordsRecordIdGet200Envelope
+            Object record detail response. The base detail payload is intentionally thin; drawer sections load through scoped endpoints.
+
+        Examples
+        --------
+        import asyncio
+
+        from sanka_sdk import AsyncSankaClient
+
+        client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.custom_objects.get_public_custom_object_record_api(
+                custom_object_id="custom_object_id",
+                record_id="record_id",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.get_public_custom_object_record_api(
+            custom_object_id,
+            record_id,
+            workspace_id=workspace_id,
+            view_id=view_id,
+            form_view_id=form_view_id,
+            request_options=request_options,
+        )
+        return _response.data
+
+    async def update_public_custom_object_record_api(
+        self,
+        custom_object_id: str,
+        record_id: str,
+        *,
+        workspace_id: typing.Optional[str] = None,
+        view_id: typing.Optional[str] = OMIT,
+        form_view_id: typing.Optional[str] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> UpdatePublicCustomObjectRecordApiV2PublicCustomObjectsCustomObjectIdRecordsRecordIdPut200Envelope:
+        """
+        Parameters
+        ----------
+        custom_object_id : str
+
+        record_id : str
+
+        workspace_id : typing.Optional[str]
+
+        view_id : typing.Optional[str]
+
+        form_view_id : typing.Optional[str]
+
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        UpdatePublicCustomObjectRecordApiV2PublicCustomObjectsCustomObjectIdRecordsRecordIdPut200Envelope
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sanka_sdk import AsyncSankaClient
+
+        client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.custom_objects.update_public_custom_object_record_api(
+                custom_object_id="custom_object_id",
+                record_id="record_id",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.update_public_custom_object_record_api(
+            custom_object_id,
+            record_id,
+            workspace_id=workspace_id,
+            view_id=view_id,
+            form_view_id=form_view_id,
+            properties=properties,
+            request_options=request_options,
+        )
+        return _response.data
+
+    async def delete_public_custom_object_record_api(
+        self,
+        custom_object_id: str,
+        record_id: str,
+        *,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> DeletePublicCustomObjectRecordApiV2PublicCustomObjectsCustomObjectIdRecordsRecordIdDelete200Envelope:
+        """
+        Parameters
+        ----------
+        custom_object_id : str
+
+        record_id : str
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        DeletePublicCustomObjectRecordApiV2PublicCustomObjectsCustomObjectIdRecordsRecordIdDelete200Envelope
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sanka_sdk import AsyncSankaClient
+
+        client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.custom_objects.delete_public_custom_object_record_api(
+                custom_object_id="custom_object_id",
+                record_id="record_id",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.delete_public_custom_object_record_api(
+            custom_object_id, record_id, workspace_id=workspace_id, request_options=request_options
+        )
+        return _response.data
+
+    async def archive_public_custom_object_record_api(
+        self,
+        custom_object_id: str,
+        record_id: str,
+        *,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> ArchivePublicCustomObjectRecordApiV2PublicCustomObjectsCustomObjectIdRecordsRecordIdArchivePost200Envelope:
+        """
+        Parameters
+        ----------
+        custom_object_id : str
+
+        record_id : str
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        ArchivePublicCustomObjectRecordApiV2PublicCustomObjectsCustomObjectIdRecordsRecordIdArchivePost200Envelope
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sanka_sdk import AsyncSankaClient
+
+        client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.custom_objects.archive_public_custom_object_record_api(
+                custom_object_id="custom_object_id",
+                record_id="record_id",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.archive_public_custom_object_record_api(
+            custom_object_id, record_id, workspace_id=workspace_id, request_options=request_options
+        )
+        return _response.data
+
+    async def activate_public_custom_object_record_api(
+        self,
+        custom_object_id: str,
+        record_id: str,
+        *,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> ActivatePublicCustomObjectRecordApiV2PublicCustomObjectsCustomObjectIdRecordsRecordIdActivatePost200Envelope:
+        """
+        Parameters
+        ----------
+        custom_object_id : str
+
+        record_id : str
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        ActivatePublicCustomObjectRecordApiV2PublicCustomObjectsCustomObjectIdRecordsRecordIdActivatePost200Envelope
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sanka_sdk import AsyncSankaClient
+
+        client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.custom_objects.activate_public_custom_object_record_api(
+                custom_object_id="custom_object_id",
+                record_id="record_id",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.activate_public_custom_object_record_api(
+            custom_object_id, record_id, workspace_id=workspace_id, request_options=request_options
+        )
+        return _response.data
 
     async def create_public_custom_object_record_compatibility_api(
         self,

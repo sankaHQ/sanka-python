@@ -38,7 +38,10 @@ class RawExportsClient:
         self,
         *,
         object_type: typing.Optional[str] = None,
+        page: typing.Optional[int] = None,
         limit: typing.Optional[int] = None,
+        search_query: typing.Optional[str] = None,
+        q: typing.Optional[str] = None,
         workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[ListPublicExportJobsCompatApiV2PublicExportsGet200Envelope]:
@@ -47,7 +50,13 @@ class RawExportsClient:
         ----------
         object_type : typing.Optional[str]
 
+        page : typing.Optional[int]
+
         limit : typing.Optional[int]
+
+        search_query : typing.Optional[str]
+
+        q : typing.Optional[str]
 
         workspace_id : typing.Optional[str]
 
@@ -64,7 +73,10 @@ class RawExportsClient:
             method="GET",
             params={
                 "object_type": object_type,
+                "page": page,
                 "limit": limit,
+                "search_query": search_query,
+                "q": q,
                 "workspace_id": workspace_id,
             },
             request_options=request_options,
@@ -443,7 +455,10 @@ class AsyncRawExportsClient:
         self,
         *,
         object_type: typing.Optional[str] = None,
+        page: typing.Optional[int] = None,
         limit: typing.Optional[int] = None,
+        search_query: typing.Optional[str] = None,
+        q: typing.Optional[str] = None,
         workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[ListPublicExportJobsCompatApiV2PublicExportsGet200Envelope]:
@@ -452,7 +467,13 @@ class AsyncRawExportsClient:
         ----------
         object_type : typing.Optional[str]
 
+        page : typing.Optional[int]
+
         limit : typing.Optional[int]
+
+        search_query : typing.Optional[str]
+
+        q : typing.Optional[str]
 
         workspace_id : typing.Optional[str]
 
@@ -469,7 +490,10 @@ class AsyncRawExportsClient:
             method="GET",
             params={
                 "object_type": object_type,
+                "page": page,
                 "limit": limit,
+                "search_query": search_query,
+                "q": q,
                 "workspace_id": workspace_id,
             },
             request_options=request_options,

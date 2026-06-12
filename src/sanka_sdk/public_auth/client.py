@@ -204,6 +204,18 @@ class PublicAuthClient:
         duration_ms: typing.Optional[float] = OMIT,
         client_name: typing.Optional[str] = OMIT,
         client_version: typing.Optional[str] = OMIT,
+        source_ip_address: typing.Optional[str] = OMIT,
+        source_user_agent: typing.Optional[str] = OMIT,
+        source_browser: typing.Optional[str] = OMIT,
+        source_os: typing.Optional[str] = OMIT,
+        source_device_type: typing.Optional[str] = OMIT,
+        mcp_protocol_version: typing.Optional[str] = OMIT,
+        mcp_server_name: typing.Optional[str] = OMIT,
+        mcp_server_version: typing.Optional[str] = OMIT,
+        model_provider: typing.Optional[str] = OMIT,
+        model_name: typing.Optional[str] = OMIT,
+        result_summary: typing.Optional[str] = OMIT,
+        record_ids: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
         error: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> RecordPublicAuthMcpToolCallApiV2PublicAuthMcpSessionToolCallLogPost200Envelope:
@@ -229,6 +241,30 @@ class PublicAuthClient:
         client_name : typing.Optional[str]
 
         client_version : typing.Optional[str]
+
+        source_ip_address : typing.Optional[str]
+
+        source_user_agent : typing.Optional[str]
+
+        source_browser : typing.Optional[str]
+
+        source_os : typing.Optional[str]
+
+        source_device_type : typing.Optional[str]
+
+        mcp_protocol_version : typing.Optional[str]
+
+        mcp_server_name : typing.Optional[str]
+
+        mcp_server_version : typing.Optional[str]
+
+        model_provider : typing.Optional[str]
+
+        model_name : typing.Optional[str]
+
+        result_summary : typing.Optional[str]
+
+        record_ids : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
 
         error : typing.Optional[str]
 
@@ -263,6 +299,18 @@ class PublicAuthClient:
             duration_ms=duration_ms,
             client_name=client_name,
             client_version=client_version,
+            source_ip_address=source_ip_address,
+            source_user_agent=source_user_agent,
+            source_browser=source_browser,
+            source_os=source_os,
+            source_device_type=source_device_type,
+            mcp_protocol_version=mcp_protocol_version,
+            mcp_server_name=mcp_server_name,
+            mcp_server_version=mcp_server_version,
+            model_provider=model_provider,
+            model_name=model_name,
+            result_summary=result_summary,
+            record_ids=record_ids,
             error=error,
             request_options=request_options,
         )
@@ -508,6 +556,18 @@ class AsyncPublicAuthClient:
         duration_ms: typing.Optional[float] = OMIT,
         client_name: typing.Optional[str] = OMIT,
         client_version: typing.Optional[str] = OMIT,
+        source_ip_address: typing.Optional[str] = OMIT,
+        source_user_agent: typing.Optional[str] = OMIT,
+        source_browser: typing.Optional[str] = OMIT,
+        source_os: typing.Optional[str] = OMIT,
+        source_device_type: typing.Optional[str] = OMIT,
+        mcp_protocol_version: typing.Optional[str] = OMIT,
+        mcp_server_name: typing.Optional[str] = OMIT,
+        mcp_server_version: typing.Optional[str] = OMIT,
+        model_provider: typing.Optional[str] = OMIT,
+        model_name: typing.Optional[str] = OMIT,
+        result_summary: typing.Optional[str] = OMIT,
+        record_ids: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
         error: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> RecordPublicAuthMcpToolCallApiV2PublicAuthMcpSessionToolCallLogPost200Envelope:
@@ -533,6 +593,30 @@ class AsyncPublicAuthClient:
         client_name : typing.Optional[str]
 
         client_version : typing.Optional[str]
+
+        source_ip_address : typing.Optional[str]
+
+        source_user_agent : typing.Optional[str]
+
+        source_browser : typing.Optional[str]
+
+        source_os : typing.Optional[str]
+
+        source_device_type : typing.Optional[str]
+
+        mcp_protocol_version : typing.Optional[str]
+
+        mcp_server_name : typing.Optional[str]
+
+        mcp_server_version : typing.Optional[str]
+
+        model_provider : typing.Optional[str]
+
+        model_name : typing.Optional[str]
+
+        result_summary : typing.Optional[str]
+
+        record_ids : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
 
         error : typing.Optional[str]
 
@@ -575,6 +659,18 @@ class AsyncPublicAuthClient:
             duration_ms=duration_ms,
             client_name=client_name,
             client_version=client_version,
+            source_ip_address=source_ip_address,
+            source_user_agent=source_user_agent,
+            source_browser=source_browser,
+            source_os=source_os,
+            source_device_type=source_device_type,
+            mcp_protocol_version=mcp_protocol_version,
+            mcp_server_name=mcp_server_name,
+            mcp_server_version=mcp_server_version,
+            model_provider=model_provider,
+            model_name=model_name,
+            result_summary=result_summary,
+            record_ids=record_ids,
             error=error,
             request_options=request_options,
         )
