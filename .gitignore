@@ -6,3 +6,5 @@ build/
 dist/
 .tmp-fern/
 src/sanka_sdk/.fern/
+
+.lavish/
