@@ -11,6 +11,9 @@ from ..core.request_options import RequestOptions
 from ..core.unchecked_base_model import construct_type
 from ..errors.unauthorized_error import UnauthorizedError
 from ..errors.unprocessable_entity_error import UnprocessableEntityError
+from ..types.bulk_update_public_subscriptions_api_v_2_public_subscriptions_bulk_update_post_200_envelope import (
+    BulkUpdatePublicSubscriptionsApiV2PublicSubscriptionsBulkUpdatePost200Envelope,
+)
 from ..types.create_public_subscription_api_v_2_public_subscriptions_post_200_envelope import (
     CreatePublicSubscriptionApiV2PublicSubscriptionsPost200Envelope,
 )
@@ -47,7 +50,12 @@ class RawSubscriptionsClient:
         usage_status: typing.Optional[str] = None,
         page: typing.Optional[int] = None,
         limit: typing.Optional[int] = None,
+        cursor: typing.Optional[str] = None,
         sort: typing.Optional[str] = None,
+        created_at_from: typing.Optional[str] = None,
+        created_at_to: typing.Optional[str] = None,
+        updated_at_from: typing.Optional[str] = None,
+        updated_at_to: typing.Optional[str] = None,
         x_language: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
@@ -71,7 +79,17 @@ class RawSubscriptionsClient:
 
         limit : typing.Optional[int]
 
+        cursor : typing.Optional[str]
+
         sort : typing.Optional[str]
+
+        created_at_from : typing.Optional[str]
+
+        created_at_to : typing.Optional[str]
+
+        updated_at_from : typing.Optional[str]
+
+        updated_at_to : typing.Optional[str]
 
         x_language : typing.Optional[str]
 
@@ -83,7 +101,7 @@ class RawSubscriptionsClient:
         Returns
         -------
         HttpResponse[ListPublicSubscriptionsApiV2PublicSubscriptionsGet200Envelope]
-            Object record list response
+            Object record list or line-item-expanded list response
         """
         _response = self._client_wrapper.httpx_client.request(
             "v2/public/subscriptions",
@@ -97,7 +115,12 @@ class RawSubscriptionsClient:
                 "usage_status": usage_status,
                 "page": page,
                 "limit": limit,
+                "cursor": cursor,
                 "sort": sort,
+                "created_at_from": created_at_from,
+                "created_at_to": created_at_to,
+                "updated_at_from": updated_at_from,
+                "updated_at_to": updated_at_to,
             },
             headers={
                 "X-Language": str(x_language) if x_language is not None else None,
@@ -148,6 +171,8 @@ class RawSubscriptionsClient:
         workspace_id: typing.Optional[str] = None,
         view_id: typing.Optional[str] = OMIT,
         form_view_id: typing.Optional[str] = OMIT,
+        cost_line_items: typing.Optional[typing.Sequence[typing.Optional[typing.Any]]] = OMIT,
+        line_items: typing.Optional[typing.Sequence[typing.Optional[typing.Any]]] = OMIT,
         properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[CreatePublicSubscriptionApiV2PublicSubscriptionsPost200Envelope]:
@@ -159,6 +184,10 @@ class RawSubscriptionsClient:
         view_id : typing.Optional[str]
 
         form_view_id : typing.Optional[str]
+
+        cost_line_items : typing.Optional[typing.Sequence[typing.Optional[typing.Any]]]
+
+        line_items : typing.Optional[typing.Sequence[typing.Optional[typing.Any]]]
 
         properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
 
@@ -179,6 +208,8 @@ class RawSubscriptionsClient:
             json={
                 "view_id": view_id,
                 "form_view_id": form_view_id,
+                "cost_line_items": cost_line_items,
+                "line_items": line_items,
                 "properties": properties,
             },
             headers={
@@ -193,6 +224,108 @@ class RawSubscriptionsClient:
                     CreatePublicSubscriptionApiV2PublicSubscriptionsPost200Envelope,
                     construct_type(
                         type_=CreatePublicSubscriptionApiV2PublicSubscriptionsPost200Envelope,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    def bulk_update_public_subscriptions_api(
+        self,
+        *,
+        workspace_id: typing.Optional[str] = None,
+        accept_language: typing.Optional[str] = None,
+        ids: typing.Optional[typing.Sequence[str]] = OMIT,
+        flag_all: typing.Optional[bool] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
+        search: typing.Optional[str] = OMIT,
+        status: typing.Optional[str] = OMIT,
+        usage_status: typing.Optional[str] = OMIT,
+        view_id: typing.Optional[str] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> HttpResponse[BulkUpdatePublicSubscriptionsApiV2PublicSubscriptionsBulkUpdatePost200Envelope]:
+        """
+        Parameters
+        ----------
+        workspace_id : typing.Optional[str]
+
+        accept_language : typing.Optional[str]
+
+        ids : typing.Optional[typing.Sequence[str]]
+
+        flag_all : typing.Optional[bool]
+
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
+
+        search : typing.Optional[str]
+
+        status : typing.Optional[str]
+
+        usage_status : typing.Optional[str]
+
+        view_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[BulkUpdatePublicSubscriptionsApiV2PublicSubscriptionsBulkUpdatePost200Envelope]
+            Successful Response
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            "v2/public/subscriptions/bulk-update",
+            method="POST",
+            params={
+                "workspace_id": workspace_id,
+            },
+            json={
+                "ids": ids,
+                "flag_all": flag_all,
+                "properties": properties,
+                "search": search,
+                "status": status,
+                "usage_status": usage_status,
+                "view_id": view_id,
+            },
+            headers={
+                "content-type": "application/json",
+                "Accept-Language": str(accept_language) if accept_language is not None else None,
+            },
+            request_options=request_options,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    BulkUpdatePublicSubscriptionsApiV2PublicSubscriptionsBulkUpdatePost200Envelope,
+                    construct_type(
+                        type_=BulkUpdatePublicSubscriptionsApiV2PublicSubscriptionsBulkUpdatePost200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
@@ -311,6 +444,10 @@ class RawSubscriptionsClient:
         workspace_id: typing.Optional[str] = None,
         view_id: typing.Optional[str] = OMIT,
         form_view_id: typing.Optional[str] = OMIT,
+        associations: typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]] = OMIT,
+        cost_line_items: typing.Optional[typing.Sequence[typing.Optional[typing.Any]]] = OMIT,
+        files: typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]] = OMIT,
+        line_items: typing.Optional[typing.Sequence[typing.Optional[typing.Any]]] = OMIT,
         properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[UpdatePublicSubscriptionApiV2PublicSubscriptionsSubscriptionIdPut200Envelope]:
@@ -326,6 +463,14 @@ class RawSubscriptionsClient:
         view_id : typing.Optional[str]
 
         form_view_id : typing.Optional[str]
+
+        associations : typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]]
+
+        cost_line_items : typing.Optional[typing.Sequence[typing.Optional[typing.Any]]]
+
+        files : typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]]
+
+        line_items : typing.Optional[typing.Sequence[typing.Optional[typing.Any]]]
 
         properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
 
@@ -347,6 +492,10 @@ class RawSubscriptionsClient:
             json={
                 "view_id": view_id,
                 "form_view_id": form_view_id,
+                "associations": associations,
+                "cost_line_items": cost_line_items,
+                "files": files,
+                "line_items": line_items,
                 "properties": properties,
             },
             headers={
@@ -479,7 +628,12 @@ class AsyncRawSubscriptionsClient:
         usage_status: typing.Optional[str] = None,
         page: typing.Optional[int] = None,
         limit: typing.Optional[int] = None,
+        cursor: typing.Optional[str] = None,
         sort: typing.Optional[str] = None,
+        created_at_from: typing.Optional[str] = None,
+        created_at_to: typing.Optional[str] = None,
+        updated_at_from: typing.Optional[str] = None,
+        updated_at_to: typing.Optional[str] = None,
         x_language: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
@@ -503,7 +657,17 @@ class AsyncRawSubscriptionsClient:
 
         limit : typing.Optional[int]
 
+        cursor : typing.Optional[str]
+
         sort : typing.Optional[str]
+
+        created_at_from : typing.Optional[str]
+
+        created_at_to : typing.Optional[str]
+
+        updated_at_from : typing.Optional[str]
+
+        updated_at_to : typing.Optional[str]
 
         x_language : typing.Optional[str]
 
@@ -515,7 +679,7 @@ class AsyncRawSubscriptionsClient:
         Returns
         -------
         AsyncHttpResponse[ListPublicSubscriptionsApiV2PublicSubscriptionsGet200Envelope]
-            Object record list response
+            Object record list or line-item-expanded list response
         """
         _response = await self._client_wrapper.httpx_client.request(
             "v2/public/subscriptions",
@@ -529,7 +693,12 @@ class AsyncRawSubscriptionsClient:
                 "usage_status": usage_status,
                 "page": page,
                 "limit": limit,
+                "cursor": cursor,
                 "sort": sort,
+                "created_at_from": created_at_from,
+                "created_at_to": created_at_to,
+                "updated_at_from": updated_at_from,
+                "updated_at_to": updated_at_to,
             },
             headers={
                 "X-Language": str(x_language) if x_language is not None else None,
@@ -580,6 +749,8 @@ class AsyncRawSubscriptionsClient:
         workspace_id: typing.Optional[str] = None,
         view_id: typing.Optional[str] = OMIT,
         form_view_id: typing.Optional[str] = OMIT,
+        cost_line_items: typing.Optional[typing.Sequence[typing.Optional[typing.Any]]] = OMIT,
+        line_items: typing.Optional[typing.Sequence[typing.Optional[typing.Any]]] = OMIT,
         properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[CreatePublicSubscriptionApiV2PublicSubscriptionsPost200Envelope]:
@@ -591,6 +762,10 @@ class AsyncRawSubscriptionsClient:
         view_id : typing.Optional[str]
 
         form_view_id : typing.Optional[str]
+
+        cost_line_items : typing.Optional[typing.Sequence[typing.Optional[typing.Any]]]
+
+        line_items : typing.Optional[typing.Sequence[typing.Optional[typing.Any]]]
 
         properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
 
@@ -611,6 +786,8 @@ class AsyncRawSubscriptionsClient:
             json={
                 "view_id": view_id,
                 "form_view_id": form_view_id,
+                "cost_line_items": cost_line_items,
+                "line_items": line_items,
                 "properties": properties,
             },
             headers={
@@ -625,6 +802,108 @@ class AsyncRawSubscriptionsClient:
                     CreatePublicSubscriptionApiV2PublicSubscriptionsPost200Envelope,
                     construct_type(
                         type_=CreatePublicSubscriptionApiV2PublicSubscriptionsPost200Envelope,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    async def bulk_update_public_subscriptions_api(
+        self,
+        *,
+        workspace_id: typing.Optional[str] = None,
+        accept_language: typing.Optional[str] = None,
+        ids: typing.Optional[typing.Sequence[str]] = OMIT,
+        flag_all: typing.Optional[bool] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
+        search: typing.Optional[str] = OMIT,
+        status: typing.Optional[str] = OMIT,
+        usage_status: typing.Optional[str] = OMIT,
+        view_id: typing.Optional[str] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> AsyncHttpResponse[BulkUpdatePublicSubscriptionsApiV2PublicSubscriptionsBulkUpdatePost200Envelope]:
+        """
+        Parameters
+        ----------
+        workspace_id : typing.Optional[str]
+
+        accept_language : typing.Optional[str]
+
+        ids : typing.Optional[typing.Sequence[str]]
+
+        flag_all : typing.Optional[bool]
+
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
+
+        search : typing.Optional[str]
+
+        status : typing.Optional[str]
+
+        usage_status : typing.Optional[str]
+
+        view_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[BulkUpdatePublicSubscriptionsApiV2PublicSubscriptionsBulkUpdatePost200Envelope]
+            Successful Response
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            "v2/public/subscriptions/bulk-update",
+            method="POST",
+            params={
+                "workspace_id": workspace_id,
+            },
+            json={
+                "ids": ids,
+                "flag_all": flag_all,
+                "properties": properties,
+                "search": search,
+                "status": status,
+                "usage_status": usage_status,
+                "view_id": view_id,
+            },
+            headers={
+                "content-type": "application/json",
+                "Accept-Language": str(accept_language) if accept_language is not None else None,
+            },
+            request_options=request_options,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    BulkUpdatePublicSubscriptionsApiV2PublicSubscriptionsBulkUpdatePost200Envelope,
+                    construct_type(
+                        type_=BulkUpdatePublicSubscriptionsApiV2PublicSubscriptionsBulkUpdatePost200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
@@ -743,6 +1022,10 @@ class AsyncRawSubscriptionsClient:
         workspace_id: typing.Optional[str] = None,
         view_id: typing.Optional[str] = OMIT,
         form_view_id: typing.Optional[str] = OMIT,
+        associations: typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]] = OMIT,
+        cost_line_items: typing.Optional[typing.Sequence[typing.Optional[typing.Any]]] = OMIT,
+        files: typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]] = OMIT,
+        line_items: typing.Optional[typing.Sequence[typing.Optional[typing.Any]]] = OMIT,
         properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[UpdatePublicSubscriptionApiV2PublicSubscriptionsSubscriptionIdPut200Envelope]:
@@ -758,6 +1041,14 @@ class AsyncRawSubscriptionsClient:
         view_id : typing.Optional[str]
 
         form_view_id : typing.Optional[str]
+
+        associations : typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]]
+
+        cost_line_items : typing.Optional[typing.Sequence[typing.Optional[typing.Any]]]
+
+        files : typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]]
+
+        line_items : typing.Optional[typing.Sequence[typing.Optional[typing.Any]]]
 
         properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
 
@@ -779,6 +1070,10 @@ class AsyncRawSubscriptionsClient:
             json={
                 "view_id": view_id,
                 "form_view_id": form_view_id,
+                "associations": associations,
+                "cost_line_items": cost_line_items,
+                "files": files,
+                "line_items": line_items,
                 "properties": properties,
             },
             headers={

@@ -16,6 +16,27 @@ from ..types.error_envelope import ErrorEnvelope
 from ..types.get_public_workflow_run_api_v_2_public_workflow_runs_run_id_get_200_envelope import (
     GetPublicWorkflowRunApiV2PublicWorkflowRunsRunIdGet200Envelope,
 )
+from ..types.get_public_workflow_run_nested_compat_api_v_2_public_workflows_runs_run_id_get_200_envelope import (
+    GetPublicWorkflowRunNestedCompatApiV2PublicWorkflowsRunsRunIdGet200Envelope,
+)
+from ..types.preview_public_freee_invoice_export_api_v_2_public_invoices_exports_freee_preview_post_200_envelope import (
+    PreviewPublicFreeeInvoiceExportApiV2PublicInvoicesExportsFreeePreviewPost200Envelope,
+)
+from ..types.preview_public_hubspot_commission_incentive_api_v_2_public_incentives_commission_hubspot_preview_post_200_envelope import (
+    PreviewPublicHubspotCommissionIncentiveApiV2PublicIncentivesCommissionHubspotPreviewPost200Envelope,
+)
+from ..types.preview_public_hubspot_estimate_draft_api_v_2_public_estimates_drafts_hubspot_preview_post_200_envelope import (
+    PreviewPublicHubspotEstimateDraftApiV2PublicEstimatesDraftsHubspotPreviewPost200Envelope,
+)
+from ..types.preview_public_hubspot_invoice_draft_api_v_2_public_invoices_drafts_hubspot_preview_post_200_envelope import (
+    PreviewPublicHubspotInvoiceDraftApiV2PublicInvoicesDraftsHubspotPreviewPost200Envelope,
+)
+from ..types.preview_public_hubspot_order_handoff_api_v_2_public_orders_handoffs_hubspot_preview_post_200_envelope import (
+    PreviewPublicHubspotOrderHandoffApiV2PublicOrdersHandoffsHubspotPreviewPost200Envelope,
+)
+from ..types.preview_public_moneyforward_invoice_export_api_v_2_public_invoices_exports_moneyforward_preview_post_200_envelope import (
+    PreviewPublicMoneyforwardInvoiceExportApiV2PublicInvoicesExportsMoneyforwardPreviewPost200Envelope,
+)
 from ..types.preview_public_salesforce_quote_readiness_api_v_2_public_cpq_quote_readiness_salesforce_preview_post_200_envelope import (
     PreviewPublicSalesforceQuoteReadinessApiV2PublicCpqQuoteReadinessSalesforcePreviewPost200Envelope,
 )
@@ -25,8 +46,32 @@ from ..types.preview_public_workflow_compat_api_v_2_public_workflow_runs_preview
 from ..types.resolve_public_workflow_record_api_v_2_public_workflow_runs_resolve_record_post_200_envelope import (
     ResolvePublicWorkflowRecordApiV2PublicWorkflowRunsResolveRecordPost200Envelope,
 )
+from ..types.start_public_freee_invoice_export_api_v_2_public_invoices_exports_freee_post_200_envelope import (
+    StartPublicFreeeInvoiceExportApiV2PublicInvoicesExportsFreeePost200Envelope,
+)
+from ..types.start_public_hubspot_estimate_draft_api_v_2_public_estimates_drafts_hubspot_post_200_envelope import (
+    StartPublicHubspotEstimateDraftApiV2PublicEstimatesDraftsHubspotPost200Envelope,
+)
+from ..types.start_public_hubspot_invoice_draft_api_v_2_public_invoices_drafts_hubspot_post_200_envelope import (
+    StartPublicHubspotInvoiceDraftApiV2PublicInvoicesDraftsHubspotPost200Envelope,
+)
+from ..types.start_public_hubspot_order_handoff_api_v_2_public_orders_handoffs_hubspot_post_200_envelope import (
+    StartPublicHubspotOrderHandoffApiV2PublicOrdersHandoffsHubspotPost200Envelope,
+)
+from ..types.start_public_hubspot_revenue_control_report_api_v_2_public_reports_revenue_control_hubspot_post_200_envelope import (
+    StartPublicHubspotRevenueControlReportApiV2PublicReportsRevenueControlHubspotPost200Envelope,
+)
+from ..types.start_public_moneyforward_invoice_export_api_v_2_public_invoices_exports_moneyforward_post_200_envelope import (
+    StartPublicMoneyforwardInvoiceExportApiV2PublicInvoicesExportsMoneyforwardPost200Envelope,
+)
 from ..types.start_public_workflow_compat_api_v_2_public_workflow_runs_start_post_200_envelope import (
     StartPublicWorkflowCompatApiV2PublicWorkflowRunsStartPost200Envelope,
+)
+from ..types.summarize_public_salesforce_quote_readiness_api_v_2_public_cpq_quote_readiness_salesforce_summary_post_200_envelope import (
+    SummarizePublicSalesforceQuoteReadinessApiV2PublicCpqQuoteReadinessSalesforceSummaryPost200Envelope,
+)
+from ..types.writeback_public_salesforce_quote_readiness_api_v_2_public_cpq_quote_readiness_salesforce_writeback_post_200_envelope import (
+    WritebackPublicSalesforceQuoteReadinessApiV2PublicCpqQuoteReadinessSalesforceWritebackPost200Envelope,
 )
 
 # this is used as the default value for optional parameters
@@ -73,6 +118,84 @@ class RawWorkflowRunsClient:
                     GetPublicWorkflowRunApiV2PublicWorkflowRunsRunIdGet200Envelope,
                     construct_type(
                         type_=GetPublicWorkflowRunApiV2PublicWorkflowRunsRunIdGet200Envelope,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    def get_public_workflow_run_nested_compat_api(
+        self,
+        run_id: str,
+        *,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> HttpResponse[GetPublicWorkflowRunNestedCompatApiV2PublicWorkflowsRunsRunIdGet200Envelope]:
+        """
+        Parameters
+        ----------
+        run_id : str
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[GetPublicWorkflowRunNestedCompatApiV2PublicWorkflowsRunsRunIdGet200Envelope]
+            Successful Response
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            f"v2/public/workflows/runs/{jsonable_encoder(run_id)}",
+            method="GET",
+            params={
+                "workspace_id": workspace_id,
+            },
+            request_options=request_options,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    GetPublicWorkflowRunNestedCompatApiV2PublicWorkflowsRunsRunIdGet200Envelope,
+                    construct_type(
+                        type_=GetPublicWorkflowRunNestedCompatApiV2PublicWorkflowsRunsRunIdGet200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
@@ -317,6 +440,442 @@ class RawWorkflowRunsClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
+    def preview_public_hubspot_invoice_draft_api(
+        self,
+        *,
+        request: typing.Dict[str, typing.Optional[typing.Any]],
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> HttpResponse[PreviewPublicHubspotInvoiceDraftApiV2PublicInvoicesDraftsHubspotPreviewPost200Envelope]:
+        """
+        Parameters
+        ----------
+        request : typing.Dict[str, typing.Optional[typing.Any]]
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[PreviewPublicHubspotInvoiceDraftApiV2PublicInvoicesDraftsHubspotPreviewPost200Envelope]
+            Successful Response
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            "v2/public/invoices/drafts/hubspot/preview",
+            method="POST",
+            params={
+                "workspace_id": workspace_id,
+            },
+            json=request,
+            headers={
+                "content-type": "application/json",
+            },
+            request_options=request_options,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    PreviewPublicHubspotInvoiceDraftApiV2PublicInvoicesDraftsHubspotPreviewPost200Envelope,
+                    construct_type(
+                        type_=PreviewPublicHubspotInvoiceDraftApiV2PublicInvoicesDraftsHubspotPreviewPost200Envelope,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    def preview_public_freee_invoice_export_api(
+        self,
+        *,
+        request: typing.Dict[str, typing.Optional[typing.Any]],
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> HttpResponse[PreviewPublicFreeeInvoiceExportApiV2PublicInvoicesExportsFreeePreviewPost200Envelope]:
+        """
+        Parameters
+        ----------
+        request : typing.Dict[str, typing.Optional[typing.Any]]
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[PreviewPublicFreeeInvoiceExportApiV2PublicInvoicesExportsFreeePreviewPost200Envelope]
+            Successful Response
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            "v2/public/invoices/exports/freee/preview",
+            method="POST",
+            params={
+                "workspace_id": workspace_id,
+            },
+            json=request,
+            headers={
+                "content-type": "application/json",
+            },
+            request_options=request_options,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    PreviewPublicFreeeInvoiceExportApiV2PublicInvoicesExportsFreeePreviewPost200Envelope,
+                    construct_type(
+                        type_=PreviewPublicFreeeInvoiceExportApiV2PublicInvoicesExportsFreeePreviewPost200Envelope,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    def preview_public_moneyforward_invoice_export_api(
+        self,
+        *,
+        request: typing.Dict[str, typing.Optional[typing.Any]],
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> HttpResponse[
+        PreviewPublicMoneyforwardInvoiceExportApiV2PublicInvoicesExportsMoneyforwardPreviewPost200Envelope
+    ]:
+        """
+        Parameters
+        ----------
+        request : typing.Dict[str, typing.Optional[typing.Any]]
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[PreviewPublicMoneyforwardInvoiceExportApiV2PublicInvoicesExportsMoneyforwardPreviewPost200Envelope]
+            Successful Response
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            "v2/public/invoices/exports/moneyforward/preview",
+            method="POST",
+            params={
+                "workspace_id": workspace_id,
+            },
+            json=request,
+            headers={
+                "content-type": "application/json",
+            },
+            request_options=request_options,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    PreviewPublicMoneyforwardInvoiceExportApiV2PublicInvoicesExportsMoneyforwardPreviewPost200Envelope,
+                    construct_type(
+                        type_=PreviewPublicMoneyforwardInvoiceExportApiV2PublicInvoicesExportsMoneyforwardPreviewPost200Envelope,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    def preview_public_hubspot_estimate_draft_api(
+        self,
+        *,
+        request: typing.Dict[str, typing.Optional[typing.Any]],
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> HttpResponse[PreviewPublicHubspotEstimateDraftApiV2PublicEstimatesDraftsHubspotPreviewPost200Envelope]:
+        """
+        Parameters
+        ----------
+        request : typing.Dict[str, typing.Optional[typing.Any]]
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[PreviewPublicHubspotEstimateDraftApiV2PublicEstimatesDraftsHubspotPreviewPost200Envelope]
+            Successful Response
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            "v2/public/estimates/drafts/hubspot/preview",
+            method="POST",
+            params={
+                "workspace_id": workspace_id,
+            },
+            json=request,
+            headers={
+                "content-type": "application/json",
+            },
+            request_options=request_options,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    PreviewPublicHubspotEstimateDraftApiV2PublicEstimatesDraftsHubspotPreviewPost200Envelope,
+                    construct_type(
+                        type_=PreviewPublicHubspotEstimateDraftApiV2PublicEstimatesDraftsHubspotPreviewPost200Envelope,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    def preview_public_hubspot_order_handoff_api(
+        self,
+        *,
+        request: typing.Dict[str, typing.Optional[typing.Any]],
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> HttpResponse[PreviewPublicHubspotOrderHandoffApiV2PublicOrdersHandoffsHubspotPreviewPost200Envelope]:
+        """
+        Parameters
+        ----------
+        request : typing.Dict[str, typing.Optional[typing.Any]]
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[PreviewPublicHubspotOrderHandoffApiV2PublicOrdersHandoffsHubspotPreviewPost200Envelope]
+            Successful Response
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            "v2/public/orders/handoffs/hubspot/preview",
+            method="POST",
+            params={
+                "workspace_id": workspace_id,
+            },
+            json=request,
+            headers={
+                "content-type": "application/json",
+            },
+            request_options=request_options,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    PreviewPublicHubspotOrderHandoffApiV2PublicOrdersHandoffsHubspotPreviewPost200Envelope,
+                    construct_type(
+                        type_=PreviewPublicHubspotOrderHandoffApiV2PublicOrdersHandoffsHubspotPreviewPost200Envelope,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    def preview_public_hubspot_commission_incentive_api(
+        self,
+        *,
+        request: typing.Dict[str, typing.Optional[typing.Any]],
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> HttpResponse[
+        PreviewPublicHubspotCommissionIncentiveApiV2PublicIncentivesCommissionHubspotPreviewPost200Envelope
+    ]:
+        """
+        Parameters
+        ----------
+        request : typing.Dict[str, typing.Optional[typing.Any]]
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[PreviewPublicHubspotCommissionIncentiveApiV2PublicIncentivesCommissionHubspotPreviewPost200Envelope]
+            Successful Response
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            "v2/public/incentives/commission/hubspot/preview",
+            method="POST",
+            params={
+                "workspace_id": workspace_id,
+            },
+            json=request,
+            headers={
+                "content-type": "application/json",
+            },
+            request_options=request_options,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    PreviewPublicHubspotCommissionIncentiveApiV2PublicIncentivesCommissionHubspotPreviewPost200Envelope,
+                    construct_type(
+                        type_=PreviewPublicHubspotCommissionIncentiveApiV2PublicIncentivesCommissionHubspotPreviewPost200Envelope,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
     def preview_public_salesforce_quote_readiness_api(
         self,
         *,
@@ -360,6 +919,80 @@ class RawWorkflowRunsClient:
                     PreviewPublicSalesforceQuoteReadinessApiV2PublicCpqQuoteReadinessSalesforcePreviewPost200Envelope,
                     construct_type(
                         type_=PreviewPublicSalesforceQuoteReadinessApiV2PublicCpqQuoteReadinessSalesforcePreviewPost200Envelope,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    def summarize_public_salesforce_quote_readiness_api(
+        self,
+        *,
+        request: typing.Dict[str, typing.Optional[typing.Any]],
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> HttpResponse[
+        SummarizePublicSalesforceQuoteReadinessApiV2PublicCpqQuoteReadinessSalesforceSummaryPost200Envelope
+    ]:
+        """
+        Parameters
+        ----------
+        request : typing.Dict[str, typing.Optional[typing.Any]]
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[SummarizePublicSalesforceQuoteReadinessApiV2PublicCpqQuoteReadinessSalesforceSummaryPost200Envelope]
+            Successful Response
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            "v2/public/cpq/quote-readiness/salesforce/summary",
+            method="POST",
+            params={
+                "workspace_id": workspace_id,
+            },
+            json=request,
+            headers={
+                "content-type": "application/json",
+            },
+            request_options=request_options,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    SummarizePublicSalesforceQuoteReadinessApiV2PublicCpqQuoteReadinessSalesforceSummaryPost200Envelope,
+                    construct_type(
+                        type_=SummarizePublicSalesforceQuoteReadinessApiV2PublicCpqQuoteReadinessSalesforceSummaryPost200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
@@ -496,6 +1129,523 @@ class RawWorkflowRunsClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
+    def start_public_hubspot_invoice_draft_api(
+        self,
+        *,
+        request: typing.Dict[str, typing.Optional[typing.Any]],
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> HttpResponse[StartPublicHubspotInvoiceDraftApiV2PublicInvoicesDraftsHubspotPost200Envelope]:
+        """
+        Parameters
+        ----------
+        request : typing.Dict[str, typing.Optional[typing.Any]]
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[StartPublicHubspotInvoiceDraftApiV2PublicInvoicesDraftsHubspotPost200Envelope]
+            Successful Response
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            "v2/public/invoices/drafts/hubspot",
+            method="POST",
+            params={
+                "workspace_id": workspace_id,
+            },
+            json=request,
+            headers={
+                "content-type": "application/json",
+            },
+            request_options=request_options,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    StartPublicHubspotInvoiceDraftApiV2PublicInvoicesDraftsHubspotPost200Envelope,
+                    construct_type(
+                        type_=StartPublicHubspotInvoiceDraftApiV2PublicInvoicesDraftsHubspotPost200Envelope,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    def start_public_freee_invoice_export_api(
+        self,
+        *,
+        request: typing.Dict[str, typing.Optional[typing.Any]],
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> HttpResponse[StartPublicFreeeInvoiceExportApiV2PublicInvoicesExportsFreeePost200Envelope]:
+        """
+        Parameters
+        ----------
+        request : typing.Dict[str, typing.Optional[typing.Any]]
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[StartPublicFreeeInvoiceExportApiV2PublicInvoicesExportsFreeePost200Envelope]
+            Successful Response
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            "v2/public/invoices/exports/freee",
+            method="POST",
+            params={
+                "workspace_id": workspace_id,
+            },
+            json=request,
+            headers={
+                "content-type": "application/json",
+            },
+            request_options=request_options,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    StartPublicFreeeInvoiceExportApiV2PublicInvoicesExportsFreeePost200Envelope,
+                    construct_type(
+                        type_=StartPublicFreeeInvoiceExportApiV2PublicInvoicesExportsFreeePost200Envelope,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    def start_public_moneyforward_invoice_export_api(
+        self,
+        *,
+        request: typing.Dict[str, typing.Optional[typing.Any]],
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> HttpResponse[StartPublicMoneyforwardInvoiceExportApiV2PublicInvoicesExportsMoneyforwardPost200Envelope]:
+        """
+        Parameters
+        ----------
+        request : typing.Dict[str, typing.Optional[typing.Any]]
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[StartPublicMoneyforwardInvoiceExportApiV2PublicInvoicesExportsMoneyforwardPost200Envelope]
+            Successful Response
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            "v2/public/invoices/exports/moneyforward",
+            method="POST",
+            params={
+                "workspace_id": workspace_id,
+            },
+            json=request,
+            headers={
+                "content-type": "application/json",
+            },
+            request_options=request_options,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    StartPublicMoneyforwardInvoiceExportApiV2PublicInvoicesExportsMoneyforwardPost200Envelope,
+                    construct_type(
+                        type_=StartPublicMoneyforwardInvoiceExportApiV2PublicInvoicesExportsMoneyforwardPost200Envelope,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    def start_public_hubspot_estimate_draft_api(
+        self,
+        *,
+        request: typing.Dict[str, typing.Optional[typing.Any]],
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> HttpResponse[StartPublicHubspotEstimateDraftApiV2PublicEstimatesDraftsHubspotPost200Envelope]:
+        """
+        Parameters
+        ----------
+        request : typing.Dict[str, typing.Optional[typing.Any]]
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[StartPublicHubspotEstimateDraftApiV2PublicEstimatesDraftsHubspotPost200Envelope]
+            Successful Response
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            "v2/public/estimates/drafts/hubspot",
+            method="POST",
+            params={
+                "workspace_id": workspace_id,
+            },
+            json=request,
+            headers={
+                "content-type": "application/json",
+            },
+            request_options=request_options,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    StartPublicHubspotEstimateDraftApiV2PublicEstimatesDraftsHubspotPost200Envelope,
+                    construct_type(
+                        type_=StartPublicHubspotEstimateDraftApiV2PublicEstimatesDraftsHubspotPost200Envelope,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    def start_public_hubspot_order_handoff_api(
+        self,
+        *,
+        request: typing.Dict[str, typing.Optional[typing.Any]],
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> HttpResponse[StartPublicHubspotOrderHandoffApiV2PublicOrdersHandoffsHubspotPost200Envelope]:
+        """
+        Parameters
+        ----------
+        request : typing.Dict[str, typing.Optional[typing.Any]]
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[StartPublicHubspotOrderHandoffApiV2PublicOrdersHandoffsHubspotPost200Envelope]
+            Successful Response
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            "v2/public/orders/handoffs/hubspot",
+            method="POST",
+            params={
+                "workspace_id": workspace_id,
+            },
+            json=request,
+            headers={
+                "content-type": "application/json",
+            },
+            request_options=request_options,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    StartPublicHubspotOrderHandoffApiV2PublicOrdersHandoffsHubspotPost200Envelope,
+                    construct_type(
+                        type_=StartPublicHubspotOrderHandoffApiV2PublicOrdersHandoffsHubspotPost200Envelope,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    def start_public_hubspot_revenue_control_report_api(
+        self,
+        *,
+        request: typing.Dict[str, typing.Optional[typing.Any]],
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> HttpResponse[StartPublicHubspotRevenueControlReportApiV2PublicReportsRevenueControlHubspotPost200Envelope]:
+        """
+        Parameters
+        ----------
+        request : typing.Dict[str, typing.Optional[typing.Any]]
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[StartPublicHubspotRevenueControlReportApiV2PublicReportsRevenueControlHubspotPost200Envelope]
+            Successful Response
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            "v2/public/reports/revenue-control/hubspot",
+            method="POST",
+            params={
+                "workspace_id": workspace_id,
+            },
+            json=request,
+            headers={
+                "content-type": "application/json",
+            },
+            request_options=request_options,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    StartPublicHubspotRevenueControlReportApiV2PublicReportsRevenueControlHubspotPost200Envelope,
+                    construct_type(
+                        type_=StartPublicHubspotRevenueControlReportApiV2PublicReportsRevenueControlHubspotPost200Envelope,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    def writeback_public_salesforce_quote_readiness_api(
+        self,
+        *,
+        request: typing.Dict[str, typing.Optional[typing.Any]],
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> HttpResponse[
+        WritebackPublicSalesforceQuoteReadinessApiV2PublicCpqQuoteReadinessSalesforceWritebackPost200Envelope
+    ]:
+        """
+        Parameters
+        ----------
+        request : typing.Dict[str, typing.Optional[typing.Any]]
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[WritebackPublicSalesforceQuoteReadinessApiV2PublicCpqQuoteReadinessSalesforceWritebackPost200Envelope]
+            Successful Response
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            "v2/public/cpq/quote-readiness/salesforce/writeback",
+            method="POST",
+            params={
+                "workspace_id": workspace_id,
+            },
+            json=request,
+            headers={
+                "content-type": "application/json",
+            },
+            request_options=request_options,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    WritebackPublicSalesforceQuoteReadinessApiV2PublicCpqQuoteReadinessSalesforceWritebackPost200Envelope,
+                    construct_type(
+                        type_=WritebackPublicSalesforceQuoteReadinessApiV2PublicCpqQuoteReadinessSalesforceWritebackPost200Envelope,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
 
 class AsyncRawWorkflowRunsClient:
     def __init__(self, *, client_wrapper: AsyncClientWrapper):
@@ -537,6 +1687,84 @@ class AsyncRawWorkflowRunsClient:
                     GetPublicWorkflowRunApiV2PublicWorkflowRunsRunIdGet200Envelope,
                     construct_type(
                         type_=GetPublicWorkflowRunApiV2PublicWorkflowRunsRunIdGet200Envelope,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    async def get_public_workflow_run_nested_compat_api(
+        self,
+        run_id: str,
+        *,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> AsyncHttpResponse[GetPublicWorkflowRunNestedCompatApiV2PublicWorkflowsRunsRunIdGet200Envelope]:
+        """
+        Parameters
+        ----------
+        run_id : str
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[GetPublicWorkflowRunNestedCompatApiV2PublicWorkflowsRunsRunIdGet200Envelope]
+            Successful Response
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            f"v2/public/workflows/runs/{jsonable_encoder(run_id)}",
+            method="GET",
+            params={
+                "workspace_id": workspace_id,
+            },
+            request_options=request_options,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    GetPublicWorkflowRunNestedCompatApiV2PublicWorkflowsRunsRunIdGet200Envelope,
+                    construct_type(
+                        type_=GetPublicWorkflowRunNestedCompatApiV2PublicWorkflowsRunsRunIdGet200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
@@ -781,6 +2009,442 @@ class AsyncRawWorkflowRunsClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
+    async def preview_public_hubspot_invoice_draft_api(
+        self,
+        *,
+        request: typing.Dict[str, typing.Optional[typing.Any]],
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> AsyncHttpResponse[PreviewPublicHubspotInvoiceDraftApiV2PublicInvoicesDraftsHubspotPreviewPost200Envelope]:
+        """
+        Parameters
+        ----------
+        request : typing.Dict[str, typing.Optional[typing.Any]]
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[PreviewPublicHubspotInvoiceDraftApiV2PublicInvoicesDraftsHubspotPreviewPost200Envelope]
+            Successful Response
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            "v2/public/invoices/drafts/hubspot/preview",
+            method="POST",
+            params={
+                "workspace_id": workspace_id,
+            },
+            json=request,
+            headers={
+                "content-type": "application/json",
+            },
+            request_options=request_options,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    PreviewPublicHubspotInvoiceDraftApiV2PublicInvoicesDraftsHubspotPreviewPost200Envelope,
+                    construct_type(
+                        type_=PreviewPublicHubspotInvoiceDraftApiV2PublicInvoicesDraftsHubspotPreviewPost200Envelope,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    async def preview_public_freee_invoice_export_api(
+        self,
+        *,
+        request: typing.Dict[str, typing.Optional[typing.Any]],
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> AsyncHttpResponse[PreviewPublicFreeeInvoiceExportApiV2PublicInvoicesExportsFreeePreviewPost200Envelope]:
+        """
+        Parameters
+        ----------
+        request : typing.Dict[str, typing.Optional[typing.Any]]
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[PreviewPublicFreeeInvoiceExportApiV2PublicInvoicesExportsFreeePreviewPost200Envelope]
+            Successful Response
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            "v2/public/invoices/exports/freee/preview",
+            method="POST",
+            params={
+                "workspace_id": workspace_id,
+            },
+            json=request,
+            headers={
+                "content-type": "application/json",
+            },
+            request_options=request_options,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    PreviewPublicFreeeInvoiceExportApiV2PublicInvoicesExportsFreeePreviewPost200Envelope,
+                    construct_type(
+                        type_=PreviewPublicFreeeInvoiceExportApiV2PublicInvoicesExportsFreeePreviewPost200Envelope,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    async def preview_public_moneyforward_invoice_export_api(
+        self,
+        *,
+        request: typing.Dict[str, typing.Optional[typing.Any]],
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> AsyncHttpResponse[
+        PreviewPublicMoneyforwardInvoiceExportApiV2PublicInvoicesExportsMoneyforwardPreviewPost200Envelope
+    ]:
+        """
+        Parameters
+        ----------
+        request : typing.Dict[str, typing.Optional[typing.Any]]
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[PreviewPublicMoneyforwardInvoiceExportApiV2PublicInvoicesExportsMoneyforwardPreviewPost200Envelope]
+            Successful Response
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            "v2/public/invoices/exports/moneyforward/preview",
+            method="POST",
+            params={
+                "workspace_id": workspace_id,
+            },
+            json=request,
+            headers={
+                "content-type": "application/json",
+            },
+            request_options=request_options,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    PreviewPublicMoneyforwardInvoiceExportApiV2PublicInvoicesExportsMoneyforwardPreviewPost200Envelope,
+                    construct_type(
+                        type_=PreviewPublicMoneyforwardInvoiceExportApiV2PublicInvoicesExportsMoneyforwardPreviewPost200Envelope,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    async def preview_public_hubspot_estimate_draft_api(
+        self,
+        *,
+        request: typing.Dict[str, typing.Optional[typing.Any]],
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> AsyncHttpResponse[PreviewPublicHubspotEstimateDraftApiV2PublicEstimatesDraftsHubspotPreviewPost200Envelope]:
+        """
+        Parameters
+        ----------
+        request : typing.Dict[str, typing.Optional[typing.Any]]
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[PreviewPublicHubspotEstimateDraftApiV2PublicEstimatesDraftsHubspotPreviewPost200Envelope]
+            Successful Response
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            "v2/public/estimates/drafts/hubspot/preview",
+            method="POST",
+            params={
+                "workspace_id": workspace_id,
+            },
+            json=request,
+            headers={
+                "content-type": "application/json",
+            },
+            request_options=request_options,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    PreviewPublicHubspotEstimateDraftApiV2PublicEstimatesDraftsHubspotPreviewPost200Envelope,
+                    construct_type(
+                        type_=PreviewPublicHubspotEstimateDraftApiV2PublicEstimatesDraftsHubspotPreviewPost200Envelope,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    async def preview_public_hubspot_order_handoff_api(
+        self,
+        *,
+        request: typing.Dict[str, typing.Optional[typing.Any]],
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> AsyncHttpResponse[PreviewPublicHubspotOrderHandoffApiV2PublicOrdersHandoffsHubspotPreviewPost200Envelope]:
+        """
+        Parameters
+        ----------
+        request : typing.Dict[str, typing.Optional[typing.Any]]
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[PreviewPublicHubspotOrderHandoffApiV2PublicOrdersHandoffsHubspotPreviewPost200Envelope]
+            Successful Response
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            "v2/public/orders/handoffs/hubspot/preview",
+            method="POST",
+            params={
+                "workspace_id": workspace_id,
+            },
+            json=request,
+            headers={
+                "content-type": "application/json",
+            },
+            request_options=request_options,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    PreviewPublicHubspotOrderHandoffApiV2PublicOrdersHandoffsHubspotPreviewPost200Envelope,
+                    construct_type(
+                        type_=PreviewPublicHubspotOrderHandoffApiV2PublicOrdersHandoffsHubspotPreviewPost200Envelope,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    async def preview_public_hubspot_commission_incentive_api(
+        self,
+        *,
+        request: typing.Dict[str, typing.Optional[typing.Any]],
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> AsyncHttpResponse[
+        PreviewPublicHubspotCommissionIncentiveApiV2PublicIncentivesCommissionHubspotPreviewPost200Envelope
+    ]:
+        """
+        Parameters
+        ----------
+        request : typing.Dict[str, typing.Optional[typing.Any]]
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[PreviewPublicHubspotCommissionIncentiveApiV2PublicIncentivesCommissionHubspotPreviewPost200Envelope]
+            Successful Response
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            "v2/public/incentives/commission/hubspot/preview",
+            method="POST",
+            params={
+                "workspace_id": workspace_id,
+            },
+            json=request,
+            headers={
+                "content-type": "application/json",
+            },
+            request_options=request_options,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    PreviewPublicHubspotCommissionIncentiveApiV2PublicIncentivesCommissionHubspotPreviewPost200Envelope,
+                    construct_type(
+                        type_=PreviewPublicHubspotCommissionIncentiveApiV2PublicIncentivesCommissionHubspotPreviewPost200Envelope,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
     async def preview_public_salesforce_quote_readiness_api(
         self,
         *,
@@ -824,6 +2488,80 @@ class AsyncRawWorkflowRunsClient:
                     PreviewPublicSalesforceQuoteReadinessApiV2PublicCpqQuoteReadinessSalesforcePreviewPost200Envelope,
                     construct_type(
                         type_=PreviewPublicSalesforceQuoteReadinessApiV2PublicCpqQuoteReadinessSalesforcePreviewPost200Envelope,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    async def summarize_public_salesforce_quote_readiness_api(
+        self,
+        *,
+        request: typing.Dict[str, typing.Optional[typing.Any]],
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> AsyncHttpResponse[
+        SummarizePublicSalesforceQuoteReadinessApiV2PublicCpqQuoteReadinessSalesforceSummaryPost200Envelope
+    ]:
+        """
+        Parameters
+        ----------
+        request : typing.Dict[str, typing.Optional[typing.Any]]
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[SummarizePublicSalesforceQuoteReadinessApiV2PublicCpqQuoteReadinessSalesforceSummaryPost200Envelope]
+            Successful Response
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            "v2/public/cpq/quote-readiness/salesforce/summary",
+            method="POST",
+            params={
+                "workspace_id": workspace_id,
+            },
+            json=request,
+            headers={
+                "content-type": "application/json",
+            },
+            request_options=request_options,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    SummarizePublicSalesforceQuoteReadinessApiV2PublicCpqQuoteReadinessSalesforceSummaryPost200Envelope,
+                    construct_type(
+                        type_=SummarizePublicSalesforceQuoteReadinessApiV2PublicCpqQuoteReadinessSalesforceSummaryPost200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
@@ -935,6 +2673,525 @@ class AsyncRawWorkflowRunsClient:
                 )
             if _response.status_code == 403:
                 raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    async def start_public_hubspot_invoice_draft_api(
+        self,
+        *,
+        request: typing.Dict[str, typing.Optional[typing.Any]],
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> AsyncHttpResponse[StartPublicHubspotInvoiceDraftApiV2PublicInvoicesDraftsHubspotPost200Envelope]:
+        """
+        Parameters
+        ----------
+        request : typing.Dict[str, typing.Optional[typing.Any]]
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[StartPublicHubspotInvoiceDraftApiV2PublicInvoicesDraftsHubspotPost200Envelope]
+            Successful Response
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            "v2/public/invoices/drafts/hubspot",
+            method="POST",
+            params={
+                "workspace_id": workspace_id,
+            },
+            json=request,
+            headers={
+                "content-type": "application/json",
+            },
+            request_options=request_options,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    StartPublicHubspotInvoiceDraftApiV2PublicInvoicesDraftsHubspotPost200Envelope,
+                    construct_type(
+                        type_=StartPublicHubspotInvoiceDraftApiV2PublicInvoicesDraftsHubspotPost200Envelope,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    async def start_public_freee_invoice_export_api(
+        self,
+        *,
+        request: typing.Dict[str, typing.Optional[typing.Any]],
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> AsyncHttpResponse[StartPublicFreeeInvoiceExportApiV2PublicInvoicesExportsFreeePost200Envelope]:
+        """
+        Parameters
+        ----------
+        request : typing.Dict[str, typing.Optional[typing.Any]]
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[StartPublicFreeeInvoiceExportApiV2PublicInvoicesExportsFreeePost200Envelope]
+            Successful Response
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            "v2/public/invoices/exports/freee",
+            method="POST",
+            params={
+                "workspace_id": workspace_id,
+            },
+            json=request,
+            headers={
+                "content-type": "application/json",
+            },
+            request_options=request_options,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    StartPublicFreeeInvoiceExportApiV2PublicInvoicesExportsFreeePost200Envelope,
+                    construct_type(
+                        type_=StartPublicFreeeInvoiceExportApiV2PublicInvoicesExportsFreeePost200Envelope,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    async def start_public_moneyforward_invoice_export_api(
+        self,
+        *,
+        request: typing.Dict[str, typing.Optional[typing.Any]],
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> AsyncHttpResponse[StartPublicMoneyforwardInvoiceExportApiV2PublicInvoicesExportsMoneyforwardPost200Envelope]:
+        """
+        Parameters
+        ----------
+        request : typing.Dict[str, typing.Optional[typing.Any]]
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[StartPublicMoneyforwardInvoiceExportApiV2PublicInvoicesExportsMoneyforwardPost200Envelope]
+            Successful Response
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            "v2/public/invoices/exports/moneyforward",
+            method="POST",
+            params={
+                "workspace_id": workspace_id,
+            },
+            json=request,
+            headers={
+                "content-type": "application/json",
+            },
+            request_options=request_options,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    StartPublicMoneyforwardInvoiceExportApiV2PublicInvoicesExportsMoneyforwardPost200Envelope,
+                    construct_type(
+                        type_=StartPublicMoneyforwardInvoiceExportApiV2PublicInvoicesExportsMoneyforwardPost200Envelope,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    async def start_public_hubspot_estimate_draft_api(
+        self,
+        *,
+        request: typing.Dict[str, typing.Optional[typing.Any]],
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> AsyncHttpResponse[StartPublicHubspotEstimateDraftApiV2PublicEstimatesDraftsHubspotPost200Envelope]:
+        """
+        Parameters
+        ----------
+        request : typing.Dict[str, typing.Optional[typing.Any]]
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[StartPublicHubspotEstimateDraftApiV2PublicEstimatesDraftsHubspotPost200Envelope]
+            Successful Response
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            "v2/public/estimates/drafts/hubspot",
+            method="POST",
+            params={
+                "workspace_id": workspace_id,
+            },
+            json=request,
+            headers={
+                "content-type": "application/json",
+            },
+            request_options=request_options,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    StartPublicHubspotEstimateDraftApiV2PublicEstimatesDraftsHubspotPost200Envelope,
+                    construct_type(
+                        type_=StartPublicHubspotEstimateDraftApiV2PublicEstimatesDraftsHubspotPost200Envelope,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    async def start_public_hubspot_order_handoff_api(
+        self,
+        *,
+        request: typing.Dict[str, typing.Optional[typing.Any]],
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> AsyncHttpResponse[StartPublicHubspotOrderHandoffApiV2PublicOrdersHandoffsHubspotPost200Envelope]:
+        """
+        Parameters
+        ----------
+        request : typing.Dict[str, typing.Optional[typing.Any]]
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[StartPublicHubspotOrderHandoffApiV2PublicOrdersHandoffsHubspotPost200Envelope]
+            Successful Response
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            "v2/public/orders/handoffs/hubspot",
+            method="POST",
+            params={
+                "workspace_id": workspace_id,
+            },
+            json=request,
+            headers={
+                "content-type": "application/json",
+            },
+            request_options=request_options,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    StartPublicHubspotOrderHandoffApiV2PublicOrdersHandoffsHubspotPost200Envelope,
+                    construct_type(
+                        type_=StartPublicHubspotOrderHandoffApiV2PublicOrdersHandoffsHubspotPost200Envelope,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    async def start_public_hubspot_revenue_control_report_api(
+        self,
+        *,
+        request: typing.Dict[str, typing.Optional[typing.Any]],
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> AsyncHttpResponse[
+        StartPublicHubspotRevenueControlReportApiV2PublicReportsRevenueControlHubspotPost200Envelope
+    ]:
+        """
+        Parameters
+        ----------
+        request : typing.Dict[str, typing.Optional[typing.Any]]
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[StartPublicHubspotRevenueControlReportApiV2PublicReportsRevenueControlHubspotPost200Envelope]
+            Successful Response
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            "v2/public/reports/revenue-control/hubspot",
+            method="POST",
+            params={
+                "workspace_id": workspace_id,
+            },
+            json=request,
+            headers={
+                "content-type": "application/json",
+            },
+            request_options=request_options,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    StartPublicHubspotRevenueControlReportApiV2PublicReportsRevenueControlHubspotPost200Envelope,
+                    construct_type(
+                        type_=StartPublicHubspotRevenueControlReportApiV2PublicReportsRevenueControlHubspotPost200Envelope,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    async def writeback_public_salesforce_quote_readiness_api(
+        self,
+        *,
+        request: typing.Dict[str, typing.Optional[typing.Any]],
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> AsyncHttpResponse[
+        WritebackPublicSalesforceQuoteReadinessApiV2PublicCpqQuoteReadinessSalesforceWritebackPost200Envelope
+    ]:
+        """
+        Parameters
+        ----------
+        request : typing.Dict[str, typing.Optional[typing.Any]]
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[WritebackPublicSalesforceQuoteReadinessApiV2PublicCpqQuoteReadinessSalesforceWritebackPost200Envelope]
+            Successful Response
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            "v2/public/cpq/quote-readiness/salesforce/writeback",
+            method="POST",
+            params={
+                "workspace_id": workspace_id,
+            },
+            json=request,
+            headers={
+                "content-type": "application/json",
+            },
+            request_options=request_options,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    WritebackPublicSalesforceQuoteReadinessApiV2PublicCpqQuoteReadinessSalesforceWritebackPost200Envelope,
+                    construct_type(
+                        type_=WritebackPublicSalesforceQuoteReadinessApiV2PublicCpqQuoteReadinessSalesforceWritebackPost200Envelope,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
                         ErrorEnvelope,

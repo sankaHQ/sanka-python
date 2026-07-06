@@ -8,7 +8,9 @@ from ..core.unchecked_base_model import UncheckedBaseModel
 from .envelope_meta import EnvelopeMeta
 
 
-class ListApprovalRequestsApiV2PublicApprovalRequestsGet200Envelope(UncheckedBaseModel):
+class SummarizePublicSalesforceQuoteReadinessApiV2PublicCpqQuoteReadinessSalesforceSummaryPost200Envelope(
+    UncheckedBaseModel
+):
     success: typing.Literal[True] = True
     data: typing.Dict[str, typing.Optional[typing.Any]]
     meta: EnvelopeMeta

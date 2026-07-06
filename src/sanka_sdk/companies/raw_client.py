@@ -59,7 +59,12 @@ class RawCompaniesClient:
         usage_status: typing.Optional[str] = None,
         page: typing.Optional[int] = None,
         limit: typing.Optional[int] = None,
+        cursor: typing.Optional[str] = None,
         sort: typing.Optional[str] = None,
+        created_at_from: typing.Optional[str] = None,
+        created_at_to: typing.Optional[str] = None,
+        updated_at_from: typing.Optional[str] = None,
+        updated_at_to: typing.Optional[str] = None,
         x_language: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
@@ -83,7 +88,17 @@ class RawCompaniesClient:
 
         limit : typing.Optional[int]
 
+        cursor : typing.Optional[str]
+
         sort : typing.Optional[str]
+
+        created_at_from : typing.Optional[str]
+
+        created_at_to : typing.Optional[str]
+
+        updated_at_from : typing.Optional[str]
+
+        updated_at_to : typing.Optional[str]
 
         x_language : typing.Optional[str]
 
@@ -109,7 +124,12 @@ class RawCompaniesClient:
                 "usage_status": usage_status,
                 "page": page,
                 "limit": limit,
+                "cursor": cursor,
                 "sort": sort,
+                "created_at_from": created_at_from,
+                "created_at_to": created_at_to,
+                "updated_at_from": updated_at_from,
+                "updated_at_to": updated_at_to,
             },
             headers={
                 "X-Language": str(x_language) if x_language is not None else None,
@@ -157,6 +177,7 @@ class RawCompaniesClient:
     def create_public_company_api(
         self,
         *,
+        language: typing.Optional[str] = None,
         workspace_id: typing.Optional[str] = None,
         view_id: typing.Optional[str] = OMIT,
         form_view_id: typing.Optional[str] = OMIT,
@@ -169,11 +190,15 @@ class RawCompaniesClient:
         operation: typing.Optional[str] = OMIT,
         dry_run: typing.Optional[bool] = OMIT,
         confirm: typing.Optional[bool] = OMIT,
+        billing_cycle: typing.Optional[str] = OMIT,
+        payment_cycle: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[CreatePublicCompanyApiV2PublicCompaniesPost200Envelope]:
         """
         Parameters
         ----------
+        language : typing.Optional[str]
+
         workspace_id : typing.Optional[str]
 
         view_id : typing.Optional[str]
@@ -198,6 +223,12 @@ class RawCompaniesClient:
 
         confirm : typing.Optional[bool]
 
+        billing_cycle : typing.Optional[str]
+            Company billing cycle. Accepted values include 'end' for month-end or '1' through '31' for a closing day.
+
+        payment_cycle : typing.Optional[str]
+            Company payment cycle. Accepted values include 'cmonth_end', 'nmonth_end', or net terms such as 'net_30'.
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
@@ -210,6 +241,7 @@ class RawCompaniesClient:
             "v2/public/companies",
             method="POST",
             params={
+                "language": language,
                 "workspace_id": workspace_id,
             },
             json={
@@ -224,6 +256,8 @@ class RawCompaniesClient:
                 "operation": operation,
                 "dry_run": dry_run,
                 "confirm": confirm,
+                "billing_cycle": billing_cycle,
+                "payment_cycle": payment_cycle,
             },
             headers={
                 "content-type": "application/json",
@@ -352,6 +386,7 @@ class RawCompaniesClient:
         company_id: str,
         *,
         external_id: typing.Optional[str] = None,
+        language: typing.Optional[str] = None,
         workspace_id: typing.Optional[str] = None,
         view_id: typing.Optional[str] = OMIT,
         form_view_id: typing.Optional[str] = OMIT,
@@ -360,10 +395,12 @@ class RawCompaniesClient:
         provider: typing.Optional[str] = OMIT,
         channel_id: typing.Optional[str] = OMIT,
         external_object_type: typing.Optional[str] = OMIT,
-        public_object_record_mutation_request_external_id: typing.Optional[str] = OMIT,
+        company_mutation_request_external_id: typing.Optional[str] = OMIT,
         operation: typing.Optional[str] = OMIT,
         dry_run: typing.Optional[bool] = OMIT,
         confirm: typing.Optional[bool] = OMIT,
+        billing_cycle: typing.Optional[str] = OMIT,
+        payment_cycle: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[UpdatePublicCompanyApiV2PublicCompaniesCompanyIdPut200Envelope]:
         """
@@ -372,6 +409,8 @@ class RawCompaniesClient:
         company_id : str
 
         external_id : typing.Optional[str]
+
+        language : typing.Optional[str]
 
         workspace_id : typing.Optional[str]
 
@@ -389,13 +428,19 @@ class RawCompaniesClient:
 
         external_object_type : typing.Optional[str]
 
-        public_object_record_mutation_request_external_id : typing.Optional[str]
+        company_mutation_request_external_id : typing.Optional[str]
 
         operation : typing.Optional[str]
 
         dry_run : typing.Optional[bool]
 
         confirm : typing.Optional[bool]
+
+        billing_cycle : typing.Optional[str]
+            Company billing cycle. Accepted values include 'end' for month-end or '1' through '31' for a closing day.
+
+        payment_cycle : typing.Optional[str]
+            Company payment cycle. Accepted values include 'cmonth_end', 'nmonth_end', or net terms such as 'net_30'.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -410,6 +455,7 @@ class RawCompaniesClient:
             method="PUT",
             params={
                 "external_id": external_id,
+                "language": language,
                 "workspace_id": workspace_id,
             },
             json={
@@ -424,6 +470,8 @@ class RawCompaniesClient:
                 "operation": operation,
                 "dry_run": dry_run,
                 "confirm": confirm,
+                "billing_cycle": billing_cycle,
+                "payment_cycle": payment_cycle,
             },
             headers={
                 "content-type": "application/json",
@@ -950,7 +998,12 @@ class AsyncRawCompaniesClient:
         usage_status: typing.Optional[str] = None,
         page: typing.Optional[int] = None,
         limit: typing.Optional[int] = None,
+        cursor: typing.Optional[str] = None,
         sort: typing.Optional[str] = None,
+        created_at_from: typing.Optional[str] = None,
+        created_at_to: typing.Optional[str] = None,
+        updated_at_from: typing.Optional[str] = None,
+        updated_at_to: typing.Optional[str] = None,
         x_language: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
@@ -974,7 +1027,17 @@ class AsyncRawCompaniesClient:
 
         limit : typing.Optional[int]
 
+        cursor : typing.Optional[str]
+
         sort : typing.Optional[str]
+
+        created_at_from : typing.Optional[str]
+
+        created_at_to : typing.Optional[str]
+
+        updated_at_from : typing.Optional[str]
+
+        updated_at_to : typing.Optional[str]
 
         x_language : typing.Optional[str]
 
@@ -1000,7 +1063,12 @@ class AsyncRawCompaniesClient:
                 "usage_status": usage_status,
                 "page": page,
                 "limit": limit,
+                "cursor": cursor,
                 "sort": sort,
+                "created_at_from": created_at_from,
+                "created_at_to": created_at_to,
+                "updated_at_from": updated_at_from,
+                "updated_at_to": updated_at_to,
             },
             headers={
                 "X-Language": str(x_language) if x_language is not None else None,
@@ -1048,6 +1116,7 @@ class AsyncRawCompaniesClient:
     async def create_public_company_api(
         self,
         *,
+        language: typing.Optional[str] = None,
         workspace_id: typing.Optional[str] = None,
         view_id: typing.Optional[str] = OMIT,
         form_view_id: typing.Optional[str] = OMIT,
@@ -1060,11 +1129,15 @@ class AsyncRawCompaniesClient:
         operation: typing.Optional[str] = OMIT,
         dry_run: typing.Optional[bool] = OMIT,
         confirm: typing.Optional[bool] = OMIT,
+        billing_cycle: typing.Optional[str] = OMIT,
+        payment_cycle: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[CreatePublicCompanyApiV2PublicCompaniesPost200Envelope]:
         """
         Parameters
         ----------
+        language : typing.Optional[str]
+
         workspace_id : typing.Optional[str]
 
         view_id : typing.Optional[str]
@@ -1089,6 +1162,12 @@ class AsyncRawCompaniesClient:
 
         confirm : typing.Optional[bool]
 
+        billing_cycle : typing.Optional[str]
+            Company billing cycle. Accepted values include 'end' for month-end or '1' through '31' for a closing day.
+
+        payment_cycle : typing.Optional[str]
+            Company payment cycle. Accepted values include 'cmonth_end', 'nmonth_end', or net terms such as 'net_30'.
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
@@ -1101,6 +1180,7 @@ class AsyncRawCompaniesClient:
             "v2/public/companies",
             method="POST",
             params={
+                "language": language,
                 "workspace_id": workspace_id,
             },
             json={
@@ -1115,6 +1195,8 @@ class AsyncRawCompaniesClient:
                 "operation": operation,
                 "dry_run": dry_run,
                 "confirm": confirm,
+                "billing_cycle": billing_cycle,
+                "payment_cycle": payment_cycle,
             },
             headers={
                 "content-type": "application/json",
@@ -1243,6 +1325,7 @@ class AsyncRawCompaniesClient:
         company_id: str,
         *,
         external_id: typing.Optional[str] = None,
+        language: typing.Optional[str] = None,
         workspace_id: typing.Optional[str] = None,
         view_id: typing.Optional[str] = OMIT,
         form_view_id: typing.Optional[str] = OMIT,
@@ -1251,10 +1334,12 @@ class AsyncRawCompaniesClient:
         provider: typing.Optional[str] = OMIT,
         channel_id: typing.Optional[str] = OMIT,
         external_object_type: typing.Optional[str] = OMIT,
-        public_object_record_mutation_request_external_id: typing.Optional[str] = OMIT,
+        company_mutation_request_external_id: typing.Optional[str] = OMIT,
         operation: typing.Optional[str] = OMIT,
         dry_run: typing.Optional[bool] = OMIT,
         confirm: typing.Optional[bool] = OMIT,
+        billing_cycle: typing.Optional[str] = OMIT,
+        payment_cycle: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[UpdatePublicCompanyApiV2PublicCompaniesCompanyIdPut200Envelope]:
         """
@@ -1263,6 +1348,8 @@ class AsyncRawCompaniesClient:
         company_id : str
 
         external_id : typing.Optional[str]
+
+        language : typing.Optional[str]
 
         workspace_id : typing.Optional[str]
 
@@ -1280,13 +1367,19 @@ class AsyncRawCompaniesClient:
 
         external_object_type : typing.Optional[str]
 
-        public_object_record_mutation_request_external_id : typing.Optional[str]
+        company_mutation_request_external_id : typing.Optional[str]
 
         operation : typing.Optional[str]
 
         dry_run : typing.Optional[bool]
 
         confirm : typing.Optional[bool]
+
+        billing_cycle : typing.Optional[str]
+            Company billing cycle. Accepted values include 'end' for month-end or '1' through '31' for a closing day.
+
+        payment_cycle : typing.Optional[str]
+            Company payment cycle. Accepted values include 'cmonth_end', 'nmonth_end', or net terms such as 'net_30'.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -1301,6 +1394,7 @@ class AsyncRawCompaniesClient:
             method="PUT",
             params={
                 "external_id": external_id,
+                "language": language,
                 "workspace_id": workspace_id,
             },
             json={
@@ -1315,6 +1409,8 @@ class AsyncRawCompaniesClient:
                 "operation": operation,
                 "dry_run": dry_run,
                 "confirm": confirm,
+                "billing_cycle": billing_cycle,
+                "payment_cycle": payment_cycle,
             },
             headers={
                 "content-type": "application/json",

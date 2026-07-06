@@ -13,6 +13,8 @@ class ObjectRecordData(UncheckedBaseModel):
     record_id: str
     object_type: str
     custom_object_id: typing.Optional[str] = None
+    status: typing.Optional[str] = None
+    usage_status: typing.Optional[str] = None
     properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = None
     display_properties: typing.Optional[typing.Dict[str, ObjectRecordDisplayValue]] = None
 

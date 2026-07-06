@@ -18,6 +18,7 @@ class PublicPropertyMutationRequest(UncheckedBaseModel):
     target: typing.Optional[str] = None
     language: typing.Optional[str] = None
     custom_object_id: typing.Optional[str] = None
+    custom_object_slug: typing.Optional[str] = None
     editor_variant: typing.Optional[str] = None
     source: typing.Optional[str] = None
     scope: typing.Optional[str] = None

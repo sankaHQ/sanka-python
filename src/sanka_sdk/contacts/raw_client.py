@@ -47,7 +47,12 @@ class RawContactsClient:
         usage_status: typing.Optional[str] = None,
         page: typing.Optional[int] = None,
         limit: typing.Optional[int] = None,
+        cursor: typing.Optional[str] = None,
         sort: typing.Optional[str] = None,
+        created_at_from: typing.Optional[str] = None,
+        created_at_to: typing.Optional[str] = None,
+        updated_at_from: typing.Optional[str] = None,
+        updated_at_to: typing.Optional[str] = None,
         x_language: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
@@ -71,7 +76,17 @@ class RawContactsClient:
 
         limit : typing.Optional[int]
 
+        cursor : typing.Optional[str]
+
         sort : typing.Optional[str]
+
+        created_at_from : typing.Optional[str]
+
+        created_at_to : typing.Optional[str]
+
+        updated_at_from : typing.Optional[str]
+
+        updated_at_to : typing.Optional[str]
 
         x_language : typing.Optional[str]
 
@@ -97,7 +112,12 @@ class RawContactsClient:
                 "usage_status": usage_status,
                 "page": page,
                 "limit": limit,
+                "cursor": cursor,
                 "sort": sort,
+                "created_at_from": created_at_from,
+                "created_at_to": created_at_to,
+                "updated_at_from": updated_at_from,
+                "updated_at_to": updated_at_to,
             },
             headers={
                 "X-Language": str(x_language) if x_language is not None else None,
@@ -145,6 +165,7 @@ class RawContactsClient:
     def create_public_contact_api(
         self,
         *,
+        language: typing.Optional[str] = None,
         workspace_id: typing.Optional[str] = None,
         view_id: typing.Optional[str] = OMIT,
         form_view_id: typing.Optional[str] = OMIT,
@@ -162,6 +183,8 @@ class RawContactsClient:
         """
         Parameters
         ----------
+        language : typing.Optional[str]
+
         workspace_id : typing.Optional[str]
 
         view_id : typing.Optional[str]
@@ -198,6 +221,7 @@ class RawContactsClient:
             "v2/public/contacts",
             method="POST",
             params={
+                "language": language,
                 "workspace_id": workspace_id,
             },
             json={
@@ -340,6 +364,7 @@ class RawContactsClient:
         contact_id: str,
         *,
         external_id: typing.Optional[str] = None,
+        language: typing.Optional[str] = None,
         workspace_id: typing.Optional[str] = None,
         view_id: typing.Optional[str] = OMIT,
         form_view_id: typing.Optional[str] = OMIT,
@@ -360,6 +385,8 @@ class RawContactsClient:
         contact_id : str
 
         external_id : typing.Optional[str]
+
+        language : typing.Optional[str]
 
         workspace_id : typing.Optional[str]
 
@@ -398,6 +425,7 @@ class RawContactsClient:
             method="PUT",
             params={
                 "external_id": external_id,
+                "language": language,
                 "workspace_id": workspace_id,
             },
             json={
@@ -567,7 +595,12 @@ class AsyncRawContactsClient:
         usage_status: typing.Optional[str] = None,
         page: typing.Optional[int] = None,
         limit: typing.Optional[int] = None,
+        cursor: typing.Optional[str] = None,
         sort: typing.Optional[str] = None,
+        created_at_from: typing.Optional[str] = None,
+        created_at_to: typing.Optional[str] = None,
+        updated_at_from: typing.Optional[str] = None,
+        updated_at_to: typing.Optional[str] = None,
         x_language: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
@@ -591,7 +624,17 @@ class AsyncRawContactsClient:
 
         limit : typing.Optional[int]
 
+        cursor : typing.Optional[str]
+
         sort : typing.Optional[str]
+
+        created_at_from : typing.Optional[str]
+
+        created_at_to : typing.Optional[str]
+
+        updated_at_from : typing.Optional[str]
+
+        updated_at_to : typing.Optional[str]
 
         x_language : typing.Optional[str]
 
@@ -617,7 +660,12 @@ class AsyncRawContactsClient:
                 "usage_status": usage_status,
                 "page": page,
                 "limit": limit,
+                "cursor": cursor,
                 "sort": sort,
+                "created_at_from": created_at_from,
+                "created_at_to": created_at_to,
+                "updated_at_from": updated_at_from,
+                "updated_at_to": updated_at_to,
             },
             headers={
                 "X-Language": str(x_language) if x_language is not None else None,
@@ -665,6 +713,7 @@ class AsyncRawContactsClient:
     async def create_public_contact_api(
         self,
         *,
+        language: typing.Optional[str] = None,
         workspace_id: typing.Optional[str] = None,
         view_id: typing.Optional[str] = OMIT,
         form_view_id: typing.Optional[str] = OMIT,
@@ -682,6 +731,8 @@ class AsyncRawContactsClient:
         """
         Parameters
         ----------
+        language : typing.Optional[str]
+
         workspace_id : typing.Optional[str]
 
         view_id : typing.Optional[str]
@@ -718,6 +769,7 @@ class AsyncRawContactsClient:
             "v2/public/contacts",
             method="POST",
             params={
+                "language": language,
                 "workspace_id": workspace_id,
             },
             json={
@@ -860,6 +912,7 @@ class AsyncRawContactsClient:
         contact_id: str,
         *,
         external_id: typing.Optional[str] = None,
+        language: typing.Optional[str] = None,
         workspace_id: typing.Optional[str] = None,
         view_id: typing.Optional[str] = OMIT,
         form_view_id: typing.Optional[str] = OMIT,
@@ -880,6 +933,8 @@ class AsyncRawContactsClient:
         contact_id : str
 
         external_id : typing.Optional[str]
+
+        language : typing.Optional[str]
 
         workspace_id : typing.Optional[str]
 
@@ -918,6 +973,7 @@ class AsyncRawContactsClient:
             method="PUT",
             params={
                 "external_id": external_id,
+                "language": language,
                 "workspace_id": workspace_id,
             },
             json={

@@ -7,6 +7,9 @@ from ..core.request_options import RequestOptions
 from ..types.create_public_workflow_api_v_2_public_workflows_post_200_envelope import (
     CreatePublicWorkflowApiV2PublicWorkflowsPost200Envelope,
 )
+from ..types.delete_public_workflow_api_v_2_public_workflows_workflow_id_delete_200_envelope import (
+    DeletePublicWorkflowApiV2PublicWorkflowsWorkflowIdDelete200Envelope,
+)
 from ..types.get_public_workflow_api_v_2_public_workflows_workflow_id_get_200_envelope import (
     GetPublicWorkflowApiV2PublicWorkflowsWorkflowIdGet200Envelope,
 )
@@ -229,6 +232,45 @@ class WorkflowsClient:
         )
         """
         _response = self._raw_client.get_public_workflow_api(
+            workflow_id, workspace_id=workspace_id, request_options=request_options
+        )
+        return _response.data
+
+    def delete_public_workflow_api(
+        self,
+        workflow_id: str,
+        *,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> DeletePublicWorkflowApiV2PublicWorkflowsWorkflowIdDelete200Envelope:
+        """
+        Parameters
+        ----------
+        workflow_id : str
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        DeletePublicWorkflowApiV2PublicWorkflowsWorkflowIdDelete200Envelope
+            Successful Response
+
+        Examples
+        --------
+        from sanka_sdk import SankaClient
+
+        client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+        client.workflows.delete_public_workflow_api(
+            workflow_id="workflow_id",
+        )
+        """
+        _response = self._raw_client.delete_public_workflow_api(
             workflow_id, workspace_id=workspace_id, request_options=request_options
         )
         return _response.data
@@ -617,6 +659,53 @@ class AsyncWorkflowsClient:
         asyncio.run(main())
         """
         _response = await self._raw_client.get_public_workflow_api(
+            workflow_id, workspace_id=workspace_id, request_options=request_options
+        )
+        return _response.data
+
+    async def delete_public_workflow_api(
+        self,
+        workflow_id: str,
+        *,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> DeletePublicWorkflowApiV2PublicWorkflowsWorkflowIdDelete200Envelope:
+        """
+        Parameters
+        ----------
+        workflow_id : str
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        DeletePublicWorkflowApiV2PublicWorkflowsWorkflowIdDelete200Envelope
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sanka_sdk import AsyncSankaClient
+
+        client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.workflows.delete_public_workflow_api(
+                workflow_id="workflow_id",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.delete_public_workflow_api(
             workflow_id, workspace_id=workspace_id, request_options=request_options
         )
         return _response.data

@@ -18,6 +18,7 @@ class ObjectRecordListData(UncheckedBaseModel):
     page: int
     page_size: int
     total: int
+    next_cursor: typing.Optional[str] = None
     meta: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = None
 
     if IS_PYDANTIC_V2:

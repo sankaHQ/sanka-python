@@ -7,6 +7,27 @@ from ..core.request_options import RequestOptions
 from ..types.get_public_workflow_run_api_v_2_public_workflow_runs_run_id_get_200_envelope import (
     GetPublicWorkflowRunApiV2PublicWorkflowRunsRunIdGet200Envelope,
 )
+from ..types.get_public_workflow_run_nested_compat_api_v_2_public_workflows_runs_run_id_get_200_envelope import (
+    GetPublicWorkflowRunNestedCompatApiV2PublicWorkflowsRunsRunIdGet200Envelope,
+)
+from ..types.preview_public_freee_invoice_export_api_v_2_public_invoices_exports_freee_preview_post_200_envelope import (
+    PreviewPublicFreeeInvoiceExportApiV2PublicInvoicesExportsFreeePreviewPost200Envelope,
+)
+from ..types.preview_public_hubspot_commission_incentive_api_v_2_public_incentives_commission_hubspot_preview_post_200_envelope import (
+    PreviewPublicHubspotCommissionIncentiveApiV2PublicIncentivesCommissionHubspotPreviewPost200Envelope,
+)
+from ..types.preview_public_hubspot_estimate_draft_api_v_2_public_estimates_drafts_hubspot_preview_post_200_envelope import (
+    PreviewPublicHubspotEstimateDraftApiV2PublicEstimatesDraftsHubspotPreviewPost200Envelope,
+)
+from ..types.preview_public_hubspot_invoice_draft_api_v_2_public_invoices_drafts_hubspot_preview_post_200_envelope import (
+    PreviewPublicHubspotInvoiceDraftApiV2PublicInvoicesDraftsHubspotPreviewPost200Envelope,
+)
+from ..types.preview_public_hubspot_order_handoff_api_v_2_public_orders_handoffs_hubspot_preview_post_200_envelope import (
+    PreviewPublicHubspotOrderHandoffApiV2PublicOrdersHandoffsHubspotPreviewPost200Envelope,
+)
+from ..types.preview_public_moneyforward_invoice_export_api_v_2_public_invoices_exports_moneyforward_preview_post_200_envelope import (
+    PreviewPublicMoneyforwardInvoiceExportApiV2PublicInvoicesExportsMoneyforwardPreviewPost200Envelope,
+)
 from ..types.preview_public_salesforce_quote_readiness_api_v_2_public_cpq_quote_readiness_salesforce_preview_post_200_envelope import (
     PreviewPublicSalesforceQuoteReadinessApiV2PublicCpqQuoteReadinessSalesforcePreviewPost200Envelope,
 )
@@ -16,8 +37,32 @@ from ..types.preview_public_workflow_compat_api_v_2_public_workflow_runs_preview
 from ..types.resolve_public_workflow_record_api_v_2_public_workflow_runs_resolve_record_post_200_envelope import (
     ResolvePublicWorkflowRecordApiV2PublicWorkflowRunsResolveRecordPost200Envelope,
 )
+from ..types.start_public_freee_invoice_export_api_v_2_public_invoices_exports_freee_post_200_envelope import (
+    StartPublicFreeeInvoiceExportApiV2PublicInvoicesExportsFreeePost200Envelope,
+)
+from ..types.start_public_hubspot_estimate_draft_api_v_2_public_estimates_drafts_hubspot_post_200_envelope import (
+    StartPublicHubspotEstimateDraftApiV2PublicEstimatesDraftsHubspotPost200Envelope,
+)
+from ..types.start_public_hubspot_invoice_draft_api_v_2_public_invoices_drafts_hubspot_post_200_envelope import (
+    StartPublicHubspotInvoiceDraftApiV2PublicInvoicesDraftsHubspotPost200Envelope,
+)
+from ..types.start_public_hubspot_order_handoff_api_v_2_public_orders_handoffs_hubspot_post_200_envelope import (
+    StartPublicHubspotOrderHandoffApiV2PublicOrdersHandoffsHubspotPost200Envelope,
+)
+from ..types.start_public_hubspot_revenue_control_report_api_v_2_public_reports_revenue_control_hubspot_post_200_envelope import (
+    StartPublicHubspotRevenueControlReportApiV2PublicReportsRevenueControlHubspotPost200Envelope,
+)
+from ..types.start_public_moneyforward_invoice_export_api_v_2_public_invoices_exports_moneyforward_post_200_envelope import (
+    StartPublicMoneyforwardInvoiceExportApiV2PublicInvoicesExportsMoneyforwardPost200Envelope,
+)
 from ..types.start_public_workflow_compat_api_v_2_public_workflow_runs_start_post_200_envelope import (
     StartPublicWorkflowCompatApiV2PublicWorkflowRunsStartPost200Envelope,
+)
+from ..types.summarize_public_salesforce_quote_readiness_api_v_2_public_cpq_quote_readiness_salesforce_summary_post_200_envelope import (
+    SummarizePublicSalesforceQuoteReadinessApiV2PublicCpqQuoteReadinessSalesforceSummaryPost200Envelope,
+)
+from ..types.writeback_public_salesforce_quote_readiness_api_v_2_public_cpq_quote_readiness_salesforce_writeback_post_200_envelope import (
+    WritebackPublicSalesforceQuoteReadinessApiV2PublicCpqQuoteReadinessSalesforceWritebackPost200Envelope,
 )
 from .raw_client import AsyncRawWorkflowRunsClient, RawWorkflowRunsClient
 
@@ -75,6 +120,45 @@ class WorkflowRunsClient:
         )
         """
         _response = self._raw_client.get_public_workflow_run_api(
+            run_id, workspace_id=workspace_id, request_options=request_options
+        )
+        return _response.data
+
+    def get_public_workflow_run_nested_compat_api(
+        self,
+        run_id: str,
+        *,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> GetPublicWorkflowRunNestedCompatApiV2PublicWorkflowsRunsRunIdGet200Envelope:
+        """
+        Parameters
+        ----------
+        run_id : str
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        GetPublicWorkflowRunNestedCompatApiV2PublicWorkflowsRunsRunIdGet200Envelope
+            Successful Response
+
+        Examples
+        --------
+        from sanka_sdk import SankaClient
+
+        client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+        client.workflow_runs.get_public_workflow_run_nested_compat_api(
+            run_id="run_id",
+        )
+        """
+        _response = self._raw_client.get_public_workflow_run_nested_compat_api(
             run_id, workspace_id=workspace_id, request_options=request_options
         )
         return _response.data
@@ -193,6 +277,240 @@ class WorkflowRunsClient:
         )
         return _response.data
 
+    def preview_public_hubspot_invoice_draft_api(
+        self,
+        *,
+        request: typing.Dict[str, typing.Optional[typing.Any]],
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> PreviewPublicHubspotInvoiceDraftApiV2PublicInvoicesDraftsHubspotPreviewPost200Envelope:
+        """
+        Parameters
+        ----------
+        request : typing.Dict[str, typing.Optional[typing.Any]]
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        PreviewPublicHubspotInvoiceDraftApiV2PublicInvoicesDraftsHubspotPreviewPost200Envelope
+            Successful Response
+
+        Examples
+        --------
+        from sanka_sdk import SankaClient
+
+        client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+        client.workflow_runs.preview_public_hubspot_invoice_draft_api(
+            request={"key": "value"},
+        )
+        """
+        _response = self._raw_client.preview_public_hubspot_invoice_draft_api(
+            request=request, workspace_id=workspace_id, request_options=request_options
+        )
+        return _response.data
+
+    def preview_public_freee_invoice_export_api(
+        self,
+        *,
+        request: typing.Dict[str, typing.Optional[typing.Any]],
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> PreviewPublicFreeeInvoiceExportApiV2PublicInvoicesExportsFreeePreviewPost200Envelope:
+        """
+        Parameters
+        ----------
+        request : typing.Dict[str, typing.Optional[typing.Any]]
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        PreviewPublicFreeeInvoiceExportApiV2PublicInvoicesExportsFreeePreviewPost200Envelope
+            Successful Response
+
+        Examples
+        --------
+        from sanka_sdk import SankaClient
+
+        client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+        client.workflow_runs.preview_public_freee_invoice_export_api(
+            request={"key": "value"},
+        )
+        """
+        _response = self._raw_client.preview_public_freee_invoice_export_api(
+            request=request, workspace_id=workspace_id, request_options=request_options
+        )
+        return _response.data
+
+    def preview_public_moneyforward_invoice_export_api(
+        self,
+        *,
+        request: typing.Dict[str, typing.Optional[typing.Any]],
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> PreviewPublicMoneyforwardInvoiceExportApiV2PublicInvoicesExportsMoneyforwardPreviewPost200Envelope:
+        """
+        Parameters
+        ----------
+        request : typing.Dict[str, typing.Optional[typing.Any]]
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        PreviewPublicMoneyforwardInvoiceExportApiV2PublicInvoicesExportsMoneyforwardPreviewPost200Envelope
+            Successful Response
+
+        Examples
+        --------
+        from sanka_sdk import SankaClient
+
+        client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+        client.workflow_runs.preview_public_moneyforward_invoice_export_api(
+            request={"key": "value"},
+        )
+        """
+        _response = self._raw_client.preview_public_moneyforward_invoice_export_api(
+            request=request, workspace_id=workspace_id, request_options=request_options
+        )
+        return _response.data
+
+    def preview_public_hubspot_estimate_draft_api(
+        self,
+        *,
+        request: typing.Dict[str, typing.Optional[typing.Any]],
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> PreviewPublicHubspotEstimateDraftApiV2PublicEstimatesDraftsHubspotPreviewPost200Envelope:
+        """
+        Parameters
+        ----------
+        request : typing.Dict[str, typing.Optional[typing.Any]]
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        PreviewPublicHubspotEstimateDraftApiV2PublicEstimatesDraftsHubspotPreviewPost200Envelope
+            Successful Response
+
+        Examples
+        --------
+        from sanka_sdk import SankaClient
+
+        client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+        client.workflow_runs.preview_public_hubspot_estimate_draft_api(
+            request={"key": "value"},
+        )
+        """
+        _response = self._raw_client.preview_public_hubspot_estimate_draft_api(
+            request=request, workspace_id=workspace_id, request_options=request_options
+        )
+        return _response.data
+
+    def preview_public_hubspot_order_handoff_api(
+        self,
+        *,
+        request: typing.Dict[str, typing.Optional[typing.Any]],
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> PreviewPublicHubspotOrderHandoffApiV2PublicOrdersHandoffsHubspotPreviewPost200Envelope:
+        """
+        Parameters
+        ----------
+        request : typing.Dict[str, typing.Optional[typing.Any]]
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        PreviewPublicHubspotOrderHandoffApiV2PublicOrdersHandoffsHubspotPreviewPost200Envelope
+            Successful Response
+
+        Examples
+        --------
+        from sanka_sdk import SankaClient
+
+        client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+        client.workflow_runs.preview_public_hubspot_order_handoff_api(
+            request={"key": "value"},
+        )
+        """
+        _response = self._raw_client.preview_public_hubspot_order_handoff_api(
+            request=request, workspace_id=workspace_id, request_options=request_options
+        )
+        return _response.data
+
+    def preview_public_hubspot_commission_incentive_api(
+        self,
+        *,
+        request: typing.Dict[str, typing.Optional[typing.Any]],
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> PreviewPublicHubspotCommissionIncentiveApiV2PublicIncentivesCommissionHubspotPreviewPost200Envelope:
+        """
+        Parameters
+        ----------
+        request : typing.Dict[str, typing.Optional[typing.Any]]
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        PreviewPublicHubspotCommissionIncentiveApiV2PublicIncentivesCommissionHubspotPreviewPost200Envelope
+            Successful Response
+
+        Examples
+        --------
+        from sanka_sdk import SankaClient
+
+        client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+        client.workflow_runs.preview_public_hubspot_commission_incentive_api(
+            request={"key": "value"},
+        )
+        """
+        _response = self._raw_client.preview_public_hubspot_commission_incentive_api(
+            request=request, workspace_id=workspace_id, request_options=request_options
+        )
+        return _response.data
+
     def preview_public_salesforce_quote_readiness_api(
         self,
         *,
@@ -228,6 +546,45 @@ class WorkflowRunsClient:
         )
         """
         _response = self._raw_client.preview_public_salesforce_quote_readiness_api(
+            request=request, workspace_id=workspace_id, request_options=request_options
+        )
+        return _response.data
+
+    def summarize_public_salesforce_quote_readiness_api(
+        self,
+        *,
+        request: typing.Dict[str, typing.Optional[typing.Any]],
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> SummarizePublicSalesforceQuoteReadinessApiV2PublicCpqQuoteReadinessSalesforceSummaryPost200Envelope:
+        """
+        Parameters
+        ----------
+        request : typing.Dict[str, typing.Optional[typing.Any]]
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        SummarizePublicSalesforceQuoteReadinessApiV2PublicCpqQuoteReadinessSalesforceSummaryPost200Envelope
+            Successful Response
+
+        Examples
+        --------
+        from sanka_sdk import SankaClient
+
+        client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+        client.workflow_runs.summarize_public_salesforce_quote_readiness_api(
+            request={"key": "value"},
+        )
+        """
+        _response = self._raw_client.summarize_public_salesforce_quote_readiness_api(
             request=request, workspace_id=workspace_id, request_options=request_options
         )
         return _response.data
@@ -293,6 +650,279 @@ class WorkflowRunsClient:
         )
         return _response.data
 
+    def start_public_hubspot_invoice_draft_api(
+        self,
+        *,
+        request: typing.Dict[str, typing.Optional[typing.Any]],
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> StartPublicHubspotInvoiceDraftApiV2PublicInvoicesDraftsHubspotPost200Envelope:
+        """
+        Parameters
+        ----------
+        request : typing.Dict[str, typing.Optional[typing.Any]]
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        StartPublicHubspotInvoiceDraftApiV2PublicInvoicesDraftsHubspotPost200Envelope
+            Successful Response
+
+        Examples
+        --------
+        from sanka_sdk import SankaClient
+
+        client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+        client.workflow_runs.start_public_hubspot_invoice_draft_api(
+            request={"key": "value"},
+        )
+        """
+        _response = self._raw_client.start_public_hubspot_invoice_draft_api(
+            request=request, workspace_id=workspace_id, request_options=request_options
+        )
+        return _response.data
+
+    def start_public_freee_invoice_export_api(
+        self,
+        *,
+        request: typing.Dict[str, typing.Optional[typing.Any]],
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> StartPublicFreeeInvoiceExportApiV2PublicInvoicesExportsFreeePost200Envelope:
+        """
+        Parameters
+        ----------
+        request : typing.Dict[str, typing.Optional[typing.Any]]
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        StartPublicFreeeInvoiceExportApiV2PublicInvoicesExportsFreeePost200Envelope
+            Successful Response
+
+        Examples
+        --------
+        from sanka_sdk import SankaClient
+
+        client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+        client.workflow_runs.start_public_freee_invoice_export_api(
+            request={"key": "value"},
+        )
+        """
+        _response = self._raw_client.start_public_freee_invoice_export_api(
+            request=request, workspace_id=workspace_id, request_options=request_options
+        )
+        return _response.data
+
+    def start_public_moneyforward_invoice_export_api(
+        self,
+        *,
+        request: typing.Dict[str, typing.Optional[typing.Any]],
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> StartPublicMoneyforwardInvoiceExportApiV2PublicInvoicesExportsMoneyforwardPost200Envelope:
+        """
+        Parameters
+        ----------
+        request : typing.Dict[str, typing.Optional[typing.Any]]
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        StartPublicMoneyforwardInvoiceExportApiV2PublicInvoicesExportsMoneyforwardPost200Envelope
+            Successful Response
+
+        Examples
+        --------
+        from sanka_sdk import SankaClient
+
+        client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+        client.workflow_runs.start_public_moneyforward_invoice_export_api(
+            request={"key": "value"},
+        )
+        """
+        _response = self._raw_client.start_public_moneyforward_invoice_export_api(
+            request=request, workspace_id=workspace_id, request_options=request_options
+        )
+        return _response.data
+
+    def start_public_hubspot_estimate_draft_api(
+        self,
+        *,
+        request: typing.Dict[str, typing.Optional[typing.Any]],
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> StartPublicHubspotEstimateDraftApiV2PublicEstimatesDraftsHubspotPost200Envelope:
+        """
+        Parameters
+        ----------
+        request : typing.Dict[str, typing.Optional[typing.Any]]
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        StartPublicHubspotEstimateDraftApiV2PublicEstimatesDraftsHubspotPost200Envelope
+            Successful Response
+
+        Examples
+        --------
+        from sanka_sdk import SankaClient
+
+        client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+        client.workflow_runs.start_public_hubspot_estimate_draft_api(
+            request={"key": "value"},
+        )
+        """
+        _response = self._raw_client.start_public_hubspot_estimate_draft_api(
+            request=request, workspace_id=workspace_id, request_options=request_options
+        )
+        return _response.data
+
+    def start_public_hubspot_order_handoff_api(
+        self,
+        *,
+        request: typing.Dict[str, typing.Optional[typing.Any]],
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> StartPublicHubspotOrderHandoffApiV2PublicOrdersHandoffsHubspotPost200Envelope:
+        """
+        Parameters
+        ----------
+        request : typing.Dict[str, typing.Optional[typing.Any]]
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        StartPublicHubspotOrderHandoffApiV2PublicOrdersHandoffsHubspotPost200Envelope
+            Successful Response
+
+        Examples
+        --------
+        from sanka_sdk import SankaClient
+
+        client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+        client.workflow_runs.start_public_hubspot_order_handoff_api(
+            request={"key": "value"},
+        )
+        """
+        _response = self._raw_client.start_public_hubspot_order_handoff_api(
+            request=request, workspace_id=workspace_id, request_options=request_options
+        )
+        return _response.data
+
+    def start_public_hubspot_revenue_control_report_api(
+        self,
+        *,
+        request: typing.Dict[str, typing.Optional[typing.Any]],
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> StartPublicHubspotRevenueControlReportApiV2PublicReportsRevenueControlHubspotPost200Envelope:
+        """
+        Parameters
+        ----------
+        request : typing.Dict[str, typing.Optional[typing.Any]]
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        StartPublicHubspotRevenueControlReportApiV2PublicReportsRevenueControlHubspotPost200Envelope
+            Successful Response
+
+        Examples
+        --------
+        from sanka_sdk import SankaClient
+
+        client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+        client.workflow_runs.start_public_hubspot_revenue_control_report_api(
+            request={"key": "value"},
+        )
+        """
+        _response = self._raw_client.start_public_hubspot_revenue_control_report_api(
+            request=request, workspace_id=workspace_id, request_options=request_options
+        )
+        return _response.data
+
+    def writeback_public_salesforce_quote_readiness_api(
+        self,
+        *,
+        request: typing.Dict[str, typing.Optional[typing.Any]],
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> WritebackPublicSalesforceQuoteReadinessApiV2PublicCpqQuoteReadinessSalesforceWritebackPost200Envelope:
+        """
+        Parameters
+        ----------
+        request : typing.Dict[str, typing.Optional[typing.Any]]
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        WritebackPublicSalesforceQuoteReadinessApiV2PublicCpqQuoteReadinessSalesforceWritebackPost200Envelope
+            Successful Response
+
+        Examples
+        --------
+        from sanka_sdk import SankaClient
+
+        client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+        client.workflow_runs.writeback_public_salesforce_quote_readiness_api(
+            request={"key": "value"},
+        )
+        """
+        _response = self._raw_client.writeback_public_salesforce_quote_readiness_api(
+            request=request, workspace_id=workspace_id, request_options=request_options
+        )
+        return _response.data
+
 
 class AsyncWorkflowRunsClient:
     def __init__(self, *, client_wrapper: AsyncClientWrapper):
@@ -352,6 +982,53 @@ class AsyncWorkflowRunsClient:
         asyncio.run(main())
         """
         _response = await self._raw_client.get_public_workflow_run_api(
+            run_id, workspace_id=workspace_id, request_options=request_options
+        )
+        return _response.data
+
+    async def get_public_workflow_run_nested_compat_api(
+        self,
+        run_id: str,
+        *,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> GetPublicWorkflowRunNestedCompatApiV2PublicWorkflowsRunsRunIdGet200Envelope:
+        """
+        Parameters
+        ----------
+        run_id : str
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        GetPublicWorkflowRunNestedCompatApiV2PublicWorkflowsRunsRunIdGet200Envelope
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sanka_sdk import AsyncSankaClient
+
+        client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.workflow_runs.get_public_workflow_run_nested_compat_api(
+                run_id="run_id",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.get_public_workflow_run_nested_compat_api(
             run_id, workspace_id=workspace_id, request_options=request_options
         )
         return _response.data
@@ -486,6 +1163,288 @@ class AsyncWorkflowRunsClient:
         )
         return _response.data
 
+    async def preview_public_hubspot_invoice_draft_api(
+        self,
+        *,
+        request: typing.Dict[str, typing.Optional[typing.Any]],
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> PreviewPublicHubspotInvoiceDraftApiV2PublicInvoicesDraftsHubspotPreviewPost200Envelope:
+        """
+        Parameters
+        ----------
+        request : typing.Dict[str, typing.Optional[typing.Any]]
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        PreviewPublicHubspotInvoiceDraftApiV2PublicInvoicesDraftsHubspotPreviewPost200Envelope
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sanka_sdk import AsyncSankaClient
+
+        client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.workflow_runs.preview_public_hubspot_invoice_draft_api(
+                request={"key": "value"},
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.preview_public_hubspot_invoice_draft_api(
+            request=request, workspace_id=workspace_id, request_options=request_options
+        )
+        return _response.data
+
+    async def preview_public_freee_invoice_export_api(
+        self,
+        *,
+        request: typing.Dict[str, typing.Optional[typing.Any]],
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> PreviewPublicFreeeInvoiceExportApiV2PublicInvoicesExportsFreeePreviewPost200Envelope:
+        """
+        Parameters
+        ----------
+        request : typing.Dict[str, typing.Optional[typing.Any]]
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        PreviewPublicFreeeInvoiceExportApiV2PublicInvoicesExportsFreeePreviewPost200Envelope
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sanka_sdk import AsyncSankaClient
+
+        client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.workflow_runs.preview_public_freee_invoice_export_api(
+                request={"key": "value"},
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.preview_public_freee_invoice_export_api(
+            request=request, workspace_id=workspace_id, request_options=request_options
+        )
+        return _response.data
+
+    async def preview_public_moneyforward_invoice_export_api(
+        self,
+        *,
+        request: typing.Dict[str, typing.Optional[typing.Any]],
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> PreviewPublicMoneyforwardInvoiceExportApiV2PublicInvoicesExportsMoneyforwardPreviewPost200Envelope:
+        """
+        Parameters
+        ----------
+        request : typing.Dict[str, typing.Optional[typing.Any]]
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        PreviewPublicMoneyforwardInvoiceExportApiV2PublicInvoicesExportsMoneyforwardPreviewPost200Envelope
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sanka_sdk import AsyncSankaClient
+
+        client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.workflow_runs.preview_public_moneyforward_invoice_export_api(
+                request={"key": "value"},
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.preview_public_moneyforward_invoice_export_api(
+            request=request, workspace_id=workspace_id, request_options=request_options
+        )
+        return _response.data
+
+    async def preview_public_hubspot_estimate_draft_api(
+        self,
+        *,
+        request: typing.Dict[str, typing.Optional[typing.Any]],
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> PreviewPublicHubspotEstimateDraftApiV2PublicEstimatesDraftsHubspotPreviewPost200Envelope:
+        """
+        Parameters
+        ----------
+        request : typing.Dict[str, typing.Optional[typing.Any]]
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        PreviewPublicHubspotEstimateDraftApiV2PublicEstimatesDraftsHubspotPreviewPost200Envelope
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sanka_sdk import AsyncSankaClient
+
+        client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.workflow_runs.preview_public_hubspot_estimate_draft_api(
+                request={"key": "value"},
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.preview_public_hubspot_estimate_draft_api(
+            request=request, workspace_id=workspace_id, request_options=request_options
+        )
+        return _response.data
+
+    async def preview_public_hubspot_order_handoff_api(
+        self,
+        *,
+        request: typing.Dict[str, typing.Optional[typing.Any]],
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> PreviewPublicHubspotOrderHandoffApiV2PublicOrdersHandoffsHubspotPreviewPost200Envelope:
+        """
+        Parameters
+        ----------
+        request : typing.Dict[str, typing.Optional[typing.Any]]
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        PreviewPublicHubspotOrderHandoffApiV2PublicOrdersHandoffsHubspotPreviewPost200Envelope
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sanka_sdk import AsyncSankaClient
+
+        client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.workflow_runs.preview_public_hubspot_order_handoff_api(
+                request={"key": "value"},
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.preview_public_hubspot_order_handoff_api(
+            request=request, workspace_id=workspace_id, request_options=request_options
+        )
+        return _response.data
+
+    async def preview_public_hubspot_commission_incentive_api(
+        self,
+        *,
+        request: typing.Dict[str, typing.Optional[typing.Any]],
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> PreviewPublicHubspotCommissionIncentiveApiV2PublicIncentivesCommissionHubspotPreviewPost200Envelope:
+        """
+        Parameters
+        ----------
+        request : typing.Dict[str, typing.Optional[typing.Any]]
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        PreviewPublicHubspotCommissionIncentiveApiV2PublicIncentivesCommissionHubspotPreviewPost200Envelope
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sanka_sdk import AsyncSankaClient
+
+        client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.workflow_runs.preview_public_hubspot_commission_incentive_api(
+                request={"key": "value"},
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.preview_public_hubspot_commission_incentive_api(
+            request=request, workspace_id=workspace_id, request_options=request_options
+        )
+        return _response.data
+
     async def preview_public_salesforce_quote_readiness_api(
         self,
         *,
@@ -529,6 +1488,53 @@ class AsyncWorkflowRunsClient:
         asyncio.run(main())
         """
         _response = await self._raw_client.preview_public_salesforce_quote_readiness_api(
+            request=request, workspace_id=workspace_id, request_options=request_options
+        )
+        return _response.data
+
+    async def summarize_public_salesforce_quote_readiness_api(
+        self,
+        *,
+        request: typing.Dict[str, typing.Optional[typing.Any]],
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> SummarizePublicSalesforceQuoteReadinessApiV2PublicCpqQuoteReadinessSalesforceSummaryPost200Envelope:
+        """
+        Parameters
+        ----------
+        request : typing.Dict[str, typing.Optional[typing.Any]]
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        SummarizePublicSalesforceQuoteReadinessApiV2PublicCpqQuoteReadinessSalesforceSummaryPost200Envelope
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sanka_sdk import AsyncSankaClient
+
+        client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.workflow_runs.summarize_public_salesforce_quote_readiness_api(
+                request={"key": "value"},
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.summarize_public_salesforce_quote_readiness_api(
             request=request, workspace_id=workspace_id, request_options=request_options
         )
         return _response.data
@@ -599,5 +1605,334 @@ class AsyncWorkflowRunsClient:
             language=language,
             lang=lang,
             request_options=request_options,
+        )
+        return _response.data
+
+    async def start_public_hubspot_invoice_draft_api(
+        self,
+        *,
+        request: typing.Dict[str, typing.Optional[typing.Any]],
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> StartPublicHubspotInvoiceDraftApiV2PublicInvoicesDraftsHubspotPost200Envelope:
+        """
+        Parameters
+        ----------
+        request : typing.Dict[str, typing.Optional[typing.Any]]
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        StartPublicHubspotInvoiceDraftApiV2PublicInvoicesDraftsHubspotPost200Envelope
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sanka_sdk import AsyncSankaClient
+
+        client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.workflow_runs.start_public_hubspot_invoice_draft_api(
+                request={"key": "value"},
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.start_public_hubspot_invoice_draft_api(
+            request=request, workspace_id=workspace_id, request_options=request_options
+        )
+        return _response.data
+
+    async def start_public_freee_invoice_export_api(
+        self,
+        *,
+        request: typing.Dict[str, typing.Optional[typing.Any]],
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> StartPublicFreeeInvoiceExportApiV2PublicInvoicesExportsFreeePost200Envelope:
+        """
+        Parameters
+        ----------
+        request : typing.Dict[str, typing.Optional[typing.Any]]
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        StartPublicFreeeInvoiceExportApiV2PublicInvoicesExportsFreeePost200Envelope
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sanka_sdk import AsyncSankaClient
+
+        client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.workflow_runs.start_public_freee_invoice_export_api(
+                request={"key": "value"},
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.start_public_freee_invoice_export_api(
+            request=request, workspace_id=workspace_id, request_options=request_options
+        )
+        return _response.data
+
+    async def start_public_moneyforward_invoice_export_api(
+        self,
+        *,
+        request: typing.Dict[str, typing.Optional[typing.Any]],
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> StartPublicMoneyforwardInvoiceExportApiV2PublicInvoicesExportsMoneyforwardPost200Envelope:
+        """
+        Parameters
+        ----------
+        request : typing.Dict[str, typing.Optional[typing.Any]]
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        StartPublicMoneyforwardInvoiceExportApiV2PublicInvoicesExportsMoneyforwardPost200Envelope
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sanka_sdk import AsyncSankaClient
+
+        client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.workflow_runs.start_public_moneyforward_invoice_export_api(
+                request={"key": "value"},
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.start_public_moneyforward_invoice_export_api(
+            request=request, workspace_id=workspace_id, request_options=request_options
+        )
+        return _response.data
+
+    async def start_public_hubspot_estimate_draft_api(
+        self,
+        *,
+        request: typing.Dict[str, typing.Optional[typing.Any]],
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> StartPublicHubspotEstimateDraftApiV2PublicEstimatesDraftsHubspotPost200Envelope:
+        """
+        Parameters
+        ----------
+        request : typing.Dict[str, typing.Optional[typing.Any]]
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        StartPublicHubspotEstimateDraftApiV2PublicEstimatesDraftsHubspotPost200Envelope
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sanka_sdk import AsyncSankaClient
+
+        client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.workflow_runs.start_public_hubspot_estimate_draft_api(
+                request={"key": "value"},
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.start_public_hubspot_estimate_draft_api(
+            request=request, workspace_id=workspace_id, request_options=request_options
+        )
+        return _response.data
+
+    async def start_public_hubspot_order_handoff_api(
+        self,
+        *,
+        request: typing.Dict[str, typing.Optional[typing.Any]],
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> StartPublicHubspotOrderHandoffApiV2PublicOrdersHandoffsHubspotPost200Envelope:
+        """
+        Parameters
+        ----------
+        request : typing.Dict[str, typing.Optional[typing.Any]]
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        StartPublicHubspotOrderHandoffApiV2PublicOrdersHandoffsHubspotPost200Envelope
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sanka_sdk import AsyncSankaClient
+
+        client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.workflow_runs.start_public_hubspot_order_handoff_api(
+                request={"key": "value"},
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.start_public_hubspot_order_handoff_api(
+            request=request, workspace_id=workspace_id, request_options=request_options
+        )
+        return _response.data
+
+    async def start_public_hubspot_revenue_control_report_api(
+        self,
+        *,
+        request: typing.Dict[str, typing.Optional[typing.Any]],
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> StartPublicHubspotRevenueControlReportApiV2PublicReportsRevenueControlHubspotPost200Envelope:
+        """
+        Parameters
+        ----------
+        request : typing.Dict[str, typing.Optional[typing.Any]]
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        StartPublicHubspotRevenueControlReportApiV2PublicReportsRevenueControlHubspotPost200Envelope
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sanka_sdk import AsyncSankaClient
+
+        client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.workflow_runs.start_public_hubspot_revenue_control_report_api(
+                request={"key": "value"},
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.start_public_hubspot_revenue_control_report_api(
+            request=request, workspace_id=workspace_id, request_options=request_options
+        )
+        return _response.data
+
+    async def writeback_public_salesforce_quote_readiness_api(
+        self,
+        *,
+        request: typing.Dict[str, typing.Optional[typing.Any]],
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> WritebackPublicSalesforceQuoteReadinessApiV2PublicCpqQuoteReadinessSalesforceWritebackPost200Envelope:
+        """
+        Parameters
+        ----------
+        request : typing.Dict[str, typing.Optional[typing.Any]]
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        WritebackPublicSalesforceQuoteReadinessApiV2PublicCpqQuoteReadinessSalesforceWritebackPost200Envelope
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sanka_sdk import AsyncSankaClient
+
+        client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.workflow_runs.writeback_public_salesforce_quote_readiness_api(
+                request={"key": "value"},
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.writeback_public_salesforce_quote_readiness_api(
+            request=request, workspace_id=workspace_id, request_options=request_options
         )
         return _response.data

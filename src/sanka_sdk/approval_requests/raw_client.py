@@ -19,9 +19,6 @@ from ..types.create_approval_request_api_v_2_public_approval_requests_post_200_e
     CreateApprovalRequestApiV2PublicApprovalRequestsPost200Envelope,
 )
 from ..types.error_envelope import ErrorEnvelope
-from ..types.list_approval_requests_api_v_2_public_approval_requests_get_200_envelope import (
-    ListApprovalRequestsApiV2PublicApprovalRequestsGet200Envelope,
-)
 from ..types.reject_approval_request_api_v_2_public_approval_requests_history_id_reject_post_200_envelope import (
     RejectApprovalRequestApiV2PublicApprovalRequestsHistoryIdRejectPost200Envelope,
 )
@@ -33,93 +30,6 @@ OMIT = typing.cast(typing.Any, ...)
 class RawApprovalRequestsClient:
     def __init__(self, *, client_wrapper: SyncClientWrapper):
         self._client_wrapper = client_wrapper
-
-    def list_approval_requests_api(
-        self,
-        *,
-        record_id: str,
-        object: typing.Optional[str] = None,
-        object_type: typing.Optional[str] = None,
-        workspace_id: typing.Optional[str] = None,
-        request_options: typing.Optional[RequestOptions] = None,
-    ) -> HttpResponse[ListApprovalRequestsApiV2PublicApprovalRequestsGet200Envelope]:
-        """
-        Parameters
-        ----------
-        record_id : str
-
-        object : typing.Optional[str]
-
-        object_type : typing.Optional[str]
-
-        workspace_id : typing.Optional[str]
-
-        request_options : typing.Optional[RequestOptions]
-            Request-specific configuration.
-
-        Returns
-        -------
-        HttpResponse[ListApprovalRequestsApiV2PublicApprovalRequestsGet200Envelope]
-            Successful Response
-        """
-        _response = self._client_wrapper.httpx_client.request(
-            "v2/public/approval-requests",
-            method="GET",
-            params={
-                "record_id": record_id,
-                "object": object,
-                "object_type": object_type,
-                "workspace_id": workspace_id,
-            },
-            request_options=request_options,
-        )
-        try:
-            if 200 <= _response.status_code < 300:
-                _data = typing.cast(
-                    ListApprovalRequestsApiV2PublicApprovalRequestsGet200Envelope,
-                    construct_type(
-                        type_=ListApprovalRequestsApiV2PublicApprovalRequestsGet200Envelope,  # type: ignore
-                        object_=_response.json(),
-                    ),
-                )
-                return HttpResponse(response=_response, data=_data)
-            if _response.status_code == 401:
-                raise UnauthorizedError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        ErrorEnvelope,
-                        construct_type(
-                            type_=ErrorEnvelope,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 403:
-                raise ForbiddenError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        ErrorEnvelope,
-                        construct_type(
-                            type_=ErrorEnvelope,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 422:
-                raise UnprocessableEntityError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        ErrorEnvelope,
-                        construct_type(
-                            type_=ErrorEnvelope,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
-        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
     def create_approval_request_api(
         self,
@@ -394,93 +304,6 @@ class RawApprovalRequestsClient:
 class AsyncRawApprovalRequestsClient:
     def __init__(self, *, client_wrapper: AsyncClientWrapper):
         self._client_wrapper = client_wrapper
-
-    async def list_approval_requests_api(
-        self,
-        *,
-        record_id: str,
-        object: typing.Optional[str] = None,
-        object_type: typing.Optional[str] = None,
-        workspace_id: typing.Optional[str] = None,
-        request_options: typing.Optional[RequestOptions] = None,
-    ) -> AsyncHttpResponse[ListApprovalRequestsApiV2PublicApprovalRequestsGet200Envelope]:
-        """
-        Parameters
-        ----------
-        record_id : str
-
-        object : typing.Optional[str]
-
-        object_type : typing.Optional[str]
-
-        workspace_id : typing.Optional[str]
-
-        request_options : typing.Optional[RequestOptions]
-            Request-specific configuration.
-
-        Returns
-        -------
-        AsyncHttpResponse[ListApprovalRequestsApiV2PublicApprovalRequestsGet200Envelope]
-            Successful Response
-        """
-        _response = await self._client_wrapper.httpx_client.request(
-            "v2/public/approval-requests",
-            method="GET",
-            params={
-                "record_id": record_id,
-                "object": object,
-                "object_type": object_type,
-                "workspace_id": workspace_id,
-            },
-            request_options=request_options,
-        )
-        try:
-            if 200 <= _response.status_code < 300:
-                _data = typing.cast(
-                    ListApprovalRequestsApiV2PublicApprovalRequestsGet200Envelope,
-                    construct_type(
-                        type_=ListApprovalRequestsApiV2PublicApprovalRequestsGet200Envelope,  # type: ignore
-                        object_=_response.json(),
-                    ),
-                )
-                return AsyncHttpResponse(response=_response, data=_data)
-            if _response.status_code == 401:
-                raise UnauthorizedError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        ErrorEnvelope,
-                        construct_type(
-                            type_=ErrorEnvelope,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 403:
-                raise ForbiddenError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        ErrorEnvelope,
-                        construct_type(
-                            type_=ErrorEnvelope,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 422:
-                raise UnprocessableEntityError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        ErrorEnvelope,
-                        construct_type(
-                            type_=ErrorEnvelope,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
-        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
     async def create_approval_request_api(
         self,

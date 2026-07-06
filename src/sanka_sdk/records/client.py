@@ -52,6 +52,7 @@ class RecordsClient:
         mode: typing.Optional[str] = OMIT,
         page: typing.Optional[int] = OMIT,
         limit: typing.Optional[int] = OMIT,
+        cursor: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> QueryPublicRecordsApiV2PublicRecordsQueryPost200Envelope:
         """
@@ -91,6 +92,8 @@ class RecordsClient:
 
         limit : typing.Optional[int]
 
+        cursor : typing.Optional[str]
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
@@ -127,6 +130,7 @@ class RecordsClient:
             mode=mode,
             page=page,
             limit=limit,
+            cursor=cursor,
             request_options=request_options,
         )
         return _response.data
@@ -274,6 +278,7 @@ class AsyncRecordsClient:
         mode: typing.Optional[str] = OMIT,
         page: typing.Optional[int] = OMIT,
         limit: typing.Optional[int] = OMIT,
+        cursor: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> QueryPublicRecordsApiV2PublicRecordsQueryPost200Envelope:
         """
@@ -312,6 +317,8 @@ class AsyncRecordsClient:
         page : typing.Optional[int]
 
         limit : typing.Optional[int]
+
+        cursor : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -357,6 +364,7 @@ class AsyncRecordsClient:
             mode=mode,
             page=page,
             limit=limit,
+            cursor=cursor,
             request_options=request_options,
         )
         return _response.data

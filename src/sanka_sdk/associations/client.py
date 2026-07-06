@@ -106,6 +106,7 @@ class AssociationsClient:
         definition_id: typing.Optional[str] = OMIT,
         label: typing.Optional[str] = OMIT,
         idempotency_key: typing.Optional[str] = OMIT,
+        confirm_association_warnings: typing.Optional[bool] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> CreatePublicAssociationApiV2PublicAssociationsPost200Envelope:
         """
@@ -122,6 +123,8 @@ class AssociationsClient:
         label : typing.Optional[str]
 
         idempotency_key : typing.Optional[str]
+
+        confirm_association_warnings : typing.Optional[bool]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -157,6 +160,7 @@ class AssociationsClient:
             definition_id=definition_id,
             label=label,
             idempotency_key=idempotency_key,
+            confirm_association_warnings=confirm_association_warnings,
             request_options=request_options,
         )
         return _response.data
@@ -170,6 +174,7 @@ class AssociationsClient:
         definition_id: typing.Optional[str] = OMIT,
         label: typing.Optional[str] = OMIT,
         idempotency_key: typing.Optional[str] = OMIT,
+        confirm_association_warnings: typing.Optional[bool] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> DeletePublicAssociationApiV2PublicAssociationsDelete200Envelope:
         """
@@ -186,6 +191,8 @@ class AssociationsClient:
         label : typing.Optional[str]
 
         idempotency_key : typing.Optional[str]
+
+        confirm_association_warnings : typing.Optional[bool]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -221,6 +228,7 @@ class AssociationsClient:
             definition_id=definition_id,
             label=label,
             idempotency_key=idempotency_key,
+            confirm_association_warnings=confirm_association_warnings,
             request_options=request_options,
         )
         return _response.data
@@ -320,6 +328,7 @@ class AsyncAssociationsClient:
         definition_id: typing.Optional[str] = OMIT,
         label: typing.Optional[str] = OMIT,
         idempotency_key: typing.Optional[str] = OMIT,
+        confirm_association_warnings: typing.Optional[bool] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> CreatePublicAssociationApiV2PublicAssociationsPost200Envelope:
         """
@@ -336,6 +345,8 @@ class AsyncAssociationsClient:
         label : typing.Optional[str]
 
         idempotency_key : typing.Optional[str]
+
+        confirm_association_warnings : typing.Optional[bool]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -379,6 +390,7 @@ class AsyncAssociationsClient:
             definition_id=definition_id,
             label=label,
             idempotency_key=idempotency_key,
+            confirm_association_warnings=confirm_association_warnings,
             request_options=request_options,
         )
         return _response.data
@@ -392,6 +404,7 @@ class AsyncAssociationsClient:
         definition_id: typing.Optional[str] = OMIT,
         label: typing.Optional[str] = OMIT,
         idempotency_key: typing.Optional[str] = OMIT,
+        confirm_association_warnings: typing.Optional[bool] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> DeletePublicAssociationApiV2PublicAssociationsDelete200Envelope:
         """
@@ -408,6 +421,8 @@ class AsyncAssociationsClient:
         label : typing.Optional[str]
 
         idempotency_key : typing.Optional[str]
+
+        confirm_association_warnings : typing.Optional[bool]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -451,6 +466,7 @@ class AsyncAssociationsClient:
             definition_id=definition_id,
             label=label,
             idempotency_key=idempotency_key,
+            confirm_association_warnings=confirm_association_warnings,
             request_options=request_options,
         )
         return _response.data

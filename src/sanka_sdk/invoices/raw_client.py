@@ -11,9 +11,13 @@ from ..core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ..core.http_response import AsyncHttpResponse, HttpResponse
 from ..core.jsonable_encoder import jsonable_encoder
 from ..core.request_options import RequestOptions
+from ..core.serialization import convert_and_respect_annotation_metadata
 from ..core.unchecked_base_model import construct_type
 from ..errors.unauthorized_error import UnauthorizedError
 from ..errors.unprocessable_entity_error import UnprocessableEntityError
+from ..types.bulk_update_public_invoices_api_v_2_public_invoices_bulk_update_post_200_envelope import (
+    BulkUpdatePublicInvoicesApiV2PublicInvoicesBulkUpdatePost200Envelope,
+)
 from ..types.create_public_invoice_api_v_2_public_invoices_post_200_envelope import (
     CreatePublicInvoiceApiV2PublicInvoicesPost200Envelope,
 )
@@ -33,6 +37,7 @@ from ..types.list_public_overdue_invoices_api_v_2_public_invoices_overdue_get_20
 from ..types.permanent_delete_public_invoice_api_v_2_public_invoices_invoice_id_permanent_delete_delete_200_envelope import (
     PermanentDeletePublicInvoiceApiV2PublicInvoicesInvoiceIdPermanentDeleteDelete200Envelope,
 )
+from ..types.public_invoice_email_pdf_attachment import PublicInvoiceEmailPdfAttachment
 from ..types.send_public_invoice_email_api_v_2_public_invoices_invoice_id_email_post_200_envelope import (
     SendPublicInvoiceEmailApiV2PublicInvoicesInvoiceIdEmailPost200Envelope,
 )
@@ -42,6 +47,7 @@ from ..types.update_public_invoice_api_v_2_public_invoices_invoice_id_put_200_en
 from ..types.upload_public_invoice_file_api_v_2_public_invoices_files_post_200_envelope import (
     UploadPublicInvoiceFileApiV2PublicInvoicesFilesPost200Envelope,
 )
+from .types.public_invoice_email_request_action import PublicInvoiceEmailRequestAction
 
 # this is used as the default value for optional parameters
 OMIT = typing.cast(typing.Any, ...)
@@ -62,7 +68,12 @@ class RawInvoicesClient:
         usage_status: typing.Optional[str] = None,
         page: typing.Optional[int] = None,
         limit: typing.Optional[int] = None,
+        cursor: typing.Optional[str] = None,
         sort: typing.Optional[str] = None,
+        created_at_from: typing.Optional[str] = None,
+        created_at_to: typing.Optional[str] = None,
+        updated_at_from: typing.Optional[str] = None,
+        updated_at_to: typing.Optional[str] = None,
         x_language: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
@@ -86,7 +97,17 @@ class RawInvoicesClient:
 
         limit : typing.Optional[int]
 
+        cursor : typing.Optional[str]
+
         sort : typing.Optional[str]
+
+        created_at_from : typing.Optional[str]
+
+        created_at_to : typing.Optional[str]
+
+        updated_at_from : typing.Optional[str]
+
+        updated_at_to : typing.Optional[str]
 
         x_language : typing.Optional[str]
 
@@ -98,7 +119,7 @@ class RawInvoicesClient:
         Returns
         -------
         HttpResponse[ListPublicInvoicesApiV2PublicInvoicesGet200Envelope]
-            Object record list response
+            Object record list or line-item-expanded list response
         """
         _response = self._client_wrapper.httpx_client.request(
             "v2/public/invoices",
@@ -112,7 +133,12 @@ class RawInvoicesClient:
                 "usage_status": usage_status,
                 "page": page,
                 "limit": limit,
+                "cursor": cursor,
                 "sort": sort,
+                "created_at_from": created_at_from,
+                "created_at_to": created_at_to,
+                "updated_at_from": updated_at_from,
+                "updated_at_to": updated_at_to,
             },
             headers={
                 "X-Language": str(x_language) if x_language is not None else None,
@@ -163,6 +189,8 @@ class RawInvoicesClient:
         workspace_id: typing.Optional[str] = None,
         view_id: typing.Optional[str] = OMIT,
         form_view_id: typing.Optional[str] = OMIT,
+        cost_line_items: typing.Optional[typing.Sequence[typing.Optional[typing.Any]]] = OMIT,
+        line_items: typing.Optional[typing.Sequence[typing.Optional[typing.Any]]] = OMIT,
         properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[CreatePublicInvoiceApiV2PublicInvoicesPost200Envelope]:
@@ -174,6 +202,10 @@ class RawInvoicesClient:
         view_id : typing.Optional[str]
 
         form_view_id : typing.Optional[str]
+
+        cost_line_items : typing.Optional[typing.Sequence[typing.Optional[typing.Any]]]
+
+        line_items : typing.Optional[typing.Sequence[typing.Optional[typing.Any]]]
 
         properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
 
@@ -194,6 +226,8 @@ class RawInvoicesClient:
             json={
                 "view_id": view_id,
                 "form_view_id": form_view_id,
+                "cost_line_items": cost_line_items,
+                "line_items": line_items,
                 "properties": properties,
             },
             headers={
@@ -282,6 +316,108 @@ class RawInvoicesClient:
                     UploadPublicInvoiceFileApiV2PublicInvoicesFilesPost200Envelope,
                     construct_type(
                         type_=UploadPublicInvoiceFileApiV2PublicInvoicesFilesPost200Envelope,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    def bulk_update_public_invoices_api(
+        self,
+        *,
+        workspace_id: typing.Optional[str] = None,
+        accept_language: typing.Optional[str] = None,
+        ids: typing.Optional[typing.Sequence[str]] = OMIT,
+        flag_all: typing.Optional[bool] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
+        search: typing.Optional[str] = OMIT,
+        status: typing.Optional[str] = OMIT,
+        usage_status: typing.Optional[str] = OMIT,
+        view_id: typing.Optional[str] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> HttpResponse[BulkUpdatePublicInvoicesApiV2PublicInvoicesBulkUpdatePost200Envelope]:
+        """
+        Parameters
+        ----------
+        workspace_id : typing.Optional[str]
+
+        accept_language : typing.Optional[str]
+
+        ids : typing.Optional[typing.Sequence[str]]
+
+        flag_all : typing.Optional[bool]
+
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
+
+        search : typing.Optional[str]
+
+        status : typing.Optional[str]
+
+        usage_status : typing.Optional[str]
+
+        view_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[BulkUpdatePublicInvoicesApiV2PublicInvoicesBulkUpdatePost200Envelope]
+            Successful Response
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            "v2/public/invoices/bulk-update",
+            method="POST",
+            params={
+                "workspace_id": workspace_id,
+            },
+            json={
+                "ids": ids,
+                "flag_all": flag_all,
+                "properties": properties,
+                "search": search,
+                "status": status,
+                "usage_status": usage_status,
+                "view_id": view_id,
+            },
+            headers={
+                "content-type": "application/json",
+                "Accept-Language": str(accept_language) if accept_language is not None else None,
+            },
+            request_options=request_options,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    BulkUpdatePublicInvoicesApiV2PublicInvoicesBulkUpdatePost200Envelope,
+                    construct_type(
+                        type_=BulkUpdatePublicInvoicesApiV2PublicInvoicesBulkUpdatePost200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
@@ -476,6 +612,10 @@ class RawInvoicesClient:
         workspace_id: typing.Optional[str] = None,
         view_id: typing.Optional[str] = OMIT,
         form_view_id: typing.Optional[str] = OMIT,
+        associations: typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]] = OMIT,
+        cost_line_items: typing.Optional[typing.Sequence[typing.Optional[typing.Any]]] = OMIT,
+        files: typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]] = OMIT,
+        line_items: typing.Optional[typing.Sequence[typing.Optional[typing.Any]]] = OMIT,
         properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[UpdatePublicInvoiceApiV2PublicInvoicesInvoiceIdPut200Envelope]:
@@ -491,6 +631,14 @@ class RawInvoicesClient:
         view_id : typing.Optional[str]
 
         form_view_id : typing.Optional[str]
+
+        associations : typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]]
+
+        cost_line_items : typing.Optional[typing.Sequence[typing.Optional[typing.Any]]]
+
+        files : typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]]
+
+        line_items : typing.Optional[typing.Sequence[typing.Optional[typing.Any]]]
 
         properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
 
@@ -512,6 +660,10 @@ class RawInvoicesClient:
             json={
                 "view_id": view_id,
                 "form_view_id": form_view_id,
+                "associations": associations,
+                "cost_line_items": cost_line_items,
+                "files": files,
+                "line_items": line_items,
                 "properties": properties,
             },
             headers={
@@ -725,19 +877,26 @@ class RawInvoicesClient:
         self,
         invoice_id: str,
         *,
-        request: typing.Dict[str, typing.Optional[typing.Any]],
         lang: typing.Optional[str] = None,
         language: typing.Optional[str] = None,
         workspace_id: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
+        action: typing.Optional[PublicInvoiceEmailRequestAction] = OMIT,
+        to: typing.Optional[typing.Sequence[str]] = OMIT,
+        cc: typing.Optional[typing.Sequence[str]] = OMIT,
+        subject: typing.Optional[str] = OMIT,
+        body: typing.Optional[str] = OMIT,
+        scheduled_at: typing.Optional[dt.datetime] = OMIT,
+        template_select: typing.Optional[str] = OMIT,
+        additional_pdf_attachments: typing.Optional[typing.Sequence[PublicInvoiceEmailPdfAttachment]] = OMIT,
+        channel_id: typing.Optional[str] = OMIT,
+        external_id: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[SendPublicInvoiceEmailApiV2PublicInvoicesInvoiceIdEmailPost200Envelope]:
         """
         Parameters
         ----------
         invoice_id : str
-
-        request : typing.Dict[str, typing.Optional[typing.Any]]
 
         lang : typing.Optional[str]
 
@@ -746,6 +905,26 @@ class RawInvoicesClient:
         workspace_id : typing.Optional[str]
 
         accept_language : typing.Optional[str]
+
+        action : typing.Optional[PublicInvoiceEmailRequestAction]
+
+        to : typing.Optional[typing.Sequence[str]]
+
+        cc : typing.Optional[typing.Sequence[str]]
+
+        subject : typing.Optional[str]
+
+        body : typing.Optional[str]
+
+        scheduled_at : typing.Optional[dt.datetime]
+
+        template_select : typing.Optional[str]
+
+        additional_pdf_attachments : typing.Optional[typing.Sequence[PublicInvoiceEmailPdfAttachment]]
+
+        channel_id : typing.Optional[str]
+
+        external_id : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -763,7 +942,22 @@ class RawInvoicesClient:
                 "language": language,
                 "workspace_id": workspace_id,
             },
-            json=request,
+            json={
+                "action": action,
+                "to": to,
+                "cc": cc,
+                "subject": subject,
+                "body": body,
+                "scheduled_at": scheduled_at,
+                "template_select": template_select,
+                "additional_pdf_attachments": convert_and_respect_annotation_metadata(
+                    object_=additional_pdf_attachments,
+                    annotation=typing.Sequence[PublicInvoiceEmailPdfAttachment],
+                    direction="write",
+                ),
+                "channel_id": channel_id,
+                "external_id": external_id,
+            },
             headers={
                 "content-type": "application/json",
                 "Accept-Language": str(accept_language) if accept_language is not None else None,
@@ -905,7 +1099,12 @@ class AsyncRawInvoicesClient:
         usage_status: typing.Optional[str] = None,
         page: typing.Optional[int] = None,
         limit: typing.Optional[int] = None,
+        cursor: typing.Optional[str] = None,
         sort: typing.Optional[str] = None,
+        created_at_from: typing.Optional[str] = None,
+        created_at_to: typing.Optional[str] = None,
+        updated_at_from: typing.Optional[str] = None,
+        updated_at_to: typing.Optional[str] = None,
         x_language: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
@@ -929,7 +1128,17 @@ class AsyncRawInvoicesClient:
 
         limit : typing.Optional[int]
 
+        cursor : typing.Optional[str]
+
         sort : typing.Optional[str]
+
+        created_at_from : typing.Optional[str]
+
+        created_at_to : typing.Optional[str]
+
+        updated_at_from : typing.Optional[str]
+
+        updated_at_to : typing.Optional[str]
 
         x_language : typing.Optional[str]
 
@@ -941,7 +1150,7 @@ class AsyncRawInvoicesClient:
         Returns
         -------
         AsyncHttpResponse[ListPublicInvoicesApiV2PublicInvoicesGet200Envelope]
-            Object record list response
+            Object record list or line-item-expanded list response
         """
         _response = await self._client_wrapper.httpx_client.request(
             "v2/public/invoices",
@@ -955,7 +1164,12 @@ class AsyncRawInvoicesClient:
                 "usage_status": usage_status,
                 "page": page,
                 "limit": limit,
+                "cursor": cursor,
                 "sort": sort,
+                "created_at_from": created_at_from,
+                "created_at_to": created_at_to,
+                "updated_at_from": updated_at_from,
+                "updated_at_to": updated_at_to,
             },
             headers={
                 "X-Language": str(x_language) if x_language is not None else None,
@@ -1006,6 +1220,8 @@ class AsyncRawInvoicesClient:
         workspace_id: typing.Optional[str] = None,
         view_id: typing.Optional[str] = OMIT,
         form_view_id: typing.Optional[str] = OMIT,
+        cost_line_items: typing.Optional[typing.Sequence[typing.Optional[typing.Any]]] = OMIT,
+        line_items: typing.Optional[typing.Sequence[typing.Optional[typing.Any]]] = OMIT,
         properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[CreatePublicInvoiceApiV2PublicInvoicesPost200Envelope]:
@@ -1017,6 +1233,10 @@ class AsyncRawInvoicesClient:
         view_id : typing.Optional[str]
 
         form_view_id : typing.Optional[str]
+
+        cost_line_items : typing.Optional[typing.Sequence[typing.Optional[typing.Any]]]
+
+        line_items : typing.Optional[typing.Sequence[typing.Optional[typing.Any]]]
 
         properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
 
@@ -1037,6 +1257,8 @@ class AsyncRawInvoicesClient:
             json={
                 "view_id": view_id,
                 "form_view_id": form_view_id,
+                "cost_line_items": cost_line_items,
+                "line_items": line_items,
                 "properties": properties,
             },
             headers={
@@ -1125,6 +1347,108 @@ class AsyncRawInvoicesClient:
                     UploadPublicInvoiceFileApiV2PublicInvoicesFilesPost200Envelope,
                     construct_type(
                         type_=UploadPublicInvoiceFileApiV2PublicInvoicesFilesPost200Envelope,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    async def bulk_update_public_invoices_api(
+        self,
+        *,
+        workspace_id: typing.Optional[str] = None,
+        accept_language: typing.Optional[str] = None,
+        ids: typing.Optional[typing.Sequence[str]] = OMIT,
+        flag_all: typing.Optional[bool] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
+        search: typing.Optional[str] = OMIT,
+        status: typing.Optional[str] = OMIT,
+        usage_status: typing.Optional[str] = OMIT,
+        view_id: typing.Optional[str] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> AsyncHttpResponse[BulkUpdatePublicInvoicesApiV2PublicInvoicesBulkUpdatePost200Envelope]:
+        """
+        Parameters
+        ----------
+        workspace_id : typing.Optional[str]
+
+        accept_language : typing.Optional[str]
+
+        ids : typing.Optional[typing.Sequence[str]]
+
+        flag_all : typing.Optional[bool]
+
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
+
+        search : typing.Optional[str]
+
+        status : typing.Optional[str]
+
+        usage_status : typing.Optional[str]
+
+        view_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[BulkUpdatePublicInvoicesApiV2PublicInvoicesBulkUpdatePost200Envelope]
+            Successful Response
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            "v2/public/invoices/bulk-update",
+            method="POST",
+            params={
+                "workspace_id": workspace_id,
+            },
+            json={
+                "ids": ids,
+                "flag_all": flag_all,
+                "properties": properties,
+                "search": search,
+                "status": status,
+                "usage_status": usage_status,
+                "view_id": view_id,
+            },
+            headers={
+                "content-type": "application/json",
+                "Accept-Language": str(accept_language) if accept_language is not None else None,
+            },
+            request_options=request_options,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    BulkUpdatePublicInvoicesApiV2PublicInvoicesBulkUpdatePost200Envelope,
+                    construct_type(
+                        type_=BulkUpdatePublicInvoicesApiV2PublicInvoicesBulkUpdatePost200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
@@ -1319,6 +1643,10 @@ class AsyncRawInvoicesClient:
         workspace_id: typing.Optional[str] = None,
         view_id: typing.Optional[str] = OMIT,
         form_view_id: typing.Optional[str] = OMIT,
+        associations: typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]] = OMIT,
+        cost_line_items: typing.Optional[typing.Sequence[typing.Optional[typing.Any]]] = OMIT,
+        files: typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]] = OMIT,
+        line_items: typing.Optional[typing.Sequence[typing.Optional[typing.Any]]] = OMIT,
         properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[UpdatePublicInvoiceApiV2PublicInvoicesInvoiceIdPut200Envelope]:
@@ -1334,6 +1662,14 @@ class AsyncRawInvoicesClient:
         view_id : typing.Optional[str]
 
         form_view_id : typing.Optional[str]
+
+        associations : typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]]
+
+        cost_line_items : typing.Optional[typing.Sequence[typing.Optional[typing.Any]]]
+
+        files : typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]]
+
+        line_items : typing.Optional[typing.Sequence[typing.Optional[typing.Any]]]
 
         properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
 
@@ -1355,6 +1691,10 @@ class AsyncRawInvoicesClient:
             json={
                 "view_id": view_id,
                 "form_view_id": form_view_id,
+                "associations": associations,
+                "cost_line_items": cost_line_items,
+                "files": files,
+                "line_items": line_items,
                 "properties": properties,
             },
             headers={
@@ -1569,19 +1909,26 @@ class AsyncRawInvoicesClient:
         self,
         invoice_id: str,
         *,
-        request: typing.Dict[str, typing.Optional[typing.Any]],
         lang: typing.Optional[str] = None,
         language: typing.Optional[str] = None,
         workspace_id: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
+        action: typing.Optional[PublicInvoiceEmailRequestAction] = OMIT,
+        to: typing.Optional[typing.Sequence[str]] = OMIT,
+        cc: typing.Optional[typing.Sequence[str]] = OMIT,
+        subject: typing.Optional[str] = OMIT,
+        body: typing.Optional[str] = OMIT,
+        scheduled_at: typing.Optional[dt.datetime] = OMIT,
+        template_select: typing.Optional[str] = OMIT,
+        additional_pdf_attachments: typing.Optional[typing.Sequence[PublicInvoiceEmailPdfAttachment]] = OMIT,
+        channel_id: typing.Optional[str] = OMIT,
+        external_id: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[SendPublicInvoiceEmailApiV2PublicInvoicesInvoiceIdEmailPost200Envelope]:
         """
         Parameters
         ----------
         invoice_id : str
-
-        request : typing.Dict[str, typing.Optional[typing.Any]]
 
         lang : typing.Optional[str]
 
@@ -1590,6 +1937,26 @@ class AsyncRawInvoicesClient:
         workspace_id : typing.Optional[str]
 
         accept_language : typing.Optional[str]
+
+        action : typing.Optional[PublicInvoiceEmailRequestAction]
+
+        to : typing.Optional[typing.Sequence[str]]
+
+        cc : typing.Optional[typing.Sequence[str]]
+
+        subject : typing.Optional[str]
+
+        body : typing.Optional[str]
+
+        scheduled_at : typing.Optional[dt.datetime]
+
+        template_select : typing.Optional[str]
+
+        additional_pdf_attachments : typing.Optional[typing.Sequence[PublicInvoiceEmailPdfAttachment]]
+
+        channel_id : typing.Optional[str]
+
+        external_id : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -1607,7 +1974,22 @@ class AsyncRawInvoicesClient:
                 "language": language,
                 "workspace_id": workspace_id,
             },
-            json=request,
+            json={
+                "action": action,
+                "to": to,
+                "cc": cc,
+                "subject": subject,
+                "body": body,
+                "scheduled_at": scheduled_at,
+                "template_select": template_select,
+                "additional_pdf_attachments": convert_and_respect_annotation_metadata(
+                    object_=additional_pdf_attachments,
+                    annotation=typing.Sequence[PublicInvoiceEmailPdfAttachment],
+                    direction="write",
+                ),
+                "channel_id": channel_id,
+                "external_id": external_id,
+            },
             headers={
                 "content-type": "application/json",
                 "Accept-Language": str(accept_language) if accept_language is not None else None,

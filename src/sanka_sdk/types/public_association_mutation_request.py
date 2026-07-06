@@ -14,6 +14,7 @@ class PublicAssociationMutationRequest(UncheckedBaseModel):
     definition_id: typing.Optional[str] = None
     label: typing.Optional[str] = None
     idempotency_key: typing.Optional[str] = None
+    confirm_association_warnings: typing.Optional[bool] = None
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

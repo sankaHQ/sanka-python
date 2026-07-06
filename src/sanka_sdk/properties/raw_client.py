@@ -54,6 +54,8 @@ class RawPropertiesClient:
         provider: typing.Optional[str] = None,
         channel_id: typing.Optional[str] = None,
         external_object_type: typing.Optional[str] = None,
+        custom_object_slug: typing.Optional[str] = None,
+        custom_object: typing.Optional[str] = None,
         workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[ListPublicDeveloperPropertiesApiV2PublicPropertiesObjectNameGet200Envelope]:
@@ -86,6 +88,10 @@ class RawPropertiesClient:
 
         external_object_type : typing.Optional[str]
 
+        custom_object_slug : typing.Optional[str]
+
+        custom_object : typing.Optional[str]
+
         workspace_id : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
@@ -112,6 +118,8 @@ class RawPropertiesClient:
                 "provider": provider,
                 "channel_id": channel_id,
                 "external_object_type": external_object_type,
+                "custom_object_slug": custom_object_slug,
+                "custom_object": custom_object,
                 "workspace_id": workspace_id,
             },
             request_options=request_options,
@@ -167,6 +175,7 @@ class RawPropertiesClient:
         target: typing.Optional[str] = OMIT,
         language: typing.Optional[str] = OMIT,
         custom_object_id: typing.Optional[str] = OMIT,
+        custom_object_slug: typing.Optional[str] = OMIT,
         editor_variant: typing.Optional[str] = OMIT,
         source: typing.Optional[str] = OMIT,
         scope: typing.Optional[str] = OMIT,
@@ -205,6 +214,8 @@ class RawPropertiesClient:
         language : typing.Optional[str]
 
         custom_object_id : typing.Optional[str]
+
+        custom_object_slug : typing.Optional[str]
 
         editor_variant : typing.Optional[str]
 
@@ -258,6 +269,7 @@ class RawPropertiesClient:
                 "target": target,
                 "language": language,
                 "custom_object_id": custom_object_id,
+                "custom_object_slug": custom_object_slug,
                 "editor_variant": editor_variant,
                 "source": source,
                 "scope": scope,
@@ -327,6 +339,8 @@ class RawPropertiesClient:
         provider: typing.Optional[str] = None,
         channel_id: typing.Optional[str] = None,
         external_object_type: typing.Optional[str] = None,
+        custom_object_slug: typing.Optional[str] = None,
+        custom_object: typing.Optional[str] = None,
         workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[RetrievePublicDeveloperPropertyApiV2PublicPropertiesObjectNamePropertyRefGet200Envelope]:
@@ -353,6 +367,10 @@ class RawPropertiesClient:
 
         external_object_type : typing.Optional[str]
 
+        custom_object_slug : typing.Optional[str]
+
+        custom_object : typing.Optional[str]
+
         workspace_id : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
@@ -375,6 +393,8 @@ class RawPropertiesClient:
                 "provider": provider,
                 "channel_id": channel_id,
                 "external_object_type": external_object_type,
+                "custom_object_slug": custom_object_slug,
+                "custom_object": custom_object,
                 "workspace_id": workspace_id,
             },
             request_options=request_options,
@@ -431,6 +451,7 @@ class RawPropertiesClient:
         target: typing.Optional[str] = OMIT,
         language: typing.Optional[str] = OMIT,
         custom_object_id: typing.Optional[str] = OMIT,
+        custom_object_slug: typing.Optional[str] = OMIT,
         editor_variant: typing.Optional[str] = OMIT,
         source: typing.Optional[str] = OMIT,
         scope: typing.Optional[str] = OMIT,
@@ -471,6 +492,8 @@ class RawPropertiesClient:
         language : typing.Optional[str]
 
         custom_object_id : typing.Optional[str]
+
+        custom_object_slug : typing.Optional[str]
 
         editor_variant : typing.Optional[str]
 
@@ -524,6 +547,7 @@ class RawPropertiesClient:
                 "target": target,
                 "language": language,
                 "custom_object_id": custom_object_id,
+                "custom_object_slug": custom_object_slug,
                 "editor_variant": editor_variant,
                 "source": source,
                 "scope": scope,
@@ -595,6 +619,8 @@ class RawPropertiesClient:
         dry_run: typing.Optional[bool] = None,
         confirm: typing.Optional[bool] = None,
         language: typing.Optional[str] = None,
+        custom_object_slug: typing.Optional[str] = None,
+        custom_object: typing.Optional[str] = None,
         workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[DeletePublicDeveloperPropertyApiV2PublicPropertiesObjectNamePropertyRefDelete200Envelope]:
@@ -625,6 +651,10 @@ class RawPropertiesClient:
 
         language : typing.Optional[str]
 
+        custom_object_slug : typing.Optional[str]
+
+        custom_object : typing.Optional[str]
+
         workspace_id : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
@@ -649,6 +679,8 @@ class RawPropertiesClient:
                 "dry_run": dry_run,
                 "confirm": confirm,
                 "language": language,
+                "custom_object_slug": custom_object_slug,
+                "custom_object": custom_object,
                 "workspace_id": workspace_id,
             },
             request_options=request_options,
@@ -711,6 +743,8 @@ class AsyncRawPropertiesClient:
         provider: typing.Optional[str] = None,
         channel_id: typing.Optional[str] = None,
         external_object_type: typing.Optional[str] = None,
+        custom_object_slug: typing.Optional[str] = None,
+        custom_object: typing.Optional[str] = None,
         workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[ListPublicDeveloperPropertiesApiV2PublicPropertiesObjectNameGet200Envelope]:
@@ -743,6 +777,10 @@ class AsyncRawPropertiesClient:
 
         external_object_type : typing.Optional[str]
 
+        custom_object_slug : typing.Optional[str]
+
+        custom_object : typing.Optional[str]
+
         workspace_id : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
@@ -769,6 +807,8 @@ class AsyncRawPropertiesClient:
                 "provider": provider,
                 "channel_id": channel_id,
                 "external_object_type": external_object_type,
+                "custom_object_slug": custom_object_slug,
+                "custom_object": custom_object,
                 "workspace_id": workspace_id,
             },
             request_options=request_options,
@@ -824,6 +864,7 @@ class AsyncRawPropertiesClient:
         target: typing.Optional[str] = OMIT,
         language: typing.Optional[str] = OMIT,
         custom_object_id: typing.Optional[str] = OMIT,
+        custom_object_slug: typing.Optional[str] = OMIT,
         editor_variant: typing.Optional[str] = OMIT,
         source: typing.Optional[str] = OMIT,
         scope: typing.Optional[str] = OMIT,
@@ -862,6 +903,8 @@ class AsyncRawPropertiesClient:
         language : typing.Optional[str]
 
         custom_object_id : typing.Optional[str]
+
+        custom_object_slug : typing.Optional[str]
 
         editor_variant : typing.Optional[str]
 
@@ -915,6 +958,7 @@ class AsyncRawPropertiesClient:
                 "target": target,
                 "language": language,
                 "custom_object_id": custom_object_id,
+                "custom_object_slug": custom_object_slug,
                 "editor_variant": editor_variant,
                 "source": source,
                 "scope": scope,
@@ -984,6 +1028,8 @@ class AsyncRawPropertiesClient:
         provider: typing.Optional[str] = None,
         channel_id: typing.Optional[str] = None,
         external_object_type: typing.Optional[str] = None,
+        custom_object_slug: typing.Optional[str] = None,
+        custom_object: typing.Optional[str] = None,
         workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[RetrievePublicDeveloperPropertyApiV2PublicPropertiesObjectNamePropertyRefGet200Envelope]:
@@ -1010,6 +1056,10 @@ class AsyncRawPropertiesClient:
 
         external_object_type : typing.Optional[str]
 
+        custom_object_slug : typing.Optional[str]
+
+        custom_object : typing.Optional[str]
+
         workspace_id : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
@@ -1032,6 +1082,8 @@ class AsyncRawPropertiesClient:
                 "provider": provider,
                 "channel_id": channel_id,
                 "external_object_type": external_object_type,
+                "custom_object_slug": custom_object_slug,
+                "custom_object": custom_object,
                 "workspace_id": workspace_id,
             },
             request_options=request_options,
@@ -1088,6 +1140,7 @@ class AsyncRawPropertiesClient:
         target: typing.Optional[str] = OMIT,
         language: typing.Optional[str] = OMIT,
         custom_object_id: typing.Optional[str] = OMIT,
+        custom_object_slug: typing.Optional[str] = OMIT,
         editor_variant: typing.Optional[str] = OMIT,
         source: typing.Optional[str] = OMIT,
         scope: typing.Optional[str] = OMIT,
@@ -1128,6 +1181,8 @@ class AsyncRawPropertiesClient:
         language : typing.Optional[str]
 
         custom_object_id : typing.Optional[str]
+
+        custom_object_slug : typing.Optional[str]
 
         editor_variant : typing.Optional[str]
 
@@ -1181,6 +1236,7 @@ class AsyncRawPropertiesClient:
                 "target": target,
                 "language": language,
                 "custom_object_id": custom_object_id,
+                "custom_object_slug": custom_object_slug,
                 "editor_variant": editor_variant,
                 "source": source,
                 "scope": scope,
@@ -1252,6 +1308,8 @@ class AsyncRawPropertiesClient:
         dry_run: typing.Optional[bool] = None,
         confirm: typing.Optional[bool] = None,
         language: typing.Optional[str] = None,
+        custom_object_slug: typing.Optional[str] = None,
+        custom_object: typing.Optional[str] = None,
         workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[DeletePublicDeveloperPropertyApiV2PublicPropertiesObjectNamePropertyRefDelete200Envelope]:
@@ -1282,6 +1340,10 @@ class AsyncRawPropertiesClient:
 
         language : typing.Optional[str]
 
+        custom_object_slug : typing.Optional[str]
+
+        custom_object : typing.Optional[str]
+
         workspace_id : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
@@ -1306,6 +1368,8 @@ class AsyncRawPropertiesClient:
                 "dry_run": dry_run,
                 "confirm": confirm,
                 "language": language,
+                "custom_object_slug": custom_object_slug,
+                "custom_object": custom_object,
                 "workspace_id": workspace_id,
             },
             request_options=request_options,

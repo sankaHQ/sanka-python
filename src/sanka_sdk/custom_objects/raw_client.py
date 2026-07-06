@@ -66,7 +66,12 @@ class RawCustomObjectsClient:
         usage_status: typing.Optional[str] = None,
         page: typing.Optional[int] = None,
         limit: typing.Optional[int] = None,
+        cursor: typing.Optional[str] = None,
         sort: typing.Optional[str] = None,
+        created_at_from: typing.Optional[str] = None,
+        created_at_to: typing.Optional[str] = None,
+        updated_at_from: typing.Optional[str] = None,
+        updated_at_to: typing.Optional[str] = None,
         x_language: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
@@ -92,7 +97,17 @@ class RawCustomObjectsClient:
 
         limit : typing.Optional[int]
 
+        cursor : typing.Optional[str]
+
         sort : typing.Optional[str]
+
+        created_at_from : typing.Optional[str]
+
+        created_at_to : typing.Optional[str]
+
+        updated_at_from : typing.Optional[str]
+
+        updated_at_to : typing.Optional[str]
 
         x_language : typing.Optional[str]
 
@@ -118,7 +133,12 @@ class RawCustomObjectsClient:
                 "usage_status": usage_status,
                 "page": page,
                 "limit": limit,
+                "cursor": cursor,
                 "sort": sort,
+                "created_at_from": created_at_from,
+                "created_at_to": created_at_to,
+                "updated_at_from": updated_at_from,
+                "updated_at_to": updated_at_to,
             },
             headers={
                 "X-Language": str(x_language) if x_language is not None else None,
@@ -178,9 +198,12 @@ class RawCustomObjectsClient:
         self,
         custom_object_id: str,
         *,
+        language: typing.Optional[str] = None,
         workspace_id: typing.Optional[str] = None,
         view_id: typing.Optional[str] = OMIT,
         form_view_id: typing.Optional[str] = OMIT,
+        cost_line_items: typing.Optional[typing.Sequence[typing.Optional[typing.Any]]] = OMIT,
+        line_items: typing.Optional[typing.Sequence[typing.Optional[typing.Any]]] = OMIT,
         properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[CreatePublicCustomObjectRecordApiV2PublicCustomObjectsCustomObjectIdRecordsPost200Envelope]:
@@ -189,11 +212,17 @@ class RawCustomObjectsClient:
         ----------
         custom_object_id : str
 
+        language : typing.Optional[str]
+
         workspace_id : typing.Optional[str]
 
         view_id : typing.Optional[str]
 
         form_view_id : typing.Optional[str]
+
+        cost_line_items : typing.Optional[typing.Sequence[typing.Optional[typing.Any]]]
+
+        line_items : typing.Optional[typing.Sequence[typing.Optional[typing.Any]]]
 
         properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
 
@@ -209,11 +238,14 @@ class RawCustomObjectsClient:
             f"v2/public/custom-objects/{jsonable_encoder(custom_object_id)}/records",
             method="POST",
             params={
+                "language": language,
                 "workspace_id": workspace_id,
             },
             json={
                 "view_id": view_id,
                 "form_view_id": form_view_id,
+                "cost_line_items": cost_line_items,
+                "line_items": line_items,
                 "properties": properties,
             },
             headers={
@@ -364,9 +396,14 @@ class RawCustomObjectsClient:
         custom_object_id: str,
         record_id: str,
         *,
+        language: typing.Optional[str] = None,
         workspace_id: typing.Optional[str] = None,
         view_id: typing.Optional[str] = OMIT,
         form_view_id: typing.Optional[str] = OMIT,
+        associations: typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]] = OMIT,
+        cost_line_items: typing.Optional[typing.Sequence[typing.Optional[typing.Any]]] = OMIT,
+        files: typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]] = OMIT,
+        line_items: typing.Optional[typing.Sequence[typing.Optional[typing.Any]]] = OMIT,
         properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[
@@ -379,11 +416,21 @@ class RawCustomObjectsClient:
 
         record_id : str
 
+        language : typing.Optional[str]
+
         workspace_id : typing.Optional[str]
 
         view_id : typing.Optional[str]
 
         form_view_id : typing.Optional[str]
+
+        associations : typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]]
+
+        cost_line_items : typing.Optional[typing.Sequence[typing.Optional[typing.Any]]]
+
+        files : typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]]
+
+        line_items : typing.Optional[typing.Sequence[typing.Optional[typing.Any]]]
 
         properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
 
@@ -399,11 +446,16 @@ class RawCustomObjectsClient:
             f"v2/public/custom-objects/{jsonable_encoder(custom_object_id)}/records/{jsonable_encoder(record_id)}",
             method="PUT",
             params={
+                "language": language,
                 "workspace_id": workspace_id,
             },
             json={
                 "view_id": view_id,
                 "form_view_id": form_view_id,
+                "associations": associations,
+                "cost_line_items": cost_line_items,
+                "files": files,
+                "line_items": line_items,
                 "properties": properties,
             },
             headers={
@@ -712,6 +764,7 @@ class RawCustomObjectsClient:
     def create_public_custom_object_record_compatibility_api(
         self,
         *,
+        language: typing.Optional[str] = None,
         workspace_id: typing.Optional[str] = None,
         external_object_type: typing.Optional[str] = OMIT,
         data: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
@@ -722,6 +775,8 @@ class RawCustomObjectsClient:
         """
         Parameters
         ----------
+        language : typing.Optional[str]
+
         workspace_id : typing.Optional[str]
 
         external_object_type : typing.Optional[str]
@@ -744,6 +799,7 @@ class RawCustomObjectsClient:
             "v2/public/records/custom-objects/records",
             method="POST",
             params={
+                "language": language,
                 "workspace_id": workspace_id,
             },
             json={
@@ -799,6 +855,7 @@ class RawCustomObjectsClient:
         self,
         record_id: str,
         *,
+        language: typing.Optional[str] = None,
         workspace_id: typing.Optional[str] = None,
         external_object_type: typing.Optional[str] = OMIT,
         data: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
@@ -812,6 +869,8 @@ class RawCustomObjectsClient:
         Parameters
         ----------
         record_id : str
+
+        language : typing.Optional[str]
 
         workspace_id : typing.Optional[str]
 
@@ -835,6 +894,7 @@ class RawCustomObjectsClient:
             f"v2/public/records/custom-objects/records/{jsonable_encoder(record_id)}",
             method="POST",
             params={
+                "language": language,
                 "workspace_id": workspace_id,
             },
             json={
@@ -982,7 +1042,12 @@ class AsyncRawCustomObjectsClient:
         usage_status: typing.Optional[str] = None,
         page: typing.Optional[int] = None,
         limit: typing.Optional[int] = None,
+        cursor: typing.Optional[str] = None,
         sort: typing.Optional[str] = None,
+        created_at_from: typing.Optional[str] = None,
+        created_at_to: typing.Optional[str] = None,
+        updated_at_from: typing.Optional[str] = None,
+        updated_at_to: typing.Optional[str] = None,
         x_language: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
@@ -1008,7 +1073,17 @@ class AsyncRawCustomObjectsClient:
 
         limit : typing.Optional[int]
 
+        cursor : typing.Optional[str]
+
         sort : typing.Optional[str]
+
+        created_at_from : typing.Optional[str]
+
+        created_at_to : typing.Optional[str]
+
+        updated_at_from : typing.Optional[str]
+
+        updated_at_to : typing.Optional[str]
 
         x_language : typing.Optional[str]
 
@@ -1034,7 +1109,12 @@ class AsyncRawCustomObjectsClient:
                 "usage_status": usage_status,
                 "page": page,
                 "limit": limit,
+                "cursor": cursor,
                 "sort": sort,
+                "created_at_from": created_at_from,
+                "created_at_to": created_at_to,
+                "updated_at_from": updated_at_from,
+                "updated_at_to": updated_at_to,
             },
             headers={
                 "X-Language": str(x_language) if x_language is not None else None,
@@ -1094,9 +1174,12 @@ class AsyncRawCustomObjectsClient:
         self,
         custom_object_id: str,
         *,
+        language: typing.Optional[str] = None,
         workspace_id: typing.Optional[str] = None,
         view_id: typing.Optional[str] = OMIT,
         form_view_id: typing.Optional[str] = OMIT,
+        cost_line_items: typing.Optional[typing.Sequence[typing.Optional[typing.Any]]] = OMIT,
+        line_items: typing.Optional[typing.Sequence[typing.Optional[typing.Any]]] = OMIT,
         properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[CreatePublicCustomObjectRecordApiV2PublicCustomObjectsCustomObjectIdRecordsPost200Envelope]:
@@ -1105,11 +1188,17 @@ class AsyncRawCustomObjectsClient:
         ----------
         custom_object_id : str
 
+        language : typing.Optional[str]
+
         workspace_id : typing.Optional[str]
 
         view_id : typing.Optional[str]
 
         form_view_id : typing.Optional[str]
+
+        cost_line_items : typing.Optional[typing.Sequence[typing.Optional[typing.Any]]]
+
+        line_items : typing.Optional[typing.Sequence[typing.Optional[typing.Any]]]
 
         properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
 
@@ -1125,11 +1214,14 @@ class AsyncRawCustomObjectsClient:
             f"v2/public/custom-objects/{jsonable_encoder(custom_object_id)}/records",
             method="POST",
             params={
+                "language": language,
                 "workspace_id": workspace_id,
             },
             json={
                 "view_id": view_id,
                 "form_view_id": form_view_id,
+                "cost_line_items": cost_line_items,
+                "line_items": line_items,
                 "properties": properties,
             },
             headers={
@@ -1282,9 +1374,14 @@ class AsyncRawCustomObjectsClient:
         custom_object_id: str,
         record_id: str,
         *,
+        language: typing.Optional[str] = None,
         workspace_id: typing.Optional[str] = None,
         view_id: typing.Optional[str] = OMIT,
         form_view_id: typing.Optional[str] = OMIT,
+        associations: typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]] = OMIT,
+        cost_line_items: typing.Optional[typing.Sequence[typing.Optional[typing.Any]]] = OMIT,
+        files: typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]] = OMIT,
+        line_items: typing.Optional[typing.Sequence[typing.Optional[typing.Any]]] = OMIT,
         properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[
@@ -1297,11 +1394,21 @@ class AsyncRawCustomObjectsClient:
 
         record_id : str
 
+        language : typing.Optional[str]
+
         workspace_id : typing.Optional[str]
 
         view_id : typing.Optional[str]
 
         form_view_id : typing.Optional[str]
+
+        associations : typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]]
+
+        cost_line_items : typing.Optional[typing.Sequence[typing.Optional[typing.Any]]]
+
+        files : typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]]
+
+        line_items : typing.Optional[typing.Sequence[typing.Optional[typing.Any]]]
 
         properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
 
@@ -1317,11 +1424,16 @@ class AsyncRawCustomObjectsClient:
             f"v2/public/custom-objects/{jsonable_encoder(custom_object_id)}/records/{jsonable_encoder(record_id)}",
             method="PUT",
             params={
+                "language": language,
                 "workspace_id": workspace_id,
             },
             json={
                 "view_id": view_id,
                 "form_view_id": form_view_id,
+                "associations": associations,
+                "cost_line_items": cost_line_items,
+                "files": files,
+                "line_items": line_items,
                 "properties": properties,
             },
             headers={
@@ -1630,6 +1742,7 @@ class AsyncRawCustomObjectsClient:
     async def create_public_custom_object_record_compatibility_api(
         self,
         *,
+        language: typing.Optional[str] = None,
         workspace_id: typing.Optional[str] = None,
         external_object_type: typing.Optional[str] = OMIT,
         data: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
@@ -1642,6 +1755,8 @@ class AsyncRawCustomObjectsClient:
         """
         Parameters
         ----------
+        language : typing.Optional[str]
+
         workspace_id : typing.Optional[str]
 
         external_object_type : typing.Optional[str]
@@ -1664,6 +1779,7 @@ class AsyncRawCustomObjectsClient:
             "v2/public/records/custom-objects/records",
             method="POST",
             params={
+                "language": language,
                 "workspace_id": workspace_id,
             },
             json={
@@ -1719,6 +1835,7 @@ class AsyncRawCustomObjectsClient:
         self,
         record_id: str,
         *,
+        language: typing.Optional[str] = None,
         workspace_id: typing.Optional[str] = None,
         external_object_type: typing.Optional[str] = OMIT,
         data: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
@@ -1732,6 +1849,8 @@ class AsyncRawCustomObjectsClient:
         Parameters
         ----------
         record_id : str
+
+        language : typing.Optional[str]
 
         workspace_id : typing.Optional[str]
 
@@ -1755,6 +1874,7 @@ class AsyncRawCustomObjectsClient:
             f"v2/public/records/custom-objects/records/{jsonable_encoder(record_id)}",
             method="POST",
             params={
+                "language": language,
                 "workspace_id": workspace_id,
             },
             json={

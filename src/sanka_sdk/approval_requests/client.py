@@ -10,9 +10,6 @@ from ..types.approve_approval_request_api_v_2_public_approval_requests_history_i
 from ..types.create_approval_request_api_v_2_public_approval_requests_post_200_envelope import (
     CreateApprovalRequestApiV2PublicApprovalRequestsPost200Envelope,
 )
-from ..types.list_approval_requests_api_v_2_public_approval_requests_get_200_envelope import (
-    ListApprovalRequestsApiV2PublicApprovalRequestsGet200Envelope,
-)
 from ..types.reject_approval_request_api_v_2_public_approval_requests_history_id_reject_post_200_envelope import (
     RejectApprovalRequestApiV2PublicApprovalRequestsHistoryIdRejectPost200Envelope,
 )
@@ -36,55 +33,6 @@ class ApprovalRequestsClient:
         RawApprovalRequestsClient
         """
         return self._raw_client
-
-    def list_approval_requests_api(
-        self,
-        *,
-        record_id: str,
-        object: typing.Optional[str] = None,
-        object_type: typing.Optional[str] = None,
-        workspace_id: typing.Optional[str] = None,
-        request_options: typing.Optional[RequestOptions] = None,
-    ) -> ListApprovalRequestsApiV2PublicApprovalRequestsGet200Envelope:
-        """
-        Parameters
-        ----------
-        record_id : str
-
-        object : typing.Optional[str]
-
-        object_type : typing.Optional[str]
-
-        workspace_id : typing.Optional[str]
-
-        request_options : typing.Optional[RequestOptions]
-            Request-specific configuration.
-
-        Returns
-        -------
-        ListApprovalRequestsApiV2PublicApprovalRequestsGet200Envelope
-            Successful Response
-
-        Examples
-        --------
-        from sanka_sdk import SankaClient
-
-        client = SankaClient(
-            workspace_code="YOUR_WORKSPACE_CODE",
-            token="YOUR_TOKEN",
-        )
-        client.approval_requests.list_approval_requests_api(
-            record_id="record_id",
-        )
-        """
-        _response = self._raw_client.list_approval_requests_api(
-            record_id=record_id,
-            object=object,
-            object_type=object_type,
-            workspace_id=workspace_id,
-            request_options=request_options,
-        )
-        return _response.data
 
     def create_approval_request_api(
         self,
@@ -250,63 +198,6 @@ class AsyncApprovalRequestsClient:
         AsyncRawApprovalRequestsClient
         """
         return self._raw_client
-
-    async def list_approval_requests_api(
-        self,
-        *,
-        record_id: str,
-        object: typing.Optional[str] = None,
-        object_type: typing.Optional[str] = None,
-        workspace_id: typing.Optional[str] = None,
-        request_options: typing.Optional[RequestOptions] = None,
-    ) -> ListApprovalRequestsApiV2PublicApprovalRequestsGet200Envelope:
-        """
-        Parameters
-        ----------
-        record_id : str
-
-        object : typing.Optional[str]
-
-        object_type : typing.Optional[str]
-
-        workspace_id : typing.Optional[str]
-
-        request_options : typing.Optional[RequestOptions]
-            Request-specific configuration.
-
-        Returns
-        -------
-        ListApprovalRequestsApiV2PublicApprovalRequestsGet200Envelope
-            Successful Response
-
-        Examples
-        --------
-        import asyncio
-
-        from sanka_sdk import AsyncSankaClient
-
-        client = AsyncSankaClient(
-            workspace_code="YOUR_WORKSPACE_CODE",
-            token="YOUR_TOKEN",
-        )
-
-
-        async def main() -> None:
-            await client.approval_requests.list_approval_requests_api(
-                record_id="record_id",
-            )
-
-
-        asyncio.run(main())
-        """
-        _response = await self._raw_client.list_approval_requests_api(
-            record_id=record_id,
-            object=object,
-            object_type=object_type,
-            workspace_id=workspace_id,
-            request_options=request_options,
-        )
-        return _response.data
 
     async def create_approval_request_api(
         self,
