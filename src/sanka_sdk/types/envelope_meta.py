@@ -6,11 +6,13 @@ import pydantic
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.unchecked_base_model import UncheckedBaseModel
 from .pagination_meta import PaginationMeta
+from .toast_message import ToastMessage
 
 
 class EnvelopeMeta(UncheckedBaseModel):
     ctx_id: str
     pagination: typing.Optional[PaginationMeta] = None
+    toast: typing.Optional[ToastMessage] = None
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

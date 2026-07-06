@@ -53,7 +53,12 @@ class RawTicketsClient:
         usage_status: typing.Optional[str] = None,
         page: typing.Optional[int] = None,
         limit: typing.Optional[int] = None,
+        cursor: typing.Optional[str] = None,
         sort: typing.Optional[str] = None,
+        created_at_from: typing.Optional[str] = None,
+        created_at_to: typing.Optional[str] = None,
+        updated_at_from: typing.Optional[str] = None,
+        updated_at_to: typing.Optional[str] = None,
         x_language: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
@@ -77,7 +82,17 @@ class RawTicketsClient:
 
         limit : typing.Optional[int]
 
+        cursor : typing.Optional[str]
+
         sort : typing.Optional[str]
+
+        created_at_from : typing.Optional[str]
+
+        created_at_to : typing.Optional[str]
+
+        updated_at_from : typing.Optional[str]
+
+        updated_at_to : typing.Optional[str]
 
         x_language : typing.Optional[str]
 
@@ -103,7 +118,12 @@ class RawTicketsClient:
                 "usage_status": usage_status,
                 "page": page,
                 "limit": limit,
+                "cursor": cursor,
                 "sort": sort,
+                "created_at_from": created_at_from,
+                "created_at_to": created_at_to,
+                "updated_at_from": updated_at_from,
+                "updated_at_to": updated_at_to,
             },
             headers={
                 "X-Language": str(x_language) if x_language is not None else None,
@@ -154,6 +174,8 @@ class RawTicketsClient:
         workspace_id: typing.Optional[str] = None,
         view_id: typing.Optional[str] = OMIT,
         form_view_id: typing.Optional[str] = OMIT,
+        cost_line_items: typing.Optional[typing.Sequence[typing.Optional[typing.Any]]] = OMIT,
+        line_items: typing.Optional[typing.Sequence[typing.Optional[typing.Any]]] = OMIT,
         properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[CreatePublicTicketApiV2PublicTicketsPost200Envelope]:
@@ -165,6 +187,10 @@ class RawTicketsClient:
         view_id : typing.Optional[str]
 
         form_view_id : typing.Optional[str]
+
+        cost_line_items : typing.Optional[typing.Sequence[typing.Optional[typing.Any]]]
+
+        line_items : typing.Optional[typing.Sequence[typing.Optional[typing.Any]]]
 
         properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
 
@@ -185,6 +211,8 @@ class RawTicketsClient:
             json={
                 "view_id": view_id,
                 "form_view_id": form_view_id,
+                "cost_line_items": cost_line_items,
+                "line_items": line_items,
                 "properties": properties,
             },
             headers={
@@ -378,6 +406,10 @@ class RawTicketsClient:
         workspace_id: typing.Optional[str] = None,
         view_id: typing.Optional[str] = OMIT,
         form_view_id: typing.Optional[str] = OMIT,
+        associations: typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]] = OMIT,
+        cost_line_items: typing.Optional[typing.Sequence[typing.Optional[typing.Any]]] = OMIT,
+        files: typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]] = OMIT,
+        line_items: typing.Optional[typing.Sequence[typing.Optional[typing.Any]]] = OMIT,
         properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[UpdatePublicTicketApiV2PublicTicketsTicketIdPut200Envelope]:
@@ -393,6 +425,14 @@ class RawTicketsClient:
         view_id : typing.Optional[str]
 
         form_view_id : typing.Optional[str]
+
+        associations : typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]]
+
+        cost_line_items : typing.Optional[typing.Sequence[typing.Optional[typing.Any]]]
+
+        files : typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]]
+
+        line_items : typing.Optional[typing.Sequence[typing.Optional[typing.Any]]]
 
         properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
 
@@ -414,6 +454,10 @@ class RawTicketsClient:
             json={
                 "view_id": view_id,
                 "form_view_id": form_view_id,
+                "associations": associations,
+                "cost_line_items": cost_line_items,
+                "files": files,
+                "line_items": line_items,
                 "properties": properties,
             },
             headers={
@@ -625,7 +669,12 @@ class AsyncRawTicketsClient:
         usage_status: typing.Optional[str] = None,
         page: typing.Optional[int] = None,
         limit: typing.Optional[int] = None,
+        cursor: typing.Optional[str] = None,
         sort: typing.Optional[str] = None,
+        created_at_from: typing.Optional[str] = None,
+        created_at_to: typing.Optional[str] = None,
+        updated_at_from: typing.Optional[str] = None,
+        updated_at_to: typing.Optional[str] = None,
         x_language: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
@@ -649,7 +698,17 @@ class AsyncRawTicketsClient:
 
         limit : typing.Optional[int]
 
+        cursor : typing.Optional[str]
+
         sort : typing.Optional[str]
+
+        created_at_from : typing.Optional[str]
+
+        created_at_to : typing.Optional[str]
+
+        updated_at_from : typing.Optional[str]
+
+        updated_at_to : typing.Optional[str]
 
         x_language : typing.Optional[str]
 
@@ -675,7 +734,12 @@ class AsyncRawTicketsClient:
                 "usage_status": usage_status,
                 "page": page,
                 "limit": limit,
+                "cursor": cursor,
                 "sort": sort,
+                "created_at_from": created_at_from,
+                "created_at_to": created_at_to,
+                "updated_at_from": updated_at_from,
+                "updated_at_to": updated_at_to,
             },
             headers={
                 "X-Language": str(x_language) if x_language is not None else None,
@@ -726,6 +790,8 @@ class AsyncRawTicketsClient:
         workspace_id: typing.Optional[str] = None,
         view_id: typing.Optional[str] = OMIT,
         form_view_id: typing.Optional[str] = OMIT,
+        cost_line_items: typing.Optional[typing.Sequence[typing.Optional[typing.Any]]] = OMIT,
+        line_items: typing.Optional[typing.Sequence[typing.Optional[typing.Any]]] = OMIT,
         properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[CreatePublicTicketApiV2PublicTicketsPost200Envelope]:
@@ -737,6 +803,10 @@ class AsyncRawTicketsClient:
         view_id : typing.Optional[str]
 
         form_view_id : typing.Optional[str]
+
+        cost_line_items : typing.Optional[typing.Sequence[typing.Optional[typing.Any]]]
+
+        line_items : typing.Optional[typing.Sequence[typing.Optional[typing.Any]]]
 
         properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
 
@@ -757,6 +827,8 @@ class AsyncRawTicketsClient:
             json={
                 "view_id": view_id,
                 "form_view_id": form_view_id,
+                "cost_line_items": cost_line_items,
+                "line_items": line_items,
                 "properties": properties,
             },
             headers={
@@ -950,6 +1022,10 @@ class AsyncRawTicketsClient:
         workspace_id: typing.Optional[str] = None,
         view_id: typing.Optional[str] = OMIT,
         form_view_id: typing.Optional[str] = OMIT,
+        associations: typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]] = OMIT,
+        cost_line_items: typing.Optional[typing.Sequence[typing.Optional[typing.Any]]] = OMIT,
+        files: typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]] = OMIT,
+        line_items: typing.Optional[typing.Sequence[typing.Optional[typing.Any]]] = OMIT,
         properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[UpdatePublicTicketApiV2PublicTicketsTicketIdPut200Envelope]:
@@ -965,6 +1041,14 @@ class AsyncRawTicketsClient:
         view_id : typing.Optional[str]
 
         form_view_id : typing.Optional[str]
+
+        associations : typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]]
+
+        cost_line_items : typing.Optional[typing.Sequence[typing.Optional[typing.Any]]]
+
+        files : typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]]
+
+        line_items : typing.Optional[typing.Sequence[typing.Optional[typing.Any]]]
 
         properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
 
@@ -986,6 +1070,10 @@ class AsyncRawTicketsClient:
             json={
                 "view_id": view_id,
                 "form_view_id": form_view_id,
+                "associations": associations,
+                "cost_line_items": cost_line_items,
+                "files": files,
+                "line_items": line_items,
                 "properties": properties,
             },
             headers={

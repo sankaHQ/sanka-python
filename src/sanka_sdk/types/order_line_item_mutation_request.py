@@ -17,6 +17,7 @@ class OrderLineItemMutationRequest(UncheckedBaseModel):
     tax_rate: typing.Optional[float] = None
     tax_type: typing.Optional[str] = None
     total_price: typing.Optional[float] = None
+    total_price_without_tax: typing.Optional[float] = None
     currency: typing.Optional[str] = None
     custom_fields: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = None
 

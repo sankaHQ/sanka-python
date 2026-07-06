@@ -6,6 +6,9 @@ import typing
 from .. import core
 from ..core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ..core.request_options import RequestOptions
+from ..types.bulk_update_public_invoices_api_v_2_public_invoices_bulk_update_post_200_envelope import (
+    BulkUpdatePublicInvoicesApiV2PublicInvoicesBulkUpdatePost200Envelope,
+)
 from ..types.create_public_invoice_api_v_2_public_invoices_post_200_envelope import (
     CreatePublicInvoiceApiV2PublicInvoicesPost200Envelope,
 )
@@ -24,6 +27,7 @@ from ..types.list_public_overdue_invoices_api_v_2_public_invoices_overdue_get_20
 from ..types.permanent_delete_public_invoice_api_v_2_public_invoices_invoice_id_permanent_delete_delete_200_envelope import (
     PermanentDeletePublicInvoiceApiV2PublicInvoicesInvoiceIdPermanentDeleteDelete200Envelope,
 )
+from ..types.public_invoice_email_pdf_attachment import PublicInvoiceEmailPdfAttachment
 from ..types.send_public_invoice_email_api_v_2_public_invoices_invoice_id_email_post_200_envelope import (
     SendPublicInvoiceEmailApiV2PublicInvoicesInvoiceIdEmailPost200Envelope,
 )
@@ -34,6 +38,7 @@ from ..types.upload_public_invoice_file_api_v_2_public_invoices_files_post_200_e
     UploadPublicInvoiceFileApiV2PublicInvoicesFilesPost200Envelope,
 )
 from .raw_client import AsyncRawInvoicesClient, RawInvoicesClient
+from .types.public_invoice_email_request_action import PublicInvoiceEmailRequestAction
 
 # this is used as the default value for optional parameters
 OMIT = typing.cast(typing.Any, ...)
@@ -65,7 +70,12 @@ class InvoicesClient:
         usage_status: typing.Optional[str] = None,
         page: typing.Optional[int] = None,
         limit: typing.Optional[int] = None,
+        cursor: typing.Optional[str] = None,
         sort: typing.Optional[str] = None,
+        created_at_from: typing.Optional[str] = None,
+        created_at_to: typing.Optional[str] = None,
+        updated_at_from: typing.Optional[str] = None,
+        updated_at_to: typing.Optional[str] = None,
         x_language: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
@@ -89,7 +99,17 @@ class InvoicesClient:
 
         limit : typing.Optional[int]
 
+        cursor : typing.Optional[str]
+
         sort : typing.Optional[str]
+
+        created_at_from : typing.Optional[str]
+
+        created_at_to : typing.Optional[str]
+
+        updated_at_from : typing.Optional[str]
+
+        updated_at_to : typing.Optional[str]
 
         x_language : typing.Optional[str]
 
@@ -101,7 +121,7 @@ class InvoicesClient:
         Returns
         -------
         ListPublicInvoicesApiV2PublicInvoicesGet200Envelope
-            Object record list response
+            Object record list or line-item-expanded list response
 
         Examples
         --------
@@ -122,7 +142,12 @@ class InvoicesClient:
             usage_status=usage_status,
             page=page,
             limit=limit,
+            cursor=cursor,
             sort=sort,
+            created_at_from=created_at_from,
+            created_at_to=created_at_to,
+            updated_at_from=updated_at_from,
+            updated_at_to=updated_at_to,
             x_language=x_language,
             accept_language=accept_language,
             request_options=request_options,
@@ -135,6 +160,8 @@ class InvoicesClient:
         workspace_id: typing.Optional[str] = None,
         view_id: typing.Optional[str] = OMIT,
         form_view_id: typing.Optional[str] = OMIT,
+        cost_line_items: typing.Optional[typing.Sequence[typing.Optional[typing.Any]]] = OMIT,
+        line_items: typing.Optional[typing.Sequence[typing.Optional[typing.Any]]] = OMIT,
         properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> CreatePublicInvoiceApiV2PublicInvoicesPost200Envelope:
@@ -146,6 +173,10 @@ class InvoicesClient:
         view_id : typing.Optional[str]
 
         form_view_id : typing.Optional[str]
+
+        cost_line_items : typing.Optional[typing.Sequence[typing.Optional[typing.Any]]]
+
+        line_items : typing.Optional[typing.Sequence[typing.Optional[typing.Any]]]
 
         properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
 
@@ -171,6 +202,8 @@ class InvoicesClient:
             workspace_id=workspace_id,
             view_id=view_id,
             form_view_id=form_view_id,
+            cost_line_items=cost_line_items,
+            line_items=line_items,
             properties=properties,
             request_options=request_options,
         )
@@ -211,6 +244,73 @@ class InvoicesClient:
         """
         _response = self._raw_client.upload_public_invoice_file_api(
             file=file, workspace_id=workspace_id, request_options=request_options
+        )
+        return _response.data
+
+    def bulk_update_public_invoices_api(
+        self,
+        *,
+        workspace_id: typing.Optional[str] = None,
+        accept_language: typing.Optional[str] = None,
+        ids: typing.Optional[typing.Sequence[str]] = OMIT,
+        flag_all: typing.Optional[bool] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
+        search: typing.Optional[str] = OMIT,
+        status: typing.Optional[str] = OMIT,
+        usage_status: typing.Optional[str] = OMIT,
+        view_id: typing.Optional[str] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> BulkUpdatePublicInvoicesApiV2PublicInvoicesBulkUpdatePost200Envelope:
+        """
+        Parameters
+        ----------
+        workspace_id : typing.Optional[str]
+
+        accept_language : typing.Optional[str]
+
+        ids : typing.Optional[typing.Sequence[str]]
+
+        flag_all : typing.Optional[bool]
+
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
+
+        search : typing.Optional[str]
+
+        status : typing.Optional[str]
+
+        usage_status : typing.Optional[str]
+
+        view_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        BulkUpdatePublicInvoicesApiV2PublicInvoicesBulkUpdatePost200Envelope
+            Successful Response
+
+        Examples
+        --------
+        from sanka_sdk import SankaClient
+
+        client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+        client.invoices.bulk_update_public_invoices_api()
+        """
+        _response = self._raw_client.bulk_update_public_invoices_api(
+            workspace_id=workspace_id,
+            accept_language=accept_language,
+            ids=ids,
+            flag_all=flag_all,
+            properties=properties,
+            search=search,
+            status=status,
+            usage_status=usage_status,
+            view_id=view_id,
+            request_options=request_options,
         )
         return _response.data
 
@@ -322,6 +422,10 @@ class InvoicesClient:
         workspace_id: typing.Optional[str] = None,
         view_id: typing.Optional[str] = OMIT,
         form_view_id: typing.Optional[str] = OMIT,
+        associations: typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]] = OMIT,
+        cost_line_items: typing.Optional[typing.Sequence[typing.Optional[typing.Any]]] = OMIT,
+        files: typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]] = OMIT,
+        line_items: typing.Optional[typing.Sequence[typing.Optional[typing.Any]]] = OMIT,
         properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> UpdatePublicInvoiceApiV2PublicInvoicesInvoiceIdPut200Envelope:
@@ -337,6 +441,14 @@ class InvoicesClient:
         view_id : typing.Optional[str]
 
         form_view_id : typing.Optional[str]
+
+        associations : typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]]
+
+        cost_line_items : typing.Optional[typing.Sequence[typing.Optional[typing.Any]]]
+
+        files : typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]]
+
+        line_items : typing.Optional[typing.Sequence[typing.Optional[typing.Any]]]
 
         properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
 
@@ -366,6 +478,10 @@ class InvoicesClient:
             workspace_id=workspace_id,
             view_id=view_id,
             form_view_id=form_view_id,
+            associations=associations,
+            cost_line_items=cost_line_items,
+            files=files,
+            line_items=line_items,
             properties=properties,
             request_options=request_options,
         )
@@ -478,19 +594,26 @@ class InvoicesClient:
         self,
         invoice_id: str,
         *,
-        request: typing.Dict[str, typing.Optional[typing.Any]],
         lang: typing.Optional[str] = None,
         language: typing.Optional[str] = None,
         workspace_id: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
+        action: typing.Optional[PublicInvoiceEmailRequestAction] = OMIT,
+        to: typing.Optional[typing.Sequence[str]] = OMIT,
+        cc: typing.Optional[typing.Sequence[str]] = OMIT,
+        subject: typing.Optional[str] = OMIT,
+        body: typing.Optional[str] = OMIT,
+        scheduled_at: typing.Optional[dt.datetime] = OMIT,
+        template_select: typing.Optional[str] = OMIT,
+        additional_pdf_attachments: typing.Optional[typing.Sequence[PublicInvoiceEmailPdfAttachment]] = OMIT,
+        channel_id: typing.Optional[str] = OMIT,
+        external_id: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> SendPublicInvoiceEmailApiV2PublicInvoicesInvoiceIdEmailPost200Envelope:
         """
         Parameters
         ----------
         invoice_id : str
-
-        request : typing.Dict[str, typing.Optional[typing.Any]]
 
         lang : typing.Optional[str]
 
@@ -499,6 +622,26 @@ class InvoicesClient:
         workspace_id : typing.Optional[str]
 
         accept_language : typing.Optional[str]
+
+        action : typing.Optional[PublicInvoiceEmailRequestAction]
+
+        to : typing.Optional[typing.Sequence[str]]
+
+        cc : typing.Optional[typing.Sequence[str]]
+
+        subject : typing.Optional[str]
+
+        body : typing.Optional[str]
+
+        scheduled_at : typing.Optional[dt.datetime]
+
+        template_select : typing.Optional[str]
+
+        additional_pdf_attachments : typing.Optional[typing.Sequence[PublicInvoiceEmailPdfAttachment]]
+
+        channel_id : typing.Optional[str]
+
+        external_id : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -518,16 +661,24 @@ class InvoicesClient:
         )
         client.invoices.send_public_invoice_email_api(
             invoice_id="invoice_id",
-            request={"key": "value"},
         )
         """
         _response = self._raw_client.send_public_invoice_email_api(
             invoice_id,
-            request=request,
             lang=lang,
             language=language,
             workspace_id=workspace_id,
             accept_language=accept_language,
+            action=action,
+            to=to,
+            cc=cc,
+            subject=subject,
+            body=body,
+            scheduled_at=scheduled_at,
+            template_select=template_select,
+            additional_pdf_attachments=additional_pdf_attachments,
+            channel_id=channel_id,
+            external_id=external_id,
             request_options=request_options,
         )
         return _response.data
@@ -612,7 +763,12 @@ class AsyncInvoicesClient:
         usage_status: typing.Optional[str] = None,
         page: typing.Optional[int] = None,
         limit: typing.Optional[int] = None,
+        cursor: typing.Optional[str] = None,
         sort: typing.Optional[str] = None,
+        created_at_from: typing.Optional[str] = None,
+        created_at_to: typing.Optional[str] = None,
+        updated_at_from: typing.Optional[str] = None,
+        updated_at_to: typing.Optional[str] = None,
         x_language: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
@@ -636,7 +792,17 @@ class AsyncInvoicesClient:
 
         limit : typing.Optional[int]
 
+        cursor : typing.Optional[str]
+
         sort : typing.Optional[str]
+
+        created_at_from : typing.Optional[str]
+
+        created_at_to : typing.Optional[str]
+
+        updated_at_from : typing.Optional[str]
+
+        updated_at_to : typing.Optional[str]
 
         x_language : typing.Optional[str]
 
@@ -648,7 +814,7 @@ class AsyncInvoicesClient:
         Returns
         -------
         ListPublicInvoicesApiV2PublicInvoicesGet200Envelope
-            Object record list response
+            Object record list or line-item-expanded list response
 
         Examples
         --------
@@ -677,7 +843,12 @@ class AsyncInvoicesClient:
             usage_status=usage_status,
             page=page,
             limit=limit,
+            cursor=cursor,
             sort=sort,
+            created_at_from=created_at_from,
+            created_at_to=created_at_to,
+            updated_at_from=updated_at_from,
+            updated_at_to=updated_at_to,
             x_language=x_language,
             accept_language=accept_language,
             request_options=request_options,
@@ -690,6 +861,8 @@ class AsyncInvoicesClient:
         workspace_id: typing.Optional[str] = None,
         view_id: typing.Optional[str] = OMIT,
         form_view_id: typing.Optional[str] = OMIT,
+        cost_line_items: typing.Optional[typing.Sequence[typing.Optional[typing.Any]]] = OMIT,
+        line_items: typing.Optional[typing.Sequence[typing.Optional[typing.Any]]] = OMIT,
         properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> CreatePublicInvoiceApiV2PublicInvoicesPost200Envelope:
@@ -701,6 +874,10 @@ class AsyncInvoicesClient:
         view_id : typing.Optional[str]
 
         form_view_id : typing.Optional[str]
+
+        cost_line_items : typing.Optional[typing.Sequence[typing.Optional[typing.Any]]]
+
+        line_items : typing.Optional[typing.Sequence[typing.Optional[typing.Any]]]
 
         properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
 
@@ -734,6 +911,8 @@ class AsyncInvoicesClient:
             workspace_id=workspace_id,
             view_id=view_id,
             form_view_id=form_view_id,
+            cost_line_items=cost_line_items,
+            line_items=line_items,
             properties=properties,
             request_options=request_options,
         )
@@ -782,6 +961,81 @@ class AsyncInvoicesClient:
         """
         _response = await self._raw_client.upload_public_invoice_file_api(
             file=file, workspace_id=workspace_id, request_options=request_options
+        )
+        return _response.data
+
+    async def bulk_update_public_invoices_api(
+        self,
+        *,
+        workspace_id: typing.Optional[str] = None,
+        accept_language: typing.Optional[str] = None,
+        ids: typing.Optional[typing.Sequence[str]] = OMIT,
+        flag_all: typing.Optional[bool] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
+        search: typing.Optional[str] = OMIT,
+        status: typing.Optional[str] = OMIT,
+        usage_status: typing.Optional[str] = OMIT,
+        view_id: typing.Optional[str] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> BulkUpdatePublicInvoicesApiV2PublicInvoicesBulkUpdatePost200Envelope:
+        """
+        Parameters
+        ----------
+        workspace_id : typing.Optional[str]
+
+        accept_language : typing.Optional[str]
+
+        ids : typing.Optional[typing.Sequence[str]]
+
+        flag_all : typing.Optional[bool]
+
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
+
+        search : typing.Optional[str]
+
+        status : typing.Optional[str]
+
+        usage_status : typing.Optional[str]
+
+        view_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        BulkUpdatePublicInvoicesApiV2PublicInvoicesBulkUpdatePost200Envelope
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sanka_sdk import AsyncSankaClient
+
+        client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.invoices.bulk_update_public_invoices_api()
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.bulk_update_public_invoices_api(
+            workspace_id=workspace_id,
+            accept_language=accept_language,
+            ids=ids,
+            flag_all=flag_all,
+            properties=properties,
+            search=search,
+            status=status,
+            usage_status=usage_status,
+            view_id=view_id,
+            request_options=request_options,
         )
         return _response.data
 
@@ -909,6 +1163,10 @@ class AsyncInvoicesClient:
         workspace_id: typing.Optional[str] = None,
         view_id: typing.Optional[str] = OMIT,
         form_view_id: typing.Optional[str] = OMIT,
+        associations: typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]] = OMIT,
+        cost_line_items: typing.Optional[typing.Sequence[typing.Optional[typing.Any]]] = OMIT,
+        files: typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]] = OMIT,
+        line_items: typing.Optional[typing.Sequence[typing.Optional[typing.Any]]] = OMIT,
         properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> UpdatePublicInvoiceApiV2PublicInvoicesInvoiceIdPut200Envelope:
@@ -924,6 +1182,14 @@ class AsyncInvoicesClient:
         view_id : typing.Optional[str]
 
         form_view_id : typing.Optional[str]
+
+        associations : typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]]
+
+        cost_line_items : typing.Optional[typing.Sequence[typing.Optional[typing.Any]]]
+
+        files : typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]]
+
+        line_items : typing.Optional[typing.Sequence[typing.Optional[typing.Any]]]
 
         properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
 
@@ -961,6 +1227,10 @@ class AsyncInvoicesClient:
             workspace_id=workspace_id,
             view_id=view_id,
             form_view_id=form_view_id,
+            associations=associations,
+            cost_line_items=cost_line_items,
+            files=files,
+            line_items=line_items,
             properties=properties,
             request_options=request_options,
         )
@@ -1090,19 +1360,26 @@ class AsyncInvoicesClient:
         self,
         invoice_id: str,
         *,
-        request: typing.Dict[str, typing.Optional[typing.Any]],
         lang: typing.Optional[str] = None,
         language: typing.Optional[str] = None,
         workspace_id: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
+        action: typing.Optional[PublicInvoiceEmailRequestAction] = OMIT,
+        to: typing.Optional[typing.Sequence[str]] = OMIT,
+        cc: typing.Optional[typing.Sequence[str]] = OMIT,
+        subject: typing.Optional[str] = OMIT,
+        body: typing.Optional[str] = OMIT,
+        scheduled_at: typing.Optional[dt.datetime] = OMIT,
+        template_select: typing.Optional[str] = OMIT,
+        additional_pdf_attachments: typing.Optional[typing.Sequence[PublicInvoiceEmailPdfAttachment]] = OMIT,
+        channel_id: typing.Optional[str] = OMIT,
+        external_id: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> SendPublicInvoiceEmailApiV2PublicInvoicesInvoiceIdEmailPost200Envelope:
         """
         Parameters
         ----------
         invoice_id : str
-
-        request : typing.Dict[str, typing.Optional[typing.Any]]
 
         lang : typing.Optional[str]
 
@@ -1111,6 +1388,26 @@ class AsyncInvoicesClient:
         workspace_id : typing.Optional[str]
 
         accept_language : typing.Optional[str]
+
+        action : typing.Optional[PublicInvoiceEmailRequestAction]
+
+        to : typing.Optional[typing.Sequence[str]]
+
+        cc : typing.Optional[typing.Sequence[str]]
+
+        subject : typing.Optional[str]
+
+        body : typing.Optional[str]
+
+        scheduled_at : typing.Optional[dt.datetime]
+
+        template_select : typing.Optional[str]
+
+        additional_pdf_attachments : typing.Optional[typing.Sequence[PublicInvoiceEmailPdfAttachment]]
+
+        channel_id : typing.Optional[str]
+
+        external_id : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -1135,7 +1432,6 @@ class AsyncInvoicesClient:
         async def main() -> None:
             await client.invoices.send_public_invoice_email_api(
                 invoice_id="invoice_id",
-                request={"key": "value"},
             )
 
 
@@ -1143,11 +1439,20 @@ class AsyncInvoicesClient:
         """
         _response = await self._raw_client.send_public_invoice_email_api(
             invoice_id,
-            request=request,
             lang=lang,
             language=language,
             workspace_id=workspace_id,
             accept_language=accept_language,
+            action=action,
+            to=to,
+            cc=cc,
+            subject=subject,
+            body=body,
+            scheduled_at=scheduled_at,
+            template_select=template_select,
+            additional_pdf_attachments=additional_pdf_attachments,
+            channel_id=channel_id,
+            external_id=external_id,
             request_options=request_options,
         )
         return _response.data

@@ -162,6 +162,7 @@ class RawImportsClient:
         record_ids : typing.Optional[typing.Sequence[str]]
 
         source_record : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
+            Provider-specific source metadata. For Stripe invoice/subscription backfills, use scope=all with optional days_ago, created_gte, and limit; bounded synchronous backfills support up to 200 records.
 
         operation : typing.Optional[str]
 
@@ -517,6 +518,7 @@ class AsyncRawImportsClient:
         record_ids : typing.Optional[typing.Sequence[str]]
 
         source_record : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
+            Provider-specific source metadata. For Stripe invoice/subscription backfills, use scope=all with optional days_ago, created_gte, and limit; bounded synchronous backfills support up to 200 records.
 
         operation : typing.Optional[str]
 

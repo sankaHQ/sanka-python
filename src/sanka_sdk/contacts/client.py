@@ -51,7 +51,12 @@ class ContactsClient:
         usage_status: typing.Optional[str] = None,
         page: typing.Optional[int] = None,
         limit: typing.Optional[int] = None,
+        cursor: typing.Optional[str] = None,
         sort: typing.Optional[str] = None,
+        created_at_from: typing.Optional[str] = None,
+        created_at_to: typing.Optional[str] = None,
+        updated_at_from: typing.Optional[str] = None,
+        updated_at_to: typing.Optional[str] = None,
         x_language: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
@@ -75,7 +80,17 @@ class ContactsClient:
 
         limit : typing.Optional[int]
 
+        cursor : typing.Optional[str]
+
         sort : typing.Optional[str]
+
+        created_at_from : typing.Optional[str]
+
+        created_at_to : typing.Optional[str]
+
+        updated_at_from : typing.Optional[str]
+
+        updated_at_to : typing.Optional[str]
 
         x_language : typing.Optional[str]
 
@@ -108,7 +123,12 @@ class ContactsClient:
             usage_status=usage_status,
             page=page,
             limit=limit,
+            cursor=cursor,
             sort=sort,
+            created_at_from=created_at_from,
+            created_at_to=created_at_to,
+            updated_at_from=updated_at_from,
+            updated_at_to=updated_at_to,
             x_language=x_language,
             accept_language=accept_language,
             request_options=request_options,
@@ -118,6 +138,7 @@ class ContactsClient:
     def create_public_contact_api(
         self,
         *,
+        language: typing.Optional[str] = None,
         workspace_id: typing.Optional[str] = None,
         view_id: typing.Optional[str] = OMIT,
         form_view_id: typing.Optional[str] = OMIT,
@@ -135,6 +156,8 @@ class ContactsClient:
         """
         Parameters
         ----------
+        language : typing.Optional[str]
+
         workspace_id : typing.Optional[str]
 
         view_id : typing.Optional[str]
@@ -178,6 +201,7 @@ class ContactsClient:
         client.contacts.create_public_contact_api()
         """
         _response = self._raw_client.create_public_contact_api(
+            language=language,
             workspace_id=workspace_id,
             view_id=view_id,
             form_view_id=form_view_id,
@@ -252,6 +276,7 @@ class ContactsClient:
         contact_id: str,
         *,
         external_id: typing.Optional[str] = None,
+        language: typing.Optional[str] = None,
         workspace_id: typing.Optional[str] = None,
         view_id: typing.Optional[str] = OMIT,
         form_view_id: typing.Optional[str] = OMIT,
@@ -272,6 +297,8 @@ class ContactsClient:
         contact_id : str
 
         external_id : typing.Optional[str]
+
+        language : typing.Optional[str]
 
         workspace_id : typing.Optional[str]
 
@@ -320,6 +347,7 @@ class ContactsClient:
         _response = self._raw_client.update_public_contact_api(
             contact_id,
             external_id=external_id,
+            language=language,
             workspace_id=workspace_id,
             view_id=view_id,
             form_view_id=form_view_id,
@@ -432,7 +460,12 @@ class AsyncContactsClient:
         usage_status: typing.Optional[str] = None,
         page: typing.Optional[int] = None,
         limit: typing.Optional[int] = None,
+        cursor: typing.Optional[str] = None,
         sort: typing.Optional[str] = None,
+        created_at_from: typing.Optional[str] = None,
+        created_at_to: typing.Optional[str] = None,
+        updated_at_from: typing.Optional[str] = None,
+        updated_at_to: typing.Optional[str] = None,
         x_language: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
@@ -456,7 +489,17 @@ class AsyncContactsClient:
 
         limit : typing.Optional[int]
 
+        cursor : typing.Optional[str]
+
         sort : typing.Optional[str]
+
+        created_at_from : typing.Optional[str]
+
+        created_at_to : typing.Optional[str]
+
+        updated_at_from : typing.Optional[str]
+
+        updated_at_to : typing.Optional[str]
 
         x_language : typing.Optional[str]
 
@@ -497,7 +540,12 @@ class AsyncContactsClient:
             usage_status=usage_status,
             page=page,
             limit=limit,
+            cursor=cursor,
             sort=sort,
+            created_at_from=created_at_from,
+            created_at_to=created_at_to,
+            updated_at_from=updated_at_from,
+            updated_at_to=updated_at_to,
             x_language=x_language,
             accept_language=accept_language,
             request_options=request_options,
@@ -507,6 +555,7 @@ class AsyncContactsClient:
     async def create_public_contact_api(
         self,
         *,
+        language: typing.Optional[str] = None,
         workspace_id: typing.Optional[str] = None,
         view_id: typing.Optional[str] = OMIT,
         form_view_id: typing.Optional[str] = OMIT,
@@ -524,6 +573,8 @@ class AsyncContactsClient:
         """
         Parameters
         ----------
+        language : typing.Optional[str]
+
         workspace_id : typing.Optional[str]
 
         view_id : typing.Optional[str]
@@ -575,6 +626,7 @@ class AsyncContactsClient:
         asyncio.run(main())
         """
         _response = await self._raw_client.create_public_contact_api(
+            language=language,
             workspace_id=workspace_id,
             view_id=view_id,
             form_view_id=form_view_id,
@@ -657,6 +709,7 @@ class AsyncContactsClient:
         contact_id: str,
         *,
         external_id: typing.Optional[str] = None,
+        language: typing.Optional[str] = None,
         workspace_id: typing.Optional[str] = None,
         view_id: typing.Optional[str] = OMIT,
         form_view_id: typing.Optional[str] = OMIT,
@@ -677,6 +730,8 @@ class AsyncContactsClient:
         contact_id : str
 
         external_id : typing.Optional[str]
+
+        language : typing.Optional[str]
 
         workspace_id : typing.Optional[str]
 
@@ -733,6 +788,7 @@ class AsyncContactsClient:
         _response = await self._raw_client.update_public_contact_api(
             contact_id,
             external_id=external_id,
+            language=language,
             workspace_id=workspace_id,
             view_id=view_id,
             form_view_id=form_view_id,

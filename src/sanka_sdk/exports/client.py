@@ -114,11 +114,28 @@ class ExportsClient:
         export_set_items: typing.Optional[bool] = OMIT,
         set_code_source: typing.Optional[str] = OMIT,
         mapping_custom_fields: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
+        mapping_custom_fields_conditional: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
+        update_hubspot: typing.Optional[typing.Optional[typing.Any]] = OMIT,
+        hubspot_follow_up_channel_id: typing.Optional[str] = OMIT,
+        hubspot_follow_up_deal_stage: typing.Optional[str] = OMIT,
         mapping_type: typing.Optional[str] = OMIT,
         selected_custom_object: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> CreatePublicExportJobCompatApiV2PublicExportsPost200Envelope:
         """
+        Create an export job.
+
+        Integration-destination exports are validated against the runnable
+        delivery matrix (item/order to nextengine, and company/contact/deal/item/
+        order to hubspot via the native outbound dispatcher). Provider and
+        object pairs without a working delivery pipeline are rejected with HTTP
+        400 and error code ``INTEGRATION_EXPORT_NOT_SUPPORTED`` (details:
+        ``object_type``, ``provider``, ``reason``) before any job history row or
+        outbound event is created. Empty or unknown provider slugs are rejected
+        with HTTP 400 and error code ``INTEGRATION_EXPORT_UNKNOWN_PROVIDER``.
+        Accepted integration exports are recorded with status ``queued`` while
+        background delivery runs.
+
         Parameters
         ----------
         object_type : str
@@ -158,6 +175,14 @@ class ExportsClient:
         set_code_source : typing.Optional[str]
 
         mapping_custom_fields : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
+
+        mapping_custom_fields_conditional : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
+
+        update_hubspot : typing.Optional[typing.Optional[typing.Any]]
+
+        hubspot_follow_up_channel_id : typing.Optional[str]
+
+        hubspot_follow_up_deal_stage : typing.Optional[str]
 
         mapping_type : typing.Optional[str]
 
@@ -203,6 +228,10 @@ class ExportsClient:
             export_set_items=export_set_items,
             set_code_source=set_code_source,
             mapping_custom_fields=mapping_custom_fields,
+            mapping_custom_fields_conditional=mapping_custom_fields_conditional,
+            update_hubspot=update_hubspot,
+            hubspot_follow_up_channel_id=hubspot_follow_up_channel_id,
+            hubspot_follow_up_deal_stage=hubspot_follow_up_deal_stage,
             mapping_type=mapping_type,
             selected_custom_object=selected_custom_object,
             request_options=request_options,
@@ -388,11 +417,28 @@ class AsyncExportsClient:
         export_set_items: typing.Optional[bool] = OMIT,
         set_code_source: typing.Optional[str] = OMIT,
         mapping_custom_fields: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
+        mapping_custom_fields_conditional: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
+        update_hubspot: typing.Optional[typing.Optional[typing.Any]] = OMIT,
+        hubspot_follow_up_channel_id: typing.Optional[str] = OMIT,
+        hubspot_follow_up_deal_stage: typing.Optional[str] = OMIT,
         mapping_type: typing.Optional[str] = OMIT,
         selected_custom_object: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> CreatePublicExportJobCompatApiV2PublicExportsPost200Envelope:
         """
+        Create an export job.
+
+        Integration-destination exports are validated against the runnable
+        delivery matrix (item/order to nextengine, and company/contact/deal/item/
+        order to hubspot via the native outbound dispatcher). Provider and
+        object pairs without a working delivery pipeline are rejected with HTTP
+        400 and error code ``INTEGRATION_EXPORT_NOT_SUPPORTED`` (details:
+        ``object_type``, ``provider``, ``reason``) before any job history row or
+        outbound event is created. Empty or unknown provider slugs are rejected
+        with HTTP 400 and error code ``INTEGRATION_EXPORT_UNKNOWN_PROVIDER``.
+        Accepted integration exports are recorded with status ``queued`` while
+        background delivery runs.
+
         Parameters
         ----------
         object_type : str
@@ -432,6 +478,14 @@ class AsyncExportsClient:
         set_code_source : typing.Optional[str]
 
         mapping_custom_fields : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
+
+        mapping_custom_fields_conditional : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
+
+        update_hubspot : typing.Optional[typing.Optional[typing.Any]]
+
+        hubspot_follow_up_channel_id : typing.Optional[str]
+
+        hubspot_follow_up_deal_stage : typing.Optional[str]
 
         mapping_type : typing.Optional[str]
 
@@ -485,6 +539,10 @@ class AsyncExportsClient:
             export_set_items=export_set_items,
             set_code_source=set_code_source,
             mapping_custom_fields=mapping_custom_fields,
+            mapping_custom_fields_conditional=mapping_custom_fields_conditional,
+            update_hubspot=update_hubspot,
+            hubspot_follow_up_channel_id=hubspot_follow_up_channel_id,
+            hubspot_follow_up_deal_stage=hubspot_follow_up_deal_stage,
             mapping_type=mapping_type,
             selected_custom_object=selected_custom_object,
             request_options=request_options,

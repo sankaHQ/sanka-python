@@ -140,6 +140,7 @@ class RawAssociationsClient:
         definition_id: typing.Optional[str] = OMIT,
         label: typing.Optional[str] = OMIT,
         idempotency_key: typing.Optional[str] = OMIT,
+        confirm_association_warnings: typing.Optional[bool] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[CreatePublicAssociationApiV2PublicAssociationsPost200Envelope]:
         """
@@ -156,6 +157,8 @@ class RawAssociationsClient:
         label : typing.Optional[str]
 
         idempotency_key : typing.Optional[str]
+
+        confirm_association_warnings : typing.Optional[bool]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -181,6 +184,7 @@ class RawAssociationsClient:
                 "definition_id": definition_id,
                 "label": label,
                 "idempotency_key": idempotency_key,
+                "confirm_association_warnings": confirm_association_warnings,
             },
             headers={
                 "content-type": "application/json",
@@ -245,6 +249,7 @@ class RawAssociationsClient:
         definition_id: typing.Optional[str] = OMIT,
         label: typing.Optional[str] = OMIT,
         idempotency_key: typing.Optional[str] = OMIT,
+        confirm_association_warnings: typing.Optional[bool] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[DeletePublicAssociationApiV2PublicAssociationsDelete200Envelope]:
         """
@@ -261,6 +266,8 @@ class RawAssociationsClient:
         label : typing.Optional[str]
 
         idempotency_key : typing.Optional[str]
+
+        confirm_association_warnings : typing.Optional[bool]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -286,6 +293,7 @@ class RawAssociationsClient:
                 "definition_id": definition_id,
                 "label": label,
                 "idempotency_key": idempotency_key,
+                "confirm_association_warnings": confirm_association_warnings,
             },
             headers={
                 "content-type": "application/json",
@@ -454,6 +462,7 @@ class AsyncRawAssociationsClient:
         definition_id: typing.Optional[str] = OMIT,
         label: typing.Optional[str] = OMIT,
         idempotency_key: typing.Optional[str] = OMIT,
+        confirm_association_warnings: typing.Optional[bool] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[CreatePublicAssociationApiV2PublicAssociationsPost200Envelope]:
         """
@@ -470,6 +479,8 @@ class AsyncRawAssociationsClient:
         label : typing.Optional[str]
 
         idempotency_key : typing.Optional[str]
+
+        confirm_association_warnings : typing.Optional[bool]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -495,6 +506,7 @@ class AsyncRawAssociationsClient:
                 "definition_id": definition_id,
                 "label": label,
                 "idempotency_key": idempotency_key,
+                "confirm_association_warnings": confirm_association_warnings,
             },
             headers={
                 "content-type": "application/json",
@@ -559,6 +571,7 @@ class AsyncRawAssociationsClient:
         definition_id: typing.Optional[str] = OMIT,
         label: typing.Optional[str] = OMIT,
         idempotency_key: typing.Optional[str] = OMIT,
+        confirm_association_warnings: typing.Optional[bool] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[DeletePublicAssociationApiV2PublicAssociationsDelete200Envelope]:
         """
@@ -575,6 +588,8 @@ class AsyncRawAssociationsClient:
         label : typing.Optional[str]
 
         idempotency_key : typing.Optional[str]
+
+        confirm_association_warnings : typing.Optional[bool]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -600,6 +615,7 @@ class AsyncRawAssociationsClient:
                 "definition_id": definition_id,
                 "label": label,
                 "idempotency_key": idempotency_key,
+                "confirm_association_warnings": confirm_association_warnings,
             },
             headers={
                 "content-type": "application/json",

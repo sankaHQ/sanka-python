@@ -6,12 +6,11 @@ import pydantic
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.unchecked_base_model import UncheckedBaseModel
 from .envelope_meta import EnvelopeMeta
-from .object_record_list_data import ObjectRecordListData
 
 
 class ListPublicInvoicesApiV2PublicInvoicesGet200Envelope(UncheckedBaseModel):
     success: typing.Literal[True] = True
-    data: ObjectRecordListData
+    data: typing.Dict[str, typing.Optional[typing.Any]]
     meta: EnvelopeMeta
 
     if IS_PYDANTIC_V2:

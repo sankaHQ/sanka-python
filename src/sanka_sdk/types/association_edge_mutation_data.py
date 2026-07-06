@@ -11,6 +11,7 @@ from .association_edge import AssociationEdge
 class AssociationEdgeMutationData(UncheckedBaseModel):
     edge: typing.Optional[AssociationEdge] = None
     edges: typing.Optional[typing.List[AssociationEdge]] = None
+    edge_ids: typing.Optional[typing.List[str]] = None
     created: typing.Optional[bool] = None
     deleted: typing.Optional[bool] = None
     replaced: typing.Optional[bool] = None

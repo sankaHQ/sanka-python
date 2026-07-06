@@ -16,6 +16,9 @@ from ..errors.unprocessable_entity_error import UnprocessableEntityError
 from ..types.create_public_workflow_api_v_2_public_workflows_post_200_envelope import (
     CreatePublicWorkflowApiV2PublicWorkflowsPost200Envelope,
 )
+from ..types.delete_public_workflow_api_v_2_public_workflows_workflow_id_delete_200_envelope import (
+    DeletePublicWorkflowApiV2PublicWorkflowsWorkflowIdDelete200Envelope,
+)
 from ..types.error_envelope import ErrorEnvelope
 from ..types.get_public_workflow_api_v_2_public_workflows_workflow_id_get_200_envelope import (
     GetPublicWorkflowApiV2PublicWorkflowsWorkflowIdGet200Envelope,
@@ -319,6 +322,84 @@ class RawWorkflowsClient:
                     GetPublicWorkflowApiV2PublicWorkflowsWorkflowIdGet200Envelope,
                     construct_type(
                         type_=GetPublicWorkflowApiV2PublicWorkflowsWorkflowIdGet200Envelope,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    def delete_public_workflow_api(
+        self,
+        workflow_id: str,
+        *,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> HttpResponse[DeletePublicWorkflowApiV2PublicWorkflowsWorkflowIdDelete200Envelope]:
+        """
+        Parameters
+        ----------
+        workflow_id : str
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[DeletePublicWorkflowApiV2PublicWorkflowsWorkflowIdDelete200Envelope]
+            Successful Response
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            f"v2/public/workflows/{jsonable_encoder(workflow_id)}",
+            method="DELETE",
+            params={
+                "workspace_id": workspace_id,
+            },
+            request_options=request_options,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    DeletePublicWorkflowApiV2PublicWorkflowsWorkflowIdDelete200Envelope,
+                    construct_type(
+                        type_=DeletePublicWorkflowApiV2PublicWorkflowsWorkflowIdDelete200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
@@ -890,6 +971,84 @@ class AsyncRawWorkflowsClient:
                     GetPublicWorkflowApiV2PublicWorkflowsWorkflowIdGet200Envelope,
                     construct_type(
                         type_=GetPublicWorkflowApiV2PublicWorkflowsWorkflowIdGet200Envelope,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    async def delete_public_workflow_api(
+        self,
+        workflow_id: str,
+        *,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> AsyncHttpResponse[DeletePublicWorkflowApiV2PublicWorkflowsWorkflowIdDelete200Envelope]:
+        """
+        Parameters
+        ----------
+        workflow_id : str
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[DeletePublicWorkflowApiV2PublicWorkflowsWorkflowIdDelete200Envelope]
+            Successful Response
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            f"v2/public/workflows/{jsonable_encoder(workflow_id)}",
+            method="DELETE",
+            params={
+                "workspace_id": workspace_id,
+            },
+            request_options=request_options,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    DeletePublicWorkflowApiV2PublicWorkflowsWorkflowIdDelete200Envelope,
+                    construct_type(
+                        type_=DeletePublicWorkflowApiV2PublicWorkflowsWorkflowIdDelete200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )

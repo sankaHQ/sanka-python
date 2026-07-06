@@ -10,6 +10,8 @@ from ..core.unchecked_base_model import UncheckedBaseModel
 class ObjectRecordCreateRequest(UncheckedBaseModel):
     view_id: typing.Optional[str] = None
     form_view_id: typing.Optional[str] = None
+    cost_line_items: typing.Optional[typing.List[typing.Optional[typing.Any]]] = None
+    line_items: typing.Optional[typing.List[typing.Optional[typing.Any]]] = None
     properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = None
 
     if IS_PYDANTIC_V2:

@@ -68,7 +68,12 @@ class CustomObjectsClient:
         usage_status: typing.Optional[str] = None,
         page: typing.Optional[int] = None,
         limit: typing.Optional[int] = None,
+        cursor: typing.Optional[str] = None,
         sort: typing.Optional[str] = None,
+        created_at_from: typing.Optional[str] = None,
+        created_at_to: typing.Optional[str] = None,
+        updated_at_from: typing.Optional[str] = None,
+        updated_at_to: typing.Optional[str] = None,
         x_language: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
@@ -94,7 +99,17 @@ class CustomObjectsClient:
 
         limit : typing.Optional[int]
 
+        cursor : typing.Optional[str]
+
         sort : typing.Optional[str]
+
+        created_at_from : typing.Optional[str]
+
+        created_at_to : typing.Optional[str]
+
+        updated_at_from : typing.Optional[str]
+
+        updated_at_to : typing.Optional[str]
 
         x_language : typing.Optional[str]
 
@@ -130,7 +145,12 @@ class CustomObjectsClient:
             usage_status=usage_status,
             page=page,
             limit=limit,
+            cursor=cursor,
             sort=sort,
+            created_at_from=created_at_from,
+            created_at_to=created_at_to,
+            updated_at_from=updated_at_from,
+            updated_at_to=updated_at_to,
             x_language=x_language,
             accept_language=accept_language,
             request_options=request_options,
@@ -141,9 +161,12 @@ class CustomObjectsClient:
         self,
         custom_object_id: str,
         *,
+        language: typing.Optional[str] = None,
         workspace_id: typing.Optional[str] = None,
         view_id: typing.Optional[str] = OMIT,
         form_view_id: typing.Optional[str] = OMIT,
+        cost_line_items: typing.Optional[typing.Sequence[typing.Optional[typing.Any]]] = OMIT,
+        line_items: typing.Optional[typing.Sequence[typing.Optional[typing.Any]]] = OMIT,
         properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> CreatePublicCustomObjectRecordApiV2PublicCustomObjectsCustomObjectIdRecordsPost200Envelope:
@@ -152,11 +175,17 @@ class CustomObjectsClient:
         ----------
         custom_object_id : str
 
+        language : typing.Optional[str]
+
         workspace_id : typing.Optional[str]
 
         view_id : typing.Optional[str]
 
         form_view_id : typing.Optional[str]
+
+        cost_line_items : typing.Optional[typing.Sequence[typing.Optional[typing.Any]]]
+
+        line_items : typing.Optional[typing.Sequence[typing.Optional[typing.Any]]]
 
         properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
 
@@ -182,9 +211,12 @@ class CustomObjectsClient:
         """
         _response = self._raw_client.create_public_custom_object_record_api(
             custom_object_id,
+            language=language,
             workspace_id=workspace_id,
             view_id=view_id,
             form_view_id=form_view_id,
+            cost_line_items=cost_line_items,
+            line_items=line_items,
             properties=properties,
             request_options=request_options,
         )
@@ -249,9 +281,14 @@ class CustomObjectsClient:
         custom_object_id: str,
         record_id: str,
         *,
+        language: typing.Optional[str] = None,
         workspace_id: typing.Optional[str] = None,
         view_id: typing.Optional[str] = OMIT,
         form_view_id: typing.Optional[str] = OMIT,
+        associations: typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]] = OMIT,
+        cost_line_items: typing.Optional[typing.Sequence[typing.Optional[typing.Any]]] = OMIT,
+        files: typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]] = OMIT,
+        line_items: typing.Optional[typing.Sequence[typing.Optional[typing.Any]]] = OMIT,
         properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> UpdatePublicCustomObjectRecordApiV2PublicCustomObjectsCustomObjectIdRecordsRecordIdPut200Envelope:
@@ -262,11 +299,21 @@ class CustomObjectsClient:
 
         record_id : str
 
+        language : typing.Optional[str]
+
         workspace_id : typing.Optional[str]
 
         view_id : typing.Optional[str]
 
         form_view_id : typing.Optional[str]
+
+        associations : typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]]
+
+        cost_line_items : typing.Optional[typing.Sequence[typing.Optional[typing.Any]]]
+
+        files : typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]]
+
+        line_items : typing.Optional[typing.Sequence[typing.Optional[typing.Any]]]
 
         properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
 
@@ -294,9 +341,14 @@ class CustomObjectsClient:
         _response = self._raw_client.update_public_custom_object_record_api(
             custom_object_id,
             record_id,
+            language=language,
             workspace_id=workspace_id,
             view_id=view_id,
             form_view_id=form_view_id,
+            associations=associations,
+            cost_line_items=cost_line_items,
+            files=files,
+            line_items=line_items,
             properties=properties,
             request_options=request_options,
         )
@@ -434,6 +486,7 @@ class CustomObjectsClient:
     def create_public_custom_object_record_compatibility_api(
         self,
         *,
+        language: typing.Optional[str] = None,
         workspace_id: typing.Optional[str] = None,
         external_object_type: typing.Optional[str] = OMIT,
         data: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
@@ -444,6 +497,8 @@ class CustomObjectsClient:
         """
         Parameters
         ----------
+        language : typing.Optional[str]
+
         workspace_id : typing.Optional[str]
 
         external_object_type : typing.Optional[str]
@@ -473,6 +528,7 @@ class CustomObjectsClient:
         client.custom_objects.create_public_custom_object_record_compatibility_api()
         """
         _response = self._raw_client.create_public_custom_object_record_compatibility_api(
+            language=language,
             workspace_id=workspace_id,
             external_object_type=external_object_type,
             data=data,
@@ -486,6 +542,7 @@ class CustomObjectsClient:
         self,
         record_id: str,
         *,
+        language: typing.Optional[str] = None,
         workspace_id: typing.Optional[str] = None,
         external_object_type: typing.Optional[str] = OMIT,
         data: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
@@ -497,6 +554,8 @@ class CustomObjectsClient:
         Parameters
         ----------
         record_id : str
+
+        language : typing.Optional[str]
 
         workspace_id : typing.Optional[str]
 
@@ -530,6 +589,7 @@ class CustomObjectsClient:
         """
         _response = self._raw_client.update_public_custom_object_record_compatibility_api(
             record_id,
+            language=language,
             workspace_id=workspace_id,
             external_object_type=external_object_type,
             data=data,
@@ -612,7 +672,12 @@ class AsyncCustomObjectsClient:
         usage_status: typing.Optional[str] = None,
         page: typing.Optional[int] = None,
         limit: typing.Optional[int] = None,
+        cursor: typing.Optional[str] = None,
         sort: typing.Optional[str] = None,
+        created_at_from: typing.Optional[str] = None,
+        created_at_to: typing.Optional[str] = None,
+        updated_at_from: typing.Optional[str] = None,
+        updated_at_to: typing.Optional[str] = None,
         x_language: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
@@ -638,7 +703,17 @@ class AsyncCustomObjectsClient:
 
         limit : typing.Optional[int]
 
+        cursor : typing.Optional[str]
+
         sort : typing.Optional[str]
+
+        created_at_from : typing.Optional[str]
+
+        created_at_to : typing.Optional[str]
+
+        updated_at_from : typing.Optional[str]
+
+        updated_at_to : typing.Optional[str]
 
         x_language : typing.Optional[str]
 
@@ -682,7 +757,12 @@ class AsyncCustomObjectsClient:
             usage_status=usage_status,
             page=page,
             limit=limit,
+            cursor=cursor,
             sort=sort,
+            created_at_from=created_at_from,
+            created_at_to=created_at_to,
+            updated_at_from=updated_at_from,
+            updated_at_to=updated_at_to,
             x_language=x_language,
             accept_language=accept_language,
             request_options=request_options,
@@ -693,9 +773,12 @@ class AsyncCustomObjectsClient:
         self,
         custom_object_id: str,
         *,
+        language: typing.Optional[str] = None,
         workspace_id: typing.Optional[str] = None,
         view_id: typing.Optional[str] = OMIT,
         form_view_id: typing.Optional[str] = OMIT,
+        cost_line_items: typing.Optional[typing.Sequence[typing.Optional[typing.Any]]] = OMIT,
+        line_items: typing.Optional[typing.Sequence[typing.Optional[typing.Any]]] = OMIT,
         properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> CreatePublicCustomObjectRecordApiV2PublicCustomObjectsCustomObjectIdRecordsPost200Envelope:
@@ -704,11 +787,17 @@ class AsyncCustomObjectsClient:
         ----------
         custom_object_id : str
 
+        language : typing.Optional[str]
+
         workspace_id : typing.Optional[str]
 
         view_id : typing.Optional[str]
 
         form_view_id : typing.Optional[str]
+
+        cost_line_items : typing.Optional[typing.Sequence[typing.Optional[typing.Any]]]
+
+        line_items : typing.Optional[typing.Sequence[typing.Optional[typing.Any]]]
 
         properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
 
@@ -742,9 +831,12 @@ class AsyncCustomObjectsClient:
         """
         _response = await self._raw_client.create_public_custom_object_record_api(
             custom_object_id,
+            language=language,
             workspace_id=workspace_id,
             view_id=view_id,
             form_view_id=form_view_id,
+            cost_line_items=cost_line_items,
+            line_items=line_items,
             properties=properties,
             request_options=request_options,
         )
@@ -817,9 +909,14 @@ class AsyncCustomObjectsClient:
         custom_object_id: str,
         record_id: str,
         *,
+        language: typing.Optional[str] = None,
         workspace_id: typing.Optional[str] = None,
         view_id: typing.Optional[str] = OMIT,
         form_view_id: typing.Optional[str] = OMIT,
+        associations: typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]] = OMIT,
+        cost_line_items: typing.Optional[typing.Sequence[typing.Optional[typing.Any]]] = OMIT,
+        files: typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]] = OMIT,
+        line_items: typing.Optional[typing.Sequence[typing.Optional[typing.Any]]] = OMIT,
         properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> UpdatePublicCustomObjectRecordApiV2PublicCustomObjectsCustomObjectIdRecordsRecordIdPut200Envelope:
@@ -830,11 +927,21 @@ class AsyncCustomObjectsClient:
 
         record_id : str
 
+        language : typing.Optional[str]
+
         workspace_id : typing.Optional[str]
 
         view_id : typing.Optional[str]
 
         form_view_id : typing.Optional[str]
+
+        associations : typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]]
+
+        cost_line_items : typing.Optional[typing.Sequence[typing.Optional[typing.Any]]]
+
+        files : typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]]
+
+        line_items : typing.Optional[typing.Sequence[typing.Optional[typing.Any]]]
 
         properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
 
@@ -870,9 +977,14 @@ class AsyncCustomObjectsClient:
         _response = await self._raw_client.update_public_custom_object_record_api(
             custom_object_id,
             record_id,
+            language=language,
             workspace_id=workspace_id,
             view_id=view_id,
             form_view_id=form_view_id,
+            associations=associations,
+            cost_line_items=cost_line_items,
+            files=files,
+            line_items=line_items,
             properties=properties,
             request_options=request_options,
         )
@@ -1034,6 +1146,7 @@ class AsyncCustomObjectsClient:
     async def create_public_custom_object_record_compatibility_api(
         self,
         *,
+        language: typing.Optional[str] = None,
         workspace_id: typing.Optional[str] = None,
         external_object_type: typing.Optional[str] = OMIT,
         data: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
@@ -1044,6 +1157,8 @@ class AsyncCustomObjectsClient:
         """
         Parameters
         ----------
+        language : typing.Optional[str]
+
         workspace_id : typing.Optional[str]
 
         external_object_type : typing.Optional[str]
@@ -1081,6 +1196,7 @@ class AsyncCustomObjectsClient:
         asyncio.run(main())
         """
         _response = await self._raw_client.create_public_custom_object_record_compatibility_api(
+            language=language,
             workspace_id=workspace_id,
             external_object_type=external_object_type,
             data=data,
@@ -1094,6 +1210,7 @@ class AsyncCustomObjectsClient:
         self,
         record_id: str,
         *,
+        language: typing.Optional[str] = None,
         workspace_id: typing.Optional[str] = None,
         external_object_type: typing.Optional[str] = OMIT,
         data: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
@@ -1105,6 +1222,8 @@ class AsyncCustomObjectsClient:
         Parameters
         ----------
         record_id : str
+
+        language : typing.Optional[str]
 
         workspace_id : typing.Optional[str]
 
@@ -1146,6 +1265,7 @@ class AsyncCustomObjectsClient:
         """
         _response = await self._raw_client.update_public_custom_object_record_compatibility_api(
             record_id,
+            language=language,
             workspace_id=workspace_id,
             external_object_type=external_object_type,
             data=data,

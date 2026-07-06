@@ -47,7 +47,12 @@ class RawMetersClient:
         usage_status: typing.Optional[str] = None,
         page: typing.Optional[int] = None,
         limit: typing.Optional[int] = None,
+        cursor: typing.Optional[str] = None,
         sort: typing.Optional[str] = None,
+        created_at_from: typing.Optional[str] = None,
+        created_at_to: typing.Optional[str] = None,
+        updated_at_from: typing.Optional[str] = None,
+        updated_at_to: typing.Optional[str] = None,
         x_language: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
@@ -71,7 +76,17 @@ class RawMetersClient:
 
         limit : typing.Optional[int]
 
+        cursor : typing.Optional[str]
+
         sort : typing.Optional[str]
+
+        created_at_from : typing.Optional[str]
+
+        created_at_to : typing.Optional[str]
+
+        updated_at_from : typing.Optional[str]
+
+        updated_at_to : typing.Optional[str]
 
         x_language : typing.Optional[str]
 
@@ -97,7 +112,12 @@ class RawMetersClient:
                 "usage_status": usage_status,
                 "page": page,
                 "limit": limit,
+                "cursor": cursor,
                 "sort": sort,
+                "created_at_from": created_at_from,
+                "created_at_to": created_at_to,
+                "updated_at_from": updated_at_from,
+                "updated_at_to": updated_at_to,
             },
             headers={
                 "X-Language": str(x_language) if x_language is not None else None,
@@ -543,7 +563,12 @@ class AsyncRawMetersClient:
         usage_status: typing.Optional[str] = None,
         page: typing.Optional[int] = None,
         limit: typing.Optional[int] = None,
+        cursor: typing.Optional[str] = None,
         sort: typing.Optional[str] = None,
+        created_at_from: typing.Optional[str] = None,
+        created_at_to: typing.Optional[str] = None,
+        updated_at_from: typing.Optional[str] = None,
+        updated_at_to: typing.Optional[str] = None,
         x_language: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
@@ -567,7 +592,17 @@ class AsyncRawMetersClient:
 
         limit : typing.Optional[int]
 
+        cursor : typing.Optional[str]
+
         sort : typing.Optional[str]
+
+        created_at_from : typing.Optional[str]
+
+        created_at_to : typing.Optional[str]
+
+        updated_at_from : typing.Optional[str]
+
+        updated_at_to : typing.Optional[str]
 
         x_language : typing.Optional[str]
 
@@ -593,7 +628,12 @@ class AsyncRawMetersClient:
                 "usage_status": usage_status,
                 "page": page,
                 "limit": limit,
+                "cursor": cursor,
                 "sort": sort,
+                "created_at_from": created_at_from,
+                "created_at_to": created_at_to,
+                "updated_at_from": updated_at_from,
+                "updated_at_to": updated_at_to,
             },
             headers={
                 "X-Language": str(x_language) if x_language is not None else None,

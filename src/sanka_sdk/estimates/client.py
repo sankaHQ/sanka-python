@@ -55,7 +55,12 @@ class EstimatesClient:
         usage_status: typing.Optional[str] = None,
         page: typing.Optional[int] = None,
         limit: typing.Optional[int] = None,
+        cursor: typing.Optional[str] = None,
         sort: typing.Optional[str] = None,
+        created_at_from: typing.Optional[str] = None,
+        created_at_to: typing.Optional[str] = None,
+        updated_at_from: typing.Optional[str] = None,
+        updated_at_to: typing.Optional[str] = None,
         x_language: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
@@ -79,7 +84,17 @@ class EstimatesClient:
 
         limit : typing.Optional[int]
 
+        cursor : typing.Optional[str]
+
         sort : typing.Optional[str]
+
+        created_at_from : typing.Optional[str]
+
+        created_at_to : typing.Optional[str]
+
+        updated_at_from : typing.Optional[str]
+
+        updated_at_to : typing.Optional[str]
 
         x_language : typing.Optional[str]
 
@@ -91,7 +106,7 @@ class EstimatesClient:
         Returns
         -------
         ListPublicEstimatesApiV2PublicEstimatesGet200Envelope
-            Object record list response
+            Object record list or line-item-expanded list response
 
         Examples
         --------
@@ -112,7 +127,12 @@ class EstimatesClient:
             usage_status=usage_status,
             page=page,
             limit=limit,
+            cursor=cursor,
             sort=sort,
+            created_at_from=created_at_from,
+            created_at_to=created_at_to,
+            updated_at_from=updated_at_from,
+            updated_at_to=updated_at_to,
             x_language=x_language,
             accept_language=accept_language,
             request_options=request_options,
@@ -125,6 +145,8 @@ class EstimatesClient:
         workspace_id: typing.Optional[str] = None,
         view_id: typing.Optional[str] = OMIT,
         form_view_id: typing.Optional[str] = OMIT,
+        cost_line_items: typing.Optional[typing.Sequence[typing.Optional[typing.Any]]] = OMIT,
+        line_items: typing.Optional[typing.Sequence[typing.Optional[typing.Any]]] = OMIT,
         properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> CreatePublicEstimateApiV2PublicEstimatesPost200Envelope:
@@ -136,6 +158,10 @@ class EstimatesClient:
         view_id : typing.Optional[str]
 
         form_view_id : typing.Optional[str]
+
+        cost_line_items : typing.Optional[typing.Sequence[typing.Optional[typing.Any]]]
+
+        line_items : typing.Optional[typing.Sequence[typing.Optional[typing.Any]]]
 
         properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
 
@@ -161,6 +187,8 @@ class EstimatesClient:
             workspace_id=workspace_id,
             view_id=view_id,
             form_view_id=form_view_id,
+            cost_line_items=cost_line_items,
+            line_items=line_items,
             properties=properties,
             request_options=request_options,
         )
@@ -265,6 +293,10 @@ class EstimatesClient:
         workspace_id: typing.Optional[str] = None,
         view_id: typing.Optional[str] = OMIT,
         form_view_id: typing.Optional[str] = OMIT,
+        associations: typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]] = OMIT,
+        cost_line_items: typing.Optional[typing.Sequence[typing.Optional[typing.Any]]] = OMIT,
+        files: typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]] = OMIT,
+        line_items: typing.Optional[typing.Sequence[typing.Optional[typing.Any]]] = OMIT,
         properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> UpdatePublicEstimateApiV2PublicEstimatesEstimateIdPut200Envelope:
@@ -280,6 +312,14 @@ class EstimatesClient:
         view_id : typing.Optional[str]
 
         form_view_id : typing.Optional[str]
+
+        associations : typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]]
+
+        cost_line_items : typing.Optional[typing.Sequence[typing.Optional[typing.Any]]]
+
+        files : typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]]
+
+        line_items : typing.Optional[typing.Sequence[typing.Optional[typing.Any]]]
 
         properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
 
@@ -309,6 +349,10 @@ class EstimatesClient:
             workspace_id=workspace_id,
             view_id=view_id,
             form_view_id=form_view_id,
+            associations=associations,
+            cost_line_items=cost_line_items,
+            files=files,
+            line_items=line_items,
             properties=properties,
             request_options=request_options,
         )
@@ -444,7 +488,12 @@ class AsyncEstimatesClient:
         usage_status: typing.Optional[str] = None,
         page: typing.Optional[int] = None,
         limit: typing.Optional[int] = None,
+        cursor: typing.Optional[str] = None,
         sort: typing.Optional[str] = None,
+        created_at_from: typing.Optional[str] = None,
+        created_at_to: typing.Optional[str] = None,
+        updated_at_from: typing.Optional[str] = None,
+        updated_at_to: typing.Optional[str] = None,
         x_language: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
@@ -468,7 +517,17 @@ class AsyncEstimatesClient:
 
         limit : typing.Optional[int]
 
+        cursor : typing.Optional[str]
+
         sort : typing.Optional[str]
+
+        created_at_from : typing.Optional[str]
+
+        created_at_to : typing.Optional[str]
+
+        updated_at_from : typing.Optional[str]
+
+        updated_at_to : typing.Optional[str]
 
         x_language : typing.Optional[str]
 
@@ -480,7 +539,7 @@ class AsyncEstimatesClient:
         Returns
         -------
         ListPublicEstimatesApiV2PublicEstimatesGet200Envelope
-            Object record list response
+            Object record list or line-item-expanded list response
 
         Examples
         --------
@@ -509,7 +568,12 @@ class AsyncEstimatesClient:
             usage_status=usage_status,
             page=page,
             limit=limit,
+            cursor=cursor,
             sort=sort,
+            created_at_from=created_at_from,
+            created_at_to=created_at_to,
+            updated_at_from=updated_at_from,
+            updated_at_to=updated_at_to,
             x_language=x_language,
             accept_language=accept_language,
             request_options=request_options,
@@ -522,6 +586,8 @@ class AsyncEstimatesClient:
         workspace_id: typing.Optional[str] = None,
         view_id: typing.Optional[str] = OMIT,
         form_view_id: typing.Optional[str] = OMIT,
+        cost_line_items: typing.Optional[typing.Sequence[typing.Optional[typing.Any]]] = OMIT,
+        line_items: typing.Optional[typing.Sequence[typing.Optional[typing.Any]]] = OMIT,
         properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> CreatePublicEstimateApiV2PublicEstimatesPost200Envelope:
@@ -533,6 +599,10 @@ class AsyncEstimatesClient:
         view_id : typing.Optional[str]
 
         form_view_id : typing.Optional[str]
+
+        cost_line_items : typing.Optional[typing.Sequence[typing.Optional[typing.Any]]]
+
+        line_items : typing.Optional[typing.Sequence[typing.Optional[typing.Any]]]
 
         properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
 
@@ -566,6 +636,8 @@ class AsyncEstimatesClient:
             workspace_id=workspace_id,
             view_id=view_id,
             form_view_id=form_view_id,
+            cost_line_items=cost_line_items,
+            line_items=line_items,
             properties=properties,
             request_options=request_options,
         )
@@ -686,6 +758,10 @@ class AsyncEstimatesClient:
         workspace_id: typing.Optional[str] = None,
         view_id: typing.Optional[str] = OMIT,
         form_view_id: typing.Optional[str] = OMIT,
+        associations: typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]] = OMIT,
+        cost_line_items: typing.Optional[typing.Sequence[typing.Optional[typing.Any]]] = OMIT,
+        files: typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]] = OMIT,
+        line_items: typing.Optional[typing.Sequence[typing.Optional[typing.Any]]] = OMIT,
         properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> UpdatePublicEstimateApiV2PublicEstimatesEstimateIdPut200Envelope:
@@ -701,6 +777,14 @@ class AsyncEstimatesClient:
         view_id : typing.Optional[str]
 
         form_view_id : typing.Optional[str]
+
+        associations : typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]]
+
+        cost_line_items : typing.Optional[typing.Sequence[typing.Optional[typing.Any]]]
+
+        files : typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]]
+
+        line_items : typing.Optional[typing.Sequence[typing.Optional[typing.Any]]]
 
         properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
 
@@ -738,6 +822,10 @@ class AsyncEstimatesClient:
             workspace_id=workspace_id,
             view_id=view_id,
             form_view_id=form_view_id,
+            associations=associations,
+            cost_line_items=cost_line_items,
+            files=files,
+            line_items=line_items,
             properties=properties,
             request_options=request_options,
         )

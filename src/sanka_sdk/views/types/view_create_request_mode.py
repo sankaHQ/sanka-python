@@ -2,4 +2,21 @@
 
 import typing
 
-ViewCreateRequestMode = typing.Union[typing.Literal["table", "kanban", "calendar", "forecast"], typing.Any]
+ViewCreateRequestMode = typing.Union[
+    typing.Literal[
+        "table",
+        "component",
+        "component_table",
+        "item_list",
+        "kanban",
+        "calendar",
+        "project",
+        "forecast",
+        "group",
+        "receivable_balance",
+        "payable_balance",
+        "pnl",
+        "balance_sheet",
+    ],
+    typing.Any,
+]

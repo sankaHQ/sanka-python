@@ -39,6 +39,7 @@ if typing.TYPE_CHECKING:
     from .orders.client import AsyncOrdersClient, OrdersClient
     from .payments.client import AsyncPaymentsClient, PaymentsClient
     from .payroll.client import AsyncPayrollClient, PayrollClient
+    from .projects.client import AsyncProjectsClient, ProjectsClient
     from .properties.client import AsyncPropertiesClient, PropertiesClient
     from .public_auth.client import AsyncPublicAuthClient, PublicAuthClient
     from .purchase_orders.client import AsyncPurchaseOrdersClient, PurchaseOrdersClient
@@ -164,6 +165,7 @@ class SankaClient:
         self._rule_settings: typing.Optional[RuleSettingsClient] = None
         self._subscriptions: typing.Optional[SubscriptionsClient] = None
         self._tasks: typing.Optional[TasksClient] = None
+        self._projects: typing.Optional[ProjectsClient] = None
         self._tickets: typing.Optional[TicketsClient] = None
         self._transfers: typing.Optional[TransfersClient] = None
         self._views: typing.Optional[ViewsClient] = None
@@ -484,6 +486,14 @@ class SankaClient:
         return self._tasks
 
     @property
+    def projects(self):
+        if self._projects is None:
+            from .projects.client import ProjectsClient  # noqa: E402
+
+            self._projects = ProjectsClient(client_wrapper=self._client_wrapper)
+        return self._projects
+
+    @property
     def tickets(self):
         if self._tickets is None:
             from .tickets.client import TicketsClient  # noqa: E402
@@ -640,6 +650,7 @@ class AsyncSankaClient:
         self._rule_settings: typing.Optional[AsyncRuleSettingsClient] = None
         self._subscriptions: typing.Optional[AsyncSubscriptionsClient] = None
         self._tasks: typing.Optional[AsyncTasksClient] = None
+        self._projects: typing.Optional[AsyncProjectsClient] = None
         self._tickets: typing.Optional[AsyncTicketsClient] = None
         self._transfers: typing.Optional[AsyncTransfersClient] = None
         self._views: typing.Optional[AsyncViewsClient] = None
@@ -958,6 +969,14 @@ class AsyncSankaClient:
 
             self._tasks = AsyncTasksClient(client_wrapper=self._client_wrapper)
         return self._tasks
+
+    @property
+    def projects(self):
+        if self._projects is None:
+            from .projects.client import AsyncProjectsClient  # noqa: E402
+
+            self._projects = AsyncProjectsClient(client_wrapper=self._client_wrapper)
+        return self._projects
 
     @property
     def tickets(self):

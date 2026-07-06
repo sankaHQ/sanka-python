@@ -48,6 +48,7 @@ class RawRecordsClient:
         mode: typing.Optional[str] = OMIT,
         page: typing.Optional[int] = OMIT,
         limit: typing.Optional[int] = OMIT,
+        cursor: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[QueryPublicRecordsApiV2PublicRecordsQueryPost200Envelope]:
         """
@@ -87,6 +88,8 @@ class RawRecordsClient:
 
         limit : typing.Optional[int]
 
+        cursor : typing.Optional[str]
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
@@ -120,6 +123,7 @@ class RawRecordsClient:
                 "mode": mode,
                 "page": page,
                 "limit": limit,
+                "cursor": cursor,
             },
             headers={
                 "content-type": "application/json",
@@ -333,6 +337,7 @@ class AsyncRawRecordsClient:
         mode: typing.Optional[str] = OMIT,
         page: typing.Optional[int] = OMIT,
         limit: typing.Optional[int] = OMIT,
+        cursor: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[QueryPublicRecordsApiV2PublicRecordsQueryPost200Envelope]:
         """
@@ -372,6 +377,8 @@ class AsyncRawRecordsClient:
 
         limit : typing.Optional[int]
 
+        cursor : typing.Optional[str]
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
@@ -405,6 +412,7 @@ class AsyncRawRecordsClient:
                 "mode": mode,
                 "page": page,
                 "limit": limit,
+                "cursor": cursor,
             },
             headers={
                 "content-type": "application/json",
