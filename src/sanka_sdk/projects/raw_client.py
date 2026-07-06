@@ -40,7 +40,7 @@ class RawProjectsClient:
     def __init__(self, *, client_wrapper: SyncClientWrapper):
         self._client_wrapper = client_wrapper
 
-    def list_public_projects_api(
+    def list(
         self,
         *,
         page: typing.Optional[int] = None,
@@ -138,7 +138,7 @@ class RawProjectsClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    def create_public_project_api(
+    def create(
         self,
         *,
         x_language: typing.Optional[str] = None,
@@ -226,7 +226,7 @@ class RawProjectsClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    def get_public_project_api_v_2_public_projects_project_id_get(
+    def retrieve(
         self,
         project_id: str,
         *,
@@ -303,7 +303,7 @@ class RawProjectsClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    def update_public_project_api_v_2_public_projects_project_id_put(
+    def update(
         self,
         project_id: str,
         *,
@@ -394,7 +394,7 @@ class RawProjectsClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    def delete_public_project_api_v_2_public_projects_project_id_delete(
+    def delete(
         self,
         project_id: str,
         *,
@@ -499,7 +499,7 @@ class AsyncRawProjectsClient:
     def __init__(self, *, client_wrapper: AsyncClientWrapper):
         self._client_wrapper = client_wrapper
 
-    async def list_public_projects_api(
+    async def list(
         self,
         *,
         page: typing.Optional[int] = None,
@@ -597,7 +597,7 @@ class AsyncRawProjectsClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    async def create_public_project_api(
+    async def create(
         self,
         *,
         x_language: typing.Optional[str] = None,
@@ -685,7 +685,7 @@ class AsyncRawProjectsClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    async def get_public_project_api_v_2_public_projects_project_id_get(
+    async def retrieve(
         self,
         project_id: str,
         *,
@@ -762,7 +762,7 @@ class AsyncRawProjectsClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    async def update_public_project_api_v_2_public_projects_project_id_put(
+    async def update(
         self,
         project_id: str,
         *,
@@ -853,7 +853,7 @@ class AsyncRawProjectsClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    async def delete_public_project_api_v_2_public_projects_project_id_delete(
+    async def delete(
         self,
         project_id: str,
         *,

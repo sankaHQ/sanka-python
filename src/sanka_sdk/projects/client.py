@@ -42,7 +42,7 @@ class ProjectsClient:
         """
         return self._raw_client
 
-    def list_public_projects_api(
+    def list(
         self,
         *,
         page: typing.Optional[int] = None,
@@ -93,9 +93,9 @@ class ProjectsClient:
             workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
-        client.projects.list_public_projects_api()
+        client.projects.list()
         """
-        _response = self._raw_client.list_public_projects_api(
+        _response = self._raw_client.list(
             page=page,
             limit=limit,
             search=search,
@@ -109,7 +109,7 @@ class ProjectsClient:
         )
         return _response.data
 
-    def create_public_project_api(
+    def create(
         self,
         *,
         x_language: typing.Optional[str] = None,
@@ -148,9 +148,9 @@ class ProjectsClient:
             workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
-        client.projects.create_public_project_api()
+        client.projects.create()
         """
-        _response = self._raw_client.create_public_project_api(
+        _response = self._raw_client.create(
             x_language=x_language,
             accept_language=accept_language,
             title=title,
@@ -160,7 +160,7 @@ class ProjectsClient:
         )
         return _response.data
 
-    def get_public_project_api_v_2_public_projects_project_id_get(
+    def retrieve(
         self,
         project_id: str,
         *,
@@ -196,11 +196,11 @@ class ProjectsClient:
             workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
-        client.projects.get_public_project_api_v_2_public_projects_project_id_get(
+        client.projects.retrieve(
             project_id="project_id",
         )
         """
-        _response = self._raw_client.get_public_project_api_v_2_public_projects_project_id_get(
+        _response = self._raw_client.retrieve(
             project_id,
             workspace_id=workspace_id,
             x_language=x_language,
@@ -209,7 +209,7 @@ class ProjectsClient:
         )
         return _response.data
 
-    def update_public_project_api_v_2_public_projects_project_id_put(
+    def update(
         self,
         project_id: str,
         *,
@@ -251,11 +251,11 @@ class ProjectsClient:
             workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
-        client.projects.update_public_project_api_v_2_public_projects_project_id_put(
+        client.projects.update(
             project_id="project_id",
         )
         """
-        _response = self._raw_client.update_public_project_api_v_2_public_projects_project_id_put(
+        _response = self._raw_client.update(
             project_id,
             x_language=x_language,
             accept_language=accept_language,
@@ -266,7 +266,7 @@ class ProjectsClient:
         )
         return _response.data
 
-    def delete_public_project_api_v_2_public_projects_project_id_delete(
+    def delete(
         self,
         project_id: str,
         *,
@@ -308,12 +308,12 @@ class ProjectsClient:
             workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
-        client.projects.delete_public_project_api_v_2_public_projects_project_id_delete(
+        client.projects.delete(
             project_id="project_id",
             request=PublicProjectDeleteRequest(),
         )
         """
-        _response = self._raw_client.delete_public_project_api_v_2_public_projects_project_id_delete(
+        _response = self._raw_client.delete(
             project_id,
             replacement_project_id=replacement_project_id,
             clear_task_project=clear_task_project,
@@ -340,7 +340,7 @@ class AsyncProjectsClient:
         """
         return self._raw_client
 
-    async def list_public_projects_api(
+    async def list(
         self,
         *,
         page: typing.Optional[int] = None,
@@ -396,12 +396,12 @@ class AsyncProjectsClient:
 
 
         async def main() -> None:
-            await client.projects.list_public_projects_api()
+            await client.projects.list()
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.list_public_projects_api(
+        _response = await self._raw_client.list(
             page=page,
             limit=limit,
             search=search,
@@ -415,7 +415,7 @@ class AsyncProjectsClient:
         )
         return _response.data
 
-    async def create_public_project_api(
+    async def create(
         self,
         *,
         x_language: typing.Optional[str] = None,
@@ -459,12 +459,12 @@ class AsyncProjectsClient:
 
 
         async def main() -> None:
-            await client.projects.create_public_project_api()
+            await client.projects.create()
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.create_public_project_api(
+        _response = await self._raw_client.create(
             x_language=x_language,
             accept_language=accept_language,
             title=title,
@@ -474,7 +474,7 @@ class AsyncProjectsClient:
         )
         return _response.data
 
-    async def get_public_project_api_v_2_public_projects_project_id_get(
+    async def retrieve(
         self,
         project_id: str,
         *,
@@ -515,14 +515,14 @@ class AsyncProjectsClient:
 
 
         async def main() -> None:
-            await client.projects.get_public_project_api_v_2_public_projects_project_id_get(
+            await client.projects.retrieve(
                 project_id="project_id",
             )
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.get_public_project_api_v_2_public_projects_project_id_get(
+        _response = await self._raw_client.retrieve(
             project_id,
             workspace_id=workspace_id,
             x_language=x_language,
@@ -531,7 +531,7 @@ class AsyncProjectsClient:
         )
         return _response.data
 
-    async def update_public_project_api_v_2_public_projects_project_id_put(
+    async def update(
         self,
         project_id: str,
         *,
@@ -578,14 +578,14 @@ class AsyncProjectsClient:
 
 
         async def main() -> None:
-            await client.projects.update_public_project_api_v_2_public_projects_project_id_put(
+            await client.projects.update(
                 project_id="project_id",
             )
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.update_public_project_api_v_2_public_projects_project_id_put(
+        _response = await self._raw_client.update(
             project_id,
             x_language=x_language,
             accept_language=accept_language,
@@ -596,7 +596,7 @@ class AsyncProjectsClient:
         )
         return _response.data
 
-    async def delete_public_project_api_v_2_public_projects_project_id_delete(
+    async def delete(
         self,
         project_id: str,
         *,
@@ -643,7 +643,7 @@ class AsyncProjectsClient:
 
 
         async def main() -> None:
-            await client.projects.delete_public_project_api_v_2_public_projects_project_id_delete(
+            await client.projects.delete(
                 project_id="project_id",
                 request=PublicProjectDeleteRequest(),
             )
@@ -651,7 +651,7 @@ class AsyncProjectsClient:
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.delete_public_project_api_v_2_public_projects_project_id_delete(
+        _response = await self._raw_client.delete(
             project_id,
             replacement_project_id=replacement_project_id,
             clear_task_project=clear_task_project,

@@ -1,11 +1,14 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+ROOT="${SANKA_PYTHON_SDK_ROOT:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd -L)}"
 FERN_DIR="$ROOT/fern"
-TMP_DIR="$(mktemp -d "$ROOT/.tmp-fern.XXXXXX")"
+TMP_PARENT="${SANKA_FERN_TMP_PARENT:-$HOME/.cache/sanka-python-fern}"
+mkdir -p "$TMP_PARENT"
+TMP_DIR="$(mktemp -d "$TMP_PARENT/run.XXXXXX")"
 OUTPUT_DIR="$ROOT/src/sanka_sdk"
 GENERATOR_IMAGE="fernapi/fern-python-sdk:4.34.0"
+GENERATOR_OUTPUT_DIR="${SANKA_FERN_OUTPUT_DIR:-$TMP_DIR/output}"
 
 cleanup() {
   rm -rf "$TMP_DIR"
@@ -47,7 +50,7 @@ ensure_docker_host() {
 ensure_colima
 ensure_docker_host
 export DOCKER_CONFIG="$TMP_DIR/docker-config"
-mkdir -p "$DOCKER_CONFIG" "$OUTPUT_DIR"
+mkdir -p "$DOCKER_CONFIG" "$OUTPUT_DIR" "$GENERATOR_OUTPUT_DIR"
 printf '{}\n' > "$DOCKER_CONFIG/config.json"
 
 (cd "$FERN_DIR" && npx --yes fern-api check >/dev/null)
@@ -92,14 +95,16 @@ cat > "$TMP_DIR/config.manual.json" <<'EOF'
 EOF
 
 find "$OUTPUT_DIR" -mindepth 1 -maxdepth 1 -exec rm -rf {} + 2>/dev/null || true
+find "$GENERATOR_OUTPUT_DIR" -mindepth 1 -maxdepth 1 -exec rm -rf {} + 2>/dev/null || true
 
 docker pull "$GENERATOR_IMAGE" >/dev/null
 docker run --rm \
   -v "$TMP_DIR:/workspace" \
-  -v "$OUTPUT_DIR:/fern/output" \
+  -v "$GENERATOR_OUTPUT_DIR:/fern/output" \
   "$GENERATOR_IMAGE" \
   /workspace/config.manual.json >/dev/null
 
+cp -R "$GENERATOR_OUTPUT_DIR"/. "$OUTPUT_DIR"/
 touch "$OUTPUT_DIR/py.typed"
 python3 -m compileall "$OUTPUT_DIR" >/dev/null
 
