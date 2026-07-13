@@ -144,6 +144,7 @@ class RawProjectsClient:
         x_language: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
         title: typing.Optional[str] = OMIT,
+        description: typing.Optional[str] = OMIT,
         default: typing.Optional[bool] = OMIT,
         statuses: typing.Optional[typing.Sequence[PublicProjectStatusRequest]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
@@ -156,6 +157,8 @@ class RawProjectsClient:
         accept_language : typing.Optional[str]
 
         title : typing.Optional[str]
+
+        description : typing.Optional[str]
 
         default : typing.Optional[bool]
 
@@ -174,6 +177,7 @@ class RawProjectsClient:
             method="POST",
             json={
                 "title": title,
+                "description": description,
                 "default": default,
                 "statuses": convert_and_respect_annotation_metadata(
                     object_=statuses,
@@ -310,6 +314,7 @@ class RawProjectsClient:
         x_language: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
         title: typing.Optional[str] = OMIT,
+        description: typing.Optional[str] = OMIT,
         default: typing.Optional[bool] = OMIT,
         statuses: typing.Optional[typing.Sequence[PublicProjectStatusRequest]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
@@ -324,6 +329,8 @@ class RawProjectsClient:
         accept_language : typing.Optional[str]
 
         title : typing.Optional[str]
+
+        description : typing.Optional[str]
 
         default : typing.Optional[bool]
 
@@ -342,6 +349,7 @@ class RawProjectsClient:
             method="PUT",
             json={
                 "title": title,
+                "description": description,
                 "default": default,
                 "statuses": convert_and_respect_annotation_metadata(
                     object_=statuses,
@@ -603,6 +611,7 @@ class AsyncRawProjectsClient:
         x_language: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
         title: typing.Optional[str] = OMIT,
+        description: typing.Optional[str] = OMIT,
         default: typing.Optional[bool] = OMIT,
         statuses: typing.Optional[typing.Sequence[PublicProjectStatusRequest]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
@@ -615,6 +624,8 @@ class AsyncRawProjectsClient:
         accept_language : typing.Optional[str]
 
         title : typing.Optional[str]
+
+        description : typing.Optional[str]
 
         default : typing.Optional[bool]
 
@@ -633,6 +644,7 @@ class AsyncRawProjectsClient:
             method="POST",
             json={
                 "title": title,
+                "description": description,
                 "default": default,
                 "statuses": convert_and_respect_annotation_metadata(
                     object_=statuses,
@@ -769,6 +781,7 @@ class AsyncRawProjectsClient:
         x_language: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
         title: typing.Optional[str] = OMIT,
+        description: typing.Optional[str] = OMIT,
         default: typing.Optional[bool] = OMIT,
         statuses: typing.Optional[typing.Sequence[PublicProjectStatusRequest]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
@@ -783,6 +796,8 @@ class AsyncRawProjectsClient:
         accept_language : typing.Optional[str]
 
         title : typing.Optional[str]
+
+        description : typing.Optional[str]
 
         default : typing.Optional[bool]
 
@@ -801,6 +816,7 @@ class AsyncRawProjectsClient:
             method="PUT",
             json={
                 "title": title,
+                "description": description,
                 "default": default,
                 "statuses": convert_and_respect_annotation_metadata(
                     object_=statuses,

@@ -12,6 +12,7 @@ class PublicProject(UncheckedBaseModel):
     id: str
     project_id: str
     title: typing.Optional[str] = None
+    description: typing.Optional[str] = None
     default: typing.Optional[bool] = None
     statuses: typing.Optional[typing.List[PublicProjectStatus]] = None
     task_count: typing.Optional[int] = None
