@@ -10,6 +10,7 @@ from .public_project_status_request import PublicProjectStatusRequest
 
 class PublicProjectRequest(UncheckedBaseModel):
     title: typing.Optional[str] = None
+    description: typing.Optional[str] = None
     default: typing.Optional[bool] = None
     statuses: typing.Optional[typing.List[PublicProjectStatusRequest]] = None
 

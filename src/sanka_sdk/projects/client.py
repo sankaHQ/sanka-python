@@ -115,6 +115,7 @@ class ProjectsClient:
         x_language: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
         title: typing.Optional[str] = OMIT,
+        description: typing.Optional[str] = OMIT,
         default: typing.Optional[bool] = OMIT,
         statuses: typing.Optional[typing.Sequence[PublicProjectStatusRequest]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
@@ -127,6 +128,8 @@ class ProjectsClient:
         accept_language : typing.Optional[str]
 
         title : typing.Optional[str]
+
+        description : typing.Optional[str]
 
         default : typing.Optional[bool]
 
@@ -154,6 +157,7 @@ class ProjectsClient:
             x_language=x_language,
             accept_language=accept_language,
             title=title,
+            description=description,
             default=default,
             statuses=statuses,
             request_options=request_options,
@@ -216,6 +220,7 @@ class ProjectsClient:
         x_language: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
         title: typing.Optional[str] = OMIT,
+        description: typing.Optional[str] = OMIT,
         default: typing.Optional[bool] = OMIT,
         statuses: typing.Optional[typing.Sequence[PublicProjectStatusRequest]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
@@ -230,6 +235,8 @@ class ProjectsClient:
         accept_language : typing.Optional[str]
 
         title : typing.Optional[str]
+
+        description : typing.Optional[str]
 
         default : typing.Optional[bool]
 
@@ -260,6 +267,7 @@ class ProjectsClient:
             x_language=x_language,
             accept_language=accept_language,
             title=title,
+            description=description,
             default=default,
             statuses=statuses,
             request_options=request_options,
@@ -421,6 +429,7 @@ class AsyncProjectsClient:
         x_language: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
         title: typing.Optional[str] = OMIT,
+        description: typing.Optional[str] = OMIT,
         default: typing.Optional[bool] = OMIT,
         statuses: typing.Optional[typing.Sequence[PublicProjectStatusRequest]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
@@ -433,6 +442,8 @@ class AsyncProjectsClient:
         accept_language : typing.Optional[str]
 
         title : typing.Optional[str]
+
+        description : typing.Optional[str]
 
         default : typing.Optional[bool]
 
@@ -468,6 +479,7 @@ class AsyncProjectsClient:
             x_language=x_language,
             accept_language=accept_language,
             title=title,
+            description=description,
             default=default,
             statuses=statuses,
             request_options=request_options,
@@ -538,6 +550,7 @@ class AsyncProjectsClient:
         x_language: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
         title: typing.Optional[str] = OMIT,
+        description: typing.Optional[str] = OMIT,
         default: typing.Optional[bool] = OMIT,
         statuses: typing.Optional[typing.Sequence[PublicProjectStatusRequest]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
@@ -552,6 +565,8 @@ class AsyncProjectsClient:
         accept_language : typing.Optional[str]
 
         title : typing.Optional[str]
+
+        description : typing.Optional[str]
 
         default : typing.Optional[bool]
 
@@ -590,6 +605,7 @@ class AsyncProjectsClient:
             x_language=x_language,
             accept_language=accept_language,
             title=title,
+            description=description,
             default=default,
             statuses=statuses,
             request_options=request_options,
