@@ -25,6 +25,7 @@ if typing.TYPE_CHECKING:
     from .estimates.client import AsyncEstimatesClient, EstimatesClient
     from .expenses.client import AsyncExpensesClient, ExpensesClient
     from .exports.client import AsyncExportsClient, ExportsClient
+    from .ferry_diagrams.client import AsyncFerryDiagramsClient, FerryDiagramsClient
     from .files.client import AsyncFilesClient, FilesClient
     from .imports.client import AsyncImportsClient, ImportsClient
     from .incentives.client import AsyncIncentivesClient, IncentivesClient
@@ -172,6 +173,7 @@ class SankaClient:
         self._workflow_actions: typing.Optional[WorkflowActionsClient] = None
         self._workflows: typing.Optional[WorkflowsClient] = None
         self._workflow_runs: typing.Optional[WorkflowRunsClient] = None
+        self._ferry_diagrams: typing.Optional[FerryDiagramsClient] = None
 
     @property
     def absences(self):
@@ -541,6 +543,14 @@ class SankaClient:
             self._workflow_runs = WorkflowRunsClient(client_wrapper=self._client_wrapper)
         return self._workflow_runs
 
+    @property
+    def ferry_diagrams(self):
+        if self._ferry_diagrams is None:
+            from .ferry_diagrams.client import FerryDiagramsClient  # noqa: E402
+
+            self._ferry_diagrams = FerryDiagramsClient(client_wrapper=self._client_wrapper)
+        return self._ferry_diagrams
+
 
 class AsyncSankaClient:
     """
@@ -657,6 +667,7 @@ class AsyncSankaClient:
         self._workflow_actions: typing.Optional[AsyncWorkflowActionsClient] = None
         self._workflows: typing.Optional[AsyncWorkflowsClient] = None
         self._workflow_runs: typing.Optional[AsyncWorkflowRunsClient] = None
+        self._ferry_diagrams: typing.Optional[AsyncFerryDiagramsClient] = None
 
     @property
     def absences(self):
@@ -1025,6 +1036,14 @@ class AsyncSankaClient:
 
             self._workflow_runs = AsyncWorkflowRunsClient(client_wrapper=self._client_wrapper)
         return self._workflow_runs
+
+    @property
+    def ferry_diagrams(self):
+        if self._ferry_diagrams is None:
+            from .ferry_diagrams.client import AsyncFerryDiagramsClient  # noqa: E402
+
+            self._ferry_diagrams = AsyncFerryDiagramsClient(client_wrapper=self._client_wrapper)
+        return self._ferry_diagrams
 
 
 def _get_base_url(*, base_url: typing.Optional[str] = None, environment: SankaClientEnvironment) -> str:
