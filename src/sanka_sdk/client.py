@@ -26,6 +26,7 @@ if typing.TYPE_CHECKING:
     from .expenses.client import AsyncExpensesClient, ExpensesClient
     from .exports.client import AsyncExportsClient, ExportsClient
     from .ferry_diagrams.client import AsyncFerryDiagramsClient, FerryDiagramsClient
+    from .ferry_programs.client import AsyncFerryProgramsClient, FerryProgramsClient
     from .files.client import AsyncFilesClient, FilesClient
     from .imports.client import AsyncImportsClient, ImportsClient
     from .incentives.client import AsyncIncentivesClient, IncentivesClient
@@ -174,6 +175,7 @@ class SankaClient:
         self._workflows: typing.Optional[WorkflowsClient] = None
         self._workflow_runs: typing.Optional[WorkflowRunsClient] = None
         self._ferry_diagrams: typing.Optional[FerryDiagramsClient] = None
+        self._ferry_programs: typing.Optional[FerryProgramsClient] = None
 
     @property
     def absences(self):
@@ -551,6 +553,14 @@ class SankaClient:
             self._ferry_diagrams = FerryDiagramsClient(client_wrapper=self._client_wrapper)
         return self._ferry_diagrams
 
+    @property
+    def ferry_programs(self):
+        if self._ferry_programs is None:
+            from .ferry_programs.client import FerryProgramsClient  # noqa: E402
+
+            self._ferry_programs = FerryProgramsClient(client_wrapper=self._client_wrapper)
+        return self._ferry_programs
+
 
 class AsyncSankaClient:
     """
@@ -668,6 +678,7 @@ class AsyncSankaClient:
         self._workflows: typing.Optional[AsyncWorkflowsClient] = None
         self._workflow_runs: typing.Optional[AsyncWorkflowRunsClient] = None
         self._ferry_diagrams: typing.Optional[AsyncFerryDiagramsClient] = None
+        self._ferry_programs: typing.Optional[AsyncFerryProgramsClient] = None
 
     @property
     def absences(self):
@@ -1044,6 +1055,14 @@ class AsyncSankaClient:
 
             self._ferry_diagrams = AsyncFerryDiagramsClient(client_wrapper=self._client_wrapper)
         return self._ferry_diagrams
+
+    @property
+    def ferry_programs(self):
+        if self._ferry_programs is None:
+            from .ferry_programs.client import AsyncFerryProgramsClient  # noqa: E402
+
+            self._ferry_programs = AsyncFerryProgramsClient(client_wrapper=self._client_wrapper)
+        return self._ferry_programs
 
 
 def _get_base_url(*, base_url: typing.Optional[str] = None, environment: SankaClientEnvironment) -> str:

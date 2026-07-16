@@ -94,7 +94,6 @@ cat > "$TMP_DIR/config.manual.json" <<'EOF'
 }
 EOF
 
-find "$OUTPUT_DIR" -mindepth 1 -maxdepth 1 -exec rm -rf {} + 2>/dev/null || true
 find "$GENERATOR_OUTPUT_DIR" -mindepth 1 -maxdepth 1 -exec rm -rf {} + 2>/dev/null || true
 
 docker pull "$GENERATOR_IMAGE" >/dev/null
@@ -102,8 +101,9 @@ docker run --rm \
   -v "$TMP_DIR:/workspace" \
   -v "$GENERATOR_OUTPUT_DIR:/fern/output" \
   "$GENERATOR_IMAGE" \
-  /workspace/config.manual.json >/dev/null
+  /workspace/config.manual.json
 
+find "$OUTPUT_DIR" -mindepth 1 -maxdepth 1 -exec rm -rf {} + 2>/dev/null || true
 cp -R "$GENERATOR_OUTPUT_DIR"/. "$OUTPUT_DIR"/
 touch "$OUTPUT_DIR/py.typed"
 python3 -m compileall "$OUTPUT_DIR" >/dev/null
