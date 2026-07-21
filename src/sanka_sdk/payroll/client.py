@@ -364,8 +364,11 @@ class PayrollClient:
         self,
         run_id: str,
         *,
-        request: typing.Dict[str, typing.Optional[typing.Any]],
         workspace_id: typing.Optional[str] = None,
+        debit_account: typing.Optional[str] = OMIT,
+        credit_account: typing.Optional[str] = OMIT,
+        deductions_account: typing.Optional[str] = OMIT,
+        notes: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> CreatePublicPayrollJournalEntryApiV2PublicPayrollRunsRunIdJournalEntryPost200Envelope:
         """
@@ -373,9 +376,15 @@ class PayrollClient:
         ----------
         run_id : str
 
-        request : typing.Dict[str, typing.Optional[typing.Any]]
-
         workspace_id : typing.Optional[str]
+
+        debit_account : typing.Optional[str]
+
+        credit_account : typing.Optional[str]
+
+        deductions_account : typing.Optional[str]
+
+        notes : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -395,11 +404,16 @@ class PayrollClient:
         )
         client.payroll.create_public_payroll_journal_entry_api(
             run_id="run_id",
-            request={"key": "value"},
         )
         """
         _response = self._raw_client.create_public_payroll_journal_entry_api(
-            run_id, request=request, workspace_id=workspace_id, request_options=request_options
+            run_id,
+            workspace_id=workspace_id,
+            debit_account=debit_account,
+            credit_account=credit_account,
+            deductions_account=deductions_account,
+            notes=notes,
+            request_options=request_options,
         )
         return _response.data
 
@@ -834,8 +848,11 @@ class AsyncPayrollClient:
         self,
         run_id: str,
         *,
-        request: typing.Dict[str, typing.Optional[typing.Any]],
         workspace_id: typing.Optional[str] = None,
+        debit_account: typing.Optional[str] = OMIT,
+        credit_account: typing.Optional[str] = OMIT,
+        deductions_account: typing.Optional[str] = OMIT,
+        notes: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> CreatePublicPayrollJournalEntryApiV2PublicPayrollRunsRunIdJournalEntryPost200Envelope:
         """
@@ -843,9 +860,15 @@ class AsyncPayrollClient:
         ----------
         run_id : str
 
-        request : typing.Dict[str, typing.Optional[typing.Any]]
-
         workspace_id : typing.Optional[str]
+
+        debit_account : typing.Optional[str]
+
+        credit_account : typing.Optional[str]
+
+        deductions_account : typing.Optional[str]
+
+        notes : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -870,14 +893,19 @@ class AsyncPayrollClient:
         async def main() -> None:
             await client.payroll.create_public_payroll_journal_entry_api(
                 run_id="run_id",
-                request={"key": "value"},
             )
 
 
         asyncio.run(main())
         """
         _response = await self._raw_client.create_public_payroll_journal_entry_api(
-            run_id, request=request, workspace_id=workspace_id, request_options=request_options
+            run_id,
+            workspace_id=workspace_id,
+            debit_account=debit_account,
+            credit_account=credit_account,
+            deductions_account=deductions_account,
+            notes=notes,
+            request_options=request_options,
         )
         return _response.data
 

@@ -45,6 +45,7 @@ class RawContactsClient:
         language: typing.Optional[str] = None,
         status: typing.Optional[str] = None,
         usage_status: typing.Optional[str] = None,
+        filters: typing.Optional[str] = None,
         page: typing.Optional[int] = None,
         limit: typing.Optional[int] = None,
         cursor: typing.Optional[str] = None,
@@ -71,6 +72,8 @@ class RawContactsClient:
         status : typing.Optional[str]
 
         usage_status : typing.Optional[str]
+
+        filters : typing.Optional[str]
 
         page : typing.Optional[int]
 
@@ -110,6 +113,7 @@ class RawContactsClient:
                 "language": language,
                 "status": status,
                 "usage_status": usage_status,
+                "filters": filters,
                 "page": page,
                 "limit": limit,
                 "cursor": cursor,
@@ -593,6 +597,7 @@ class AsyncRawContactsClient:
         language: typing.Optional[str] = None,
         status: typing.Optional[str] = None,
         usage_status: typing.Optional[str] = None,
+        filters: typing.Optional[str] = None,
         page: typing.Optional[int] = None,
         limit: typing.Optional[int] = None,
         cursor: typing.Optional[str] = None,
@@ -619,6 +624,8 @@ class AsyncRawContactsClient:
         status : typing.Optional[str]
 
         usage_status : typing.Optional[str]
+
+        filters : typing.Optional[str]
 
         page : typing.Optional[int]
 
@@ -658,6 +665,7 @@ class AsyncRawContactsClient:
                 "language": language,
                 "status": status,
                 "usage_status": usage_status,
+                "filters": filters,
                 "page": page,
                 "limit": limit,
                 "cursor": cursor,

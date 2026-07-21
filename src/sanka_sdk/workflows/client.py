@@ -51,6 +51,7 @@ class WorkflowsClient:
         limit: typing.Optional[int] = None,
         q: typing.Optional[str] = None,
         status: typing.Optional[str] = None,
+        include_lookout: typing.Optional[bool] = None,
         workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> ListPublicWorkflowsApiV2PublicWorkflowsGet200Envelope:
@@ -64,6 +65,8 @@ class WorkflowsClient:
         q : typing.Optional[str]
 
         status : typing.Optional[str]
+
+        include_lookout : typing.Optional[bool]
 
         workspace_id : typing.Optional[str]
 
@@ -86,7 +89,13 @@ class WorkflowsClient:
         client.workflows.list_public_workflows_api()
         """
         _response = self._raw_client.list_public_workflows_api(
-            page=page, limit=limit, q=q, status=status, workspace_id=workspace_id, request_options=request_options
+            page=page,
+            limit=limit,
+            q=q,
+            status=status,
+            include_lookout=include_lookout,
+            workspace_id=workspace_id,
+            request_options=request_options,
         )
         return _response.data
 
@@ -454,6 +463,7 @@ class AsyncWorkflowsClient:
         limit: typing.Optional[int] = None,
         q: typing.Optional[str] = None,
         status: typing.Optional[str] = None,
+        include_lookout: typing.Optional[bool] = None,
         workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> ListPublicWorkflowsApiV2PublicWorkflowsGet200Envelope:
@@ -467,6 +477,8 @@ class AsyncWorkflowsClient:
         q : typing.Optional[str]
 
         status : typing.Optional[str]
+
+        include_lookout : typing.Optional[bool]
 
         workspace_id : typing.Optional[str]
 
@@ -497,7 +509,13 @@ class AsyncWorkflowsClient:
         asyncio.run(main())
         """
         _response = await self._raw_client.list_public_workflows_api(
-            page=page, limit=limit, q=q, status=status, workspace_id=workspace_id, request_options=request_options
+            page=page,
+            limit=limit,
+            q=q,
+            status=status,
+            include_lookout=include_lookout,
+            workspace_id=workspace_id,
+            request_options=request_options,
         )
         return _response.data
 

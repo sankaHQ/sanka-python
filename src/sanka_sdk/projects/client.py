@@ -16,7 +16,6 @@ from ..types.get_public_project_api_v_2_public_projects_project_id_get_200_envel
 from ..types.list_public_projects_api_v_2_public_projects_get_200_envelope import (
     ListPublicProjectsApiV2PublicProjectsGet200Envelope,
 )
-from ..types.public_project_delete_request import PublicProjectDeleteRequest
 from ..types.public_project_status_request import PublicProjectStatusRequest
 from ..types.update_public_project_api_v_2_public_projects_project_id_put_200_envelope import (
     UpdatePublicProjectApiV2PublicProjectsProjectIdPut200Envelope,
@@ -42,7 +41,7 @@ class ProjectsClient:
         """
         return self._raw_client
 
-    def list(
+    def list_public_projects_api(
         self,
         *,
         page: typing.Optional[int] = None,
@@ -83,7 +82,7 @@ class ProjectsClient:
         Returns
         -------
         ListPublicProjectsApiV2PublicProjectsGet200Envelope
-            Project list response
+            Successful Response
 
         Examples
         --------
@@ -93,9 +92,9 @@ class ProjectsClient:
             workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
-        client.projects.list()
+        client.projects.list_public_projects_api()
         """
-        _response = self._raw_client.list(
+        _response = self._raw_client.list_public_projects_api(
             page=page,
             limit=limit,
             search=search,
@@ -109,9 +108,10 @@ class ProjectsClient:
         )
         return _response.data
 
-    def create(
+    def create_public_project_api(
         self,
         *,
+        workspace_id: typing.Optional[str] = None,
         x_language: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
         title: typing.Optional[str] = OMIT,
@@ -123,6 +123,8 @@ class ProjectsClient:
         """
         Parameters
         ----------
+        workspace_id : typing.Optional[str]
+
         x_language : typing.Optional[str]
 
         accept_language : typing.Optional[str]
@@ -151,9 +153,10 @@ class ProjectsClient:
             workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
-        client.projects.create()
+        client.projects.create_public_project_api()
         """
-        _response = self._raw_client.create(
+        _response = self._raw_client.create_public_project_api(
+            workspace_id=workspace_id,
             x_language=x_language,
             accept_language=accept_language,
             title=title,
@@ -164,7 +167,7 @@ class ProjectsClient:
         )
         return _response.data
 
-    def retrieve(
+    def get_public_project_api(
         self,
         project_id: str,
         *,
@@ -190,7 +193,7 @@ class ProjectsClient:
         Returns
         -------
         GetPublicProjectApiV2PublicProjectsProjectIdGet200Envelope
-            Project detail response
+            Successful Response
 
         Examples
         --------
@@ -200,11 +203,11 @@ class ProjectsClient:
             workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
-        client.projects.retrieve(
+        client.projects.get_public_project_api(
             project_id="project_id",
         )
         """
-        _response = self._raw_client.retrieve(
+        _response = self._raw_client.get_public_project_api(
             project_id,
             workspace_id=workspace_id,
             x_language=x_language,
@@ -213,10 +216,11 @@ class ProjectsClient:
         )
         return _response.data
 
-    def update(
+    def update_public_project_api(
         self,
         project_id: str,
         *,
+        workspace_id: typing.Optional[str] = None,
         x_language: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
         title: typing.Optional[str] = OMIT,
@@ -229,6 +233,8 @@ class ProjectsClient:
         Parameters
         ----------
         project_id : str
+
+        workspace_id : typing.Optional[str]
 
         x_language : typing.Optional[str]
 
@@ -258,12 +264,13 @@ class ProjectsClient:
             workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
-        client.projects.update(
+        client.projects.update_public_project_api(
             project_id="project_id",
         )
         """
-        _response = self._raw_client.update(
+        _response = self._raw_client.update_public_project_api(
             project_id,
+            workspace_id=workspace_id,
             x_language=x_language,
             accept_language=accept_language,
             title=title,
@@ -274,15 +281,15 @@ class ProjectsClient:
         )
         return _response.data
 
-    def delete(
+    def delete_public_project_api(
         self,
         project_id: str,
         *,
         replacement_project_id: typing.Optional[str] = None,
         clear_task_project: typing.Optional[bool] = None,
+        workspace_id: typing.Optional[str] = None,
         x_language: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
-        request: typing.Optional[PublicProjectDeleteRequest] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> DeletePublicProjectApiV2PublicProjectsProjectIdDelete200Envelope:
         """
@@ -294,11 +301,11 @@ class ProjectsClient:
 
         clear_task_project : typing.Optional[bool]
 
+        workspace_id : typing.Optional[str]
+
         x_language : typing.Optional[str]
 
         accept_language : typing.Optional[str]
-
-        request : typing.Optional[PublicProjectDeleteRequest]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -310,24 +317,23 @@ class ProjectsClient:
 
         Examples
         --------
-        from sanka_sdk import PublicProjectDeleteRequest, SankaClient
+        from sanka_sdk import SankaClient
 
         client = SankaClient(
             workspace_code="YOUR_WORKSPACE_CODE",
             token="YOUR_TOKEN",
         )
-        client.projects.delete(
+        client.projects.delete_public_project_api(
             project_id="project_id",
-            request=PublicProjectDeleteRequest(),
         )
         """
-        _response = self._raw_client.delete(
+        _response = self._raw_client.delete_public_project_api(
             project_id,
             replacement_project_id=replacement_project_id,
             clear_task_project=clear_task_project,
+            workspace_id=workspace_id,
             x_language=x_language,
             accept_language=accept_language,
-            request=request,
             request_options=request_options,
         )
         return _response.data
@@ -348,7 +354,7 @@ class AsyncProjectsClient:
         """
         return self._raw_client
 
-    async def list(
+    async def list_public_projects_api(
         self,
         *,
         page: typing.Optional[int] = None,
@@ -389,7 +395,7 @@ class AsyncProjectsClient:
         Returns
         -------
         ListPublicProjectsApiV2PublicProjectsGet200Envelope
-            Project list response
+            Successful Response
 
         Examples
         --------
@@ -404,12 +410,12 @@ class AsyncProjectsClient:
 
 
         async def main() -> None:
-            await client.projects.list()
+            await client.projects.list_public_projects_api()
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.list(
+        _response = await self._raw_client.list_public_projects_api(
             page=page,
             limit=limit,
             search=search,
@@ -423,9 +429,10 @@ class AsyncProjectsClient:
         )
         return _response.data
 
-    async def create(
+    async def create_public_project_api(
         self,
         *,
+        workspace_id: typing.Optional[str] = None,
         x_language: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
         title: typing.Optional[str] = OMIT,
@@ -437,6 +444,8 @@ class AsyncProjectsClient:
         """
         Parameters
         ----------
+        workspace_id : typing.Optional[str]
+
         x_language : typing.Optional[str]
 
         accept_language : typing.Optional[str]
@@ -470,12 +479,13 @@ class AsyncProjectsClient:
 
 
         async def main() -> None:
-            await client.projects.create()
+            await client.projects.create_public_project_api()
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.create(
+        _response = await self._raw_client.create_public_project_api(
+            workspace_id=workspace_id,
             x_language=x_language,
             accept_language=accept_language,
             title=title,
@@ -486,7 +496,7 @@ class AsyncProjectsClient:
         )
         return _response.data
 
-    async def retrieve(
+    async def get_public_project_api(
         self,
         project_id: str,
         *,
@@ -512,7 +522,7 @@ class AsyncProjectsClient:
         Returns
         -------
         GetPublicProjectApiV2PublicProjectsProjectIdGet200Envelope
-            Project detail response
+            Successful Response
 
         Examples
         --------
@@ -527,14 +537,14 @@ class AsyncProjectsClient:
 
 
         async def main() -> None:
-            await client.projects.retrieve(
+            await client.projects.get_public_project_api(
                 project_id="project_id",
             )
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.retrieve(
+        _response = await self._raw_client.get_public_project_api(
             project_id,
             workspace_id=workspace_id,
             x_language=x_language,
@@ -543,10 +553,11 @@ class AsyncProjectsClient:
         )
         return _response.data
 
-    async def update(
+    async def update_public_project_api(
         self,
         project_id: str,
         *,
+        workspace_id: typing.Optional[str] = None,
         x_language: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
         title: typing.Optional[str] = OMIT,
@@ -559,6 +570,8 @@ class AsyncProjectsClient:
         Parameters
         ----------
         project_id : str
+
+        workspace_id : typing.Optional[str]
 
         x_language : typing.Optional[str]
 
@@ -593,15 +606,16 @@ class AsyncProjectsClient:
 
 
         async def main() -> None:
-            await client.projects.update(
+            await client.projects.update_public_project_api(
                 project_id="project_id",
             )
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.update(
+        _response = await self._raw_client.update_public_project_api(
             project_id,
+            workspace_id=workspace_id,
             x_language=x_language,
             accept_language=accept_language,
             title=title,
@@ -612,15 +626,15 @@ class AsyncProjectsClient:
         )
         return _response.data
 
-    async def delete(
+    async def delete_public_project_api(
         self,
         project_id: str,
         *,
         replacement_project_id: typing.Optional[str] = None,
         clear_task_project: typing.Optional[bool] = None,
+        workspace_id: typing.Optional[str] = None,
         x_language: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
-        request: typing.Optional[PublicProjectDeleteRequest] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> DeletePublicProjectApiV2PublicProjectsProjectIdDelete200Envelope:
         """
@@ -632,11 +646,11 @@ class AsyncProjectsClient:
 
         clear_task_project : typing.Optional[bool]
 
+        workspace_id : typing.Optional[str]
+
         x_language : typing.Optional[str]
 
         accept_language : typing.Optional[str]
-
-        request : typing.Optional[PublicProjectDeleteRequest]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -650,7 +664,7 @@ class AsyncProjectsClient:
         --------
         import asyncio
 
-        from sanka_sdk import AsyncSankaClient, PublicProjectDeleteRequest
+        from sanka_sdk import AsyncSankaClient
 
         client = AsyncSankaClient(
             workspace_code="YOUR_WORKSPACE_CODE",
@@ -659,21 +673,20 @@ class AsyncProjectsClient:
 
 
         async def main() -> None:
-            await client.projects.delete(
+            await client.projects.delete_public_project_api(
                 project_id="project_id",
-                request=PublicProjectDeleteRequest(),
             )
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.delete(
+        _response = await self._raw_client.delete_public_project_api(
             project_id,
             replacement_project_id=replacement_project_id,
             clear_task_project=clear_task_project,
+            workspace_id=workspace_id,
             x_language=x_language,
             accept_language=accept_language,
-            request=request,
             request_options=request_options,
         )
         return _response.data

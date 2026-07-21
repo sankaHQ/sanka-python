@@ -66,6 +66,7 @@ class CustomObjectsClient:
         language: typing.Optional[str] = None,
         status: typing.Optional[str] = None,
         usage_status: typing.Optional[str] = None,
+        filters: typing.Optional[str] = None,
         page: typing.Optional[int] = None,
         limit: typing.Optional[int] = None,
         cursor: typing.Optional[str] = None,
@@ -94,6 +95,8 @@ class CustomObjectsClient:
         status : typing.Optional[str]
 
         usage_status : typing.Optional[str]
+
+        filters : typing.Optional[str]
 
         page : typing.Optional[int]
 
@@ -143,6 +146,7 @@ class CustomObjectsClient:
             language=language,
             status=status,
             usage_status=usage_status,
+            filters=filters,
             page=page,
             limit=limit,
             cursor=cursor,
@@ -670,6 +674,7 @@ class AsyncCustomObjectsClient:
         language: typing.Optional[str] = None,
         status: typing.Optional[str] = None,
         usage_status: typing.Optional[str] = None,
+        filters: typing.Optional[str] = None,
         page: typing.Optional[int] = None,
         limit: typing.Optional[int] = None,
         cursor: typing.Optional[str] = None,
@@ -698,6 +703,8 @@ class AsyncCustomObjectsClient:
         status : typing.Optional[str]
 
         usage_status : typing.Optional[str]
+
+        filters : typing.Optional[str]
 
         page : typing.Optional[int]
 
@@ -755,6 +762,7 @@ class AsyncCustomObjectsClient:
             language=language,
             status=status,
             usage_status=usage_status,
+            filters=filters,
             page=page,
             limit=limit,
             cursor=cursor,

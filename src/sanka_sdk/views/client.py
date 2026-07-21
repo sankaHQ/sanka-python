@@ -22,6 +22,7 @@ from ..types.list_public_views_api_v_2_public_views_get_200_envelope import (
 from ..types.update_public_view_api_v_2_public_views_view_id_patch_200_envelope import (
     UpdatePublicViewApiV2PublicViewsViewIdPatch200Envelope,
 )
+from ..types.view_subtotal_calculation import ViewSubtotalCalculation
 from .raw_client import AsyncRawViewsClient, RawViewsClient
 from .types.view_create_request_mode import ViewCreateRequestMode
 from .types.view_create_request_visibility import ViewCreateRequestVisibility
@@ -113,7 +114,9 @@ class ViewsClient:
         form_view_id: typing.Optional[str] = OMIT,
         visibility: typing.Optional[ViewCreateRequestVisibility] = OMIT,
         mode: typing.Optional[ViewCreateRequestMode] = OMIT,
+        group_field_id: typing.Optional[str] = OMIT,
         column_field_ids: typing.Optional[typing.Sequence[str]] = OMIT,
+        subtotal_calculations: typing.Optional[typing.Sequence[ViewSubtotalCalculation]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> CreatePublicViewApiV2PublicViewsPost200Envelope:
         """
@@ -135,7 +138,11 @@ class ViewsClient:
 
         mode : typing.Optional[ViewCreateRequestMode]
 
+        group_field_id : typing.Optional[str]
+
         column_field_ids : typing.Optional[typing.Sequence[str]]
+
+        subtotal_calculations : typing.Optional[typing.Sequence[ViewSubtotalCalculation]]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -166,7 +173,9 @@ class ViewsClient:
             form_view_id=form_view_id,
             visibility=visibility,
             mode=mode,
+            group_field_id=group_field_id,
             column_field_ids=column_field_ids,
+            subtotal_calculations=subtotal_calculations,
             request_options=request_options,
         )
         return _response.data
@@ -261,6 +270,7 @@ class ViewsClient:
         title: typing.Optional[str] = OMIT,
         visibility: typing.Optional[ViewUpdateRequestVisibility] = OMIT,
         mode: typing.Optional[ViewUpdateRequestMode] = OMIT,
+        group_field_id: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> UpdatePublicViewApiV2PublicViewsViewIdPatch200Envelope:
         """
@@ -277,6 +287,8 @@ class ViewsClient:
         visibility : typing.Optional[ViewUpdateRequestVisibility]
 
         mode : typing.Optional[ViewUpdateRequestMode]
+
+        group_field_id : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -305,6 +317,7 @@ class ViewsClient:
             title=title,
             visibility=visibility,
             mode=mode,
+            group_field_id=group_field_id,
             request_options=request_options,
         )
         return _response.data
@@ -454,7 +467,9 @@ class AsyncViewsClient:
         form_view_id: typing.Optional[str] = OMIT,
         visibility: typing.Optional[ViewCreateRequestVisibility] = OMIT,
         mode: typing.Optional[ViewCreateRequestMode] = OMIT,
+        group_field_id: typing.Optional[str] = OMIT,
         column_field_ids: typing.Optional[typing.Sequence[str]] = OMIT,
+        subtotal_calculations: typing.Optional[typing.Sequence[ViewSubtotalCalculation]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> CreatePublicViewApiV2PublicViewsPost200Envelope:
         """
@@ -476,7 +491,11 @@ class AsyncViewsClient:
 
         mode : typing.Optional[ViewCreateRequestMode]
 
+        group_field_id : typing.Optional[str]
+
         column_field_ids : typing.Optional[typing.Sequence[str]]
+
+        subtotal_calculations : typing.Optional[typing.Sequence[ViewSubtotalCalculation]]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -515,7 +534,9 @@ class AsyncViewsClient:
             form_view_id=form_view_id,
             visibility=visibility,
             mode=mode,
+            group_field_id=group_field_id,
             column_field_ids=column_field_ids,
+            subtotal_calculations=subtotal_calculations,
             request_options=request_options,
         )
         return _response.data
@@ -626,6 +647,7 @@ class AsyncViewsClient:
         title: typing.Optional[str] = OMIT,
         visibility: typing.Optional[ViewUpdateRequestVisibility] = OMIT,
         mode: typing.Optional[ViewUpdateRequestMode] = OMIT,
+        group_field_id: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> UpdatePublicViewApiV2PublicViewsViewIdPatch200Envelope:
         """
@@ -642,6 +664,8 @@ class AsyncViewsClient:
         visibility : typing.Optional[ViewUpdateRequestVisibility]
 
         mode : typing.Optional[ViewUpdateRequestMode]
+
+        group_field_id : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -678,6 +702,7 @@ class AsyncViewsClient:
             title=title,
             visibility=visibility,
             mode=mode,
+            group_field_id=group_field_id,
             request_options=request_options,
         )
         return _response.data

@@ -19,6 +19,7 @@ from ..types.list_public_payment_allocations_api_v_2_public_payments_payment_id_
 from ..types.list_public_payments_api_v_2_public_payments_get_200_envelope import (
     ListPublicPaymentsApiV2PublicPaymentsGet200Envelope,
 )
+from ..types.payment_allocation_save_input import PaymentAllocationSaveInput
 from ..types.update_public_payment_allocations_api_v_2_public_payments_payment_id_allocations_put_200_envelope import (
     UpdatePublicPaymentAllocationsApiV2PublicPaymentsPaymentIdAllocationsPut200Envelope,
 )
@@ -55,6 +56,7 @@ class PaymentsClient:
         language: typing.Optional[str] = None,
         status: typing.Optional[str] = None,
         usage_status: typing.Optional[str] = None,
+        filters: typing.Optional[str] = None,
         page: typing.Optional[int] = None,
         limit: typing.Optional[int] = None,
         cursor: typing.Optional[str] = None,
@@ -81,6 +83,8 @@ class PaymentsClient:
         status : typing.Optional[str]
 
         usage_status : typing.Optional[str]
+
+        filters : typing.Optional[str]
 
         page : typing.Optional[int]
 
@@ -127,6 +131,7 @@ class PaymentsClient:
             language=language,
             status=status,
             usage_status=usage_status,
+            filters=filters,
             page=page,
             limit=limit,
             cursor=cursor,
@@ -486,20 +491,18 @@ class PaymentsClient:
         self,
         payment_id: str,
         *,
-        request: typing.Dict[str, typing.Optional[typing.Any]],
         external_id: typing.Optional[str] = None,
         lang: typing.Optional[str] = None,
         language: typing.Optional[str] = None,
         workspace_id: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
+        allocations: typing.Optional[typing.Sequence[PaymentAllocationSaveInput]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> UpdatePublicPaymentAllocationsApiV2PublicPaymentsPaymentIdAllocationsPut200Envelope:
         """
         Parameters
         ----------
         payment_id : str
-
-        request : typing.Dict[str, typing.Optional[typing.Any]]
 
         external_id : typing.Optional[str]
 
@@ -510,6 +513,8 @@ class PaymentsClient:
         workspace_id : typing.Optional[str]
 
         accept_language : typing.Optional[str]
+
+        allocations : typing.Optional[typing.Sequence[PaymentAllocationSaveInput]]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -529,17 +534,16 @@ class PaymentsClient:
         )
         client.payments.update_public_payment_allocations_api(
             payment_id="payment_id",
-            request={"key": "value"},
         )
         """
         _response = self._raw_client.update_public_payment_allocations_api(
             payment_id,
-            request=request,
             external_id=external_id,
             lang=lang,
             language=language,
             workspace_id=workspace_id,
             accept_language=accept_language,
+            allocations=allocations,
             request_options=request_options,
         )
         return _response.data
@@ -569,6 +573,7 @@ class AsyncPaymentsClient:
         language: typing.Optional[str] = None,
         status: typing.Optional[str] = None,
         usage_status: typing.Optional[str] = None,
+        filters: typing.Optional[str] = None,
         page: typing.Optional[int] = None,
         limit: typing.Optional[int] = None,
         cursor: typing.Optional[str] = None,
@@ -595,6 +600,8 @@ class AsyncPaymentsClient:
         status : typing.Optional[str]
 
         usage_status : typing.Optional[str]
+
+        filters : typing.Optional[str]
 
         page : typing.Optional[int]
 
@@ -649,6 +656,7 @@ class AsyncPaymentsClient:
             language=language,
             status=status,
             usage_status=usage_status,
+            filters=filters,
             page=page,
             limit=limit,
             cursor=cursor,
@@ -1057,20 +1065,18 @@ class AsyncPaymentsClient:
         self,
         payment_id: str,
         *,
-        request: typing.Dict[str, typing.Optional[typing.Any]],
         external_id: typing.Optional[str] = None,
         lang: typing.Optional[str] = None,
         language: typing.Optional[str] = None,
         workspace_id: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
+        allocations: typing.Optional[typing.Sequence[PaymentAllocationSaveInput]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> UpdatePublicPaymentAllocationsApiV2PublicPaymentsPaymentIdAllocationsPut200Envelope:
         """
         Parameters
         ----------
         payment_id : str
-
-        request : typing.Dict[str, typing.Optional[typing.Any]]
 
         external_id : typing.Optional[str]
 
@@ -1081,6 +1087,8 @@ class AsyncPaymentsClient:
         workspace_id : typing.Optional[str]
 
         accept_language : typing.Optional[str]
+
+        allocations : typing.Optional[typing.Sequence[PaymentAllocationSaveInput]]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -1105,7 +1113,6 @@ class AsyncPaymentsClient:
         async def main() -> None:
             await client.payments.update_public_payment_allocations_api(
                 payment_id="payment_id",
-                request={"key": "value"},
             )
 
 
@@ -1113,12 +1120,12 @@ class AsyncPaymentsClient:
         """
         _response = await self._raw_client.update_public_payment_allocations_api(
             payment_id,
-            request=request,
             external_id=external_id,
             lang=lang,
             language=language,
             workspace_id=workspace_id,
             accept_language=accept_language,
+            allocations=allocations,
             request_options=request_options,
         )
         return _response.data

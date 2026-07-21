@@ -49,6 +49,7 @@ class RawExpensesClient:
         language: typing.Optional[str] = None,
         status: typing.Optional[str] = None,
         usage_status: typing.Optional[str] = None,
+        filters: typing.Optional[str] = None,
         page: typing.Optional[int] = None,
         limit: typing.Optional[int] = None,
         cursor: typing.Optional[str] = None,
@@ -75,6 +76,8 @@ class RawExpensesClient:
         status : typing.Optional[str]
 
         usage_status : typing.Optional[str]
+
+        filters : typing.Optional[str]
 
         page : typing.Optional[int]
 
@@ -114,6 +117,7 @@ class RawExpensesClient:
                 "language": language,
                 "status": status,
                 "usage_status": usage_status,
+                "filters": filters,
                 "page": page,
                 "limit": limit,
                 "cursor": cursor,
@@ -172,9 +176,8 @@ class RawExpensesClient:
         workspace_id: typing.Optional[str] = None,
         view_id: typing.Optional[str] = OMIT,
         form_view_id: typing.Optional[str] = OMIT,
-        cost_line_items: typing.Optional[typing.Sequence[typing.Optional[typing.Any]]] = OMIT,
-        line_items: typing.Optional[typing.Sequence[typing.Optional[typing.Any]]] = OMIT,
-        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
+        base_currency: typing.Optional[float] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[CreatePublicExpenseApiV2PublicExpensesPost200Envelope]:
         """
@@ -186,11 +189,10 @@ class RawExpensesClient:
 
         form_view_id : typing.Optional[str]
 
-        cost_line_items : typing.Optional[typing.Sequence[typing.Optional[typing.Any]]]
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
 
-        line_items : typing.Optional[typing.Sequence[typing.Optional[typing.Any]]]
-
-        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
+        base_currency : typing.Optional[float]
+            Explicit amount in the workspace base currency. When omitted, Sanka calculates the value from the expense amount and currency. A provided value takes precedence over automatic conversion.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -209,9 +211,8 @@ class RawExpensesClient:
             json={
                 "view_id": view_id,
                 "form_view_id": form_view_id,
-                "cost_line_items": cost_line_items,
-                "line_items": line_items,
                 "properties": properties,
+                "base_currency": base_currency,
             },
             headers={
                 "content-type": "application/json",
@@ -417,11 +418,8 @@ class RawExpensesClient:
         workspace_id: typing.Optional[str] = None,
         view_id: typing.Optional[str] = OMIT,
         form_view_id: typing.Optional[str] = OMIT,
-        associations: typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]] = OMIT,
-        cost_line_items: typing.Optional[typing.Sequence[typing.Optional[typing.Any]]] = OMIT,
-        files: typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]] = OMIT,
-        line_items: typing.Optional[typing.Sequence[typing.Optional[typing.Any]]] = OMIT,
-        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
+        base_currency: typing.Optional[float] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[UpdatePublicExpenseApiV2PublicExpensesExpenseIdPut200Envelope]:
         """
@@ -437,15 +435,10 @@ class RawExpensesClient:
 
         form_view_id : typing.Optional[str]
 
-        associations : typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]]
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
 
-        cost_line_items : typing.Optional[typing.Sequence[typing.Optional[typing.Any]]]
-
-        files : typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]]
-
-        line_items : typing.Optional[typing.Sequence[typing.Optional[typing.Any]]]
-
-        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
+        base_currency : typing.Optional[float]
+            Explicit amount in the workspace base currency. When omitted, Sanka calculates the value from the expense amount and currency. A provided value takes precedence over automatic conversion.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -465,11 +458,8 @@ class RawExpensesClient:
             json={
                 "view_id": view_id,
                 "form_view_id": form_view_id,
-                "associations": associations,
-                "cost_line_items": cost_line_items,
-                "files": files,
-                "line_items": line_items,
                 "properties": properties,
+                "base_currency": base_currency,
             },
             headers={
                 "content-type": "application/json",
@@ -599,6 +589,7 @@ class AsyncRawExpensesClient:
         language: typing.Optional[str] = None,
         status: typing.Optional[str] = None,
         usage_status: typing.Optional[str] = None,
+        filters: typing.Optional[str] = None,
         page: typing.Optional[int] = None,
         limit: typing.Optional[int] = None,
         cursor: typing.Optional[str] = None,
@@ -625,6 +616,8 @@ class AsyncRawExpensesClient:
         status : typing.Optional[str]
 
         usage_status : typing.Optional[str]
+
+        filters : typing.Optional[str]
 
         page : typing.Optional[int]
 
@@ -664,6 +657,7 @@ class AsyncRawExpensesClient:
                 "language": language,
                 "status": status,
                 "usage_status": usage_status,
+                "filters": filters,
                 "page": page,
                 "limit": limit,
                 "cursor": cursor,
@@ -722,9 +716,8 @@ class AsyncRawExpensesClient:
         workspace_id: typing.Optional[str] = None,
         view_id: typing.Optional[str] = OMIT,
         form_view_id: typing.Optional[str] = OMIT,
-        cost_line_items: typing.Optional[typing.Sequence[typing.Optional[typing.Any]]] = OMIT,
-        line_items: typing.Optional[typing.Sequence[typing.Optional[typing.Any]]] = OMIT,
-        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
+        base_currency: typing.Optional[float] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[CreatePublicExpenseApiV2PublicExpensesPost200Envelope]:
         """
@@ -736,11 +729,10 @@ class AsyncRawExpensesClient:
 
         form_view_id : typing.Optional[str]
 
-        cost_line_items : typing.Optional[typing.Sequence[typing.Optional[typing.Any]]]
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
 
-        line_items : typing.Optional[typing.Sequence[typing.Optional[typing.Any]]]
-
-        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
+        base_currency : typing.Optional[float]
+            Explicit amount in the workspace base currency. When omitted, Sanka calculates the value from the expense amount and currency. A provided value takes precedence over automatic conversion.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -759,9 +751,8 @@ class AsyncRawExpensesClient:
             json={
                 "view_id": view_id,
                 "form_view_id": form_view_id,
-                "cost_line_items": cost_line_items,
-                "line_items": line_items,
                 "properties": properties,
+                "base_currency": base_currency,
             },
             headers={
                 "content-type": "application/json",
@@ -967,11 +958,8 @@ class AsyncRawExpensesClient:
         workspace_id: typing.Optional[str] = None,
         view_id: typing.Optional[str] = OMIT,
         form_view_id: typing.Optional[str] = OMIT,
-        associations: typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]] = OMIT,
-        cost_line_items: typing.Optional[typing.Sequence[typing.Optional[typing.Any]]] = OMIT,
-        files: typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]] = OMIT,
-        line_items: typing.Optional[typing.Sequence[typing.Optional[typing.Any]]] = OMIT,
-        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]] = OMIT,
+        properties: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
+        base_currency: typing.Optional[float] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[UpdatePublicExpenseApiV2PublicExpensesExpenseIdPut200Envelope]:
         """
@@ -987,15 +975,10 @@ class AsyncRawExpensesClient:
 
         form_view_id : typing.Optional[str]
 
-        associations : typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]]
+        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
 
-        cost_line_items : typing.Optional[typing.Sequence[typing.Optional[typing.Any]]]
-
-        files : typing.Optional[typing.Sequence[typing.Dict[str, typing.Optional[typing.Any]]]]
-
-        line_items : typing.Optional[typing.Sequence[typing.Optional[typing.Any]]]
-
-        properties : typing.Optional[typing.Dict[str, typing.Optional[typing.Optional[typing.Any]]]]
+        base_currency : typing.Optional[float]
+            Explicit amount in the workspace base currency. When omitted, Sanka calculates the value from the expense amount and currency. A provided value takes precedence over automatic conversion.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -1015,11 +998,8 @@ class AsyncRawExpensesClient:
             json={
                 "view_id": view_id,
                 "form_view_id": form_view_id,
-                "associations": associations,
-                "cost_line_items": cost_line_items,
-                "files": files,
-                "line_items": line_items,
                 "properties": properties,
+                "base_currency": base_currency,
             },
             headers={
                 "content-type": "application/json",

@@ -53,6 +53,7 @@ class AbsencesClient:
         view_id: typing.Optional[str] = None,
         search: typing.Optional[str] = None,
         language: typing.Optional[str] = None,
+        filters: typing.Optional[str] = None,
         page: typing.Optional[int] = None,
         limit: typing.Optional[int] = None,
         cursor: typing.Optional[str] = None,
@@ -85,6 +86,8 @@ class AbsencesClient:
         search : typing.Optional[str]
 
         language : typing.Optional[str]
+
+        filters : typing.Optional[str]
 
         page : typing.Optional[int]
 
@@ -134,6 +137,7 @@ class AbsencesClient:
             view_id=view_id,
             search=search,
             language=language,
+            filters=filters,
             page=page,
             limit=limit,
             cursor=cursor,
@@ -388,6 +392,7 @@ class AsyncAbsencesClient:
         view_id: typing.Optional[str] = None,
         search: typing.Optional[str] = None,
         language: typing.Optional[str] = None,
+        filters: typing.Optional[str] = None,
         page: typing.Optional[int] = None,
         limit: typing.Optional[int] = None,
         cursor: typing.Optional[str] = None,
@@ -420,6 +425,8 @@ class AsyncAbsencesClient:
         search : typing.Optional[str]
 
         language : typing.Optional[str]
+
+        filters : typing.Optional[str]
 
         page : typing.Optional[int]
 
@@ -477,6 +484,7 @@ class AsyncAbsencesClient:
             view_id=view_id,
             search=search,
             language=language,
+            filters=filters,
             page=page,
             limit=limit,
             cursor=cursor,

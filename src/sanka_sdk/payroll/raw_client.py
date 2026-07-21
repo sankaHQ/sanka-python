@@ -544,8 +544,11 @@ class RawPayrollClient:
         self,
         run_id: str,
         *,
-        request: typing.Dict[str, typing.Optional[typing.Any]],
         workspace_id: typing.Optional[str] = None,
+        debit_account: typing.Optional[str] = OMIT,
+        credit_account: typing.Optional[str] = OMIT,
+        deductions_account: typing.Optional[str] = OMIT,
+        notes: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[CreatePublicPayrollJournalEntryApiV2PublicPayrollRunsRunIdJournalEntryPost200Envelope]:
         """
@@ -553,9 +556,15 @@ class RawPayrollClient:
         ----------
         run_id : str
 
-        request : typing.Dict[str, typing.Optional[typing.Any]]
-
         workspace_id : typing.Optional[str]
+
+        debit_account : typing.Optional[str]
+
+        credit_account : typing.Optional[str]
+
+        deductions_account : typing.Optional[str]
+
+        notes : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -571,7 +580,12 @@ class RawPayrollClient:
             params={
                 "workspace_id": workspace_id,
             },
-            json=request,
+            json={
+                "debit_account": debit_account,
+                "credit_account": credit_account,
+                "deductions_account": deductions_account,
+                "notes": notes,
+            },
             headers={
                 "content-type": "application/json",
             },
@@ -1197,8 +1211,11 @@ class AsyncRawPayrollClient:
         self,
         run_id: str,
         *,
-        request: typing.Dict[str, typing.Optional[typing.Any]],
         workspace_id: typing.Optional[str] = None,
+        debit_account: typing.Optional[str] = OMIT,
+        credit_account: typing.Optional[str] = OMIT,
+        deductions_account: typing.Optional[str] = OMIT,
+        notes: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[CreatePublicPayrollJournalEntryApiV2PublicPayrollRunsRunIdJournalEntryPost200Envelope]:
         """
@@ -1206,9 +1223,15 @@ class AsyncRawPayrollClient:
         ----------
         run_id : str
 
-        request : typing.Dict[str, typing.Optional[typing.Any]]
-
         workspace_id : typing.Optional[str]
+
+        debit_account : typing.Optional[str]
+
+        credit_account : typing.Optional[str]
+
+        deductions_account : typing.Optional[str]
+
+        notes : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -1224,7 +1247,12 @@ class AsyncRawPayrollClient:
             params={
                 "workspace_id": workspace_id,
             },
-            json=request,
+            json={
+                "debit_account": debit_account,
+                "credit_account": credit_account,
+                "deductions_account": deductions_account,
+                "notes": notes,
+            },
             headers={
                 "content-type": "application/json",
             },

@@ -19,6 +19,9 @@ class OrderLineItemMutationRequest(UncheckedBaseModel):
     total_price: typing.Optional[float] = None
     total_price_without_tax: typing.Optional[float] = None
     currency: typing.Optional[str] = None
+    row_type: typing.Optional[str] = None
+    section_label: typing.Optional[str] = None
+    section_type: typing.Optional[str] = None
     custom_fields: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = None
 
     if IS_PYDANTIC_V2:

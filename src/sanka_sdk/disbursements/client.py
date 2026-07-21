@@ -32,6 +32,10 @@ from ..types.update_public_disbursement_api_v_2_public_disbursements_disbursemen
     UpdatePublicDisbursementApiV2PublicDisbursementsDisbursementIdPut200Envelope,
 )
 from .raw_client import AsyncRawDisbursementsClient, RawDisbursementsClient
+from .types.disbursement_allocation_create_request_payable_type import DisbursementAllocationCreateRequestPayableType
+from .types.disbursement_allocation_create_request_source import DisbursementAllocationCreateRequestSource
+from .types.disbursement_allocation_patch_request_payable_type import DisbursementAllocationPatchRequestPayableType
+from .types.disbursement_allocation_patch_request_source import DisbursementAllocationPatchRequestSource
 
 # this is used as the default value for optional parameters
 OMIT = typing.cast(typing.Any, ...)
@@ -61,6 +65,7 @@ class DisbursementsClient:
         language: typing.Optional[str] = None,
         status: typing.Optional[str] = None,
         usage_status: typing.Optional[str] = None,
+        filters: typing.Optional[str] = None,
         page: typing.Optional[int] = None,
         limit: typing.Optional[int] = None,
         cursor: typing.Optional[str] = None,
@@ -87,6 +92,8 @@ class DisbursementsClient:
         status : typing.Optional[str]
 
         usage_status : typing.Optional[str]
+
+        filters : typing.Optional[str]
 
         page : typing.Optional[int]
 
@@ -133,6 +140,7 @@ class DisbursementsClient:
             language=language,
             status=status,
             usage_status=usage_status,
+            filters=filters,
             page=page,
             limit=limit,
             cursor=cursor,
@@ -427,11 +435,18 @@ class DisbursementsClient:
         self,
         disbursement_id: str,
         *,
-        request: typing.Dict[str, typing.Optional[typing.Any]],
+        amount: float,
         external_id: typing.Optional[str] = None,
         lang: typing.Optional[str] = None,
         language: typing.Optional[str] = None,
         workspace_id: typing.Optional[str] = None,
+        payable_type: typing.Optional[DisbursementAllocationCreateRequestPayableType] = OMIT,
+        payable_id: typing.Optional[str] = OMIT,
+        bill_id: typing.Optional[str] = OMIT,
+        expense_id: typing.Optional[str] = OMIT,
+        currency: typing.Optional[str] = OMIT,
+        source: typing.Optional[DisbursementAllocationCreateRequestSource] = OMIT,
+        notes: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> CreatePublicDisbursementAllocationApiV2PublicDisbursementsDisbursementIdAllocationsPost200Envelope:
         """
@@ -439,7 +454,7 @@ class DisbursementsClient:
         ----------
         disbursement_id : str
 
-        request : typing.Dict[str, typing.Optional[typing.Any]]
+        amount : float
 
         external_id : typing.Optional[str]
 
@@ -448,6 +463,20 @@ class DisbursementsClient:
         language : typing.Optional[str]
 
         workspace_id : typing.Optional[str]
+
+        payable_type : typing.Optional[DisbursementAllocationCreateRequestPayableType]
+
+        payable_id : typing.Optional[str]
+
+        bill_id : typing.Optional[str]
+
+        expense_id : typing.Optional[str]
+
+        currency : typing.Optional[str]
+
+        source : typing.Optional[DisbursementAllocationCreateRequestSource]
+
+        notes : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -467,16 +496,23 @@ class DisbursementsClient:
         )
         client.disbursements.create_public_disbursement_allocation_api(
             disbursement_id="disbursement_id",
-            request={"key": "value"},
+            amount=1.1,
         )
         """
         _response = self._raw_client.create_public_disbursement_allocation_api(
             disbursement_id,
-            request=request,
+            amount=amount,
             external_id=external_id,
             lang=lang,
             language=language,
             workspace_id=workspace_id,
+            payable_type=payable_type,
+            payable_id=payable_id,
+            bill_id=bill_id,
+            expense_id=expense_id,
+            currency=currency,
+            source=source,
+            notes=notes,
             request_options=request_options,
         )
         return _response.data
@@ -546,11 +582,18 @@ class DisbursementsClient:
         disbursement_id: str,
         allocation_id: str,
         *,
-        request: typing.Dict[str, typing.Optional[typing.Any]],
         external_id: typing.Optional[str] = None,
         lang: typing.Optional[str] = None,
         language: typing.Optional[str] = None,
         workspace_id: typing.Optional[str] = None,
+        payable_type: typing.Optional[DisbursementAllocationPatchRequestPayableType] = OMIT,
+        payable_id: typing.Optional[str] = OMIT,
+        bill_id: typing.Optional[str] = OMIT,
+        expense_id: typing.Optional[str] = OMIT,
+        amount: typing.Optional[float] = OMIT,
+        currency: typing.Optional[str] = OMIT,
+        source: typing.Optional[DisbursementAllocationPatchRequestSource] = OMIT,
+        notes: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> (
         UpdatePublicDisbursementAllocationApiV2PublicDisbursementsDisbursementIdAllocationsAllocationIdPatch200Envelope
@@ -562,8 +605,6 @@ class DisbursementsClient:
 
         allocation_id : str
 
-        request : typing.Dict[str, typing.Optional[typing.Any]]
-
         external_id : typing.Optional[str]
 
         lang : typing.Optional[str]
@@ -571,6 +612,22 @@ class DisbursementsClient:
         language : typing.Optional[str]
 
         workspace_id : typing.Optional[str]
+
+        payable_type : typing.Optional[DisbursementAllocationPatchRequestPayableType]
+
+        payable_id : typing.Optional[str]
+
+        bill_id : typing.Optional[str]
+
+        expense_id : typing.Optional[str]
+
+        amount : typing.Optional[float]
+
+        currency : typing.Optional[str]
+
+        source : typing.Optional[DisbursementAllocationPatchRequestSource]
+
+        notes : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -591,17 +648,23 @@ class DisbursementsClient:
         client.disbursements.update_public_disbursement_allocation_api(
             disbursement_id="disbursement_id",
             allocation_id="allocation_id",
-            request={"key": "value"},
         )
         """
         _response = self._raw_client.update_public_disbursement_allocation_api(
             disbursement_id,
             allocation_id,
-            request=request,
             external_id=external_id,
             lang=lang,
             language=language,
             workspace_id=workspace_id,
+            payable_type=payable_type,
+            payable_id=payable_id,
+            bill_id=bill_id,
+            expense_id=expense_id,
+            amount=amount,
+            currency=currency,
+            source=source,
+            notes=notes,
             request_options=request_options,
         )
         return _response.data
@@ -631,6 +694,7 @@ class AsyncDisbursementsClient:
         language: typing.Optional[str] = None,
         status: typing.Optional[str] = None,
         usage_status: typing.Optional[str] = None,
+        filters: typing.Optional[str] = None,
         page: typing.Optional[int] = None,
         limit: typing.Optional[int] = None,
         cursor: typing.Optional[str] = None,
@@ -657,6 +721,8 @@ class AsyncDisbursementsClient:
         status : typing.Optional[str]
 
         usage_status : typing.Optional[str]
+
+        filters : typing.Optional[str]
 
         page : typing.Optional[int]
 
@@ -711,6 +777,7 @@ class AsyncDisbursementsClient:
             language=language,
             status=status,
             usage_status=usage_status,
+            filters=filters,
             page=page,
             limit=limit,
             cursor=cursor,
@@ -1045,11 +1112,18 @@ class AsyncDisbursementsClient:
         self,
         disbursement_id: str,
         *,
-        request: typing.Dict[str, typing.Optional[typing.Any]],
+        amount: float,
         external_id: typing.Optional[str] = None,
         lang: typing.Optional[str] = None,
         language: typing.Optional[str] = None,
         workspace_id: typing.Optional[str] = None,
+        payable_type: typing.Optional[DisbursementAllocationCreateRequestPayableType] = OMIT,
+        payable_id: typing.Optional[str] = OMIT,
+        bill_id: typing.Optional[str] = OMIT,
+        expense_id: typing.Optional[str] = OMIT,
+        currency: typing.Optional[str] = OMIT,
+        source: typing.Optional[DisbursementAllocationCreateRequestSource] = OMIT,
+        notes: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> CreatePublicDisbursementAllocationApiV2PublicDisbursementsDisbursementIdAllocationsPost200Envelope:
         """
@@ -1057,7 +1131,7 @@ class AsyncDisbursementsClient:
         ----------
         disbursement_id : str
 
-        request : typing.Dict[str, typing.Optional[typing.Any]]
+        amount : float
 
         external_id : typing.Optional[str]
 
@@ -1066,6 +1140,20 @@ class AsyncDisbursementsClient:
         language : typing.Optional[str]
 
         workspace_id : typing.Optional[str]
+
+        payable_type : typing.Optional[DisbursementAllocationCreateRequestPayableType]
+
+        payable_id : typing.Optional[str]
+
+        bill_id : typing.Optional[str]
+
+        expense_id : typing.Optional[str]
+
+        currency : typing.Optional[str]
+
+        source : typing.Optional[DisbursementAllocationCreateRequestSource]
+
+        notes : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -1090,7 +1178,7 @@ class AsyncDisbursementsClient:
         async def main() -> None:
             await client.disbursements.create_public_disbursement_allocation_api(
                 disbursement_id="disbursement_id",
-                request={"key": "value"},
+                amount=1.1,
             )
 
 
@@ -1098,11 +1186,18 @@ class AsyncDisbursementsClient:
         """
         _response = await self._raw_client.create_public_disbursement_allocation_api(
             disbursement_id,
-            request=request,
+            amount=amount,
             external_id=external_id,
             lang=lang,
             language=language,
             workspace_id=workspace_id,
+            payable_type=payable_type,
+            payable_id=payable_id,
+            bill_id=bill_id,
+            expense_id=expense_id,
+            currency=currency,
+            source=source,
+            notes=notes,
             request_options=request_options,
         )
         return _response.data
@@ -1180,11 +1275,18 @@ class AsyncDisbursementsClient:
         disbursement_id: str,
         allocation_id: str,
         *,
-        request: typing.Dict[str, typing.Optional[typing.Any]],
         external_id: typing.Optional[str] = None,
         lang: typing.Optional[str] = None,
         language: typing.Optional[str] = None,
         workspace_id: typing.Optional[str] = None,
+        payable_type: typing.Optional[DisbursementAllocationPatchRequestPayableType] = OMIT,
+        payable_id: typing.Optional[str] = OMIT,
+        bill_id: typing.Optional[str] = OMIT,
+        expense_id: typing.Optional[str] = OMIT,
+        amount: typing.Optional[float] = OMIT,
+        currency: typing.Optional[str] = OMIT,
+        source: typing.Optional[DisbursementAllocationPatchRequestSource] = OMIT,
+        notes: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> (
         UpdatePublicDisbursementAllocationApiV2PublicDisbursementsDisbursementIdAllocationsAllocationIdPatch200Envelope
@@ -1196,8 +1298,6 @@ class AsyncDisbursementsClient:
 
         allocation_id : str
 
-        request : typing.Dict[str, typing.Optional[typing.Any]]
-
         external_id : typing.Optional[str]
 
         lang : typing.Optional[str]
@@ -1205,6 +1305,22 @@ class AsyncDisbursementsClient:
         language : typing.Optional[str]
 
         workspace_id : typing.Optional[str]
+
+        payable_type : typing.Optional[DisbursementAllocationPatchRequestPayableType]
+
+        payable_id : typing.Optional[str]
+
+        bill_id : typing.Optional[str]
+
+        expense_id : typing.Optional[str]
+
+        amount : typing.Optional[float]
+
+        currency : typing.Optional[str]
+
+        source : typing.Optional[DisbursementAllocationPatchRequestSource]
+
+        notes : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -1230,7 +1346,6 @@ class AsyncDisbursementsClient:
             await client.disbursements.update_public_disbursement_allocation_api(
                 disbursement_id="disbursement_id",
                 allocation_id="allocation_id",
-                request={"key": "value"},
             )
 
 
@@ -1239,11 +1354,18 @@ class AsyncDisbursementsClient:
         _response = await self._raw_client.update_public_disbursement_allocation_api(
             disbursement_id,
             allocation_id,
-            request=request,
             external_id=external_id,
             lang=lang,
             language=language,
             workspace_id=workspace_id,
+            payable_type=payable_type,
+            payable_id=payable_id,
+            bill_id=bill_id,
+            expense_id=expense_id,
+            amount=amount,
+            currency=currency,
+            source=source,
+            notes=notes,
             request_options=request_options,
         )
         return _response.data

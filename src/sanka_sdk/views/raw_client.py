@@ -8,6 +8,7 @@ from ..core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ..core.http_response import AsyncHttpResponse, HttpResponse
 from ..core.jsonable_encoder import jsonable_encoder
 from ..core.request_options import RequestOptions
+from ..core.serialization import convert_and_respect_annotation_metadata
 from ..core.unchecked_base_model import construct_type
 from ..errors.unauthorized_error import UnauthorizedError
 from ..errors.unprocessable_entity_error import UnprocessableEntityError
@@ -30,6 +31,7 @@ from ..types.list_public_views_api_v_2_public_views_get_200_envelope import (
 from ..types.update_public_view_api_v_2_public_views_view_id_patch_200_envelope import (
     UpdatePublicViewApiV2PublicViewsViewIdPatch200Envelope,
 )
+from ..types.view_subtotal_calculation import ViewSubtotalCalculation
 from .types.view_create_request_mode import ViewCreateRequestMode
 from .types.view_create_request_visibility import ViewCreateRequestVisibility
 from .types.view_update_request_mode import ViewUpdateRequestMode
@@ -138,7 +140,9 @@ class RawViewsClient:
         form_view_id: typing.Optional[str] = OMIT,
         visibility: typing.Optional[ViewCreateRequestVisibility] = OMIT,
         mode: typing.Optional[ViewCreateRequestMode] = OMIT,
+        group_field_id: typing.Optional[str] = OMIT,
         column_field_ids: typing.Optional[typing.Sequence[str]] = OMIT,
+        subtotal_calculations: typing.Optional[typing.Sequence[ViewSubtotalCalculation]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[CreatePublicViewApiV2PublicViewsPost200Envelope]:
         """
@@ -160,7 +164,11 @@ class RawViewsClient:
 
         mode : typing.Optional[ViewCreateRequestMode]
 
+        group_field_id : typing.Optional[str]
+
         column_field_ids : typing.Optional[typing.Sequence[str]]
+
+        subtotal_calculations : typing.Optional[typing.Sequence[ViewSubtotalCalculation]]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -184,7 +192,13 @@ class RawViewsClient:
                 "form_view_id": form_view_id,
                 "visibility": visibility,
                 "mode": mode,
+                "group_field_id": group_field_id,
                 "column_field_ids": column_field_ids,
+                "subtotal_calculations": convert_and_respect_annotation_metadata(
+                    object_=subtotal_calculations,
+                    annotation=typing.Sequence[ViewSubtotalCalculation],
+                    direction="write",
+                ),
             },
             headers={
                 "content-type": "application/json",
@@ -376,6 +390,7 @@ class RawViewsClient:
         title: typing.Optional[str] = OMIT,
         visibility: typing.Optional[ViewUpdateRequestVisibility] = OMIT,
         mode: typing.Optional[ViewUpdateRequestMode] = OMIT,
+        group_field_id: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[UpdatePublicViewApiV2PublicViewsViewIdPatch200Envelope]:
         """
@@ -392,6 +407,8 @@ class RawViewsClient:
         visibility : typing.Optional[ViewUpdateRequestVisibility]
 
         mode : typing.Optional[ViewUpdateRequestMode]
+
+        group_field_id : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -412,6 +429,7 @@ class RawViewsClient:
                 "title": title,
                 "visibility": visibility,
                 "mode": mode,
+                "group_field_id": group_field_id,
             },
             headers={
                 "content-type": "application/json",
@@ -639,7 +657,9 @@ class AsyncRawViewsClient:
         form_view_id: typing.Optional[str] = OMIT,
         visibility: typing.Optional[ViewCreateRequestVisibility] = OMIT,
         mode: typing.Optional[ViewCreateRequestMode] = OMIT,
+        group_field_id: typing.Optional[str] = OMIT,
         column_field_ids: typing.Optional[typing.Sequence[str]] = OMIT,
+        subtotal_calculations: typing.Optional[typing.Sequence[ViewSubtotalCalculation]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[CreatePublicViewApiV2PublicViewsPost200Envelope]:
         """
@@ -661,7 +681,11 @@ class AsyncRawViewsClient:
 
         mode : typing.Optional[ViewCreateRequestMode]
 
+        group_field_id : typing.Optional[str]
+
         column_field_ids : typing.Optional[typing.Sequence[str]]
+
+        subtotal_calculations : typing.Optional[typing.Sequence[ViewSubtotalCalculation]]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -685,7 +709,13 @@ class AsyncRawViewsClient:
                 "form_view_id": form_view_id,
                 "visibility": visibility,
                 "mode": mode,
+                "group_field_id": group_field_id,
                 "column_field_ids": column_field_ids,
+                "subtotal_calculations": convert_and_respect_annotation_metadata(
+                    object_=subtotal_calculations,
+                    annotation=typing.Sequence[ViewSubtotalCalculation],
+                    direction="write",
+                ),
             },
             headers={
                 "content-type": "application/json",
@@ -877,6 +907,7 @@ class AsyncRawViewsClient:
         title: typing.Optional[str] = OMIT,
         visibility: typing.Optional[ViewUpdateRequestVisibility] = OMIT,
         mode: typing.Optional[ViewUpdateRequestMode] = OMIT,
+        group_field_id: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[UpdatePublicViewApiV2PublicViewsViewIdPatch200Envelope]:
         """
@@ -893,6 +924,8 @@ class AsyncRawViewsClient:
         visibility : typing.Optional[ViewUpdateRequestVisibility]
 
         mode : typing.Optional[ViewUpdateRequestMode]
+
+        group_field_id : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -913,6 +946,7 @@ class AsyncRawViewsClient:
                 "title": title,
                 "visibility": visibility,
                 "mode": mode,
+                "group_field_id": group_field_id,
             },
             headers={
                 "content-type": "application/json",

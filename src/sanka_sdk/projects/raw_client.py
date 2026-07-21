@@ -10,7 +10,6 @@ from ..core.jsonable_encoder import jsonable_encoder
 from ..core.request_options import RequestOptions
 from ..core.serialization import convert_and_respect_annotation_metadata
 from ..core.unchecked_base_model import construct_type
-from ..errors.conflict_error import ConflictError
 from ..errors.unauthorized_error import UnauthorizedError
 from ..errors.unprocessable_entity_error import UnprocessableEntityError
 from ..types.create_public_project_api_v_2_public_projects_post_200_envelope import (
@@ -26,7 +25,6 @@ from ..types.get_public_project_api_v_2_public_projects_project_id_get_200_envel
 from ..types.list_public_projects_api_v_2_public_projects_get_200_envelope import (
     ListPublicProjectsApiV2PublicProjectsGet200Envelope,
 )
-from ..types.public_project_delete_request import PublicProjectDeleteRequest
 from ..types.public_project_status_request import PublicProjectStatusRequest
 from ..types.update_public_project_api_v_2_public_projects_project_id_put_200_envelope import (
     UpdatePublicProjectApiV2PublicProjectsProjectIdPut200Envelope,
@@ -40,7 +38,7 @@ class RawProjectsClient:
     def __init__(self, *, client_wrapper: SyncClientWrapper):
         self._client_wrapper = client_wrapper
 
-    def list(
+    def list_public_projects_api(
         self,
         *,
         page: typing.Optional[int] = None,
@@ -81,7 +79,7 @@ class RawProjectsClient:
         Returns
         -------
         HttpResponse[ListPublicProjectsApiV2PublicProjectsGet200Envelope]
-            Project list response
+            Successful Response
         """
         _response = self._client_wrapper.httpx_client.request(
             "v2/public/projects",
@@ -138,9 +136,10 @@ class RawProjectsClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    def create(
+    def create_public_project_api(
         self,
         *,
+        workspace_id: typing.Optional[str] = None,
         x_language: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
         title: typing.Optional[str] = OMIT,
@@ -152,6 +151,8 @@ class RawProjectsClient:
         """
         Parameters
         ----------
+        workspace_id : typing.Optional[str]
+
         x_language : typing.Optional[str]
 
         accept_language : typing.Optional[str]
@@ -175,6 +176,9 @@ class RawProjectsClient:
         _response = self._client_wrapper.httpx_client.request(
             "v2/public/projects",
             method="POST",
+            params={
+                "workspace_id": workspace_id,
+            },
             json={
                 "title": title,
                 "description": description,
@@ -230,7 +234,7 @@ class RawProjectsClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    def retrieve(
+    def get_public_project_api(
         self,
         project_id: str,
         *,
@@ -256,7 +260,7 @@ class RawProjectsClient:
         Returns
         -------
         HttpResponse[GetPublicProjectApiV2PublicProjectsProjectIdGet200Envelope]
-            Project detail response
+            Successful Response
         """
         _response = self._client_wrapper.httpx_client.request(
             f"v2/public/projects/{jsonable_encoder(project_id)}",
@@ -307,10 +311,11 @@ class RawProjectsClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    def update(
+    def update_public_project_api(
         self,
         project_id: str,
         *,
+        workspace_id: typing.Optional[str] = None,
         x_language: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
         title: typing.Optional[str] = OMIT,
@@ -323,6 +328,8 @@ class RawProjectsClient:
         Parameters
         ----------
         project_id : str
+
+        workspace_id : typing.Optional[str]
 
         x_language : typing.Optional[str]
 
@@ -347,6 +354,9 @@ class RawProjectsClient:
         _response = self._client_wrapper.httpx_client.request(
             f"v2/public/projects/{jsonable_encoder(project_id)}",
             method="PUT",
+            params={
+                "workspace_id": workspace_id,
+            },
             json={
                 "title": title,
                 "description": description,
@@ -402,15 +412,15 @@ class RawProjectsClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    def delete(
+    def delete_public_project_api(
         self,
         project_id: str,
         *,
         replacement_project_id: typing.Optional[str] = None,
         clear_task_project: typing.Optional[bool] = None,
+        workspace_id: typing.Optional[str] = None,
         x_language: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
-        request: typing.Optional[PublicProjectDeleteRequest] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[DeletePublicProjectApiV2PublicProjectsProjectIdDelete200Envelope]:
         """
@@ -422,11 +432,11 @@ class RawProjectsClient:
 
         clear_task_project : typing.Optional[bool]
 
+        workspace_id : typing.Optional[str]
+
         x_language : typing.Optional[str]
 
         accept_language : typing.Optional[str]
-
-        request : typing.Optional[PublicProjectDeleteRequest]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -442,17 +452,13 @@ class RawProjectsClient:
             params={
                 "replacement_project_id": replacement_project_id,
                 "clear_task_project": clear_task_project,
+                "workspace_id": workspace_id,
             },
-            json=convert_and_respect_annotation_metadata(
-                object_=request, annotation=typing.Optional[PublicProjectDeleteRequest], direction="write"
-            ),
             headers={
-                "content-type": "application/json",
                 "X-Language": str(x_language) if x_language is not None else None,
                 "Accept-Language": str(accept_language) if accept_language is not None else None,
             },
             request_options=request_options,
-            omit=OMIT,
         )
         try:
             if 200 <= _response.status_code < 300:
@@ -466,17 +472,6 @@ class RawProjectsClient:
                 return HttpResponse(response=_response, data=_data)
             if _response.status_code == 401:
                 raise UnauthorizedError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        ErrorEnvelope,
-                        construct_type(
-                            type_=ErrorEnvelope,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 409:
-                raise ConflictError(
                     headers=dict(_response.headers),
                     body=typing.cast(
                         ErrorEnvelope,
@@ -507,7 +502,7 @@ class AsyncRawProjectsClient:
     def __init__(self, *, client_wrapper: AsyncClientWrapper):
         self._client_wrapper = client_wrapper
 
-    async def list(
+    async def list_public_projects_api(
         self,
         *,
         page: typing.Optional[int] = None,
@@ -548,7 +543,7 @@ class AsyncRawProjectsClient:
         Returns
         -------
         AsyncHttpResponse[ListPublicProjectsApiV2PublicProjectsGet200Envelope]
-            Project list response
+            Successful Response
         """
         _response = await self._client_wrapper.httpx_client.request(
             "v2/public/projects",
@@ -605,9 +600,10 @@ class AsyncRawProjectsClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    async def create(
+    async def create_public_project_api(
         self,
         *,
+        workspace_id: typing.Optional[str] = None,
         x_language: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
         title: typing.Optional[str] = OMIT,
@@ -619,6 +615,8 @@ class AsyncRawProjectsClient:
         """
         Parameters
         ----------
+        workspace_id : typing.Optional[str]
+
         x_language : typing.Optional[str]
 
         accept_language : typing.Optional[str]
@@ -642,6 +640,9 @@ class AsyncRawProjectsClient:
         _response = await self._client_wrapper.httpx_client.request(
             "v2/public/projects",
             method="POST",
+            params={
+                "workspace_id": workspace_id,
+            },
             json={
                 "title": title,
                 "description": description,
@@ -697,7 +698,7 @@ class AsyncRawProjectsClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    async def retrieve(
+    async def get_public_project_api(
         self,
         project_id: str,
         *,
@@ -723,7 +724,7 @@ class AsyncRawProjectsClient:
         Returns
         -------
         AsyncHttpResponse[GetPublicProjectApiV2PublicProjectsProjectIdGet200Envelope]
-            Project detail response
+            Successful Response
         """
         _response = await self._client_wrapper.httpx_client.request(
             f"v2/public/projects/{jsonable_encoder(project_id)}",
@@ -774,10 +775,11 @@ class AsyncRawProjectsClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    async def update(
+    async def update_public_project_api(
         self,
         project_id: str,
         *,
+        workspace_id: typing.Optional[str] = None,
         x_language: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
         title: typing.Optional[str] = OMIT,
@@ -790,6 +792,8 @@ class AsyncRawProjectsClient:
         Parameters
         ----------
         project_id : str
+
+        workspace_id : typing.Optional[str]
 
         x_language : typing.Optional[str]
 
@@ -814,6 +818,9 @@ class AsyncRawProjectsClient:
         _response = await self._client_wrapper.httpx_client.request(
             f"v2/public/projects/{jsonable_encoder(project_id)}",
             method="PUT",
+            params={
+                "workspace_id": workspace_id,
+            },
             json={
                 "title": title,
                 "description": description,
@@ -869,15 +876,15 @@ class AsyncRawProjectsClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    async def delete(
+    async def delete_public_project_api(
         self,
         project_id: str,
         *,
         replacement_project_id: typing.Optional[str] = None,
         clear_task_project: typing.Optional[bool] = None,
+        workspace_id: typing.Optional[str] = None,
         x_language: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
-        request: typing.Optional[PublicProjectDeleteRequest] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[DeletePublicProjectApiV2PublicProjectsProjectIdDelete200Envelope]:
         """
@@ -889,11 +896,11 @@ class AsyncRawProjectsClient:
 
         clear_task_project : typing.Optional[bool]
 
+        workspace_id : typing.Optional[str]
+
         x_language : typing.Optional[str]
 
         accept_language : typing.Optional[str]
-
-        request : typing.Optional[PublicProjectDeleteRequest]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -909,17 +916,13 @@ class AsyncRawProjectsClient:
             params={
                 "replacement_project_id": replacement_project_id,
                 "clear_task_project": clear_task_project,
+                "workspace_id": workspace_id,
             },
-            json=convert_and_respect_annotation_metadata(
-                object_=request, annotation=typing.Optional[PublicProjectDeleteRequest], direction="write"
-            ),
             headers={
-                "content-type": "application/json",
                 "X-Language": str(x_language) if x_language is not None else None,
                 "Accept-Language": str(accept_language) if accept_language is not None else None,
             },
             request_options=request_options,
-            omit=OMIT,
         )
         try:
             if 200 <= _response.status_code < 300:
@@ -933,17 +936,6 @@ class AsyncRawProjectsClient:
                 return AsyncHttpResponse(response=_response, data=_data)
             if _response.status_code == 401:
                 raise UnauthorizedError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        ErrorEnvelope,
-                        construct_type(
-                            type_=ErrorEnvelope,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 409:
-                raise ConflictError(
                     headers=dict(_response.headers),
                     body=typing.cast(
                         ErrorEnvelope,

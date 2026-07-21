@@ -49,6 +49,7 @@ class AttendanceRecordsClient:
         search: typing.Optional[str] = None,
         language: typing.Optional[str] = None,
         status: typing.Optional[str] = None,
+        filters: typing.Optional[str] = None,
         page: typing.Optional[int] = None,
         limit: typing.Optional[int] = None,
         cursor: typing.Optional[str] = None,
@@ -75,6 +76,8 @@ class AttendanceRecordsClient:
         language : typing.Optional[str]
 
         status : typing.Optional[str]
+
+        filters : typing.Optional[str]
 
         page : typing.Optional[int]
 
@@ -121,6 +124,7 @@ class AttendanceRecordsClient:
             search=search,
             language=language,
             status=status,
+            filters=filters,
             page=page,
             limit=limit,
             cursor=cursor,
@@ -383,6 +387,7 @@ class AsyncAttendanceRecordsClient:
         search: typing.Optional[str] = None,
         language: typing.Optional[str] = None,
         status: typing.Optional[str] = None,
+        filters: typing.Optional[str] = None,
         page: typing.Optional[int] = None,
         limit: typing.Optional[int] = None,
         cursor: typing.Optional[str] = None,
@@ -409,6 +414,8 @@ class AsyncAttendanceRecordsClient:
         language : typing.Optional[str]
 
         status : typing.Optional[str]
+
+        filters : typing.Optional[str]
 
         page : typing.Optional[int]
 
@@ -463,6 +470,7 @@ class AsyncAttendanceRecordsClient:
             search=search,
             language=language,
             status=status,
+            filters=filters,
             page=page,
             limit=limit,
             cursor=cursor,
