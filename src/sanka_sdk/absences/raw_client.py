@@ -49,6 +49,7 @@ class RawAbsencesClient:
         view_id: typing.Optional[str] = None,
         search: typing.Optional[str] = None,
         language: typing.Optional[str] = None,
+        filters: typing.Optional[str] = None,
         page: typing.Optional[int] = None,
         limit: typing.Optional[int] = None,
         cursor: typing.Optional[str] = None,
@@ -81,6 +82,8 @@ class RawAbsencesClient:
         search : typing.Optional[str]
 
         language : typing.Optional[str]
+
+        filters : typing.Optional[str]
 
         page : typing.Optional[int]
 
@@ -123,6 +126,7 @@ class RawAbsencesClient:
                 "view_id": view_id,
                 "search": search,
                 "language": language,
+                "filters": filters,
                 "page": page,
                 "limit": limit,
                 "cursor": cursor,
@@ -525,6 +529,7 @@ class AsyncRawAbsencesClient:
         view_id: typing.Optional[str] = None,
         search: typing.Optional[str] = None,
         language: typing.Optional[str] = None,
+        filters: typing.Optional[str] = None,
         page: typing.Optional[int] = None,
         limit: typing.Optional[int] = None,
         cursor: typing.Optional[str] = None,
@@ -557,6 +562,8 @@ class AsyncRawAbsencesClient:
         search : typing.Optional[str]
 
         language : typing.Optional[str]
+
+        filters : typing.Optional[str]
 
         page : typing.Optional[int]
 
@@ -599,6 +606,7 @@ class AsyncRawAbsencesClient:
                 "view_id": view_id,
                 "search": search,
                 "language": language,
+                "filters": filters,
                 "page": page,
                 "limit": limit,
                 "cursor": cursor,

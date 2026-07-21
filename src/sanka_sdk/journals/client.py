@@ -59,6 +59,7 @@ class JournalsClient:
         search: typing.Optional[str] = None,
         status: typing.Optional[str] = None,
         usage_status: typing.Optional[str] = None,
+        filters: typing.Optional[str] = None,
         page: typing.Optional[int] = None,
         limit: typing.Optional[int] = None,
         cursor: typing.Optional[str] = None,
@@ -87,6 +88,8 @@ class JournalsClient:
         status : typing.Optional[str]
 
         usage_status : typing.Optional[str]
+
+        filters : typing.Optional[str]
 
         page : typing.Optional[int]
 
@@ -134,6 +137,7 @@ class JournalsClient:
             search=search,
             status=status,
             usage_status=usage_status,
+            filters=filters,
             page=page,
             limit=limit,
             cursor=cursor,
@@ -539,6 +543,7 @@ class AsyncJournalsClient:
         search: typing.Optional[str] = None,
         status: typing.Optional[str] = None,
         usage_status: typing.Optional[str] = None,
+        filters: typing.Optional[str] = None,
         page: typing.Optional[int] = None,
         limit: typing.Optional[int] = None,
         cursor: typing.Optional[str] = None,
@@ -567,6 +572,8 @@ class AsyncJournalsClient:
         status : typing.Optional[str]
 
         usage_status : typing.Optional[str]
+
+        filters : typing.Optional[str]
 
         page : typing.Optional[int]
 
@@ -622,6 +629,7 @@ class AsyncJournalsClient:
             search=search,
             status=status,
             usage_status=usage_status,
+            filters=filters,
             page=page,
             limit=limit,
             cursor=cursor,

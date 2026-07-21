@@ -49,6 +49,7 @@ class InventoriesClient:
         language: typing.Optional[str] = None,
         status: typing.Optional[str] = None,
         usage_status: typing.Optional[str] = None,
+        filters: typing.Optional[str] = None,
         page: typing.Optional[int] = None,
         limit: typing.Optional[int] = None,
         cursor: typing.Optional[str] = None,
@@ -75,6 +76,8 @@ class InventoriesClient:
         status : typing.Optional[str]
 
         usage_status : typing.Optional[str]
+
+        filters : typing.Optional[str]
 
         page : typing.Optional[int]
 
@@ -121,6 +124,7 @@ class InventoriesClient:
             language=language,
             status=status,
             usage_status=usage_status,
+            filters=filters,
             page=page,
             limit=limit,
             cursor=cursor,
@@ -423,6 +427,7 @@ class AsyncInventoriesClient:
         language: typing.Optional[str] = None,
         status: typing.Optional[str] = None,
         usage_status: typing.Optional[str] = None,
+        filters: typing.Optional[str] = None,
         page: typing.Optional[int] = None,
         limit: typing.Optional[int] = None,
         cursor: typing.Optional[str] = None,
@@ -449,6 +454,8 @@ class AsyncInventoriesClient:
         status : typing.Optional[str]
 
         usage_status : typing.Optional[str]
+
+        filters : typing.Optional[str]
 
         page : typing.Optional[int]
 
@@ -503,6 +510,7 @@ class AsyncInventoriesClient:
             language=language,
             status=status,
             usage_status=usage_status,
+            filters=filters,
             page=page,
             limit=limit,
             cursor=cursor,

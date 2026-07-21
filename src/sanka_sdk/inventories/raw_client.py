@@ -45,6 +45,7 @@ class RawInventoriesClient:
         language: typing.Optional[str] = None,
         status: typing.Optional[str] = None,
         usage_status: typing.Optional[str] = None,
+        filters: typing.Optional[str] = None,
         page: typing.Optional[int] = None,
         limit: typing.Optional[int] = None,
         cursor: typing.Optional[str] = None,
@@ -71,6 +72,8 @@ class RawInventoriesClient:
         status : typing.Optional[str]
 
         usage_status : typing.Optional[str]
+
+        filters : typing.Optional[str]
 
         page : typing.Optional[int]
 
@@ -110,6 +113,7 @@ class RawInventoriesClient:
                 "language": language,
                 "status": status,
                 "usage_status": usage_status,
+                "filters": filters,
                 "page": page,
                 "limit": limit,
                 "cursor": cursor,
@@ -561,6 +565,7 @@ class AsyncRawInventoriesClient:
         language: typing.Optional[str] = None,
         status: typing.Optional[str] = None,
         usage_status: typing.Optional[str] = None,
+        filters: typing.Optional[str] = None,
         page: typing.Optional[int] = None,
         limit: typing.Optional[int] = None,
         cursor: typing.Optional[str] = None,
@@ -587,6 +592,8 @@ class AsyncRawInventoriesClient:
         status : typing.Optional[str]
 
         usage_status : typing.Optional[str]
+
+        filters : typing.Optional[str]
 
         page : typing.Optional[int]
 
@@ -626,6 +633,7 @@ class AsyncRawInventoriesClient:
                 "language": language,
                 "status": status,
                 "usage_status": usage_status,
+                "filters": filters,
                 "page": page,
                 "limit": limit,
                 "cursor": cursor,

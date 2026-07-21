@@ -9,6 +9,7 @@ from ..core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ..core.http_response import AsyncHttpResponse, HttpResponse
 from ..core.jsonable_encoder import jsonable_encoder
 from ..core.request_options import RequestOptions
+from ..core.serialization import convert_and_respect_annotation_metadata
 from ..core.unchecked_base_model import construct_type
 from ..errors.unauthorized_error import UnauthorizedError
 from ..errors.unprocessable_entity_error import UnprocessableEntityError
@@ -28,6 +29,7 @@ from ..types.list_public_payment_allocations_api_v_2_public_payments_payment_id_
 from ..types.list_public_payments_api_v_2_public_payments_get_200_envelope import (
     ListPublicPaymentsApiV2PublicPaymentsGet200Envelope,
 )
+from ..types.payment_allocation_save_input import PaymentAllocationSaveInput
 from ..types.update_public_payment_allocations_api_v_2_public_payments_payment_id_allocations_put_200_envelope import (
     UpdatePublicPaymentAllocationsApiV2PublicPaymentsPaymentIdAllocationsPut200Envelope,
 )
@@ -52,6 +54,7 @@ class RawPaymentsClient:
         language: typing.Optional[str] = None,
         status: typing.Optional[str] = None,
         usage_status: typing.Optional[str] = None,
+        filters: typing.Optional[str] = None,
         page: typing.Optional[int] = None,
         limit: typing.Optional[int] = None,
         cursor: typing.Optional[str] = None,
@@ -78,6 +81,8 @@ class RawPaymentsClient:
         status : typing.Optional[str]
 
         usage_status : typing.Optional[str]
+
+        filters : typing.Optional[str]
 
         page : typing.Optional[int]
 
@@ -117,6 +122,7 @@ class RawPaymentsClient:
                 "language": language,
                 "status": status,
                 "usage_status": usage_status,
+                "filters": filters,
                 "page": page,
                 "limit": limit,
                 "cursor": cursor,
@@ -696,20 +702,18 @@ class RawPaymentsClient:
         self,
         payment_id: str,
         *,
-        request: typing.Dict[str, typing.Optional[typing.Any]],
         external_id: typing.Optional[str] = None,
         lang: typing.Optional[str] = None,
         language: typing.Optional[str] = None,
         workspace_id: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
+        allocations: typing.Optional[typing.Sequence[PaymentAllocationSaveInput]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[UpdatePublicPaymentAllocationsApiV2PublicPaymentsPaymentIdAllocationsPut200Envelope]:
         """
         Parameters
         ----------
         payment_id : str
-
-        request : typing.Dict[str, typing.Optional[typing.Any]]
 
         external_id : typing.Optional[str]
 
@@ -720,6 +724,8 @@ class RawPaymentsClient:
         workspace_id : typing.Optional[str]
 
         accept_language : typing.Optional[str]
+
+        allocations : typing.Optional[typing.Sequence[PaymentAllocationSaveInput]]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -738,7 +744,11 @@ class RawPaymentsClient:
                 "language": language,
                 "workspace_id": workspace_id,
             },
-            json=request,
+            json={
+                "allocations": convert_and_respect_annotation_metadata(
+                    object_=allocations, annotation=typing.Sequence[PaymentAllocationSaveInput], direction="write"
+                ),
+            },
             headers={
                 "content-type": "application/json",
                 "Accept-Language": str(accept_language) if accept_language is not None else None,
@@ -797,6 +807,7 @@ class AsyncRawPaymentsClient:
         language: typing.Optional[str] = None,
         status: typing.Optional[str] = None,
         usage_status: typing.Optional[str] = None,
+        filters: typing.Optional[str] = None,
         page: typing.Optional[int] = None,
         limit: typing.Optional[int] = None,
         cursor: typing.Optional[str] = None,
@@ -823,6 +834,8 @@ class AsyncRawPaymentsClient:
         status : typing.Optional[str]
 
         usage_status : typing.Optional[str]
+
+        filters : typing.Optional[str]
 
         page : typing.Optional[int]
 
@@ -862,6 +875,7 @@ class AsyncRawPaymentsClient:
                 "language": language,
                 "status": status,
                 "usage_status": usage_status,
+                "filters": filters,
                 "page": page,
                 "limit": limit,
                 "cursor": cursor,
@@ -1442,20 +1456,18 @@ class AsyncRawPaymentsClient:
         self,
         payment_id: str,
         *,
-        request: typing.Dict[str, typing.Optional[typing.Any]],
         external_id: typing.Optional[str] = None,
         lang: typing.Optional[str] = None,
         language: typing.Optional[str] = None,
         workspace_id: typing.Optional[str] = None,
         accept_language: typing.Optional[str] = None,
+        allocations: typing.Optional[typing.Sequence[PaymentAllocationSaveInput]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[UpdatePublicPaymentAllocationsApiV2PublicPaymentsPaymentIdAllocationsPut200Envelope]:
         """
         Parameters
         ----------
         payment_id : str
-
-        request : typing.Dict[str, typing.Optional[typing.Any]]
 
         external_id : typing.Optional[str]
 
@@ -1466,6 +1478,8 @@ class AsyncRawPaymentsClient:
         workspace_id : typing.Optional[str]
 
         accept_language : typing.Optional[str]
+
+        allocations : typing.Optional[typing.Sequence[PaymentAllocationSaveInput]]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -1484,7 +1498,11 @@ class AsyncRawPaymentsClient:
                 "language": language,
                 "workspace_id": workspace_id,
             },
-            json=request,
+            json={
+                "allocations": convert_and_respect_annotation_metadata(
+                    object_=allocations, annotation=typing.Sequence[PaymentAllocationSaveInput], direction="write"
+                ),
+            },
             headers={
                 "content-type": "application/json",
                 "Accept-Language": str(accept_language) if accept_language is not None else None,

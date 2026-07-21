@@ -26,6 +26,7 @@ if typing.TYPE_CHECKING:
     from .expenses.client import AsyncExpensesClient, ExpensesClient
     from .exports.client import AsyncExportsClient, ExportsClient
     from .ferry_diagrams.client import AsyncFerryDiagramsClient, FerryDiagramsClient
+    from .ferry_programs.client import AsyncFerryProgramsClient, FerryProgramsClient
     from .files.client import AsyncFilesClient, FilesClient
     from .imports.client import AsyncImportsClient, ImportsClient
     from .incentives.client import AsyncIncentivesClient, IncentivesClient
@@ -35,6 +36,7 @@ if typing.TYPE_CHECKING:
     from .items.client import AsyncItemsClient, ItemsClient
     from .journals.client import AsyncJournalsClient, JournalsClient
     from .locations.client import AsyncLocationsClient, LocationsClient
+    from .lookout.client import AsyncLookoutClient, LookoutClient
     from .meters.client import AsyncMetersClient, MetersClient
     from .object_schemas.client import AsyncObjectSchemasClient, ObjectSchemasClient
     from .orders.client import AsyncOrdersClient, OrdersClient
@@ -48,6 +50,7 @@ if typing.TYPE_CHECKING:
     from .reports.client import AsyncReportsClient, ReportsClient
     from .revenues.client import AsyncRevenuesClient, RevenuesClient
     from .rule_settings.client import AsyncRuleSettingsClient, RuleSettingsClient
+    from .sanka_buy.client import AsyncSankaBuyClient, SankaBuyClient
     from .subscriptions.client import AsyncSubscriptionsClient, SubscriptionsClient
     from .tasks.client import AsyncTasksClient, TasksClient
     from .tickets.client import AsyncTicketsClient, TicketsClient
@@ -133,6 +136,8 @@ class SankaClient:
         self._approval_requests: typing.Optional[ApprovalRequestsClient] = None
         self._associations: typing.Optional[AssociationsClient] = None
         self._attendance_records: typing.Optional[AttendanceRecordsClient] = None
+        self._sanka_buy: typing.Optional[SankaBuyClient] = None
+        self._lookout: typing.Optional[LookoutClient] = None
         self._bills: typing.Optional[BillsClient] = None
         self._companies: typing.Optional[CompaniesClient] = None
         self._contacts: typing.Optional[ContactsClient] = None
@@ -143,6 +148,8 @@ class SankaClient:
         self._estimates: typing.Optional[EstimatesClient] = None
         self._expenses: typing.Optional[ExpensesClient] = None
         self._exports: typing.Optional[ExportsClient] = None
+        self._ferry_diagrams: typing.Optional[FerryDiagramsClient] = None
+        self._ferry_programs: typing.Optional[FerryProgramsClient] = None
         self._files: typing.Optional[FilesClient] = None
         self._inventories: typing.Optional[InventoriesClient] = None
         self._inventory_transactions: typing.Optional[InventoryTransactionsClient] = None
@@ -173,7 +180,6 @@ class SankaClient:
         self._workflow_actions: typing.Optional[WorkflowActionsClient] = None
         self._workflows: typing.Optional[WorkflowsClient] = None
         self._workflow_runs: typing.Optional[WorkflowRunsClient] = None
-        self._ferry_diagrams: typing.Optional[FerryDiagramsClient] = None
 
     @property
     def absences(self):
@@ -222,6 +228,22 @@ class SankaClient:
 
             self._attendance_records = AttendanceRecordsClient(client_wrapper=self._client_wrapper)
         return self._attendance_records
+
+    @property
+    def sanka_buy(self):
+        if self._sanka_buy is None:
+            from .sanka_buy.client import SankaBuyClient  # noqa: E402
+
+            self._sanka_buy = SankaBuyClient(client_wrapper=self._client_wrapper)
+        return self._sanka_buy
+
+    @property
+    def lookout(self):
+        if self._lookout is None:
+            from .lookout.client import LookoutClient  # noqa: E402
+
+            self._lookout = LookoutClient(client_wrapper=self._client_wrapper)
+        return self._lookout
 
     @property
     def bills(self):
@@ -302,6 +324,22 @@ class SankaClient:
 
             self._exports = ExportsClient(client_wrapper=self._client_wrapper)
         return self._exports
+
+    @property
+    def ferry_diagrams(self):
+        if self._ferry_diagrams is None:
+            from .ferry_diagrams.client import FerryDiagramsClient  # noqa: E402
+
+            self._ferry_diagrams = FerryDiagramsClient(client_wrapper=self._client_wrapper)
+        return self._ferry_diagrams
+
+    @property
+    def ferry_programs(self):
+        if self._ferry_programs is None:
+            from .ferry_programs.client import FerryProgramsClient  # noqa: E402
+
+            self._ferry_programs = FerryProgramsClient(client_wrapper=self._client_wrapper)
+        return self._ferry_programs
 
     @property
     def files(self):
@@ -543,14 +581,6 @@ class SankaClient:
             self._workflow_runs = WorkflowRunsClient(client_wrapper=self._client_wrapper)
         return self._workflow_runs
 
-    @property
-    def ferry_diagrams(self):
-        if self._ferry_diagrams is None:
-            from .ferry_diagrams.client import FerryDiagramsClient  # noqa: E402
-
-            self._ferry_diagrams = FerryDiagramsClient(client_wrapper=self._client_wrapper)
-        return self._ferry_diagrams
-
 
 class AsyncSankaClient:
     """
@@ -627,6 +657,8 @@ class AsyncSankaClient:
         self._approval_requests: typing.Optional[AsyncApprovalRequestsClient] = None
         self._associations: typing.Optional[AsyncAssociationsClient] = None
         self._attendance_records: typing.Optional[AsyncAttendanceRecordsClient] = None
+        self._sanka_buy: typing.Optional[AsyncSankaBuyClient] = None
+        self._lookout: typing.Optional[AsyncLookoutClient] = None
         self._bills: typing.Optional[AsyncBillsClient] = None
         self._companies: typing.Optional[AsyncCompaniesClient] = None
         self._contacts: typing.Optional[AsyncContactsClient] = None
@@ -637,6 +669,8 @@ class AsyncSankaClient:
         self._estimates: typing.Optional[AsyncEstimatesClient] = None
         self._expenses: typing.Optional[AsyncExpensesClient] = None
         self._exports: typing.Optional[AsyncExportsClient] = None
+        self._ferry_diagrams: typing.Optional[AsyncFerryDiagramsClient] = None
+        self._ferry_programs: typing.Optional[AsyncFerryProgramsClient] = None
         self._files: typing.Optional[AsyncFilesClient] = None
         self._inventories: typing.Optional[AsyncInventoriesClient] = None
         self._inventory_transactions: typing.Optional[AsyncInventoryTransactionsClient] = None
@@ -667,7 +701,6 @@ class AsyncSankaClient:
         self._workflow_actions: typing.Optional[AsyncWorkflowActionsClient] = None
         self._workflows: typing.Optional[AsyncWorkflowsClient] = None
         self._workflow_runs: typing.Optional[AsyncWorkflowRunsClient] = None
-        self._ferry_diagrams: typing.Optional[AsyncFerryDiagramsClient] = None
 
     @property
     def absences(self):
@@ -716,6 +749,22 @@ class AsyncSankaClient:
 
             self._attendance_records = AsyncAttendanceRecordsClient(client_wrapper=self._client_wrapper)
         return self._attendance_records
+
+    @property
+    def sanka_buy(self):
+        if self._sanka_buy is None:
+            from .sanka_buy.client import AsyncSankaBuyClient  # noqa: E402
+
+            self._sanka_buy = AsyncSankaBuyClient(client_wrapper=self._client_wrapper)
+        return self._sanka_buy
+
+    @property
+    def lookout(self):
+        if self._lookout is None:
+            from .lookout.client import AsyncLookoutClient  # noqa: E402
+
+            self._lookout = AsyncLookoutClient(client_wrapper=self._client_wrapper)
+        return self._lookout
 
     @property
     def bills(self):
@@ -796,6 +845,22 @@ class AsyncSankaClient:
 
             self._exports = AsyncExportsClient(client_wrapper=self._client_wrapper)
         return self._exports
+
+    @property
+    def ferry_diagrams(self):
+        if self._ferry_diagrams is None:
+            from .ferry_diagrams.client import AsyncFerryDiagramsClient  # noqa: E402
+
+            self._ferry_diagrams = AsyncFerryDiagramsClient(client_wrapper=self._client_wrapper)
+        return self._ferry_diagrams
+
+    @property
+    def ferry_programs(self):
+        if self._ferry_programs is None:
+            from .ferry_programs.client import AsyncFerryProgramsClient  # noqa: E402
+
+            self._ferry_programs = AsyncFerryProgramsClient(client_wrapper=self._client_wrapper)
+        return self._ferry_programs
 
     @property
     def files(self):
@@ -1036,14 +1101,6 @@ class AsyncSankaClient:
 
             self._workflow_runs = AsyncWorkflowRunsClient(client_wrapper=self._client_wrapper)
         return self._workflow_runs
-
-    @property
-    def ferry_diagrams(self):
-        if self._ferry_diagrams is None:
-            from .ferry_diagrams.client import AsyncFerryDiagramsClient  # noqa: E402
-
-            self._ferry_diagrams = AsyncFerryDiagramsClient(client_wrapper=self._client_wrapper)
-        return self._ferry_diagrams
 
 
 def _get_base_url(*, base_url: typing.Optional[str] = None, environment: SankaClientEnvironment) -> str:

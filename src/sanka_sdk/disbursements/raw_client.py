@@ -39,6 +39,10 @@ from ..types.update_public_disbursement_allocation_api_v_2_public_disbursements_
 from ..types.update_public_disbursement_api_v_2_public_disbursements_disbursement_id_put_200_envelope import (
     UpdatePublicDisbursementApiV2PublicDisbursementsDisbursementIdPut200Envelope,
 )
+from .types.disbursement_allocation_create_request_payable_type import DisbursementAllocationCreateRequestPayableType
+from .types.disbursement_allocation_create_request_source import DisbursementAllocationCreateRequestSource
+from .types.disbursement_allocation_patch_request_payable_type import DisbursementAllocationPatchRequestPayableType
+from .types.disbursement_allocation_patch_request_source import DisbursementAllocationPatchRequestSource
 
 # this is used as the default value for optional parameters
 OMIT = typing.cast(typing.Any, ...)
@@ -57,6 +61,7 @@ class RawDisbursementsClient:
         language: typing.Optional[str] = None,
         status: typing.Optional[str] = None,
         usage_status: typing.Optional[str] = None,
+        filters: typing.Optional[str] = None,
         page: typing.Optional[int] = None,
         limit: typing.Optional[int] = None,
         cursor: typing.Optional[str] = None,
@@ -83,6 +88,8 @@ class RawDisbursementsClient:
         status : typing.Optional[str]
 
         usage_status : typing.Optional[str]
+
+        filters : typing.Optional[str]
 
         page : typing.Optional[int]
 
@@ -122,6 +129,7 @@ class RawDisbursementsClient:
                 "language": language,
                 "status": status,
                 "usage_status": usage_status,
+                "filters": filters,
                 "page": page,
                 "limit": limit,
                 "cursor": cursor,
@@ -602,11 +610,18 @@ class RawDisbursementsClient:
         self,
         disbursement_id: str,
         *,
-        request: typing.Dict[str, typing.Optional[typing.Any]],
+        amount: float,
         external_id: typing.Optional[str] = None,
         lang: typing.Optional[str] = None,
         language: typing.Optional[str] = None,
         workspace_id: typing.Optional[str] = None,
+        payable_type: typing.Optional[DisbursementAllocationCreateRequestPayableType] = OMIT,
+        payable_id: typing.Optional[str] = OMIT,
+        bill_id: typing.Optional[str] = OMIT,
+        expense_id: typing.Optional[str] = OMIT,
+        currency: typing.Optional[str] = OMIT,
+        source: typing.Optional[DisbursementAllocationCreateRequestSource] = OMIT,
+        notes: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[
         CreatePublicDisbursementAllocationApiV2PublicDisbursementsDisbursementIdAllocationsPost200Envelope
@@ -616,7 +631,7 @@ class RawDisbursementsClient:
         ----------
         disbursement_id : str
 
-        request : typing.Dict[str, typing.Optional[typing.Any]]
+        amount : float
 
         external_id : typing.Optional[str]
 
@@ -625,6 +640,20 @@ class RawDisbursementsClient:
         language : typing.Optional[str]
 
         workspace_id : typing.Optional[str]
+
+        payable_type : typing.Optional[DisbursementAllocationCreateRequestPayableType]
+
+        payable_id : typing.Optional[str]
+
+        bill_id : typing.Optional[str]
+
+        expense_id : typing.Optional[str]
+
+        currency : typing.Optional[str]
+
+        source : typing.Optional[DisbursementAllocationCreateRequestSource]
+
+        notes : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -643,7 +672,16 @@ class RawDisbursementsClient:
                 "language": language,
                 "workspace_id": workspace_id,
             },
-            json=request,
+            json={
+                "payable_type": payable_type,
+                "payable_id": payable_id,
+                "bill_id": bill_id,
+                "expense_id": expense_id,
+                "amount": amount,
+                "currency": currency,
+                "source": source,
+                "notes": notes,
+            },
             headers={
                 "content-type": "application/json",
             },
@@ -776,11 +814,18 @@ class RawDisbursementsClient:
         disbursement_id: str,
         allocation_id: str,
         *,
-        request: typing.Dict[str, typing.Optional[typing.Any]],
         external_id: typing.Optional[str] = None,
         lang: typing.Optional[str] = None,
         language: typing.Optional[str] = None,
         workspace_id: typing.Optional[str] = None,
+        payable_type: typing.Optional[DisbursementAllocationPatchRequestPayableType] = OMIT,
+        payable_id: typing.Optional[str] = OMIT,
+        bill_id: typing.Optional[str] = OMIT,
+        expense_id: typing.Optional[str] = OMIT,
+        amount: typing.Optional[float] = OMIT,
+        currency: typing.Optional[str] = OMIT,
+        source: typing.Optional[DisbursementAllocationPatchRequestSource] = OMIT,
+        notes: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[
         UpdatePublicDisbursementAllocationApiV2PublicDisbursementsDisbursementIdAllocationsAllocationIdPatch200Envelope
@@ -792,8 +837,6 @@ class RawDisbursementsClient:
 
         allocation_id : str
 
-        request : typing.Dict[str, typing.Optional[typing.Any]]
-
         external_id : typing.Optional[str]
 
         lang : typing.Optional[str]
@@ -801,6 +844,22 @@ class RawDisbursementsClient:
         language : typing.Optional[str]
 
         workspace_id : typing.Optional[str]
+
+        payable_type : typing.Optional[DisbursementAllocationPatchRequestPayableType]
+
+        payable_id : typing.Optional[str]
+
+        bill_id : typing.Optional[str]
+
+        expense_id : typing.Optional[str]
+
+        amount : typing.Optional[float]
+
+        currency : typing.Optional[str]
+
+        source : typing.Optional[DisbursementAllocationPatchRequestSource]
+
+        notes : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -819,7 +878,16 @@ class RawDisbursementsClient:
                 "language": language,
                 "workspace_id": workspace_id,
             },
-            json=request,
+            json={
+                "payable_type": payable_type,
+                "payable_id": payable_id,
+                "bill_id": bill_id,
+                "expense_id": expense_id,
+                "amount": amount,
+                "currency": currency,
+                "source": source,
+                "notes": notes,
+            },
             headers={
                 "content-type": "application/json",
             },
@@ -877,6 +945,7 @@ class AsyncRawDisbursementsClient:
         language: typing.Optional[str] = None,
         status: typing.Optional[str] = None,
         usage_status: typing.Optional[str] = None,
+        filters: typing.Optional[str] = None,
         page: typing.Optional[int] = None,
         limit: typing.Optional[int] = None,
         cursor: typing.Optional[str] = None,
@@ -903,6 +972,8 @@ class AsyncRawDisbursementsClient:
         status : typing.Optional[str]
 
         usage_status : typing.Optional[str]
+
+        filters : typing.Optional[str]
 
         page : typing.Optional[int]
 
@@ -942,6 +1013,7 @@ class AsyncRawDisbursementsClient:
                 "language": language,
                 "status": status,
                 "usage_status": usage_status,
+                "filters": filters,
                 "page": page,
                 "limit": limit,
                 "cursor": cursor,
@@ -1424,11 +1496,18 @@ class AsyncRawDisbursementsClient:
         self,
         disbursement_id: str,
         *,
-        request: typing.Dict[str, typing.Optional[typing.Any]],
+        amount: float,
         external_id: typing.Optional[str] = None,
         lang: typing.Optional[str] = None,
         language: typing.Optional[str] = None,
         workspace_id: typing.Optional[str] = None,
+        payable_type: typing.Optional[DisbursementAllocationCreateRequestPayableType] = OMIT,
+        payable_id: typing.Optional[str] = OMIT,
+        bill_id: typing.Optional[str] = OMIT,
+        expense_id: typing.Optional[str] = OMIT,
+        currency: typing.Optional[str] = OMIT,
+        source: typing.Optional[DisbursementAllocationCreateRequestSource] = OMIT,
+        notes: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[
         CreatePublicDisbursementAllocationApiV2PublicDisbursementsDisbursementIdAllocationsPost200Envelope
@@ -1438,7 +1517,7 @@ class AsyncRawDisbursementsClient:
         ----------
         disbursement_id : str
 
-        request : typing.Dict[str, typing.Optional[typing.Any]]
+        amount : float
 
         external_id : typing.Optional[str]
 
@@ -1447,6 +1526,20 @@ class AsyncRawDisbursementsClient:
         language : typing.Optional[str]
 
         workspace_id : typing.Optional[str]
+
+        payable_type : typing.Optional[DisbursementAllocationCreateRequestPayableType]
+
+        payable_id : typing.Optional[str]
+
+        bill_id : typing.Optional[str]
+
+        expense_id : typing.Optional[str]
+
+        currency : typing.Optional[str]
+
+        source : typing.Optional[DisbursementAllocationCreateRequestSource]
+
+        notes : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -1465,7 +1558,16 @@ class AsyncRawDisbursementsClient:
                 "language": language,
                 "workspace_id": workspace_id,
             },
-            json=request,
+            json={
+                "payable_type": payable_type,
+                "payable_id": payable_id,
+                "bill_id": bill_id,
+                "expense_id": expense_id,
+                "amount": amount,
+                "currency": currency,
+                "source": source,
+                "notes": notes,
+            },
             headers={
                 "content-type": "application/json",
             },
@@ -1598,11 +1700,18 @@ class AsyncRawDisbursementsClient:
         disbursement_id: str,
         allocation_id: str,
         *,
-        request: typing.Dict[str, typing.Optional[typing.Any]],
         external_id: typing.Optional[str] = None,
         lang: typing.Optional[str] = None,
         language: typing.Optional[str] = None,
         workspace_id: typing.Optional[str] = None,
+        payable_type: typing.Optional[DisbursementAllocationPatchRequestPayableType] = OMIT,
+        payable_id: typing.Optional[str] = OMIT,
+        bill_id: typing.Optional[str] = OMIT,
+        expense_id: typing.Optional[str] = OMIT,
+        amount: typing.Optional[float] = OMIT,
+        currency: typing.Optional[str] = OMIT,
+        source: typing.Optional[DisbursementAllocationPatchRequestSource] = OMIT,
+        notes: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[
         UpdatePublicDisbursementAllocationApiV2PublicDisbursementsDisbursementIdAllocationsAllocationIdPatch200Envelope
@@ -1614,8 +1723,6 @@ class AsyncRawDisbursementsClient:
 
         allocation_id : str
 
-        request : typing.Dict[str, typing.Optional[typing.Any]]
-
         external_id : typing.Optional[str]
 
         lang : typing.Optional[str]
@@ -1623,6 +1730,22 @@ class AsyncRawDisbursementsClient:
         language : typing.Optional[str]
 
         workspace_id : typing.Optional[str]
+
+        payable_type : typing.Optional[DisbursementAllocationPatchRequestPayableType]
+
+        payable_id : typing.Optional[str]
+
+        bill_id : typing.Optional[str]
+
+        expense_id : typing.Optional[str]
+
+        amount : typing.Optional[float]
+
+        currency : typing.Optional[str]
+
+        source : typing.Optional[DisbursementAllocationPatchRequestSource]
+
+        notes : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -1641,7 +1764,16 @@ class AsyncRawDisbursementsClient:
                 "language": language,
                 "workspace_id": workspace_id,
             },
-            json=request,
+            json={
+                "payable_type": payable_type,
+                "payable_id": payable_id,
+                "bill_id": bill_id,
+                "expense_id": expense_id,
+                "amount": amount,
+                "currency": currency,
+                "source": source,
+                "notes": notes,
+            },
             headers={
                 "content-type": "application/json",
             },

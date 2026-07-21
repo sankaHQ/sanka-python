@@ -46,6 +46,7 @@ class RawRevenuesClient:
         language: typing.Optional[str] = None,
         status: typing.Optional[str] = None,
         usage_status: typing.Optional[str] = None,
+        filters: typing.Optional[str] = None,
         page: typing.Optional[int] = None,
         limit: typing.Optional[int] = None,
         cursor: typing.Optional[str] = None,
@@ -72,6 +73,8 @@ class RawRevenuesClient:
         status : typing.Optional[str]
 
         usage_status : typing.Optional[str]
+
+        filters : typing.Optional[str]
 
         page : typing.Optional[int]
 
@@ -111,6 +114,7 @@ class RawRevenuesClient:
                 "language": language,
                 "status": status,
                 "usage_status": usage_status,
+                "filters": filters,
                 "page": page,
                 "limit": limit,
                 "cursor": cursor,
@@ -615,6 +619,7 @@ class AsyncRawRevenuesClient:
         language: typing.Optional[str] = None,
         status: typing.Optional[str] = None,
         usage_status: typing.Optional[str] = None,
+        filters: typing.Optional[str] = None,
         page: typing.Optional[int] = None,
         limit: typing.Optional[int] = None,
         cursor: typing.Optional[str] = None,
@@ -641,6 +646,8 @@ class AsyncRawRevenuesClient:
         status : typing.Optional[str]
 
         usage_status : typing.Optional[str]
+
+        filters : typing.Optional[str]
 
         page : typing.Optional[int]
 
@@ -680,6 +687,7 @@ class AsyncRawRevenuesClient:
                 "language": language,
                 "status": status,
                 "usage_status": usage_status,
+                "filters": filters,
                 "page": page,
                 "limit": limit,
                 "cursor": cursor,

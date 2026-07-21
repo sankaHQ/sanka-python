@@ -10,6 +10,7 @@ from ..types.cancel_public_export_job_compat_api_v_2_public_exports_job_id_cance
 from ..types.create_public_export_job_compat_api_v_2_public_exports_post_200_envelope import (
     CreatePublicExportJobCompatApiV2PublicExportsPost200Envelope,
 )
+from ..types.export_template_filter_field_input import ExportTemplateFilterFieldInput
 from ..types.get_public_export_job_compat_api_v_2_public_exports_job_id_get_200_envelope import (
     GetPublicExportJobCompatApiV2PublicExportsJobIdGet200Envelope,
 )
@@ -101,15 +102,24 @@ class ExportsClient:
         provider: typing.Optional[str] = OMIT,
         target_system: typing.Optional[str] = OMIT,
         channel_id: typing.Optional[str] = OMIT,
+        mapping_template_id: typing.Optional[str] = OMIT,
+        mapping_template_revision: typing.Optional[int] = OMIT,
+        mapping_template_state: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
         operation: typing.Optional[str] = OMIT,
+        request_invoice: typing.Optional[bool] = OMIT,
         record_ids: typing.Optional[typing.Sequence[str]] = OMIT,
         workspace_scope: typing.Optional[str] = OMIT,
+        view_id: typing.Optional[str] = OMIT,
+        search_query: typing.Optional[str] = OMIT,
+        filter_fields: typing.Optional[typing.Sequence[ExportTemplateFilterFieldInput]] = OMIT,
+        idempotency_key: typing.Optional[str] = OMIT,
         custom_object_id: typing.Optional[str] = OMIT,
         limit: typing.Optional[int] = OMIT,
         file_format: typing.Optional[str] = OMIT,
         dry_run: typing.Optional[bool] = OMIT,
         workflow_action_tracker_id: typing.Optional[str] = OMIT,
         action_tracker_id: typing.Optional[str] = OMIT,
+        workflow_language: typing.Optional[str] = OMIT,
         key_field: typing.Optional[str] = OMIT,
         export_set_items: typing.Optional[bool] = OMIT,
         set_code_source: typing.Optional[str] = OMIT,
@@ -126,15 +136,16 @@ class ExportsClient:
         Create an export job.
 
         Integration-destination exports are validated against the runnable
-        delivery matrix (item/order to nextengine, and company/contact/deal/item/
-        order to hubspot via the native outbound dispatcher). Provider and
+        delivery matrix. HubSpot Company, Contact, Custom Object, Deal, Invoice,
+        Item, Order, Subscription, and Ticket exports use the dedicated Hatchet
+        bulk workflow, bounded CSV chunks, and HubSpot's Imports API. Invoice
+        requires an explicitly selected HubSpot custom-object type id. NextEngine
+        Item and Order exports keep their dedicated Hatchet pipelines. Provider and
         object pairs without a working delivery pipeline are rejected with HTTP
-        400 and error code ``INTEGRATION_EXPORT_NOT_SUPPORTED`` (details:
-        ``object_type``, ``provider``, ``reason``) before any job history row or
-        outbound event is created. Empty or unknown provider slugs are rejected
-        with HTTP 400 and error code ``INTEGRATION_EXPORT_UNKNOWN_PROVIDER``.
-        Accepted integration exports are recorded with status ``queued`` while
-        background delivery runs.
+        400 and error code ``INTEGRATION_EXPORT_NOT_SUPPORTED`` before any job
+        history row is created. Empty or unknown provider slugs are rejected with
+        ``INTEGRATION_EXPORT_UNKNOWN_PROVIDER``. Accepted jobs stay queued or
+        running until provider completion and required post-processing finish.
 
         Parameters
         ----------
@@ -150,11 +161,27 @@ class ExportsClient:
 
         channel_id : typing.Optional[str]
 
+        mapping_template_id : typing.Optional[str]
+
+        mapping_template_revision : typing.Optional[int]
+
+        mapping_template_state : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
+
         operation : typing.Optional[str]
+
+        request_invoice : typing.Optional[bool]
 
         record_ids : typing.Optional[typing.Sequence[str]]
 
         workspace_scope : typing.Optional[str]
+
+        view_id : typing.Optional[str]
+
+        search_query : typing.Optional[str]
+
+        filter_fields : typing.Optional[typing.Sequence[ExportTemplateFilterFieldInput]]
+
+        idempotency_key : typing.Optional[str]
 
         custom_object_id : typing.Optional[str]
 
@@ -167,6 +194,8 @@ class ExportsClient:
         workflow_action_tracker_id : typing.Optional[str]
 
         action_tracker_id : typing.Optional[str]
+
+        workflow_language : typing.Optional[str]
 
         key_field : typing.Optional[str]
 
@@ -215,15 +244,24 @@ class ExportsClient:
             provider=provider,
             target_system=target_system,
             channel_id=channel_id,
+            mapping_template_id=mapping_template_id,
+            mapping_template_revision=mapping_template_revision,
+            mapping_template_state=mapping_template_state,
             operation=operation,
+            request_invoice=request_invoice,
             record_ids=record_ids,
             workspace_scope=workspace_scope,
+            view_id=view_id,
+            search_query=search_query,
+            filter_fields=filter_fields,
+            idempotency_key=idempotency_key,
             custom_object_id=custom_object_id,
             limit=limit,
             file_format=file_format,
             dry_run=dry_run,
             workflow_action_tracker_id=workflow_action_tracker_id,
             action_tracker_id=action_tracker_id,
+            workflow_language=workflow_language,
             key_field=key_field,
             export_set_items=export_set_items,
             set_code_source=set_code_source,
@@ -404,15 +442,24 @@ class AsyncExportsClient:
         provider: typing.Optional[str] = OMIT,
         target_system: typing.Optional[str] = OMIT,
         channel_id: typing.Optional[str] = OMIT,
+        mapping_template_id: typing.Optional[str] = OMIT,
+        mapping_template_revision: typing.Optional[int] = OMIT,
+        mapping_template_state: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
         operation: typing.Optional[str] = OMIT,
+        request_invoice: typing.Optional[bool] = OMIT,
         record_ids: typing.Optional[typing.Sequence[str]] = OMIT,
         workspace_scope: typing.Optional[str] = OMIT,
+        view_id: typing.Optional[str] = OMIT,
+        search_query: typing.Optional[str] = OMIT,
+        filter_fields: typing.Optional[typing.Sequence[ExportTemplateFilterFieldInput]] = OMIT,
+        idempotency_key: typing.Optional[str] = OMIT,
         custom_object_id: typing.Optional[str] = OMIT,
         limit: typing.Optional[int] = OMIT,
         file_format: typing.Optional[str] = OMIT,
         dry_run: typing.Optional[bool] = OMIT,
         workflow_action_tracker_id: typing.Optional[str] = OMIT,
         action_tracker_id: typing.Optional[str] = OMIT,
+        workflow_language: typing.Optional[str] = OMIT,
         key_field: typing.Optional[str] = OMIT,
         export_set_items: typing.Optional[bool] = OMIT,
         set_code_source: typing.Optional[str] = OMIT,
@@ -429,15 +476,16 @@ class AsyncExportsClient:
         Create an export job.
 
         Integration-destination exports are validated against the runnable
-        delivery matrix (item/order to nextengine, and company/contact/deal/item/
-        order to hubspot via the native outbound dispatcher). Provider and
+        delivery matrix. HubSpot Company, Contact, Custom Object, Deal, Invoice,
+        Item, Order, Subscription, and Ticket exports use the dedicated Hatchet
+        bulk workflow, bounded CSV chunks, and HubSpot's Imports API. Invoice
+        requires an explicitly selected HubSpot custom-object type id. NextEngine
+        Item and Order exports keep their dedicated Hatchet pipelines. Provider and
         object pairs without a working delivery pipeline are rejected with HTTP
-        400 and error code ``INTEGRATION_EXPORT_NOT_SUPPORTED`` (details:
-        ``object_type``, ``provider``, ``reason``) before any job history row or
-        outbound event is created. Empty or unknown provider slugs are rejected
-        with HTTP 400 and error code ``INTEGRATION_EXPORT_UNKNOWN_PROVIDER``.
-        Accepted integration exports are recorded with status ``queued`` while
-        background delivery runs.
+        400 and error code ``INTEGRATION_EXPORT_NOT_SUPPORTED`` before any job
+        history row is created. Empty or unknown provider slugs are rejected with
+        ``INTEGRATION_EXPORT_UNKNOWN_PROVIDER``. Accepted jobs stay queued or
+        running until provider completion and required post-processing finish.
 
         Parameters
         ----------
@@ -453,11 +501,27 @@ class AsyncExportsClient:
 
         channel_id : typing.Optional[str]
 
+        mapping_template_id : typing.Optional[str]
+
+        mapping_template_revision : typing.Optional[int]
+
+        mapping_template_state : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
+
         operation : typing.Optional[str]
+
+        request_invoice : typing.Optional[bool]
 
         record_ids : typing.Optional[typing.Sequence[str]]
 
         workspace_scope : typing.Optional[str]
+
+        view_id : typing.Optional[str]
+
+        search_query : typing.Optional[str]
+
+        filter_fields : typing.Optional[typing.Sequence[ExportTemplateFilterFieldInput]]
+
+        idempotency_key : typing.Optional[str]
 
         custom_object_id : typing.Optional[str]
 
@@ -470,6 +534,8 @@ class AsyncExportsClient:
         workflow_action_tracker_id : typing.Optional[str]
 
         action_tracker_id : typing.Optional[str]
+
+        workflow_language : typing.Optional[str]
 
         key_field : typing.Optional[str]
 
@@ -526,15 +592,24 @@ class AsyncExportsClient:
             provider=provider,
             target_system=target_system,
             channel_id=channel_id,
+            mapping_template_id=mapping_template_id,
+            mapping_template_revision=mapping_template_revision,
+            mapping_template_state=mapping_template_state,
             operation=operation,
+            request_invoice=request_invoice,
             record_ids=record_ids,
             workspace_scope=workspace_scope,
+            view_id=view_id,
+            search_query=search_query,
+            filter_fields=filter_fields,
+            idempotency_key=idempotency_key,
             custom_object_id=custom_object_id,
             limit=limit,
             file_format=file_format,
             dry_run=dry_run,
             workflow_action_tracker_id=workflow_action_tracker_id,
             action_tracker_id=action_tracker_id,
+            workflow_language=workflow_language,
             key_field=key_field,
             export_set_items=export_set_items,
             set_code_source=set_code_source,

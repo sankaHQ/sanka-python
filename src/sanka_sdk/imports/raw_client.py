@@ -130,6 +130,9 @@ class RawImportsClient:
         custom_object_id: typing.Optional[str] = OMIT,
         provider: typing.Optional[str] = OMIT,
         channel_id: typing.Optional[str] = OMIT,
+        mapping_template_id: typing.Optional[str] = OMIT,
+        mapping_template_revision: typing.Optional[int] = OMIT,
+        mapping_template_state: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
         record_ids: typing.Optional[typing.Sequence[str]] = OMIT,
         source_record: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
         operation: typing.Optional[str] = OMIT,
@@ -138,6 +141,10 @@ class RawImportsClient:
         relation_key_map: typing.Optional[typing.Dict[str, str]] = OMIT,
         column_mappings: typing.Optional[typing.Sequence[TransferColumnMapping]] = OMIT,
         dry_run: typing.Optional[bool] = OMIT,
+        idempotency_key: typing.Optional[str] = OMIT,
+        workflow_action_tracker_id: typing.Optional[str] = OMIT,
+        action_tracker_id: typing.Optional[str] = OMIT,
+        workflow_language: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[CreatePublicImportJobCompatApiV2PublicImportsPost200Envelope]:
         """
@@ -159,6 +166,12 @@ class RawImportsClient:
 
         channel_id : typing.Optional[str]
 
+        mapping_template_id : typing.Optional[str]
+
+        mapping_template_revision : typing.Optional[int]
+
+        mapping_template_state : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
+
         record_ids : typing.Optional[typing.Sequence[str]]
 
         source_record : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
@@ -175,6 +188,14 @@ class RawImportsClient:
         column_mappings : typing.Optional[typing.Sequence[TransferColumnMapping]]
 
         dry_run : typing.Optional[bool]
+
+        idempotency_key : typing.Optional[str]
+
+        workflow_action_tracker_id : typing.Optional[str]
+
+        action_tracker_id : typing.Optional[str]
+
+        workflow_language : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -198,6 +219,9 @@ class RawImportsClient:
                 "custom_object_id": custom_object_id,
                 "provider": provider,
                 "channel_id": channel_id,
+                "mapping_template_id": mapping_template_id,
+                "mapping_template_revision": mapping_template_revision,
+                "mapping_template_state": mapping_template_state,
                 "record_ids": record_ids,
                 "source_record": source_record,
                 "operation": operation,
@@ -208,6 +232,10 @@ class RawImportsClient:
                     object_=column_mappings, annotation=typing.Sequence[TransferColumnMapping], direction="write"
                 ),
                 "dry_run": dry_run,
+                "idempotency_key": idempotency_key,
+                "workflow_action_tracker_id": workflow_action_tracker_id,
+                "action_tracker_id": action_tracker_id,
+                "workflow_language": workflow_language,
             },
             headers={
                 "content-type": "application/json",
@@ -486,6 +514,9 @@ class AsyncRawImportsClient:
         custom_object_id: typing.Optional[str] = OMIT,
         provider: typing.Optional[str] = OMIT,
         channel_id: typing.Optional[str] = OMIT,
+        mapping_template_id: typing.Optional[str] = OMIT,
+        mapping_template_revision: typing.Optional[int] = OMIT,
+        mapping_template_state: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
         record_ids: typing.Optional[typing.Sequence[str]] = OMIT,
         source_record: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
         operation: typing.Optional[str] = OMIT,
@@ -494,6 +525,10 @@ class AsyncRawImportsClient:
         relation_key_map: typing.Optional[typing.Dict[str, str]] = OMIT,
         column_mappings: typing.Optional[typing.Sequence[TransferColumnMapping]] = OMIT,
         dry_run: typing.Optional[bool] = OMIT,
+        idempotency_key: typing.Optional[str] = OMIT,
+        workflow_action_tracker_id: typing.Optional[str] = OMIT,
+        action_tracker_id: typing.Optional[str] = OMIT,
+        workflow_language: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[CreatePublicImportJobCompatApiV2PublicImportsPost200Envelope]:
         """
@@ -515,6 +550,12 @@ class AsyncRawImportsClient:
 
         channel_id : typing.Optional[str]
 
+        mapping_template_id : typing.Optional[str]
+
+        mapping_template_revision : typing.Optional[int]
+
+        mapping_template_state : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
+
         record_ids : typing.Optional[typing.Sequence[str]]
 
         source_record : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
@@ -531,6 +572,14 @@ class AsyncRawImportsClient:
         column_mappings : typing.Optional[typing.Sequence[TransferColumnMapping]]
 
         dry_run : typing.Optional[bool]
+
+        idempotency_key : typing.Optional[str]
+
+        workflow_action_tracker_id : typing.Optional[str]
+
+        action_tracker_id : typing.Optional[str]
+
+        workflow_language : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -554,6 +603,9 @@ class AsyncRawImportsClient:
                 "custom_object_id": custom_object_id,
                 "provider": provider,
                 "channel_id": channel_id,
+                "mapping_template_id": mapping_template_id,
+                "mapping_template_revision": mapping_template_revision,
+                "mapping_template_state": mapping_template_state,
                 "record_ids": record_ids,
                 "source_record": source_record,
                 "operation": operation,
@@ -564,6 +616,10 @@ class AsyncRawImportsClient:
                     object_=column_mappings, annotation=typing.Sequence[TransferColumnMapping], direction="write"
                 ),
                 "dry_run": dry_run,
+                "idempotency_key": idempotency_key,
+                "workflow_action_tracker_id": workflow_action_tracker_id,
+                "action_tracker_id": action_tracker_id,
+                "workflow_language": workflow_language,
             },
             headers={
                 "content-type": "application/json",

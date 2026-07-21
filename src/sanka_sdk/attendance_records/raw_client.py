@@ -45,6 +45,7 @@ class RawAttendanceRecordsClient:
         search: typing.Optional[str] = None,
         language: typing.Optional[str] = None,
         status: typing.Optional[str] = None,
+        filters: typing.Optional[str] = None,
         page: typing.Optional[int] = None,
         limit: typing.Optional[int] = None,
         cursor: typing.Optional[str] = None,
@@ -71,6 +72,8 @@ class RawAttendanceRecordsClient:
         language : typing.Optional[str]
 
         status : typing.Optional[str]
+
+        filters : typing.Optional[str]
 
         page : typing.Optional[int]
 
@@ -110,6 +113,7 @@ class RawAttendanceRecordsClient:
                 "search": search,
                 "language": language,
                 "status": status,
+                "filters": filters,
                 "page": page,
                 "limit": limit,
                 "cursor": cursor,
@@ -521,6 +525,7 @@ class AsyncRawAttendanceRecordsClient:
         search: typing.Optional[str] = None,
         language: typing.Optional[str] = None,
         status: typing.Optional[str] = None,
+        filters: typing.Optional[str] = None,
         page: typing.Optional[int] = None,
         limit: typing.Optional[int] = None,
         cursor: typing.Optional[str] = None,
@@ -547,6 +552,8 @@ class AsyncRawAttendanceRecordsClient:
         language : typing.Optional[str]
 
         status : typing.Optional[str]
+
+        filters : typing.Optional[str]
 
         page : typing.Optional[int]
 
@@ -586,6 +593,7 @@ class AsyncRawAttendanceRecordsClient:
                 "search": search,
                 "language": language,
                 "status": status,
+                "filters": filters,
                 "page": page,
                 "limit": limit,
                 "cursor": cursor,

@@ -6,6 +6,7 @@ import pydantic
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.unchecked_base_model import UncheckedBaseModel
 from .object_record_data import ObjectRecordData
+from .object_record_subtotal_result import ObjectRecordSubtotalResult
 from .object_record_view_data import ObjectRecordViewData
 
 
@@ -19,6 +20,7 @@ class ObjectRecordListData(UncheckedBaseModel):
     page_size: int
     total: int
     next_cursor: typing.Optional[str] = None
+    subtotals: typing.Optional[typing.List[ObjectRecordSubtotalResult]] = None
     meta: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = None
 
     if IS_PYDANTIC_V2:

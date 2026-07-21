@@ -49,6 +49,7 @@ class RawWorkflowsClient:
         limit: typing.Optional[int] = None,
         q: typing.Optional[str] = None,
         status: typing.Optional[str] = None,
+        include_lookout: typing.Optional[bool] = None,
         workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[ListPublicWorkflowsApiV2PublicWorkflowsGet200Envelope]:
@@ -62,6 +63,8 @@ class RawWorkflowsClient:
         q : typing.Optional[str]
 
         status : typing.Optional[str]
+
+        include_lookout : typing.Optional[bool]
 
         workspace_id : typing.Optional[str]
 
@@ -81,6 +84,7 @@ class RawWorkflowsClient:
                 "limit": limit,
                 "q": q,
                 "status": status,
+                "include_lookout": include_lookout,
                 "workspace_id": workspace_id,
             },
             request_options=request_options,
@@ -698,6 +702,7 @@ class AsyncRawWorkflowsClient:
         limit: typing.Optional[int] = None,
         q: typing.Optional[str] = None,
         status: typing.Optional[str] = None,
+        include_lookout: typing.Optional[bool] = None,
         workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[ListPublicWorkflowsApiV2PublicWorkflowsGet200Envelope]:
@@ -711,6 +716,8 @@ class AsyncRawWorkflowsClient:
         q : typing.Optional[str]
 
         status : typing.Optional[str]
+
+        include_lookout : typing.Optional[bool]
 
         workspace_id : typing.Optional[str]
 
@@ -730,6 +737,7 @@ class AsyncRawWorkflowsClient:
                 "limit": limit,
                 "q": q,
                 "status": status,
+                "include_lookout": include_lookout,
                 "workspace_id": workspace_id,
             },
             request_options=request_options,
