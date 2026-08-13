@@ -12,6 +12,7 @@ if typing.TYPE_CHECKING:
     from .absences.client import AbsencesClient, AsyncAbsencesClient
     from .activity_logs.client import ActivityLogsClient, AsyncActivityLogsClient
     from .ai.client import AiClient, AsyncAiClient
+    from .applicants.client import ApplicantsClient, AsyncApplicantsClient
     from .approval_requests.client import ApprovalRequestsClient, AsyncApprovalRequestsClient
     from .associations.client import AssociationsClient, AsyncAssociationsClient
     from .attendance_records.client import AsyncAttendanceRecordsClient, AttendanceRecordsClient
@@ -30,10 +31,12 @@ if typing.TYPE_CHECKING:
     from .files.client import AsyncFilesClient, FilesClient
     from .imports.client import AsyncImportsClient, ImportsClient
     from .incentives.client import AsyncIncentivesClient, IncentivesClient
+    from .interviews.client import AsyncInterviewsClient, InterviewsClient
     from .inventories.client import AsyncInventoriesClient, InventoriesClient
     from .inventory_transactions.client import AsyncInventoryTransactionsClient, InventoryTransactionsClient
     from .invoices.client import AsyncInvoicesClient, InvoicesClient
     from .items.client import AsyncItemsClient, ItemsClient
+    from .job_postings.client import AsyncJobPostingsClient, JobPostingsClient
     from .journals.client import AsyncJournalsClient, JournalsClient
     from .locations.client import AsyncLocationsClient, LocationsClient
     from .lookout.client import AsyncLookoutClient, LookoutClient
@@ -59,6 +62,7 @@ if typing.TYPE_CHECKING:
     from .workflow_actions.client import AsyncWorkflowActionsClient, WorkflowActionsClient
     from .workflow_runs.client import AsyncWorkflowRunsClient, WorkflowRunsClient
     from .workflows.client import AsyncWorkflowsClient, WorkflowsClient
+    from .workforce_planning.client import AsyncWorkforcePlanningClient, WorkforcePlanningClient
 
 
 class SankaClient:
@@ -180,6 +184,10 @@ class SankaClient:
         self._workflow_actions: typing.Optional[WorkflowActionsClient] = None
         self._workflows: typing.Optional[WorkflowsClient] = None
         self._workflow_runs: typing.Optional[WorkflowRunsClient] = None
+        self._job_postings: typing.Optional[JobPostingsClient] = None
+        self._applicants: typing.Optional[ApplicantsClient] = None
+        self._interviews: typing.Optional[InterviewsClient] = None
+        self._workforce_planning: typing.Optional[WorkforcePlanningClient] = None
 
     @property
     def absences(self):
@@ -581,6 +589,38 @@ class SankaClient:
             self._workflow_runs = WorkflowRunsClient(client_wrapper=self._client_wrapper)
         return self._workflow_runs
 
+    @property
+    def job_postings(self):
+        if self._job_postings is None:
+            from .job_postings.client import JobPostingsClient  # noqa: E402
+
+            self._job_postings = JobPostingsClient(client_wrapper=self._client_wrapper)
+        return self._job_postings
+
+    @property
+    def applicants(self):
+        if self._applicants is None:
+            from .applicants.client import ApplicantsClient  # noqa: E402
+
+            self._applicants = ApplicantsClient(client_wrapper=self._client_wrapper)
+        return self._applicants
+
+    @property
+    def interviews(self):
+        if self._interviews is None:
+            from .interviews.client import InterviewsClient  # noqa: E402
+
+            self._interviews = InterviewsClient(client_wrapper=self._client_wrapper)
+        return self._interviews
+
+    @property
+    def workforce_planning(self):
+        if self._workforce_planning is None:
+            from .workforce_planning.client import WorkforcePlanningClient  # noqa: E402
+
+            self._workforce_planning = WorkforcePlanningClient(client_wrapper=self._client_wrapper)
+        return self._workforce_planning
+
 
 class AsyncSankaClient:
     """
@@ -701,6 +741,10 @@ class AsyncSankaClient:
         self._workflow_actions: typing.Optional[AsyncWorkflowActionsClient] = None
         self._workflows: typing.Optional[AsyncWorkflowsClient] = None
         self._workflow_runs: typing.Optional[AsyncWorkflowRunsClient] = None
+        self._job_postings: typing.Optional[AsyncJobPostingsClient] = None
+        self._applicants: typing.Optional[AsyncApplicantsClient] = None
+        self._interviews: typing.Optional[AsyncInterviewsClient] = None
+        self._workforce_planning: typing.Optional[AsyncWorkforcePlanningClient] = None
 
     @property
     def absences(self):
@@ -1101,6 +1145,38 @@ class AsyncSankaClient:
 
             self._workflow_runs = AsyncWorkflowRunsClient(client_wrapper=self._client_wrapper)
         return self._workflow_runs
+
+    @property
+    def job_postings(self):
+        if self._job_postings is None:
+            from .job_postings.client import AsyncJobPostingsClient  # noqa: E402
+
+            self._job_postings = AsyncJobPostingsClient(client_wrapper=self._client_wrapper)
+        return self._job_postings
+
+    @property
+    def applicants(self):
+        if self._applicants is None:
+            from .applicants.client import AsyncApplicantsClient  # noqa: E402
+
+            self._applicants = AsyncApplicantsClient(client_wrapper=self._client_wrapper)
+        return self._applicants
+
+    @property
+    def interviews(self):
+        if self._interviews is None:
+            from .interviews.client import AsyncInterviewsClient  # noqa: E402
+
+            self._interviews = AsyncInterviewsClient(client_wrapper=self._client_wrapper)
+        return self._interviews
+
+    @property
+    def workforce_planning(self):
+        if self._workforce_planning is None:
+            from .workforce_planning.client import AsyncWorkforcePlanningClient  # noqa: E402
+
+            self._workforce_planning = AsyncWorkforcePlanningClient(client_wrapper=self._client_wrapper)
+        return self._workforce_planning
 
 
 def _get_base_url(*, base_url: typing.Optional[str] = None, environment: SankaClientEnvironment) -> str:
