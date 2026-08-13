@@ -35,7 +35,6 @@ class ApplicantsClient:
         self,
         *,
         workspace_id: typing.Optional[str] = None,
-        view_id: typing.Optional[str] = None,
         search: typing.Optional[str] = None,
         language: typing.Optional[str] = None,
         status: typing.Optional[str] = None,
@@ -43,7 +42,6 @@ class ApplicantsClient:
         filters: typing.Optional[str] = None,
         page: typing.Optional[int] = None,
         limit: typing.Optional[int] = None,
-        cursor: typing.Optional[str] = None,
         sort: typing.Optional[str] = None,
         created_at_from: typing.Optional[str] = None,
         created_at_to: typing.Optional[str] = None,
@@ -58,8 +56,6 @@ class ApplicantsClient:
         ----------
         workspace_id : typing.Optional[str]
 
-        view_id : typing.Optional[str]
-
         search : typing.Optional[str]
 
         language : typing.Optional[str]
@@ -73,8 +69,6 @@ class ApplicantsClient:
         page : typing.Optional[int]
 
         limit : typing.Optional[int]
-
-        cursor : typing.Optional[str]
 
         sort : typing.Optional[str]
 
@@ -110,7 +104,6 @@ class ApplicantsClient:
         """
         _response = self._raw_client.list_public_applicants(
             workspace_id=workspace_id,
-            view_id=view_id,
             search=search,
             language=language,
             status=status,
@@ -118,7 +111,6 @@ class ApplicantsClient:
             filters=filters,
             page=page,
             limit=limit,
-            cursor=cursor,
             sort=sort,
             created_at_from=created_at_from,
             created_at_to=created_at_to,
@@ -391,7 +383,6 @@ class AsyncApplicantsClient:
         self,
         *,
         workspace_id: typing.Optional[str] = None,
-        view_id: typing.Optional[str] = None,
         search: typing.Optional[str] = None,
         language: typing.Optional[str] = None,
         status: typing.Optional[str] = None,
@@ -399,7 +390,6 @@ class AsyncApplicantsClient:
         filters: typing.Optional[str] = None,
         page: typing.Optional[int] = None,
         limit: typing.Optional[int] = None,
-        cursor: typing.Optional[str] = None,
         sort: typing.Optional[str] = None,
         created_at_from: typing.Optional[str] = None,
         created_at_to: typing.Optional[str] = None,
@@ -414,8 +404,6 @@ class AsyncApplicantsClient:
         ----------
         workspace_id : typing.Optional[str]
 
-        view_id : typing.Optional[str]
-
         search : typing.Optional[str]
 
         language : typing.Optional[str]
@@ -429,8 +417,6 @@ class AsyncApplicantsClient:
         page : typing.Optional[int]
 
         limit : typing.Optional[int]
-
-        cursor : typing.Optional[str]
 
         sort : typing.Optional[str]
 
@@ -474,7 +460,6 @@ class AsyncApplicantsClient:
         """
         _response = await self._raw_client.list_public_applicants(
             workspace_id=workspace_id,
-            view_id=view_id,
             search=search,
             language=language,
             status=status,
@@ -482,7 +467,6 @@ class AsyncApplicantsClient:
             filters=filters,
             page=page,
             limit=limit,
-            cursor=cursor,
             sort=sort,
             created_at_from=created_at_from,
             created_at_to=created_at_to,

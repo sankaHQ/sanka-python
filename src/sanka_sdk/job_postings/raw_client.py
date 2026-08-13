@@ -31,7 +31,6 @@ class RawJobPostingsClient:
         self,
         *,
         workspace_id: typing.Optional[str] = None,
-        view_id: typing.Optional[str] = None,
         search: typing.Optional[str] = None,
         language: typing.Optional[str] = None,
         status: typing.Optional[str] = None,
@@ -39,7 +38,6 @@ class RawJobPostingsClient:
         filters: typing.Optional[str] = None,
         page: typing.Optional[int] = None,
         limit: typing.Optional[int] = None,
-        cursor: typing.Optional[str] = None,
         sort: typing.Optional[str] = None,
         created_at_from: typing.Optional[str] = None,
         created_at_to: typing.Optional[str] = None,
@@ -54,8 +52,6 @@ class RawJobPostingsClient:
         ----------
         workspace_id : typing.Optional[str]
 
-        view_id : typing.Optional[str]
-
         search : typing.Optional[str]
 
         language : typing.Optional[str]
@@ -69,8 +65,6 @@ class RawJobPostingsClient:
         page : typing.Optional[int]
 
         limit : typing.Optional[int]
-
-        cursor : typing.Optional[str]
 
         sort : typing.Optional[str]
 
@@ -99,7 +93,6 @@ class RawJobPostingsClient:
             method="GET",
             params={
                 "workspace_id": workspace_id,
-                "view_id": view_id,
                 "search": search,
                 "language": language,
                 "status": status,
@@ -107,7 +100,6 @@ class RawJobPostingsClient:
                 "filters": filters,
                 "page": page,
                 "limit": limit,
-                "cursor": cursor,
                 "sort": sort,
                 "created_at_from": created_at_from,
                 "created_at_to": created_at_to,
@@ -558,7 +550,6 @@ class AsyncRawJobPostingsClient:
         self,
         *,
         workspace_id: typing.Optional[str] = None,
-        view_id: typing.Optional[str] = None,
         search: typing.Optional[str] = None,
         language: typing.Optional[str] = None,
         status: typing.Optional[str] = None,
@@ -566,7 +557,6 @@ class AsyncRawJobPostingsClient:
         filters: typing.Optional[str] = None,
         page: typing.Optional[int] = None,
         limit: typing.Optional[int] = None,
-        cursor: typing.Optional[str] = None,
         sort: typing.Optional[str] = None,
         created_at_from: typing.Optional[str] = None,
         created_at_to: typing.Optional[str] = None,
@@ -581,8 +571,6 @@ class AsyncRawJobPostingsClient:
         ----------
         workspace_id : typing.Optional[str]
 
-        view_id : typing.Optional[str]
-
         search : typing.Optional[str]
 
         language : typing.Optional[str]
@@ -596,8 +584,6 @@ class AsyncRawJobPostingsClient:
         page : typing.Optional[int]
 
         limit : typing.Optional[int]
-
-        cursor : typing.Optional[str]
 
         sort : typing.Optional[str]
 
@@ -626,7 +612,6 @@ class AsyncRawJobPostingsClient:
             method="GET",
             params={
                 "workspace_id": workspace_id,
-                "view_id": view_id,
                 "search": search,
                 "language": language,
                 "status": status,
@@ -634,7 +619,6 @@ class AsyncRawJobPostingsClient:
                 "filters": filters,
                 "page": page,
                 "limit": limit,
-                "cursor": cursor,
                 "sort": sort,
                 "created_at_from": created_at_from,
                 "created_at_to": created_at_to,

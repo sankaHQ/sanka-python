@@ -31,7 +31,6 @@ class RawApplicantsClient:
         self,
         *,
         workspace_id: typing.Optional[str] = None,
-        view_id: typing.Optional[str] = None,
         search: typing.Optional[str] = None,
         language: typing.Optional[str] = None,
         status: typing.Optional[str] = None,
@@ -39,7 +38,6 @@ class RawApplicantsClient:
         filters: typing.Optional[str] = None,
         page: typing.Optional[int] = None,
         limit: typing.Optional[int] = None,
-        cursor: typing.Optional[str] = None,
         sort: typing.Optional[str] = None,
         created_at_from: typing.Optional[str] = None,
         created_at_to: typing.Optional[str] = None,
@@ -54,8 +52,6 @@ class RawApplicantsClient:
         ----------
         workspace_id : typing.Optional[str]
 
-        view_id : typing.Optional[str]
-
         search : typing.Optional[str]
 
         language : typing.Optional[str]
@@ -69,8 +65,6 @@ class RawApplicantsClient:
         page : typing.Optional[int]
 
         limit : typing.Optional[int]
-
-        cursor : typing.Optional[str]
 
         sort : typing.Optional[str]
 
@@ -99,7 +93,6 @@ class RawApplicantsClient:
             method="GET",
             params={
                 "workspace_id": workspace_id,
-                "view_id": view_id,
                 "search": search,
                 "language": language,
                 "status": status,
@@ -107,7 +100,6 @@ class RawApplicantsClient:
                 "filters": filters,
                 "page": page,
                 "limit": limit,
-                "cursor": cursor,
                 "sort": sort,
                 "created_at_from": created_at_from,
                 "created_at_to": created_at_to,
@@ -558,7 +550,6 @@ class AsyncRawApplicantsClient:
         self,
         *,
         workspace_id: typing.Optional[str] = None,
-        view_id: typing.Optional[str] = None,
         search: typing.Optional[str] = None,
         language: typing.Optional[str] = None,
         status: typing.Optional[str] = None,
@@ -566,7 +557,6 @@ class AsyncRawApplicantsClient:
         filters: typing.Optional[str] = None,
         page: typing.Optional[int] = None,
         limit: typing.Optional[int] = None,
-        cursor: typing.Optional[str] = None,
         sort: typing.Optional[str] = None,
         created_at_from: typing.Optional[str] = None,
         created_at_to: typing.Optional[str] = None,
@@ -581,8 +571,6 @@ class AsyncRawApplicantsClient:
         ----------
         workspace_id : typing.Optional[str]
 
-        view_id : typing.Optional[str]
-
         search : typing.Optional[str]
 
         language : typing.Optional[str]
@@ -596,8 +584,6 @@ class AsyncRawApplicantsClient:
         page : typing.Optional[int]
 
         limit : typing.Optional[int]
-
-        cursor : typing.Optional[str]
 
         sort : typing.Optional[str]
 
@@ -626,7 +612,6 @@ class AsyncRawApplicantsClient:
             method="GET",
             params={
                 "workspace_id": workspace_id,
-                "view_id": view_id,
                 "search": search,
                 "language": language,
                 "status": status,
@@ -634,7 +619,6 @@ class AsyncRawApplicantsClient:
                 "filters": filters,
                 "page": page,
                 "limit": limit,
-                "cursor": cursor,
                 "sort": sort,
                 "created_at_from": created_at_from,
                 "created_at_to": created_at_to,
