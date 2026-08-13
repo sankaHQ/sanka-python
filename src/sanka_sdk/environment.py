@@ -4,4 +4,4 @@ import enum
 
 
 class SankaClientEnvironment(enum.Enum):
-    DEFAULT = "https://api.sanka.com"
+    DEFAULT = "https://api-v2.sanka.com/api"
