@@ -27,13 +27,15 @@ The hosted API client and local migration adapter are separate surfaces:
 | Import | What runs | Authentication |
 |---|---|---|
 | `from sanka_sdk import SankaClient` | Sanka's hosted HTTP API | API token |
-| `from sanka_sdk.migrate import SankaMigrate` | A local `sanka-migrate` subprocess | None |
+| `SankaMigrate` or `AsyncSankaMigrate` from `sanka_sdk.migrate` | A local `sanka-migrate` subprocess | None |
 
 Install the migration runtime separately, then use the tokenless adapter:
 
 ```bash
 uv tool install sanka-migrate
 ```
+
+### Synchronous
 
 ```python
 from sanka_sdk.migrate import SankaMigrate
@@ -52,6 +54,30 @@ tested = migrate.test()
 verified = migrate.verify()
 ```
 
+### Asynchronous
+
+Use `AsyncSankaMigrate` to run the same commands without blocking the event
+loop. Cancelling an awaited command also terminates its local CLI process.
+
+```python
+import asyncio
+
+from sanka_sdk.migrate import AsyncSankaMigrate
+
+
+async def main() -> None:
+    migrate = AsyncSankaMigrate(cwd="./django-app")
+
+    await migrate.scan()
+    plan = await migrate.plan(to="fastapi", generation="full")
+    await migrate.apply(plan_hash=plan.data["plan_hash"])
+    await migrate.test()
+    await migrate.verify()
+
+
+asyncio.run(main())
+```
+
 Each method maps directly to the local runtime:
 
 | Python method | Runtime command | Purpose |
@@ -62,8 +88,8 @@ Each method maps directly to the local runtime:
 | `test()` | `sanka-migrate test ... --json` | Prepare the generated target environment and run its tests |
 | `verify()` | `sanka-migrate verify ... --json` | Verify integrity and configured behavior |
 
-The adapter invokes an argument vector without a shell and never calls Sanka's
-hosted API. It forwards only parameters you provide; defaults, validation,
+Both adapters invoke an argument vector without a shell and never call Sanka's
+hosted API. They forward only parameters you provide; defaults, validation,
 framework detection, generated-target environments, and plan-hash safety remain
 owned by `sanka-migrate`. Every call returns a typed `SankaMigrateResult` with
 the `sanka-cli/v1` fields `data`, `artifacts`, `limitations`, and

@@ -1,13 +1,15 @@
 from __future__ import annotations
 
+import asyncio
 import inspect
+import os
 import tempfile
 import textwrap
 import unittest
 from pathlib import Path
 
 import sanka_sdk.migrate as migrate_module
-from sanka_sdk.migrate import SankaMigrate, SankaMigrateError
+from sanka_sdk.migrate import AsyncSankaMigrate, SankaMigrate, SankaMigrateError
 
 
 _FAKE_CLI = """\
@@ -15,9 +17,17 @@ _FAKE_CLI = """\
 import json
 import os
 import sys
+import time
 
 command = sys.argv[1]
 mode = os.environ.get("FAKE_SANKA_MODE", "success")
+pid_file = os.environ.get("FAKE_SANKA_PID_FILE")
+if pid_file:
+    with open(pid_file, "w", encoding="utf-8") as file:
+        file.write(str(os.getpid()))
+delay = float(os.environ.get("FAKE_SANKA_DELAY", "0"))
+if delay:
+    time.sleep(delay)
 if mode == "malformed":
     print("progress before json")
     print("{}")
@@ -270,13 +280,22 @@ class SankaMigrateTests(unittest.TestCase):
     def test_every_public_symbol_and_method_has_hover_documentation(self) -> None:
         for name in migrate_module.__all__:
             self.assertTrue(inspect.getdoc(getattr(migrate_module, name)), name)
-        for name in ("scan", "plan", "apply", "test", "verify"):
-            documentation = inspect.getdoc(getattr(SankaMigrate, name))
-            self.assertTrue(documentation, name)
-            self.assertIn("Args:", documentation)
-            self.assertIn("Returns:", documentation)
-            self.assertIn("Raises:", documentation)
-            self.assertIn("Side effects:", documentation)
+        for client in (SankaMigrate, AsyncSankaMigrate):
+            for name in ("scan", "plan", "apply", "test", "verify"):
+                documentation = inspect.getdoc(getattr(client, name))
+                self.assertTrue(documentation, "{}.{}".format(client.__name__, name))
+                self.assertIn("Args:", documentation)
+                self.assertIn("Returns:", documentation)
+                self.assertIn("Raises:", documentation)
+                self.assertIn("Side effects:", documentation)
+                self.assertEqual(
+                    inspect.iscoroutinefunction(getattr(client, name)),
+                    client is AsyncSankaMigrate,
+                )
+                self.assertEqual(
+                    inspect.signature(getattr(client, name)),
+                    inspect.signature(getattr(SankaMigrate, name)),
+                )
 
     def test_packaged_module_matches_the_regeneration_source(self) -> None:
         repository = Path(__file__).resolve().parents[1]
@@ -284,6 +303,75 @@ class SankaMigrateTests(unittest.TestCase):
             (repository / "src/sanka_sdk/migrate.py").read_text(encoding="utf-8"),
             (repository / "handwritten/sanka_sdk/migrate.py").read_text(encoding="utf-8"),
         )
+
+
+class AsyncSankaMigrateTests(unittest.IsolatedAsyncioTestCase):
+    def setUp(self) -> None:
+        self.temporary = tempfile.TemporaryDirectory()
+        self.addCleanup(self.temporary.cleanup)
+        self.root = Path(self.temporary.name)
+        self.executable = self.root / "fake-sanka-migrate"
+        self.executable.write_text(textwrap.dedent(_FAKE_CLI), encoding="utf-8")
+        self.executable.chmod(0o755)
+        self.migrate = AsyncSankaMigrate(cwd=self.root, executable=self.executable)
+
+    def argv(self, result: object) -> list[str]:
+        return result.data["argv"]  # type: ignore[attr-defined, no-any-return]
+
+    async def test_every_async_lifecycle_method_uses_the_shared_cli_contract(self) -> None:
+        results = [
+            await self.migrate.scan(settings="project.settings"),
+            await self.migrate.plan(to="fastapi", generation="full"),
+            await self.migrate.apply(plan_hash="sha256:reviewed", force=True),
+            await self.migrate.test(output="target"),
+            await self.migrate.verify(cases="cases.json", no_http=True),
+        ]
+
+        self.assertEqual(
+            [self.argv(result)[0] for result in results],
+            ["scan", "plan", "apply", "test", "verify"],
+        )
+        for result in results:
+            self.assertEqual(self.argv(result)[-1], "--json")
+
+    async def test_async_execution_does_not_block_the_event_loop(self) -> None:
+        migrate = AsyncSankaMigrate(
+            cwd=self.root,
+            executable=self.executable,
+            env={"FAKE_SANKA_DELAY": "0.2"},
+        )
+        task = asyncio.create_task(migrate.scan())
+
+        await asyncio.sleep(0.02)
+        self.assertFalse(task.done())
+        await task
+
+    @unittest.skipIf(os.name == "nt", "POSIX process liveness check")
+    async def test_cancellation_kills_and_reaps_the_cli_process(self) -> None:
+        pid_file = self.root / "child.pid"
+        migrate = AsyncSankaMigrate(
+            cwd=self.root,
+            executable=self.executable,
+            env={"FAKE_SANKA_DELAY": "2", "FAKE_SANKA_PID_FILE": str(pid_file)},
+        )
+        task = asyncio.create_task(migrate.scan())
+        for _ in range(100):
+            if pid_file.exists():
+                break
+            await asyncio.sleep(0.01)
+        self.assertTrue(pid_file.exists())
+
+        task.cancel()
+        with self.assertRaises(asyncio.CancelledError):
+            await task
+
+        with self.assertRaises(ProcessLookupError):
+            os.kill(int(pid_file.read_text(encoding="utf-8")), 0)
+
+    async def test_missing_executable_has_an_async_install_hint(self) -> None:
+        migrate = AsyncSankaMigrate(cwd=self.root, executable=self.root / "missing")
+        with self.assertRaisesRegex(SankaMigrateError, "uv tool install sanka-migrate"):
+            await migrate.scan()
 
 
 if __name__ == "__main__":

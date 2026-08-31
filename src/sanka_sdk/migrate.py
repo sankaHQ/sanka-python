@@ -1,23 +1,26 @@
 """Local Sanka migration commands for Python applications.
 
-This module exposes the same generic lifecycle as the ``sanka-migrate`` CLI:
-``scan -> plan -> apply -> test -> verify``. It runs the separately installed
-CLI in non-interactive JSON mode; it does not call Sanka's hosted API.
+``SankaMigrate`` and ``AsyncSankaMigrate`` expose the same generic lifecycle as
+the ``sanka-migrate`` CLI: ``scan -> plan -> apply -> test -> verify``. Both run
+the separately installed CLI in non-interactive JSON mode; neither calls
+Sanka's hosted API.
 """
 
 from __future__ import annotations
 
+import asyncio
 import json
 import os
 import subprocess
 from dataclasses import dataclass
-from typing import Any, Dict, Generic, List, Literal, Mapping, Optional, Sequence, TypedDict, TypeVar, Union
+from typing import Any, Dict, Generic, List, Literal, Mapping, Optional, Sequence, Tuple, TypedDict, TypeVar, Union
 
 PathValue = Union[str, "os.PathLike[str]"]
 CLI_SCHEMA_VERSION = "sanka-cli/v1"
 
 __all__ = [
     "ApplyData",
+    "AsyncSankaMigrate",
     "PlanData",
     "SankaMigrate",
     "SankaMigrateError",
@@ -167,11 +170,7 @@ class SankaMigrate:
             ``scan = SankaMigrate(cwd="./app").scan()``
         """
 
-        args = ["scan"]
-        _positional(args, root)
-        _option(args, "--settings", settings)
-        _option(args, "--artifact-dir", artifact_dir)
-        return self._run("scan", args)
+        return self._run("scan", _scan_args(root, settings, artifact_dir))
 
     def plan(
         self,
@@ -215,18 +214,21 @@ class SankaMigrate:
             ``plan = migrate.plan(to="fastapi", generation="full", output="./api")``
         """
 
-        args = ["plan"]
-        _positional(args, root)
-        _option(args, "--file", file)
-        _option(args, "--state", state)
-        _option(args, "--to", to)
-        _option(args, "--strategy", strategy)
-        _option(args, "--artifact-dir", artifact_dir)
-        _option(args, "--output", output)
-        _option(args, "--generation", generation)
-        _option(args, "--package-manager", package_manager)
-        _option(args, "--orm", orm)
-        return self._run("plan", args)
+        return self._run(
+            "plan",
+            _plan_args(
+                root,
+                file,
+                state,
+                to,
+                strategy,
+                artifact_dir,
+                output,
+                generation,
+                package_manager,
+                orm,
+            ),
+        )
 
     def apply(
         self,
@@ -274,21 +276,23 @@ class SankaMigrate:
             ``applied = migrate.apply(plan_hash=plan.data["plan_hash"])``
         """
 
-        if not plan_hash.strip():
-            raise ValueError("plan_hash must not be empty")
-        args = ["apply", "--plan-hash", plan_hash]
-        _option(args, "--root", root)
-        _option(args, "--file", file)
-        _option(args, "--state", state)
-        _option(args, "--to", to)
-        _option(args, "--artifact-dir", artifact_dir)
-        _option(args, "--output", output)
-        _flag(args, "--force", force)
-        _option(args, "--orm", orm)
-        _option(args, "--min-readiness", min_readiness)
-        _flag(args, "--gap-report-only", gap_report_only)
-        _option(args, "--bench-candidate", bench_candidate)
-        return self._run("apply", args)
+        return self._run(
+            "apply",
+            _apply_args(
+                plan_hash,
+                root,
+                file,
+                state,
+                to,
+                artifact_dir,
+                output,
+                force,
+                orm,
+                min_readiness,
+                gap_report_only,
+                bench_candidate,
+            ),
+        )
 
     def test(
         self,
@@ -324,14 +328,7 @@ class SankaMigrate:
             ``tested = SankaMigrate(cwd="./source").test()``
         """
 
-        args = ["test"]
-        _positional(args, root)
-        _option(args, "--file", file)
-        _option(args, "--state", state)
-        _option(args, "--to", to)
-        _option(args, "--artifact-dir", artifact_dir)
-        _option(args, "--output", output)
-        return self._run("test", args)
+        return self._run("test", _test_args(root, file, state, to, artifact_dir, output))
 
     def verify(
         self,
@@ -371,26 +368,13 @@ class SankaMigrate:
             ``verified = SankaMigrate(cwd="./source").verify(no_http=True)``
         """
 
-        args = ["verify"]
-        _positional(args, root)
-        _option(args, "--file", file)
-        _option(args, "--state", state)
-        _option(args, "--to", to)
-        _option(args, "--artifact-dir", artifact_dir)
-        _option(args, "--output", output)
-        _option(args, "--cases", cases)
-        _flag(args, "--no-http", no_http)
-        return self._run("verify", args)
+        return self._run(
+            "verify",
+            _verify_args(root, file, state, to, artifact_dir, output, cases, no_http),
+        )
 
     def _run(self, command: str, args: Sequence[str]) -> SankaMigrateResult[Any]:
-        if self.cwd is not None and not os.path.isdir(self.cwd):
-            raise SankaMigrateError(
-                "sanka-migrate working directory was not found: {}".format(self.cwd),
-                command=command,
-            )
-        environment = os.environ.copy()
-        environment.update(self.env)
-        argv = [self.executable, *args, "--json"]
+        argv, environment = self._prepare(command, args)
         try:
             completed = subprocess.run(
                 argv,
@@ -401,39 +385,425 @@ class SankaMigrate:
                 check=False,
             )
         except FileNotFoundError as error:
-            raise SankaMigrateError(
-                "sanka-migrate executable was not found; install it with "
-                "`uv tool install sanka-migrate` or pass executable=...",
-                command=command,
-            ) from error
+            raise _missing_executable(command) from error
         except OSError as error:
             raise SankaMigrateError(
                 "could not execute sanka-migrate: {}".format(error),
                 command=command,
             ) from error
 
-        result = _decode_result(
+        return _finish_result(
             completed.stdout,
             command=command,
             exit_code=completed.returncode,
             stderr=completed.stderr,
         )
-        if completed.returncode != 0 or result.outcome == "error":
-            parsed_error = result.data.get("error")
-            error_data = parsed_error if isinstance(parsed_error, dict) else None
-            message = (
-                str(error_data.get("message"))
-                if error_data and error_data.get("message")
-                else "sanka-migrate {} failed with exit code {}".format(command, completed.returncode)
-            )
+
+    def _prepare(self, command: str, args: Sequence[str]) -> Tuple[List[str], Dict[str, str]]:
+        if self.cwd is not None and not os.path.isdir(self.cwd):
             raise SankaMigrateError(
-                message,
+                "sanka-migrate working directory was not found: {}".format(self.cwd),
                 command=command,
-                exit_code=completed.returncode,
-                parsed_error=error_data,
-                stderr=completed.stderr,
             )
-        return result
+        environment = os.environ.copy()
+        environment.update(self.env)
+        return [self.executable, *args, "--json"], environment
+
+
+class AsyncSankaMigrate(SankaMigrate):
+    """Run local Sanka migration commands without blocking the event loop.
+
+    Args:
+        cwd: Working directory used by ``sanka-migrate``.
+        executable: Separately installed CLI executable name or path.
+        env: Environment variables merged over the current process environment.
+
+    The async adapter has the same options, results, and errors as
+    :class:`SankaMigrate`. Cancelling a command kills and reaps its child process.
+    """
+
+    async def scan(
+        self,
+        *,
+        root: Optional[PathValue] = None,
+        settings: Optional[str] = None,
+        artifact_dir: Optional[PathValue] = None,
+    ) -> SankaMigrateResult[ScanData]:
+        """Asynchronously inspect a source with ``sanka-migrate scan``.
+
+        Args:
+            root: Source repository root. Omit it to use ``cwd``.
+            settings: Explicit Django settings module.
+            artifact_dir: Directory for the semantic scan artifact.
+
+        Returns:
+            The scan result, discovered application data, risks, and artifacts.
+
+        Raises:
+            SankaMigrateError: If scanning or the CLI protocol fails.
+
+        Side effects:
+            Reads the source and writes only the scan artifact.
+
+        Example:
+            ``scan = await AsyncSankaMigrate(cwd="./app").scan()``
+        """
+
+        return await self._run_async("scan", _scan_args(root, settings, artifact_dir))
+
+    async def plan(
+        self,
+        *,
+        root: Optional[PathValue] = None,
+        file: Optional[PathValue] = None,
+        state: Optional[PathValue] = None,
+        to: Optional[Literal["fastapi"]] = None,
+        strategy: Optional[Literal["native", "compatibility"]] = None,
+        artifact_dir: Optional[PathValue] = None,
+        output: Optional[PathValue] = None,
+        generation: Optional[Literal["full", "update", "minimal"]] = None,
+        package_manager: Optional[Literal["uv", "pip"]] = None,
+        orm: Optional[Literal["tortoise", "sqlalchemy", "psycopg"]] = None,
+    ) -> SankaMigrateResult[PlanData]:
+        """Asynchronously create a hash-bound plan with ``sanka-migrate plan``.
+
+        Args:
+            root: Source repository root. Omit it to use ``cwd``.
+            file: Migration spec passed as ``--file``.
+            state: Run-state SQLite file passed as ``--state``.
+            to: Target framework, currently ``"fastapi"``.
+            strategy: ``"native"`` or ``"compatibility"``.
+            artifact_dir: Directory containing scan and plan artifacts.
+            output: Planned generated target directory.
+            generation: ``"full"``, ``"update"``, or ``"minimal"``.
+            package_manager: ``"uv"`` or ``"pip"``.
+            orm: ORM selected for database-backed routes.
+
+        Returns:
+            The plan result whose ``data["plan_hash"]`` is required by ``apply``.
+
+        Raises:
+            SankaMigrateError: If planning or required choices fail.
+
+        Side effects:
+            Writes plan and run-state artifacts without modifying the target.
+
+        Example:
+            ``plan = await migrate.plan(to="fastapi", generation="full")``
+        """
+
+        return await self._run_async(
+            "plan",
+            _plan_args(
+                root,
+                file,
+                state,
+                to,
+                strategy,
+                artifact_dir,
+                output,
+                generation,
+                package_manager,
+                orm,
+            ),
+        )
+
+    async def apply(
+        self,
+        *,
+        plan_hash: str,
+        root: Optional[PathValue] = None,
+        file: Optional[PathValue] = None,
+        state: Optional[PathValue] = None,
+        to: Optional[Literal["fastapi"]] = None,
+        artifact_dir: Optional[PathValue] = None,
+        output: Optional[PathValue] = None,
+        force: bool = False,
+        orm: Optional[Literal["tortoise", "sqlalchemy", "psycopg"]] = None,
+        min_readiness: Optional[float] = None,
+        gap_report_only: bool = False,
+        bench_candidate: Optional[PathValue] = None,
+    ) -> SankaMigrateResult[ApplyData]:
+        """Asynchronously apply one reviewed plan with ``sanka-migrate apply``.
+
+        Args:
+            plan_hash: Non-empty hash returned by ``plan``.
+            root: Source repository root passed as ``--root``.
+            file: Migration spec passed as ``--file``.
+            state: Run-state SQLite file passed as ``--state``.
+            to: Target framework selector.
+            artifact_dir: Directory containing the reviewed plan.
+            output: Generated target directory reviewed by the plan.
+            force: Replace conflicting generated files only when true.
+            orm: Assert the reviewed ORM without changing it.
+            min_readiness: Minimum native readiness percentage.
+            gap_report_only: Write a gap report instead of an application.
+            bench_candidate: Also write a Migration Bench candidate here.
+
+        Returns:
+            The apply result and paths written from the reviewed plan.
+
+        Raises:
+            ValueError: If ``plan_hash`` is empty.
+            SankaMigrateError: If plan safety or generation fails.
+
+        Side effects:
+            Mutates only the target and artifacts authorized by the plan.
+
+        Example:
+            ``applied = await migrate.apply(plan_hash=plan.data["plan_hash"])``
+        """
+
+        return await self._run_async(
+            "apply",
+            _apply_args(
+                plan_hash,
+                root,
+                file,
+                state,
+                to,
+                artifact_dir,
+                output,
+                force,
+                orm,
+                min_readiness,
+                gap_report_only,
+                bench_candidate,
+            ),
+        )
+
+    async def test(
+        self,
+        *,
+        root: Optional[PathValue] = None,
+        file: Optional[PathValue] = None,
+        state: Optional[PathValue] = None,
+        to: Optional[Literal["fastapi"]] = None,
+        artifact_dir: Optional[PathValue] = None,
+        output: Optional[PathValue] = None,
+    ) -> SankaMigrateResult[TestData]:
+        """Asynchronously run generated tests with ``sanka-migrate test``.
+
+        Args:
+            root: Source repository root. Omit it to use ``cwd``.
+            file: Migration spec passed as ``--file``.
+            state: Run-state SQLite file passed as ``--state``.
+            to: Target framework selector.
+            artifact_dir: Directory containing the applied plan.
+            output: Generated target directory.
+
+        Returns:
+            Test verdict, target interpreter, dependencies, and test artifact.
+
+        Raises:
+            SankaMigrateError: If environment setup or tests fail.
+
+        Side effects:
+            Uses the generated target environment and writes generated tests.
+
+        Example:
+            ``tested = await AsyncSankaMigrate(cwd="./source").test()``
+        """
+
+        return await self._run_async("test", _test_args(root, file, state, to, artifact_dir, output))
+
+    async def verify(
+        self,
+        *,
+        root: Optional[PathValue] = None,
+        file: Optional[PathValue] = None,
+        state: Optional[PathValue] = None,
+        to: Optional[Literal["fastapi"]] = None,
+        artifact_dir: Optional[PathValue] = None,
+        output: Optional[PathValue] = None,
+        cases: Optional[PathValue] = None,
+        no_http: bool = False,
+    ) -> SankaMigrateResult[VerifyData]:
+        """Asynchronously verify with ``sanka-migrate verify``.
+
+        Args:
+            root: Source repository root. Omit it to use ``cwd``.
+            file: Migration spec passed as ``--file``.
+            state: Run-state SQLite file passed as ``--state``.
+            to: Target framework selector.
+            artifact_dir: Directory containing the applied plan.
+            output: Generated target directory.
+            cases: JSON file with additional read-only HTTP cases.
+            no_http: Skip HTTP probes when structural checks are sufficient.
+
+        Returns:
+            Verification verdict, checked scope, artifacts, and limitations.
+
+        Raises:
+            SankaMigrateError: If verification or its evidence fails.
+
+        Side effects:
+            Performs checks and read-only probes in the target environment.
+
+        Example:
+            ``verified = await migrate.verify(no_http=True)``
+        """
+
+        return await self._run_async(
+            "verify",
+            _verify_args(root, file, state, to, artifact_dir, output, cases, no_http),
+        )
+
+    async def _run_async(self, command: str, args: Sequence[str]) -> SankaMigrateResult[Any]:
+        argv, environment = self._prepare(command, args)
+        try:
+            process = await asyncio.create_subprocess_exec(
+                *argv,
+                cwd=self.cwd,
+                env=environment,
+                stdout=asyncio.subprocess.PIPE,
+                stderr=asyncio.subprocess.PIPE,
+            )
+        except FileNotFoundError as error:
+            raise _missing_executable(command) from error
+        except OSError as error:
+            raise SankaMigrateError(
+                "could not execute sanka-migrate: {}".format(error),
+                command=command,
+            ) from error
+
+        try:
+            stdout_bytes, stderr_bytes = await process.communicate()
+        except asyncio.CancelledError:
+            if process.returncode is None:
+                try:
+                    process.kill()
+                except ProcessLookupError:
+                    pass
+            await process.communicate()
+            raise
+
+        exit_code = process.returncode
+        if exit_code is None:
+            raise SankaMigrateError("sanka-migrate {} did not exit".format(command), command=command)
+        return _finish_result(
+            stdout_bytes.decode("utf-8", errors="replace"),
+            command=command,
+            exit_code=exit_code,
+            stderr=stderr_bytes.decode("utf-8", errors="replace"),
+        )
+
+
+def _scan_args(root: Optional[PathValue], settings: Optional[str], artifact_dir: Optional[PathValue]) -> List[str]:
+    args = ["scan"]
+    _positional(args, root)
+    _option(args, "--settings", settings)
+    _option(args, "--artifact-dir", artifact_dir)
+    return args
+
+
+def _plan_args(
+    root: Optional[PathValue],
+    file: Optional[PathValue],
+    state: Optional[PathValue],
+    to: Optional[str],
+    strategy: Optional[str],
+    artifact_dir: Optional[PathValue],
+    output: Optional[PathValue],
+    generation: Optional[str],
+    package_manager: Optional[str],
+    orm: Optional[str],
+) -> List[str]:
+    args = ["plan"]
+    _positional(args, root)
+    for flag, value in (
+        ("--file", file),
+        ("--state", state),
+        ("--to", to),
+        ("--strategy", strategy),
+        ("--artifact-dir", artifact_dir),
+        ("--output", output),
+        ("--generation", generation),
+        ("--package-manager", package_manager),
+        ("--orm", orm),
+    ):
+        _option(args, flag, value)
+    return args
+
+
+def _apply_args(
+    plan_hash: str,
+    root: Optional[PathValue],
+    file: Optional[PathValue],
+    state: Optional[PathValue],
+    to: Optional[str],
+    artifact_dir: Optional[PathValue],
+    output: Optional[PathValue],
+    force: bool,
+    orm: Optional[str],
+    min_readiness: Optional[float],
+    gap_report_only: bool,
+    bench_candidate: Optional[PathValue],
+) -> List[str]:
+    if not plan_hash.strip():
+        raise ValueError("plan_hash must not be empty")
+    args = ["apply", "--plan-hash", plan_hash]
+    for flag, value in (
+        ("--root", root),
+        ("--file", file),
+        ("--state", state),
+        ("--to", to),
+        ("--artifact-dir", artifact_dir),
+        ("--output", output),
+    ):
+        _option(args, flag, value)
+    _flag(args, "--force", force)
+    _option(args, "--orm", orm)
+    _option(args, "--min-readiness", min_readiness)
+    _flag(args, "--gap-report-only", gap_report_only)
+    _option(args, "--bench-candidate", bench_candidate)
+    return args
+
+
+def _test_args(
+    root: Optional[PathValue],
+    file: Optional[PathValue],
+    state: Optional[PathValue],
+    to: Optional[str],
+    artifact_dir: Optional[PathValue],
+    output: Optional[PathValue],
+) -> List[str]:
+    args = ["test"]
+    _positional(args, root)
+    for flag, value in (
+        ("--file", file),
+        ("--state", state),
+        ("--to", to),
+        ("--artifact-dir", artifact_dir),
+        ("--output", output),
+    ):
+        _option(args, flag, value)
+    return args
+
+
+def _verify_args(
+    root: Optional[PathValue],
+    file: Optional[PathValue],
+    state: Optional[PathValue],
+    to: Optional[str],
+    artifact_dir: Optional[PathValue],
+    output: Optional[PathValue],
+    cases: Optional[PathValue],
+    no_http: bool,
+) -> List[str]:
+    args = ["verify"]
+    _positional(args, root)
+    for flag, value in (
+        ("--file", file),
+        ("--state", state),
+        ("--to", to),
+        ("--artifact-dir", artifact_dir),
+        ("--output", output),
+        ("--cases", cases),
+    ):
+        _option(args, flag, value)
+    _flag(args, "--no-http", no_http)
+    return args
 
 
 def _positional(args: List[str], value: Optional[PathValue]) -> None:
@@ -449,6 +819,39 @@ def _option(args: List[str], flag: str, value: Any) -> None:
 def _flag(args: List[str], flag: str, enabled: bool) -> None:
     if enabled:
         args.append(flag)
+
+
+def _finish_result(stdout: str, *, command: str, exit_code: int, stderr: str) -> SankaMigrateResult[Any]:
+    result = _decode_result(
+        stdout,
+        command=command,
+        exit_code=exit_code,
+        stderr=stderr,
+    )
+    if exit_code != 0 or result.outcome == "error":
+        parsed_error = result.data.get("error")
+        error_data = parsed_error if isinstance(parsed_error, dict) else None
+        message = (
+            str(error_data.get("message"))
+            if error_data and error_data.get("message")
+            else "sanka-migrate {} failed with exit code {}".format(command, exit_code)
+        )
+        raise SankaMigrateError(
+            message,
+            command=command,
+            exit_code=exit_code,
+            parsed_error=error_data,
+            stderr=stderr,
+        )
+    return result
+
+
+def _missing_executable(command: str) -> SankaMigrateError:
+    return SankaMigrateError(
+        "sanka-migrate executable was not found; install it with "
+        "`uv tool install sanka-migrate` or pass executable=...",
+        command=command,
+    )
 
 
 def _decode_result(
