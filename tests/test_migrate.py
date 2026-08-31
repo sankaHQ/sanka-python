@@ -56,6 +56,12 @@ raise SystemExit(int(os.environ.get("FAKE_SANKA_EXIT", "2" if mode == "error" el
 
 
 class SankaMigrateTests(unittest.TestCase):
+    def test_public_clients_import(self) -> None:
+        from sanka_sdk import AsyncSankaClient, SankaClient
+
+        self.assertTrue(callable(SankaClient))
+        self.assertTrue(callable(AsyncSankaClient))
+
     def setUp(self) -> None:
         self.temporary = tempfile.TemporaryDirectory()
         self.addCleanup(self.temporary.cleanup)

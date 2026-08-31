@@ -6,6 +6,8 @@ This package is generated from Sanka's OpenAPI spec using Fern, then packaged lo
 
 ## Install
 
+Python 3.9 or newer is required. CI tests every minor from Python 3.9 through Python 3.14.
+
 ```bash
 uv add sanka-sdk
 ```
