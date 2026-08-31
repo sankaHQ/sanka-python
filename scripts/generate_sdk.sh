@@ -105,6 +105,7 @@ docker run --rm \
   /workspace/config.manual.json >/dev/null
 
 cp -R "$GENERATOR_OUTPUT_DIR"/. "$OUTPUT_DIR"/
+cp "$ROOT/handwritten/sanka_sdk/migrate.py" "$OUTPUT_DIR/migrate.py"
 touch "$OUTPUT_DIR/py.typed"
 python3 -m compileall "$OUTPUT_DIR" >/dev/null
 
