@@ -20,6 +20,38 @@ response = client.public_auth.whoami()
 print(response)
 ```
 
+## Local migration
+
+Install the migration runtime separately, then use the tokenless migration
+module:
+
+```bash
+uv tool install sanka-migrate
+```
+
+```python
+from sanka_sdk.migrate import SankaMigrate
+
+migrate = SankaMigrate(cwd="./django-app")
+
+scan = migrate.scan()
+plan = migrate.plan(
+    to="fastapi",
+    generation="full",
+    strategy="native",
+    package_manager="uv",
+)
+applied = migrate.apply(plan_hash=plan.data["plan_hash"])
+tested = migrate.test()
+verified = migrate.verify()
+```
+
+The five methods mirror the functional arguments of `sanka-migrate scan`,
+`plan`, `apply`, `test`, and `verify`. Defaults, validation, framework
+detection, generated-target environments, and plan-hash safety remain owned by
+the runtime. See the [Sanka developer documentation](https://sanka.com/docs/developers/)
+for the CLI lifecycle.
+
 ## Regenerate
 
 ```bash
