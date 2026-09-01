@@ -1279,6 +1279,20 @@ def _decode_result(
     next_actions = payload.get("next_actions")
     if not isinstance(data, dict):
         raise _invalid_field(command, exit_code, stderr, "data", "an object")
+    error_data = data.get("error")
+    if outcome == "success":
+        if "error" in data:
+            raise _invalid_field(command, exit_code, stderr, "data.error", "absent on success")
+    else:
+        if not isinstance(error_data, dict):
+            raise _invalid_field(command, exit_code, stderr, "data.error", "an object")
+        for name in ("code", "message"):
+            if not isinstance(error_data.get(name), str):
+                raise _invalid_field(
+                    command, exit_code, stderr, "data.error." + name, "a string"
+                )
+        if "details" in error_data and not isinstance(error_data["details"], dict):
+            raise _invalid_field(command, exit_code, stderr, "data.error.details", "an object")
     for name, value in (
         ("artifacts", artifacts),
         ("limitations", limitations),

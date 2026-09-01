@@ -83,6 +83,11 @@ payload = {
     "limitations": [],
     "next_actions": [],
 }
+error_case = os.environ.get("FAKE_SANKA_ERROR_CASE")
+if error_case == "missing":
+    payload["data"].pop("error", None)
+elif error_case:
+    payload["data"]["error"] = json.loads(error_case)
 print(json.dumps(payload))
 raise SystemExit(int(os.environ.get("FAKE_SANKA_EXIT", "2" if is_error else "0")))
 """
@@ -494,16 +499,71 @@ class SankaMigrateTests(unittest.TestCase):
 
     def test_protocol_preserves_valid_failure_results_for_supported_exit_codes(self) -> None:
         for exit_code in ("1", "2"):
-            with self.subTest(exit_code=exit_code):
-                migrate = SankaMigrate(
-                    cwd=self.root,
-                    executable=self.executable,
-                    env={"FAKE_SANKA_MODE": "error", "FAKE_SANKA_EXIT": exit_code},
-                )
-                with self.assertRaises(SankaMigrateError) as raised:
-                    migrate.scan()
-                self.assertEqual(raised.exception.result.outcome, "error")
-                self.assertEqual(raised.exception.exit_code, int(exit_code))
+            for mode, expected in (
+                ("error", {"code": "SANKA_USAGE", "message": "bad option"}),
+                (
+                    "trust-error",
+                    {
+                        "code": "SANKA_MARKETPLACE_TRUST_REQUIRED",
+                        "message": "explicit trust is required",
+                        "details": {"identity": "local:/third-party"},
+                    },
+                ),
+            ):
+                with self.subTest(exit_code=exit_code, mode=mode):
+                    migrate = SankaMigrate(
+                        cwd=self.root,
+                        executable=self.executable,
+                        env={"FAKE_SANKA_MODE": mode, "FAKE_SANKA_EXIT": exit_code},
+                    )
+                    with self.assertRaises(SankaMigrateError) as raised:
+                        migrate.scan()
+                    self.assertEqual(raised.exception.parsed_error, expected)
+                    self.assertEqual(raised.exception.result.data["error"], expected)
+                    self.assertEqual(raised.exception.result.outcome, "error")
+                    self.assertEqual(raised.exception.exit_code, int(exit_code))
+
+    def test_protocol_rejects_malformed_failure_payloads_without_a_result(self) -> None:
+        malformed_errors = (
+            ("missing", "missing"),
+            ("string", '"failure"'),
+            ("empty", "{}"),
+            ("numeric-code", '{"code":7,"message":"bad option"}'),
+            ("numeric-message", '{"code":"SANKA_USAGE","message":7}'),
+            (
+                "non-object-details",
+                '{"code":"SANKA_USAGE","message":"bad option","details":[]}',
+            ),
+        )
+        for exit_code in ("1", "2"):
+            for case, error_payload in malformed_errors:
+                with self.subTest(exit_code=exit_code, case=case):
+                    migrate = SankaMigrate(
+                        cwd=self.root,
+                        executable=self.executable,
+                        env={
+                            "FAKE_SANKA_MODE": "error",
+                            "FAKE_SANKA_EXIT": exit_code,
+                            "FAKE_SANKA_ERROR_CASE": error_payload,
+                        },
+                    )
+                    with self.assertRaises(SankaMigrateError) as raised:
+                        migrate.scan()
+                    self.assertIsNone(raised.exception.result)
+
+    def test_protocol_rejects_an_error_payload_on_success_without_a_result(self) -> None:
+        migrate = SankaMigrate(
+            cwd=self.root,
+            executable=self.executable,
+            env={
+                "FAKE_SANKA_ERROR_CASE": '{"code":"SANKA_FAILED","message":"not failed"}'
+            },
+        )
+
+        with self.assertRaises(SankaMigrateError) as raised:
+            migrate.scan()
+
+        self.assertIsNone(raised.exception.result)
 
     def test_apply_requires_a_reviewed_plan_hash(self) -> None:
         with self.assertRaisesRegex(ValueError, "plan_hash"):
