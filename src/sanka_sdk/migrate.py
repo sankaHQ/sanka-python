@@ -12,6 +12,7 @@ import asyncio
 import json
 import math
 import os
+import re
 import subprocess
 from dataclasses import dataclass
 from typing import Any, Dict, Generic, List, Literal, Mapping, Optional, Sequence, Tuple, TypedDict, TypeVar, Union
@@ -1125,28 +1126,41 @@ def _extension_options(
                 json.dumps(normalized, ensure_ascii=False, separators=(",", ":"), sort_keys=True),
             )
         )
+    if isinstance(environment, (str, bytes)):
+        raise ValueError("extension_environment must be a sequence of environment variable names")
     for name in environment:
-        if not isinstance(name, str) or not name:
-            raise ValueError("extension_environment must contain non-empty strings")
+        if not isinstance(name, str) or re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*", name) is None:
+            raise ValueError("extension_environment must contain valid environment variable names")
         args.extend(("--extension-env", name))
 
 
-def _validate_json_value(value: Any) -> None:
+def _validate_json_value(value: Any, active: Optional[set[int]] = None) -> None:
     if value is None or isinstance(value, (bool, int, str)):
         return
     if isinstance(value, float):
         if math.isfinite(value):
             return
+        raise ValueError("extension_config must contain only JSON-compatible values")
     elif isinstance(value, list):
-        for item in value:
-            _validate_json_value(item)
-        return
+        items = value
     elif isinstance(value, dict):
         if all(isinstance(key, str) for key in value):
-            for item in value.values():
-                _validate_json_value(item)
-            return
-    raise ValueError("extension_config must contain only JSON-compatible values")
+            items = value.values()
+        else:
+            raise ValueError("extension_config must contain only JSON-compatible values")
+    else:
+        raise ValueError("extension_config must contain only JSON-compatible values")
+
+    active = set() if active is None else active
+    identity = id(value)
+    if identity in active:
+        raise ValueError("extension_config must contain only JSON-compatible values")
+    active.add(identity)
+    try:
+        for item in items:
+            _validate_json_value(item, active)
+    finally:
+        active.remove(identity)
 
 
 def _positional(args: List[str], value: Optional[PathValue]) -> None:
@@ -1241,6 +1255,24 @@ def _decode_result(
             stderr=stderr,
         )
 
+    outcome = payload.get("outcome")
+    if outcome not in ("success", "error"):
+        raise _invalid_field(command, exit_code, stderr, "outcome", "'success' or 'error'")
+    if exit_code not in (0, 1, 2):
+        raise SankaMigrateError(
+            "invalid sanka-migrate exit code {}; expected 0, 1, or 2".format(exit_code),
+            command=command,
+            exit_code=exit_code,
+            stderr=stderr,
+        )
+    if (outcome == "success") != (exit_code == 0):
+        raise SankaMigrateError(
+            "sanka-migrate outcome {!r} is inconsistent with exit code {}".format(outcome, exit_code),
+            command=command,
+            exit_code=exit_code,
+            stderr=stderr,
+        )
+
     data = payload.get("data")
     artifacts = payload.get("artifacts")
     limitations = payload.get("limitations")
@@ -1254,15 +1286,13 @@ def _decode_result(
     ):
         if not isinstance(value, list) or not all(isinstance(item, str) for item in value):
             raise _invalid_field(command, exit_code, stderr, name, "a string array")
-    if not isinstance(payload.get("outcome"), str):
-        raise _invalid_field(command, exit_code, stderr, "outcome", "a string")
     if not isinstance(payload.get("migration_state"), str):
         raise _invalid_field(command, exit_code, stderr, "migration_state", "a string")
 
     return SankaMigrateResult(
         schema_version=schema_version,
         command=payload_command,
-        outcome=payload["outcome"],
+        outcome=outcome,
         migration_state=payload["migration_state"],
         data=data,
         artifacts=artifacts,

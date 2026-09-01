@@ -38,7 +38,7 @@ if mode == "malformed":
 payload = {
     "schema_version": "wrong/v1" if mode == "wrong-schema" else "sanka-cli/v1",
     "command": "wrong" if mode == "wrong-command" else command,
-    "outcome": "error" if is_error else "success",
+    "outcome": os.environ.get("FAKE_SANKA_OUTCOME", "error" if is_error else "success"),
     "migration_state": "failed" if is_error else "complete",
     "data": {
         "argv": sys.argv[1:],
@@ -316,6 +316,40 @@ class SankaMigrateTests(unittest.TestCase):
                 with self.assertRaisesRegex(ValueError, "JSON-compatible"):
                     self.migrate.plan(extension_config=value)  # type: ignore[arg-type]
 
+    def test_extension_configuration_rejects_cycles_but_allows_shared_containers(self) -> None:
+        shared = ["value"]
+        self.assertEqual(
+            self.argv(self.migrate.plan(extension_config={"first": shared, "second": shared})),
+            [
+                "plan",
+                "--extension-config",
+                '{"first":["value"],"second":["value"]}',
+                "--json",
+            ],
+        )
+
+        cyclic_list: list[object] = []
+        cyclic_list.append(cyclic_list)
+        cyclic_dict: dict[str, object] = {}
+        cyclic_dict["self"] = cyclic_dict
+        for value in (cyclic_list, cyclic_dict):
+            with self.subTest(value=type(value).__name__):
+                with self.assertRaisesRegex(ValueError, "JSON-compatible"):
+                    self.migrate.plan(extension_config={"cycle": value})  # type: ignore[dict-item]
+
+    def test_extension_environment_rejects_invalid_containers_and_names_before_spawn(self) -> None:
+        migrate = SankaMigrate(cwd=self.root, executable=self.root / "missing")
+        for environment in (
+            "API_TOKEN",
+            b"API_TOKEN",
+            ("API-TOKEN",),
+            ("9API_TOKEN",),
+            ("API_TÖKEN",),
+        ):
+            with self.subTest(environment=environment):
+                with self.assertRaisesRegex(ValueError, "extension_environment"):
+                    migrate.plan(extension_environment=environment)  # type: ignore[arg-type]
+
     def test_sync_extension_management_has_full_grouped_parity_and_no_shell(self) -> None:
         marker = self.root / "unexpected-extension"
         source = "$(touch {})".format(marker)
@@ -430,6 +464,46 @@ class SankaMigrateTests(unittest.TestCase):
                 )
                 with self.assertRaisesRegex(SankaMigrateError, message):
                     migrate.scan()
+
+    def test_protocol_rejects_invalid_outcome_and_exit_pairs_without_a_result(self) -> None:
+        invalid_pairs = (
+            ("bogus", "0"),
+            ("bogus", "1"),
+            ("bogus", "2"),
+            ("bogus", "99"),
+            ("success", "1"),
+            ("success", "2"),
+            ("success", "99"),
+            ("error", "0"),
+            ("error", "99"),
+        )
+        for outcome, exit_code in invalid_pairs:
+            with self.subTest(outcome=outcome, exit_code=exit_code):
+                migrate = SankaMigrate(
+                    cwd=self.root,
+                    executable=self.executable,
+                    env={
+                        "FAKE_SANKA_MODE": "error" if outcome == "error" else "success",
+                        "FAKE_SANKA_OUTCOME": outcome,
+                        "FAKE_SANKA_EXIT": exit_code,
+                    },
+                )
+                with self.assertRaises(SankaMigrateError) as raised:
+                    migrate.scan()
+                self.assertIsNone(raised.exception.result)
+
+    def test_protocol_preserves_valid_failure_results_for_supported_exit_codes(self) -> None:
+        for exit_code in ("1", "2"):
+            with self.subTest(exit_code=exit_code):
+                migrate = SankaMigrate(
+                    cwd=self.root,
+                    executable=self.executable,
+                    env={"FAKE_SANKA_MODE": "error", "FAKE_SANKA_EXIT": exit_code},
+                )
+                with self.assertRaises(SankaMigrateError) as raised:
+                    migrate.scan()
+                self.assertEqual(raised.exception.result.outcome, "error")
+                self.assertEqual(raised.exception.exit_code, int(exit_code))
 
     def test_apply_requires_a_reviewed_plan_hash(self) -> None:
         with self.assertRaisesRegex(ValueError, "plan_hash"):
@@ -549,6 +623,10 @@ class AsyncSankaMigrateTests(unittest.IsolatedAsyncioTestCase):
                 ["extension", "marketplace", "remove", "third-party", "--json"],
             ],
         )
+
+    async def test_async_extension_environment_uses_shared_validation(self) -> None:
+        with self.assertRaisesRegex(ValueError, "extension_environment"):
+            await self.migrate.plan(extension_environment="API_TOKEN")  # type: ignore[arg-type]
 
     async def test_async_execution_does_not_block_the_event_loop(self) -> None:
         migrate = AsyncSankaMigrate(
