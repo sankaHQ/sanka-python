@@ -10,19 +10,27 @@ from __future__ import annotations
 
 import asyncio
 import json
+import math
 import os
 import subprocess
 from dataclasses import dataclass
 from typing import Any, Dict, Generic, List, Literal, Mapping, Optional, Sequence, Tuple, TypedDict, TypeVar, Union
 
 PathValue = Union[str, "os.PathLike[str]"]
+JsonValue = Union[None, bool, int, float, str, List["JsonValue"], Dict[str, "JsonValue"]]
+SankaMigrateCommand = Literal["scan", "plan", "apply", "test", "verify", "extension"]
 CLI_SCHEMA_VERSION = "sanka-cli/v1"
 
 __all__ = [
     "ApplyData",
     "AsyncSankaMigrate",
+    "ExtensionEvidence",
+    "ExtensionFailure",
+    "ExtensionRecommendation",
+    "JsonValue",
     "PlanData",
     "SankaMigrate",
+    "SankaMigrateCommand",
     "SankaMigrateError",
     "SankaMigrateResult",
     "ScanData",
@@ -33,10 +41,42 @@ __all__ = [
 TData = TypeVar("TData")
 
 
+class ExtensionEvidence(TypedDict):
+    """Static project evidence that matched an extension recommendation."""
+
+    kind: str
+    value: str
+    path: str
+
+
+class ExtensionRecommendation(TypedDict):
+    """One compatible extension recommended by ``sanka-migrate``."""
+
+    id: str
+    version: str
+    marketplace: str
+    targets: List[str]
+    evidence: List[ExtensionEvidence]
+    status: List[str]
+    add_command: str
+
+
+class _ExtensionFailureRequired(TypedDict):
+    code: str
+    message: str
+
+
+class ExtensionFailure(_ExtensionFailureRequired, total=False):
+    """Structured extension or marketplace failure returned by the CLI."""
+
+    details: Dict[str, JsonValue]
+
+
 class ScanData(TypedDict, total=False):
     """Core semantic scan fields; additional CLI fields remain available."""
 
     scan_hash: str
+    recommendations: List[ExtensionRecommendation]
 
 
 class PlanData(TypedDict):
@@ -79,7 +119,7 @@ class SankaMigrateResult(Generic[TData]):
     """
 
     schema_version: str
-    command: str
+    command: SankaMigrateCommand
     outcome: str
     migration_state: str
     data: TData
@@ -95,6 +135,7 @@ class SankaMigrateError(RuntimeError):
         command: Generic command that failed.
         exit_code: Process exit code, or ``None`` when the CLI could not start.
         parsed_error: Structured CLI error from ``data.error``, when available.
+        result: Complete valid failure envelope, when the CLI returned one.
         stderr: Diagnostic text written by the CLI.
     """
 
@@ -102,15 +143,17 @@ class SankaMigrateError(RuntimeError):
         self,
         message: str,
         *,
-        command: str,
+        command: SankaMigrateCommand,
         exit_code: Optional[int] = None,
         parsed_error: Optional[Dict[str, Any]] = None,
+        result: Optional[SankaMigrateResult[Dict[str, Any]]] = None,
         stderr: str = "",
     ) -> None:
         super().__init__(message)
         self.command = command
         self.exit_code = exit_code
         self.parsed_error = parsed_error
+        self.result = result
         self.stderr = stderr
 
 
@@ -149,6 +192,8 @@ class SankaMigrate:
         root: Optional[PathValue] = None,
         settings: Optional[str] = None,
         artifact_dir: Optional[PathValue] = None,
+        extension_config: Optional[Mapping[str, JsonValue]] = None,
+        extension_environment: Sequence[str] = (),
     ) -> SankaMigrateResult[ScanData]:
         """Inspect a source application with ``sanka-migrate scan``.
 
@@ -156,6 +201,8 @@ class SankaMigrate:
             root: Source repository root. Omit it to use ``cwd``.
             settings: Explicit Django settings module; otherwise the CLI detects it.
             artifact_dir: Directory for the semantic scan artifact.
+            extension_config: JSON-compatible settings for the selected extension.
+            extension_environment: Ambient environment variable names to forward.
 
         Returns:
             The scan result, discovered application data, risks, and artifact paths.
@@ -170,7 +217,10 @@ class SankaMigrate:
             ``scan = SankaMigrate(cwd="./app").scan()``
         """
 
-        return self._run("scan", _scan_args(root, settings, artifact_dir))
+        return self._run(
+            "scan",
+            _scan_args(root, settings, artifact_dir, extension_config, extension_environment),
+        )
 
     def plan(
         self,
@@ -178,13 +228,15 @@ class SankaMigrate:
         root: Optional[PathValue] = None,
         file: Optional[PathValue] = None,
         state: Optional[PathValue] = None,
-        to: Optional[Literal["fastapi"]] = None,
+        to: Optional[str] = None,
         strategy: Optional[Literal["native", "compatibility"]] = None,
         artifact_dir: Optional[PathValue] = None,
         output: Optional[PathValue] = None,
         generation: Optional[Literal["full", "update", "minimal"]] = None,
         package_manager: Optional[Literal["uv", "pip"]] = None,
         orm: Optional[Literal["tortoise", "sqlalchemy", "psycopg"]] = None,
+        extension_config: Optional[Mapping[str, JsonValue]] = None,
+        extension_environment: Sequence[str] = (),
     ) -> SankaMigrateResult[PlanData]:
         """Create a reviewable, hash-bound plan with ``sanka-migrate plan``.
 
@@ -192,13 +244,15 @@ class SankaMigrate:
             root: Source repository root. Omit it to use ``cwd``.
             file: Migration spec passed as ``--file``.
             state: Run-state SQLite file passed as ``--state``.
-            to: Target framework, currently ``"fastapi"`` for application migration.
+            to: Target advertised by an installed extension.
             strategy: Runtime strategy, currently ``"native"`` or ``"compatibility"``.
             artifact_dir: Directory containing scan and plan artifacts.
             output: Planned generated target directory.
             generation: Generation mode: ``"full"``, ``"update"``, or ``"minimal"``.
             package_manager: Generated environment manager: ``"uv"`` or ``"pip"``.
             orm: ORM selected when the scan detects database-backed routes.
+            extension_config: JSON-compatible settings for the selected extension.
+            extension_environment: Ambient environment variable names to forward.
 
         Returns:
             The plan result. Use ``result.data["plan_hash"]`` for ``apply()``.
@@ -227,6 +281,8 @@ class SankaMigrate:
                 generation,
                 package_manager,
                 orm,
+                extension_config,
+                extension_environment,
             ),
         )
 
@@ -237,7 +293,7 @@ class SankaMigrate:
         root: Optional[PathValue] = None,
         file: Optional[PathValue] = None,
         state: Optional[PathValue] = None,
-        to: Optional[Literal["fastapi"]] = None,
+        to: Optional[str] = None,
         artifact_dir: Optional[PathValue] = None,
         output: Optional[PathValue] = None,
         force: bool = False,
@@ -245,6 +301,8 @@ class SankaMigrate:
         min_readiness: Optional[float] = None,
         gap_report_only: bool = False,
         bench_candidate: Optional[PathValue] = None,
+        extension_config: Optional[Mapping[str, JsonValue]] = None,
+        extension_environment: Sequence[str] = (),
     ) -> SankaMigrateResult[ApplyData]:
         """Apply exactly one reviewed plan with ``sanka-migrate apply``.
 
@@ -261,6 +319,8 @@ class SankaMigrate:
             min_readiness: Minimum native readiness percentage from 0 through 100.
             gap_report_only: Write a gap report instead of generating an application.
             bench_candidate: Also write a Migration Bench candidate here.
+            extension_config: JSON-compatible settings for the selected extension.
+            extension_environment: Ambient environment variable names to forward.
 
         Returns:
             The apply result and paths written from the reviewed plan.
@@ -291,6 +351,8 @@ class SankaMigrate:
                 min_readiness,
                 gap_report_only,
                 bench_candidate,
+                extension_config,
+                extension_environment,
             ),
         )
 
@@ -300,9 +362,11 @@ class SankaMigrate:
         root: Optional[PathValue] = None,
         file: Optional[PathValue] = None,
         state: Optional[PathValue] = None,
-        to: Optional[Literal["fastapi"]] = None,
+        to: Optional[str] = None,
         artifact_dir: Optional[PathValue] = None,
         output: Optional[PathValue] = None,
+        extension_config: Optional[Mapping[str, JsonValue]] = None,
+        extension_environment: Sequence[str] = (),
     ) -> SankaMigrateResult[TestData]:
         """Run generated-target tests with ``sanka-migrate test``.
 
@@ -313,6 +377,8 @@ class SankaMigrate:
             to: Target framework selector.
             artifact_dir: Directory containing the applied plan.
             output: Generated target directory.
+            extension_config: JSON-compatible settings for the selected extension.
+            extension_environment: Ambient environment variable names to forward.
 
         Returns:
             Test verdict, target interpreter, dependencies, and generated test artifact.
@@ -328,7 +394,19 @@ class SankaMigrate:
             ``tested = SankaMigrate(cwd="./source").test()``
         """
 
-        return self._run("test", _test_args(root, file, state, to, artifact_dir, output))
+        return self._run(
+            "test",
+            _test_args(
+                root,
+                file,
+                state,
+                to,
+                artifact_dir,
+                output,
+                extension_config,
+                extension_environment,
+            ),
+        )
 
     def verify(
         self,
@@ -336,11 +414,13 @@ class SankaMigrate:
         root: Optional[PathValue] = None,
         file: Optional[PathValue] = None,
         state: Optional[PathValue] = None,
-        to: Optional[Literal["fastapi"]] = None,
+        to: Optional[str] = None,
         artifact_dir: Optional[PathValue] = None,
         output: Optional[PathValue] = None,
         cases: Optional[PathValue] = None,
         no_http: bool = False,
+        extension_config: Optional[Mapping[str, JsonValue]] = None,
+        extension_environment: Sequence[str] = (),
     ) -> SankaMigrateResult[VerifyData]:
         """Verify the selected migration with ``sanka-migrate verify``.
 
@@ -353,6 +433,8 @@ class SankaMigrate:
             output: Generated target directory.
             cases: JSON file containing additional read-only HTTP verification cases.
             no_http: Skip HTTP probes when structural verification is sufficient.
+            extension_config: JSON-compatible settings for the selected extension.
+            extension_environment: Ambient environment variable names to forward.
 
         Returns:
             Verification verdict, checked scope, artifacts, and limitations.
@@ -370,10 +452,27 @@ class SankaMigrate:
 
         return self._run(
             "verify",
-            _verify_args(root, file, state, to, artifact_dir, output, cases, no_http),
+            _verify_args(
+                root,
+                file,
+                state,
+                to,
+                artifact_dir,
+                output,
+                cases,
+                no_http,
+                extension_config,
+                extension_environment,
+            ),
         )
 
-    def _run(self, command: str, args: Sequence[str]) -> SankaMigrateResult[Any]:
+    @property
+    def extensions(self) -> _SankaExtensions:
+        """Extension and marketplace management commands."""
+
+        return _SankaExtensions(self)
+
+    def _run(self, command: SankaMigrateCommand, args: Sequence[str]) -> SankaMigrateResult[Any]:
         argv, environment = self._prepare(command, args)
         try:
             completed = subprocess.run(
@@ -399,7 +498,9 @@ class SankaMigrate:
             stderr=completed.stderr,
         )
 
-    def _prepare(self, command: str, args: Sequence[str]) -> Tuple[List[str], Dict[str, str]]:
+    def _prepare(
+        self, command: SankaMigrateCommand, args: Sequence[str]
+    ) -> Tuple[List[str], Dict[str, str]]:
         if self.cwd is not None and not os.path.isdir(self.cwd):
             raise SankaMigrateError(
                 "sanka-migrate working directory was not found: {}".format(self.cwd),
@@ -428,6 +529,8 @@ class AsyncSankaMigrate(SankaMigrate):
         root: Optional[PathValue] = None,
         settings: Optional[str] = None,
         artifact_dir: Optional[PathValue] = None,
+        extension_config: Optional[Mapping[str, JsonValue]] = None,
+        extension_environment: Sequence[str] = (),
     ) -> SankaMigrateResult[ScanData]:
         """Asynchronously inspect a source with ``sanka-migrate scan``.
 
@@ -435,6 +538,8 @@ class AsyncSankaMigrate(SankaMigrate):
             root: Source repository root. Omit it to use ``cwd``.
             settings: Explicit Django settings module.
             artifact_dir: Directory for the semantic scan artifact.
+            extension_config: JSON-compatible settings for the selected extension.
+            extension_environment: Ambient environment variable names to forward.
 
         Returns:
             The scan result, discovered application data, risks, and artifacts.
@@ -449,7 +554,10 @@ class AsyncSankaMigrate(SankaMigrate):
             ``scan = await AsyncSankaMigrate(cwd="./app").scan()``
         """
 
-        return await self._run_async("scan", _scan_args(root, settings, artifact_dir))
+        return await self._run_async(
+            "scan",
+            _scan_args(root, settings, artifact_dir, extension_config, extension_environment),
+        )
 
     async def plan(
         self,
@@ -457,13 +565,15 @@ class AsyncSankaMigrate(SankaMigrate):
         root: Optional[PathValue] = None,
         file: Optional[PathValue] = None,
         state: Optional[PathValue] = None,
-        to: Optional[Literal["fastapi"]] = None,
+        to: Optional[str] = None,
         strategy: Optional[Literal["native", "compatibility"]] = None,
         artifact_dir: Optional[PathValue] = None,
         output: Optional[PathValue] = None,
         generation: Optional[Literal["full", "update", "minimal"]] = None,
         package_manager: Optional[Literal["uv", "pip"]] = None,
         orm: Optional[Literal["tortoise", "sqlalchemy", "psycopg"]] = None,
+        extension_config: Optional[Mapping[str, JsonValue]] = None,
+        extension_environment: Sequence[str] = (),
     ) -> SankaMigrateResult[PlanData]:
         """Asynchronously create a hash-bound plan with ``sanka-migrate plan``.
 
@@ -471,13 +581,15 @@ class AsyncSankaMigrate(SankaMigrate):
             root: Source repository root. Omit it to use ``cwd``.
             file: Migration spec passed as ``--file``.
             state: Run-state SQLite file passed as ``--state``.
-            to: Target framework, currently ``"fastapi"``.
+            to: Target advertised by an installed extension.
             strategy: ``"native"`` or ``"compatibility"``.
             artifact_dir: Directory containing scan and plan artifacts.
             output: Planned generated target directory.
             generation: ``"full"``, ``"update"``, or ``"minimal"``.
             package_manager: ``"uv"`` or ``"pip"``.
             orm: ORM selected for database-backed routes.
+            extension_config: JSON-compatible settings for the selected extension.
+            extension_environment: Ambient environment variable names to forward.
 
         Returns:
             The plan result whose ``data["plan_hash"]`` is required by ``apply``.
@@ -505,6 +617,8 @@ class AsyncSankaMigrate(SankaMigrate):
                 generation,
                 package_manager,
                 orm,
+                extension_config,
+                extension_environment,
             ),
         )
 
@@ -515,7 +629,7 @@ class AsyncSankaMigrate(SankaMigrate):
         root: Optional[PathValue] = None,
         file: Optional[PathValue] = None,
         state: Optional[PathValue] = None,
-        to: Optional[Literal["fastapi"]] = None,
+        to: Optional[str] = None,
         artifact_dir: Optional[PathValue] = None,
         output: Optional[PathValue] = None,
         force: bool = False,
@@ -523,6 +637,8 @@ class AsyncSankaMigrate(SankaMigrate):
         min_readiness: Optional[float] = None,
         gap_report_only: bool = False,
         bench_candidate: Optional[PathValue] = None,
+        extension_config: Optional[Mapping[str, JsonValue]] = None,
+        extension_environment: Sequence[str] = (),
     ) -> SankaMigrateResult[ApplyData]:
         """Asynchronously apply one reviewed plan with ``sanka-migrate apply``.
 
@@ -539,6 +655,8 @@ class AsyncSankaMigrate(SankaMigrate):
             min_readiness: Minimum native readiness percentage.
             gap_report_only: Write a gap report instead of an application.
             bench_candidate: Also write a Migration Bench candidate here.
+            extension_config: JSON-compatible settings for the selected extension.
+            extension_environment: Ambient environment variable names to forward.
 
         Returns:
             The apply result and paths written from the reviewed plan.
@@ -569,6 +687,8 @@ class AsyncSankaMigrate(SankaMigrate):
                 min_readiness,
                 gap_report_only,
                 bench_candidate,
+                extension_config,
+                extension_environment,
             ),
         )
 
@@ -578,9 +698,11 @@ class AsyncSankaMigrate(SankaMigrate):
         root: Optional[PathValue] = None,
         file: Optional[PathValue] = None,
         state: Optional[PathValue] = None,
-        to: Optional[Literal["fastapi"]] = None,
+        to: Optional[str] = None,
         artifact_dir: Optional[PathValue] = None,
         output: Optional[PathValue] = None,
+        extension_config: Optional[Mapping[str, JsonValue]] = None,
+        extension_environment: Sequence[str] = (),
     ) -> SankaMigrateResult[TestData]:
         """Asynchronously run generated tests with ``sanka-migrate test``.
 
@@ -591,6 +713,8 @@ class AsyncSankaMigrate(SankaMigrate):
             to: Target framework selector.
             artifact_dir: Directory containing the applied plan.
             output: Generated target directory.
+            extension_config: JSON-compatible settings for the selected extension.
+            extension_environment: Ambient environment variable names to forward.
 
         Returns:
             Test verdict, target interpreter, dependencies, and test artifact.
@@ -605,7 +729,19 @@ class AsyncSankaMigrate(SankaMigrate):
             ``tested = await AsyncSankaMigrate(cwd="./source").test()``
         """
 
-        return await self._run_async("test", _test_args(root, file, state, to, artifact_dir, output))
+        return await self._run_async(
+            "test",
+            _test_args(
+                root,
+                file,
+                state,
+                to,
+                artifact_dir,
+                output,
+                extension_config,
+                extension_environment,
+            ),
+        )
 
     async def verify(
         self,
@@ -613,11 +749,13 @@ class AsyncSankaMigrate(SankaMigrate):
         root: Optional[PathValue] = None,
         file: Optional[PathValue] = None,
         state: Optional[PathValue] = None,
-        to: Optional[Literal["fastapi"]] = None,
+        to: Optional[str] = None,
         artifact_dir: Optional[PathValue] = None,
         output: Optional[PathValue] = None,
         cases: Optional[PathValue] = None,
         no_http: bool = False,
+        extension_config: Optional[Mapping[str, JsonValue]] = None,
+        extension_environment: Sequence[str] = (),
     ) -> SankaMigrateResult[VerifyData]:
         """Asynchronously verify with ``sanka-migrate verify``.
 
@@ -630,6 +768,8 @@ class AsyncSankaMigrate(SankaMigrate):
             output: Generated target directory.
             cases: JSON file with additional read-only HTTP cases.
             no_http: Skip HTTP probes when structural checks are sufficient.
+            extension_config: JSON-compatible settings for the selected extension.
+            extension_environment: Ambient environment variable names to forward.
 
         Returns:
             Verification verdict, checked scope, artifacts, and limitations.
@@ -646,10 +786,29 @@ class AsyncSankaMigrate(SankaMigrate):
 
         return await self._run_async(
             "verify",
-            _verify_args(root, file, state, to, artifact_dir, output, cases, no_http),
+            _verify_args(
+                root,
+                file,
+                state,
+                to,
+                artifact_dir,
+                output,
+                cases,
+                no_http,
+                extension_config,
+                extension_environment,
+            ),
         )
 
-    async def _run_async(self, command: str, args: Sequence[str]) -> SankaMigrateResult[Any]:
+    @property
+    def extensions(self) -> _AsyncSankaExtensions:
+        """Asynchronous extension and marketplace management commands."""
+
+        return _AsyncSankaExtensions(self)
+
+    async def _run_async(
+        self, command: SankaMigrateCommand, args: Sequence[str]
+    ) -> SankaMigrateResult[Any]:
         argv, environment = self._prepare(command, args)
         try:
             process = await asyncio.create_subprocess_exec(
@@ -689,11 +848,145 @@ class AsyncSankaMigrate(SankaMigrate):
         )
 
 
-def _scan_args(root: Optional[PathValue], settings: Optional[str], artifact_dir: Optional[PathValue]) -> List[str]:
+class _SankaExtensionMarketplaces:
+    def __init__(self, migrate: SankaMigrate) -> None:
+        self._migrate = migrate
+
+    def add(
+        self,
+        source: PathValue,
+        *,
+        name: Optional[str] = None,
+        trust: bool = False,
+    ) -> SankaMigrateResult[Dict[str, Any]]:
+        """Add an immutable marketplace snapshot, explicitly trusting it when requested."""
+
+        return self._migrate._run("extension", _marketplace_add_args(source, name, trust))
+
+    def list(self) -> SankaMigrateResult[Dict[str, Any]]:
+        """List configured marketplace snapshots."""
+
+        return self._migrate._run("extension", ["extension", "marketplace", "list"])
+
+    def upgrade(self, name: Optional[str] = None) -> SankaMigrateResult[Dict[str, Any]]:
+        """Refresh one marketplace, or all marketplaces when ``name`` is omitted."""
+
+        args = ["extension", "marketplace", "upgrade"]
+        if name is not None:
+            args.append(name)
+        return self._migrate._run("extension", args)
+
+    def remove(self, name: str) -> SankaMigrateResult[Dict[str, Any]]:
+        """Remove an unused marketplace snapshot."""
+
+        return self._migrate._run("extension", ["extension", "marketplace", "remove", name])
+
+
+class _SankaExtensions:
+    def __init__(self, migrate: SankaMigrate) -> None:
+        self._migrate = migrate
+        self.marketplaces = _SankaExtensionMarketplaces(migrate)
+
+    def add(
+        self, extension_id: str, *, marketplace: Optional[str] = None
+    ) -> SankaMigrateResult[Dict[str, Any]]:
+        """Install and lock an extension, optionally selecting its marketplace."""
+
+        args = ["extension", "add", extension_id]
+        _option(args, "--marketplace", marketplace)
+        return self._migrate._run("extension", args)
+
+    def list(self) -> SankaMigrateResult[Dict[str, Any]]:
+        """List available and installed extensions."""
+
+        return self._migrate._run("extension", ["extension", "list"])
+
+    def remove(self, extension_id: str) -> SankaMigrateResult[Dict[str, Any]]:
+        """Unpin or disable an extension in the current project."""
+
+        return self._migrate._run("extension", ["extension", "remove", extension_id])
+
+
+class _AsyncSankaExtensionMarketplaces:
+    def __init__(self, migrate: AsyncSankaMigrate) -> None:
+        self._migrate = migrate
+
+    async def add(
+        self,
+        source: PathValue,
+        *,
+        name: Optional[str] = None,
+        trust: bool = False,
+    ) -> SankaMigrateResult[Dict[str, Any]]:
+        """Asynchronously add an immutable marketplace snapshot."""
+
+        return await self._migrate._run_async("extension", _marketplace_add_args(source, name, trust))
+
+    async def list(self) -> SankaMigrateResult[Dict[str, Any]]:
+        """Asynchronously list configured marketplace snapshots."""
+
+        return await self._migrate._run_async("extension", ["extension", "marketplace", "list"])
+
+    async def upgrade(self, name: Optional[str] = None) -> SankaMigrateResult[Dict[str, Any]]:
+        """Asynchronously refresh one marketplace, or all when omitted."""
+
+        args = ["extension", "marketplace", "upgrade"]
+        if name is not None:
+            args.append(name)
+        return await self._migrate._run_async("extension", args)
+
+    async def remove(self, name: str) -> SankaMigrateResult[Dict[str, Any]]:
+        """Asynchronously remove an unused marketplace snapshot."""
+
+        return await self._migrate._run_async(
+            "extension", ["extension", "marketplace", "remove", name]
+        )
+
+
+class _AsyncSankaExtensions:
+    def __init__(self, migrate: AsyncSankaMigrate) -> None:
+        self._migrate = migrate
+        self.marketplaces = _AsyncSankaExtensionMarketplaces(migrate)
+
+    async def add(
+        self, extension_id: str, *, marketplace: Optional[str] = None
+    ) -> SankaMigrateResult[Dict[str, Any]]:
+        """Asynchronously install and lock an extension."""
+
+        args = ["extension", "add", extension_id]
+        _option(args, "--marketplace", marketplace)
+        return await self._migrate._run_async("extension", args)
+
+    async def list(self) -> SankaMigrateResult[Dict[str, Any]]:
+        """Asynchronously list available and installed extensions."""
+
+        return await self._migrate._run_async("extension", ["extension", "list"])
+
+    async def remove(self, extension_id: str) -> SankaMigrateResult[Dict[str, Any]]:
+        """Asynchronously unpin or disable an extension."""
+
+        return await self._migrate._run_async("extension", ["extension", "remove", extension_id])
+
+
+def _marketplace_add_args(source: PathValue, name: Optional[str], trust: bool) -> List[str]:
+    args = ["extension", "marketplace", "add", os.fspath(source)]
+    _option(args, "--name", name)
+    _flag(args, "--trust", trust)
+    return args
+
+
+def _scan_args(
+    root: Optional[PathValue],
+    settings: Optional[str],
+    artifact_dir: Optional[PathValue],
+    extension_config: Optional[Mapping[str, JsonValue]],
+    extension_environment: Sequence[str],
+) -> List[str]:
     args = ["scan"]
     _positional(args, root)
     _option(args, "--settings", settings)
     _option(args, "--artifact-dir", artifact_dir)
+    _extension_options(args, extension_config, extension_environment)
     return args
 
 
@@ -708,6 +1001,8 @@ def _plan_args(
     generation: Optional[str],
     package_manager: Optional[str],
     orm: Optional[str],
+    extension_config: Optional[Mapping[str, JsonValue]],
+    extension_environment: Sequence[str],
 ) -> List[str]:
     args = ["plan"]
     _positional(args, root)
@@ -723,6 +1018,7 @@ def _plan_args(
         ("--orm", orm),
     ):
         _option(args, flag, value)
+    _extension_options(args, extension_config, extension_environment)
     return args
 
 
@@ -739,6 +1035,8 @@ def _apply_args(
     min_readiness: Optional[float],
     gap_report_only: bool,
     bench_candidate: Optional[PathValue],
+    extension_config: Optional[Mapping[str, JsonValue]],
+    extension_environment: Sequence[str],
 ) -> List[str]:
     if not plan_hash.strip():
         raise ValueError("plan_hash must not be empty")
@@ -757,6 +1055,7 @@ def _apply_args(
     _option(args, "--min-readiness", min_readiness)
     _flag(args, "--gap-report-only", gap_report_only)
     _option(args, "--bench-candidate", bench_candidate)
+    _extension_options(args, extension_config, extension_environment)
     return args
 
 
@@ -767,6 +1066,8 @@ def _test_args(
     to: Optional[str],
     artifact_dir: Optional[PathValue],
     output: Optional[PathValue],
+    extension_config: Optional[Mapping[str, JsonValue]],
+    extension_environment: Sequence[str],
 ) -> List[str]:
     args = ["test"]
     _positional(args, root)
@@ -778,6 +1079,7 @@ def _test_args(
         ("--output", output),
     ):
         _option(args, flag, value)
+    _extension_options(args, extension_config, extension_environment)
     return args
 
 
@@ -790,6 +1092,8 @@ def _verify_args(
     output: Optional[PathValue],
     cases: Optional[PathValue],
     no_http: bool,
+    extension_config: Optional[Mapping[str, JsonValue]],
+    extension_environment: Sequence[str],
 ) -> List[str]:
     args = ["verify"]
     _positional(args, root)
@@ -803,7 +1107,46 @@ def _verify_args(
     ):
         _option(args, flag, value)
     _flag(args, "--no-http", no_http)
+    _extension_options(args, extension_config, extension_environment)
     return args
+
+
+def _extension_options(
+    args: List[str],
+    configuration: Optional[Mapping[str, JsonValue]],
+    environment: Sequence[str],
+) -> None:
+    if configuration is not None:
+        normalized = dict(configuration)
+        _validate_json_value(normalized)
+        args.extend(
+            (
+                "--extension-config",
+                json.dumps(normalized, ensure_ascii=False, separators=(",", ":"), sort_keys=True),
+            )
+        )
+    for name in environment:
+        if not isinstance(name, str) or not name:
+            raise ValueError("extension_environment must contain non-empty strings")
+        args.extend(("--extension-env", name))
+
+
+def _validate_json_value(value: Any) -> None:
+    if value is None or isinstance(value, (bool, int, str)):
+        return
+    if isinstance(value, float):
+        if math.isfinite(value):
+            return
+    elif isinstance(value, list):
+        for item in value:
+            _validate_json_value(item)
+        return
+    elif isinstance(value, dict):
+        if all(isinstance(key, str) for key in value):
+            for item in value.values():
+                _validate_json_value(item)
+            return
+    raise ValueError("extension_config must contain only JSON-compatible values")
 
 
 def _positional(args: List[str], value: Optional[PathValue]) -> None:
@@ -821,7 +1164,9 @@ def _flag(args: List[str], flag: str, enabled: bool) -> None:
         args.append(flag)
 
 
-def _finish_result(stdout: str, *, command: str, exit_code: int, stderr: str) -> SankaMigrateResult[Any]:
+def _finish_result(
+    stdout: str, *, command: SankaMigrateCommand, exit_code: int, stderr: str
+) -> SankaMigrateResult[Any]:
     result = _decode_result(
         stdout,
         command=command,
@@ -841,12 +1186,13 @@ def _finish_result(stdout: str, *, command: str, exit_code: int, stderr: str) ->
             command=command,
             exit_code=exit_code,
             parsed_error=error_data,
+            result=result,
             stderr=stderr,
         )
     return result
 
 
-def _missing_executable(command: str) -> SankaMigrateError:
+def _missing_executable(command: SankaMigrateCommand) -> SankaMigrateError:
     return SankaMigrateError(
         "sanka-migrate executable was not found; install it with "
         "`uv tool install sanka-migrate` or pass executable=...",
@@ -857,7 +1203,7 @@ def _missing_executable(command: str) -> SankaMigrateError:
 def _decode_result(
     stdout: str,
     *,
-    command: str,
+    command: SankaMigrateCommand,
     exit_code: int,
     stderr: str,
 ) -> SankaMigrateResult[Dict[str, Any]]:
@@ -926,7 +1272,7 @@ def _decode_result(
 
 
 def _invalid_field(
-    command: str,
+    command: SankaMigrateCommand,
     exit_code: int,
     stderr: str,
     name: str,
