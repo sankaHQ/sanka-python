@@ -612,6 +612,87 @@ class SankaMigrateTests(unittest.TestCase):
         )
 
 
+@unittest.skipUnless(
+    "SANKA_CLI_EXECUTABLE" in os.environ,
+    "SANKA_CLI_EXECUTABLE is not set",
+)
+class RealSankaCliAcceptanceTests(unittest.TestCase):
+    def test_real_cli_success_and_failure_envelopes_without_a_shell(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            project = root / "$(touch real-cli-shell-marker)"
+            project.mkdir()
+            (project / "views.py").write_text(
+                "from rest_framework.views import APIView\n",
+                encoding="utf-8",
+            )
+            executable = os.environ["SANKA_CLI_EXECUTABLE"]
+            migrate = SankaMigrate(
+                cwd=root,
+                executable=executable,
+                env={"SANKA_HOME": str(root / "sanka-home")},
+            )
+            self.assertEqual(migrate.executable, executable)
+            scan = migrate.scan(root=project.name)
+            listed = migrate.extensions.list()
+
+            for result, command in ((scan, "scan"), (listed, "extension")):
+                with self.subTest(command=command):
+                    self.assertEqual(
+                        (result.schema_version, result.command, result.outcome),
+                        ("sanka-cli/v1", command, "success"),
+                    )
+            self.assertFalse((root / "real-cli-shell-marker").exists())
+
+            failures = (
+                (
+                    "extension",
+                    "SANKA_EXTENSION_NOT_FOUND",
+                    lambda: migrate.extensions.add("sanka/drf-to-fastapi"),
+                ),
+                (
+                    "plan",
+                    "SANKA_EXTENSION_REQUIRED",
+                    lambda: migrate.plan(root=project.name, to="fastapi"),
+                ),
+                (
+                    "apply",
+                    "SANKA_EXTENSION_IDENTITY",
+                    lambda: migrate.apply(
+                        plan_hash="sha256:missing",
+                        root=project.name,
+                        to="fastapi",
+                    ),
+                ),
+                (
+                    "test",
+                    "SANKA_EXTENSION_IDENTITY",
+                    lambda: migrate.test(root=project.name, to="fastapi"),
+                ),
+                (
+                    "verify",
+                    "SANKA_EXTENSION_IDENTITY",
+                    lambda: migrate.verify(root=project.name, to="fastapi"),
+                ),
+            )
+            for command, error_code, call in failures:
+                with self.subTest(command=command):
+                    with self.assertRaises(SankaMigrateError) as raised:
+                        call()
+                    error = raised.exception
+                    self.assertEqual(
+                        (
+                            error.command,
+                            error.exit_code,
+                            error.parsed_error["code"],
+                            error.result.schema_version,
+                            error.result.command,
+                            error.result.outcome,
+                        ),
+                        (command, 1, error_code, "sanka-cli/v1", command, "error"),
+                    )
+
+
 class AsyncSankaMigrateTests(unittest.IsolatedAsyncioTestCase):
     def setUp(self) -> None:
         self.temporary = tempfile.TemporaryDirectory()
