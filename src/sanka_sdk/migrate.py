@@ -21,6 +21,8 @@ PathValue = Union[str, "os.PathLike[str]"]
 JsonValue = Union[None, bool, int, float, str, List["JsonValue"], Dict[str, "JsonValue"]]
 SankaMigrateCommand = Literal["scan", "plan", "apply", "test", "verify", "extension"]
 CLI_SCHEMA_VERSION = "sanka-cli/v1"
+DEFAULT_EXECUTABLE = "sanka"
+INSTALL_HINT = "Install it with: uv tool install sanka-cli"
 
 __all__ = [
     "ApplyData",
@@ -177,7 +179,7 @@ class SankaMigrate:
         self,
         *,
         cwd: Optional[PathValue] = None,
-        executable: PathValue = "sanka-migrate",
+        executable: PathValue = DEFAULT_EXECUTABLE,
         env: Optional[Mapping[str, str]] = None,
     ) -> None:
         executable_value = os.fspath(executable)
@@ -1208,8 +1210,7 @@ def _finish_result(
 
 def _missing_executable(command: SankaMigrateCommand) -> SankaMigrateError:
     return SankaMigrateError(
-        "sanka-migrate executable was not found; install it with "
-        "`uv tool install sanka-migrate` or pass executable=...",
+        "{} executable was not found. {} or pass executable=...".format(DEFAULT_EXECUTABLE, INSTALL_HINT),
         command=command,
     )
 

@@ -33,13 +33,13 @@ The hosted API client and local migration adapter are separate surfaces:
 | Import | What runs | Authentication |
 |---|---|---|
 | `from sanka_sdk import SankaClient` | Sanka's hosted HTTP API | API token |
-| `SankaMigrate` or `AsyncSankaMigrate` from `sanka_sdk.migrate` | A local `sanka-migrate` subprocess | None |
+| `SankaMigrate` or `AsyncSankaMigrate` from `sanka_sdk.migrate` | A local `sanka` subprocess | None |
 
 Install the runtime separately. Installing `sanka-sdk` does not install or
-authenticate `sanka-migrate`.
+authenticate `sanka`.
 
 ```bash
-uv tool install sanka-migrate
+uv tool install sanka-cli
 ```
 
 Use a runtime release that includes the extension marketplace commands and
@@ -80,7 +80,7 @@ verified = migrate.verify()
 
 `scan.data["recommendations"]` contains the selected extension, its target,
 matching evidence, and install status. When the exact default package is
-already installed and has not been disabled, `sanka-migrate` can lock it on
+already installed and has not been disabled, `sanka` can lock it on
 the first scan. Otherwise, if no matching extension is enabled, the command
 stops with `SANKA_EXTENSION_REQUIRED`. The error details contain the
 recommendations and exact `add_command`; the SDK does not bypass the runtime's
@@ -88,7 +88,7 @@ selection and trust checks.
 
 `extension_config` accepts JSON-compatible values and is serialized as stable,
 sorted JSON. `extension_environment` accepts environment variable names, not
-secret values. `sanka-migrate` forwards only those named values to the selected
+secret values. `sanka` forwards only those named values to the selected
 extension. Both options are available on `scan()`, `plan()`, `apply()`,
 `test()`, and `verify()`.
 
@@ -114,7 +114,7 @@ marketplaces.remove("partner")
 
 The Python methods map directly to these local commands:
 
-| Python method | `sanka-migrate` command |
+| Python method | `sanka` command |
 |---|---|
 | `extensions.list()` | `extension list --json` |
 | `extensions.add(id, marketplace=...)` | `extension add ID --marketplace NAME --json` |
@@ -125,7 +125,7 @@ The Python methods map directly to these local commands:
 | `extensions.marketplaces.remove(name)` | `extension marketplace remove NAME --json` |
 
 `trust=True` is an explicit operator decision. The SDK only passes `--trust`.
-`sanka-migrate` owns source identity checks, immutable marketplace snapshots,
+`sanka` owns source identity checks, immutable marketplace snapshots,
 artifact verification, project locks, extension installation, upgrades, and
 removal safety. An untrusted source fails with
 `SANKA_MARKETPLACE_TRUST_REQUIRED`; the SDK does not bypass that check.
@@ -161,11 +161,11 @@ Each method maps directly to the local runtime:
 
 | Python method | Runtime command | Purpose |
 |---|---|---|
-| `scan()` | `sanka-migrate scan ... --json` | Inspect the source and write the scan artifact |
-| `plan()` | `sanka-migrate plan ... --json` | Create a reviewable plan and plan hash |
-| `apply()` | `sanka-migrate apply ... --json` | Generate only from the supplied reviewed plan hash |
-| `test()` | `sanka-migrate test ... --json` | Prepare the generated target environment and run its tests |
-| `verify()` | `sanka-migrate verify ... --json` | Verify integrity and configured behavior |
+| `scan()` | `sanka scan ... --json` | Inspect the source and write the scan artifact |
+| `plan()` | `sanka plan ... --json` | Create a reviewable plan and plan hash |
+| `apply()` | `sanka apply ... --json` | Generate only from the supplied reviewed plan hash |
+| `test()` | `sanka test ... --json` | Prepare the generated target environment and run its tests |
+| `verify()` | `sanka verify ... --json` | Verify integrity and configured behavior |
 
 ### Results, failures, and subprocess safety
 
@@ -200,7 +200,7 @@ any other exit code is a protocol error.
 
 Defaults, framework detection, marketplace trust, immutable snapshots,
 extension subprocess execution, generated-target environments, and plan-hash
-safety remain in `sanka-migrate`. The SDK is a typed local adapter, not a second
+safety remain in `sanka`. The SDK is a typed local adapter, not a second
 migration runtime.
 
 See the [CLI execution model](https://github.com/sankaHQ/sanka/blob/main/docs/django-to-fastapi.md#cli-and-sdk-execution-model)

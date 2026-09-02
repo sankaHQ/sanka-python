@@ -71,7 +71,7 @@ payload = {
                             }
                         ],
                         "status": ["available"],
-                        "add_command": "sanka-migrate extension add sanka/drf-to-fastapi",
+                        "add_command": "sanka extension add sanka/drf-to-fastapi",
                     }
                 ]
             }
@@ -104,7 +104,7 @@ class SankaMigrateTests(unittest.TestCase):
         self.temporary = tempfile.TemporaryDirectory()
         self.addCleanup(self.temporary.cleanup)
         self.root = Path(self.temporary.name)
-        self.executable = self.root / "fake-sanka-migrate"
+        self.executable = self.root / "fake-sanka"
         self.executable.write_text(textwrap.dedent(_FAKE_CLI), encoding="utf-8")
         self.executable.chmod(0o755)
         self.migrate = SankaMigrate(cwd=self.root, executable=self.executable)
@@ -569,9 +569,11 @@ class SankaMigrateTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "plan_hash"):
             self.migrate.apply(plan_hash="")
 
-    def test_missing_executable_has_an_install_hint(self) -> None:
+    def test_default_executable_and_missing_hint(self) -> None:
+        self.assertEqual(SankaMigrate().executable, "sanka")
+        self.assertEqual(AsyncSankaMigrate().executable, "sanka")
         migrate = SankaMigrate(cwd=self.root, executable=self.root / "missing")
-        with self.assertRaisesRegex(SankaMigrateError, "uv tool install sanka-migrate"):
+        with self.assertRaisesRegex(SankaMigrateError, "uv tool install sanka-cli"):
             migrate.scan()
 
     def test_every_public_symbol_and_method_has_hover_documentation(self) -> None:
@@ -608,7 +610,7 @@ class AsyncSankaMigrateTests(unittest.IsolatedAsyncioTestCase):
         self.temporary = tempfile.TemporaryDirectory()
         self.addCleanup(self.temporary.cleanup)
         self.root = Path(self.temporary.name)
-        self.executable = self.root / "fake-sanka-migrate"
+        self.executable = self.root / "fake-sanka"
         self.executable.write_text(textwrap.dedent(_FAKE_CLI), encoding="utf-8")
         self.executable.chmod(0o755)
         self.migrate = AsyncSankaMigrate(cwd=self.root, executable=self.executable)
@@ -724,7 +726,7 @@ class AsyncSankaMigrateTests(unittest.IsolatedAsyncioTestCase):
 
     async def test_missing_executable_has_an_async_install_hint(self) -> None:
         migrate = AsyncSankaMigrate(cwd=self.root, executable=self.root / "missing")
-        with self.assertRaisesRegex(SankaMigrateError, "uv tool install sanka-migrate"):
+        with self.assertRaisesRegex(SankaMigrateError, "uv tool install sanka-cli"):
             await migrate.scan()
 
 
