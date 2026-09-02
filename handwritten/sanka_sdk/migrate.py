@@ -1,7 +1,7 @@
 """Local Sanka migration commands for Python applications.
 
 ``SankaMigrate`` and ``AsyncSankaMigrate`` expose the same generic lifecycle as
-the ``sanka-migrate`` CLI: ``scan -> plan -> apply -> test -> verify``. Both run
+the ``sanka`` CLI: ``scan -> plan -> apply -> test -> verify``. Both run
 the separately installed CLI in non-interactive JSON mode; neither calls
 Sanka's hosted API.
 """
@@ -53,7 +53,7 @@ class ExtensionEvidence(TypedDict):
 
 
 class ExtensionRecommendation(TypedDict):
-    """One compatible extension recommended by ``sanka-migrate``."""
+    """One compatible extension recommended by ``sanka``."""
 
     id: str
     version: str
@@ -164,10 +164,10 @@ class SankaMigrate:
     """Run local Sanka migration commands without a Sanka API token.
 
     Args:
-        cwd: Working directory used by ``sanka-migrate``. Relative command
+        cwd: Working directory used by ``sanka``. Relative command
             paths and default artifacts resolve from this directory.
         executable: CLI executable name or path. Install it separately with
-            ``uv tool install sanka-migrate``.
+            ``uv tool install sanka-cli``.
         env: Environment variables merged over the current process environment.
 
     The adapter is non-interactive and always requests one ``sanka-cli/v1``
@@ -198,7 +198,7 @@ class SankaMigrate:
         extension_config: Optional[Mapping[str, JsonValue]] = None,
         extension_environment: Sequence[str] = (),
     ) -> SankaMigrateResult[ScanData]:
-        """Inspect a source application with ``sanka-migrate scan``.
+        """Inspect a source application with ``sanka scan``.
 
         Args:
             root: Source repository root. Omit it to use ``cwd``.
@@ -241,7 +241,7 @@ class SankaMigrate:
         extension_config: Optional[Mapping[str, JsonValue]] = None,
         extension_environment: Sequence[str] = (),
     ) -> SankaMigrateResult[PlanData]:
-        """Create a reviewable, hash-bound plan with ``sanka-migrate plan``.
+        """Create a reviewable, hash-bound plan with ``sanka plan``.
 
         Args:
             root: Source repository root. Omit it to use ``cwd``.
@@ -307,7 +307,7 @@ class SankaMigrate:
         extension_config: Optional[Mapping[str, JsonValue]] = None,
         extension_environment: Sequence[str] = (),
     ) -> SankaMigrateResult[ApplyData]:
-        """Apply exactly one reviewed plan with ``sanka-migrate apply``.
+        """Apply exactly one reviewed plan with ``sanka apply``.
 
         Args:
             plan_hash: Non-empty hash returned by ``plan()``; writes are bound to it.
@@ -371,7 +371,7 @@ class SankaMigrate:
         extension_config: Optional[Mapping[str, JsonValue]] = None,
         extension_environment: Sequence[str] = (),
     ) -> SankaMigrateResult[TestData]:
-        """Run generated-target tests with ``sanka-migrate test``.
+        """Run generated-target tests with ``sanka test``.
 
         Args:
             root: Source repository root. Omit it to use ``cwd``.
@@ -425,7 +425,7 @@ class SankaMigrate:
         extension_config: Optional[Mapping[str, JsonValue]] = None,
         extension_environment: Sequence[str] = (),
     ) -> SankaMigrateResult[VerifyData]:
-        """Verify the selected migration with ``sanka-migrate verify``.
+        """Verify the selected migration with ``sanka verify``.
 
         Args:
             root: Source repository root. Omit it to use ``cwd``.
@@ -490,7 +490,7 @@ class SankaMigrate:
             raise _missing_executable(command) from error
         except OSError as error:
             raise SankaMigrateError(
-                "could not execute sanka-migrate: {}".format(error),
+                "could not execute sanka: {}".format(error),
                 command=command,
             ) from error
 
@@ -506,7 +506,7 @@ class SankaMigrate:
     ) -> Tuple[List[str], Dict[str, str]]:
         if self.cwd is not None and not os.path.isdir(self.cwd):
             raise SankaMigrateError(
-                "sanka-migrate working directory was not found: {}".format(self.cwd),
+                "sanka working directory was not found: {}".format(self.cwd),
                 command=command,
             )
         environment = os.environ.copy()
@@ -518,7 +518,7 @@ class AsyncSankaMigrate(SankaMigrate):
     """Run local Sanka migration commands without blocking the event loop.
 
     Args:
-        cwd: Working directory used by ``sanka-migrate``.
+        cwd: Working directory used by ``sanka``.
         executable: Separately installed CLI executable name or path.
         env: Environment variables merged over the current process environment.
 
@@ -535,7 +535,7 @@ class AsyncSankaMigrate(SankaMigrate):
         extension_config: Optional[Mapping[str, JsonValue]] = None,
         extension_environment: Sequence[str] = (),
     ) -> SankaMigrateResult[ScanData]:
-        """Asynchronously inspect a source with ``sanka-migrate scan``.
+        """Asynchronously inspect a source with ``sanka scan``.
 
         Args:
             root: Source repository root. Omit it to use ``cwd``.
@@ -578,7 +578,7 @@ class AsyncSankaMigrate(SankaMigrate):
         extension_config: Optional[Mapping[str, JsonValue]] = None,
         extension_environment: Sequence[str] = (),
     ) -> SankaMigrateResult[PlanData]:
-        """Asynchronously create a hash-bound plan with ``sanka-migrate plan``.
+        """Asynchronously create a hash-bound plan with ``sanka plan``.
 
         Args:
             root: Source repository root. Omit it to use ``cwd``.
@@ -643,7 +643,7 @@ class AsyncSankaMigrate(SankaMigrate):
         extension_config: Optional[Mapping[str, JsonValue]] = None,
         extension_environment: Sequence[str] = (),
     ) -> SankaMigrateResult[ApplyData]:
-        """Asynchronously apply one reviewed plan with ``sanka-migrate apply``.
+        """Asynchronously apply one reviewed plan with ``sanka apply``.
 
         Args:
             plan_hash: Non-empty hash returned by ``plan``.
@@ -707,7 +707,7 @@ class AsyncSankaMigrate(SankaMigrate):
         extension_config: Optional[Mapping[str, JsonValue]] = None,
         extension_environment: Sequence[str] = (),
     ) -> SankaMigrateResult[TestData]:
-        """Asynchronously run generated tests with ``sanka-migrate test``.
+        """Asynchronously run generated tests with ``sanka test``.
 
         Args:
             root: Source repository root. Omit it to use ``cwd``.
@@ -760,7 +760,7 @@ class AsyncSankaMigrate(SankaMigrate):
         extension_config: Optional[Mapping[str, JsonValue]] = None,
         extension_environment: Sequence[str] = (),
     ) -> SankaMigrateResult[VerifyData]:
-        """Asynchronously verify with ``sanka-migrate verify``.
+        """Asynchronously verify with ``sanka verify``.
 
         Args:
             root: Source repository root. Omit it to use ``cwd``.
@@ -825,7 +825,7 @@ class AsyncSankaMigrate(SankaMigrate):
             raise _missing_executable(command) from error
         except OSError as error:
             raise SankaMigrateError(
-                "could not execute sanka-migrate: {}".format(error),
+                "could not execute sanka: {}".format(error),
                 command=command,
             ) from error
 
@@ -842,7 +842,7 @@ class AsyncSankaMigrate(SankaMigrate):
 
         exit_code = process.returncode
         if exit_code is None:
-            raise SankaMigrateError("sanka-migrate {} did not exit".format(command), command=command)
+            raise SankaMigrateError("sanka {} did not exit".format(command), command=command)
         return _finish_result(
             stdout_bytes.decode("utf-8", errors="replace"),
             command=command,
@@ -1195,7 +1195,7 @@ def _finish_result(
         message = (
             str(error_data.get("message"))
             if error_data and error_data.get("message")
-            else "sanka-migrate {} failed with exit code {}".format(command, exit_code)
+            else "sanka {} failed with exit code {}".format(command, exit_code)
         )
         raise SankaMigrateError(
             message,
@@ -1226,14 +1226,14 @@ def _decode_result(
         payload = json.loads(stdout)
     except (json.JSONDecodeError, TypeError) as error:
         raise SankaMigrateError(
-            "sanka-migrate {} did not return one valid JSON document".format(command),
+            "sanka {} did not return one valid JSON document".format(command),
             command=command,
             exit_code=exit_code,
             stderr=stderr,
         ) from error
     if not isinstance(payload, dict):
         raise SankaMigrateError(
-            "sanka-migrate {} returned a non-object JSON document".format(command),
+            "sanka {} returned a non-object JSON document".format(command),
             command=command,
             exit_code=exit_code,
             stderr=stderr,
@@ -1243,14 +1243,14 @@ def _decode_result(
     payload_command = payload.get("command")
     if schema_version != CLI_SCHEMA_VERSION:
         raise SankaMigrateError(
-            "unsupported sanka-migrate protocol: {!r}".format(schema_version),
+            "unsupported sanka protocol: {!r}".format(schema_version),
             command=command,
             exit_code=exit_code,
             stderr=stderr,
         )
     if payload_command != command:
         raise SankaMigrateError(
-            "sanka-migrate returned command {!r}, expected {!r}".format(payload_command, command),
+            "sanka returned command {!r}, expected {!r}".format(payload_command, command),
             command=command,
             exit_code=exit_code,
             stderr=stderr,
@@ -1261,14 +1261,14 @@ def _decode_result(
         raise _invalid_field(command, exit_code, stderr, "outcome", "'success' or 'error'")
     if exit_code not in (0, 1, 2):
         raise SankaMigrateError(
-            "invalid sanka-migrate exit code {}; expected 0, 1, or 2".format(exit_code),
+            "invalid sanka exit code {}; expected 0, 1, or 2".format(exit_code),
             command=command,
             exit_code=exit_code,
             stderr=stderr,
         )
     if (outcome == "success") != (exit_code == 0):
         raise SankaMigrateError(
-            "sanka-migrate outcome {!r} is inconsistent with exit code {}".format(outcome, exit_code),
+            "sanka outcome {!r} is inconsistent with exit code {}".format(outcome, exit_code),
             command=command,
             exit_code=exit_code,
             stderr=stderr,

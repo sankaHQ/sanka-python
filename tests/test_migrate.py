@@ -458,7 +458,7 @@ class SankaMigrateTests(unittest.TestCase):
     def test_protocol_rejects_malformed_schema_and_command(self) -> None:
         for mode, message in (
             ("malformed", "one valid JSON document"),
-            ("wrong-schema", "unsupported sanka-migrate protocol"),
+            ("wrong-schema", "unsupported sanka protocol"),
             ("wrong-command", "expected 'scan'"),
         ):
             with self.subTest(mode=mode):
@@ -575,6 +575,13 @@ class SankaMigrateTests(unittest.TestCase):
         migrate = SankaMigrate(cwd=self.root, executable=self.root / "missing")
         with self.assertRaisesRegex(SankaMigrateError, "uv tool install sanka-cli"):
             migrate.scan()
+
+    def test_active_cli_guidance_uses_the_unified_executable(self) -> None:
+        repository = Path(__file__).resolve().parents[1]
+        source = (repository / "handwritten/sanka_sdk/migrate.py").read_text(encoding="utf-8")
+
+        self.assertNotIn("sanka-migrate", source)
+        self.assertIn("uv tool install sanka-cli", source)
 
     def test_every_public_symbol_and_method_has_hover_documentation(self) -> None:
         for name in migrate_module.__all__:
