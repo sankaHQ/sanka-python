@@ -648,7 +648,7 @@ class RealSankaCliAcceptanceTests(unittest.TestCase):
                 (
                     "extension",
                     "SANKA_EXTENSION_NOT_FOUND",
-                    lambda: migrate.extensions.add("sanka/drf-to-fastapi"),
+                    lambda: migrate.extensions.add("sanka-sdk-test/does-not-exist"),
                 ),
                 (
                     "plan",
