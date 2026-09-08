@@ -224,3 +224,8 @@ Configure a Trusted Publisher on PyPI for:
 - environment: `pypi`
 
 Then publish by pushing a tag like `vX.Y.Z` or running the workflow manually.
+
+
+[Developer Cloud release candidate](docs/developer-cloud.md): bounded execution, Repair, certificates and Fleet.
+
+For a worktree or pinned SDK contract, regenerate with `SANKA_API_SPEC_SOURCE=/path/to/openapi.json ./scripts/generate_sdk.sh`. The committed V2 input is `openapi/openapi.json`; no legacy runtime export runs.
