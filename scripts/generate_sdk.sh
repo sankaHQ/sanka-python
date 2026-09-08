@@ -47,6 +47,11 @@ ensure_docker_host() {
   exit 1
 }
 
+if [ -n "${SANKA_API_SPEC_SOURCE:-}" ]; then
+  mkdir -p "$ROOT/openapi"
+  cp "$SANKA_API_SPEC_SOURCE" "$ROOT/openapi/openapi.json"
+fi
+
 ensure_colima
 ensure_docker_host
 export DOCKER_CONFIG="$TMP_DIR/docker-config"

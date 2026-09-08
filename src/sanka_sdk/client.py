@@ -21,6 +21,7 @@ if typing.TYPE_CHECKING:
     from .contacts.client import AsyncContactsClient, ContactsClient
     from .custom_objects.client import AsyncCustomObjectsClient, CustomObjectsClient
     from .deals.client import AsyncDealsClient, DealsClient
+    from .developer_cloud.client import AsyncDeveloperCloudClient, DeveloperCloudClient
     from .disbursements.client import AsyncDisbursementsClient, DisbursementsClient
     from .employees.client import AsyncEmployeesClient, EmployeesClient
     from .estimates.client import AsyncEstimatesClient, EstimatesClient
@@ -188,6 +189,7 @@ class SankaClient:
         self._applicants: typing.Optional[ApplicantsClient] = None
         self._interviews: typing.Optional[InterviewsClient] = None
         self._workforce_planning: typing.Optional[WorkforcePlanningClient] = None
+        self._developer_cloud: typing.Optional[DeveloperCloudClient] = None
 
     @property
     def absences(self):
@@ -621,6 +623,14 @@ class SankaClient:
             self._workforce_planning = WorkforcePlanningClient(client_wrapper=self._client_wrapper)
         return self._workforce_planning
 
+    @property
+    def developer_cloud(self):
+        if self._developer_cloud is None:
+            from .developer_cloud.client import DeveloperCloudClient  # noqa: E402
+
+            self._developer_cloud = DeveloperCloudClient(client_wrapper=self._client_wrapper)
+        return self._developer_cloud
+
 
 class AsyncSankaClient:
     """
@@ -745,6 +755,7 @@ class AsyncSankaClient:
         self._applicants: typing.Optional[AsyncApplicantsClient] = None
         self._interviews: typing.Optional[AsyncInterviewsClient] = None
         self._workforce_planning: typing.Optional[AsyncWorkforcePlanningClient] = None
+        self._developer_cloud: typing.Optional[AsyncDeveloperCloudClient] = None
 
     @property
     def absences(self):
@@ -1177,6 +1188,14 @@ class AsyncSankaClient:
 
             self._workforce_planning = AsyncWorkforcePlanningClient(client_wrapper=self._client_wrapper)
         return self._workforce_planning
+
+    @property
+    def developer_cloud(self):
+        if self._developer_cloud is None:
+            from .developer_cloud.client import AsyncDeveloperCloudClient  # noqa: E402
+
+            self._developer_cloud = AsyncDeveloperCloudClient(client_wrapper=self._client_wrapper)
+        return self._developer_cloud
 
 
 def _get_base_url(*, base_url: typing.Optional[str] = None, environment: SankaClientEnvironment) -> str:
