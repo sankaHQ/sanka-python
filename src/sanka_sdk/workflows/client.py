@@ -4,6 +4,9 @@ import typing
 
 from ..core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ..core.request_options import RequestOptions
+from ..types.construct_public_workflow_flow_api_v_2_public_workflows_workflow_id_flow_construct_post_200_envelope import (
+    ConstructPublicWorkflowFlowApiV2PublicWorkflowsWorkflowIdFlowConstructPost200Envelope,
+)
 from ..types.create_public_workflow_api_v_2_public_workflows_post_200_envelope import (
     CreatePublicWorkflowApiV2PublicWorkflowsPost200Envelope,
 )
@@ -13,8 +16,14 @@ from ..types.delete_public_workflow_api_v_2_public_workflows_workflow_id_delete_
 from ..types.get_public_workflow_api_v_2_public_workflows_workflow_id_get_200_envelope import (
     GetPublicWorkflowApiV2PublicWorkflowsWorkflowIdGet200Envelope,
 )
+from ..types.get_public_workflow_flow_api_v_2_public_workflows_workflow_id_flow_get_200_envelope import (
+    GetPublicWorkflowFlowApiV2PublicWorkflowsWorkflowIdFlowGet200Envelope,
+)
 from ..types.list_public_workflows_api_v_2_public_workflows_get_200_envelope import (
     ListPublicWorkflowsApiV2PublicWorkflowsGet200Envelope,
+)
+from ..types.plan_public_workflow_template_api_v_2_public_workflows_templates_plan_post_200_envelope import (
+    PlanPublicWorkflowTemplateApiV2PublicWorkflowsTemplatesPlanPost200Envelope,
 )
 from ..types.public_workflow_run_request import PublicWorkflowRunRequest
 from ..types.run_public_workflow_api_v_2_public_workflows_workflow_id_run_post_200_envelope import (
@@ -23,7 +32,11 @@ from ..types.run_public_workflow_api_v_2_public_workflows_workflow_id_run_post_2
 from ..types.update_public_workflow_api_v_2_public_workflows_workflow_id_patch_200_envelope import (
     UpdatePublicWorkflowApiV2PublicWorkflowsWorkflowIdPatch200Envelope,
 )
+from ..types.use_public_workflow_template_api_v_2_public_workflows_templates_use_post_200_envelope import (
+    UsePublicWorkflowTemplateApiV2PublicWorkflowsTemplatesUsePost200Envelope,
+)
 from .raw_client import AsyncRawWorkflowsClient, RawWorkflowsClient
+from .types.public_flow_template_plan_request_parameters_value import PublicFlowTemplatePlanRequestParametersValue
 
 # this is used as the default value for optional parameters
 OMIT = typing.cast(typing.Any, ...)
@@ -437,6 +450,225 @@ class WorkflowsClient:
         """
         _response = self._raw_client.run_public_workflow_api(
             workflow_id, workspace_id=workspace_id, request=request, request_options=request_options
+        )
+        return _response.data
+
+    def plan_public_workflow_template_api(
+        self,
+        *,
+        request_id: str,
+        template_id: str,
+        template_version: int,
+        workspace_id: typing.Optional[str] = None,
+        parameters: typing.Optional[
+            typing.Dict[str, typing.Optional[PublicFlowTemplatePlanRequestParametersValue]]
+        ] = OMIT,
+        workflow_id: typing.Optional[str] = OMIT,
+        expected_definition_digest: typing.Optional[str] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> PlanPublicWorkflowTemplateApiV2PublicWorkflowsTemplatesPlanPost200Envelope:
+        """
+        Review a template without writing a workflow definition.
+
+        The request UUID binds immutable input and one plan digest. Reusing that UUID
+        with changed input conflicts. Existing workflows require their current full
+        definition digest. Only advertised shared templates can be planned.
+
+        Parameters
+        ----------
+        request_id : str
+
+        template_id : str
+
+        template_version : int
+
+        workspace_id : typing.Optional[str]
+
+        parameters : typing.Optional[typing.Dict[str, typing.Optional[PublicFlowTemplatePlanRequestParametersValue]]]
+
+        workflow_id : typing.Optional[str]
+
+        expected_definition_digest : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        PlanPublicWorkflowTemplateApiV2PublicWorkflowsTemplatesPlanPost200Envelope
+            Successful Response
+
+        Examples
+        --------
+        from sanka_sdk import SankaClient
+
+        client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+        client.workflows.plan_public_workflow_template_api(
+            request_id="request_id",
+            template_id="template_id",
+            template_version=1,
+        )
+        """
+        _response = self._raw_client.plan_public_workflow_template_api(
+            request_id=request_id,
+            template_id=template_id,
+            template_version=template_version,
+            workspace_id=workspace_id,
+            parameters=parameters,
+            workflow_id=workflow_id,
+            expected_definition_digest=expected_definition_digest,
+            request_options=request_options,
+        )
+        return _response.data
+
+    def use_public_workflow_template_api(
+        self,
+        *,
+        request_id: str,
+        plan_digest: str,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> UsePublicWorkflowTemplateApiV2PublicWorkflowsTemplatesUsePost200Envelope:
+        """
+        Construct the exact approved plan as one inactive native workflow.
+
+        Retry the same UUID and digest after a lost response. The receipt retains the
+        original committed definition digest even if a later native edit changed it.
+
+        Parameters
+        ----------
+        request_id : str
+
+        plan_digest : str
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        UsePublicWorkflowTemplateApiV2PublicWorkflowsTemplatesUsePost200Envelope
+            Successful Response
+
+        Examples
+        --------
+        from sanka_sdk import SankaClient
+
+        client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+        client.workflows.use_public_workflow_template_api(
+            request_id="request_id",
+            plan_digest="plan_digest",
+        )
+        """
+        _response = self._raw_client.use_public_workflow_template_api(
+            request_id=request_id, plan_digest=plan_digest, workspace_id=workspace_id, request_options=request_options
+        )
+        return _response.data
+
+    def get_public_workflow_flow_api(
+        self,
+        workflow_id: str,
+        *,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> GetPublicWorkflowFlowApiV2PublicWorkflowsWorkflowIdFlowGet200Envelope:
+        """
+        Read managed settings and the current native definition digest.
+
+        Current values and the last template baseline are separate. Only implemented
+        operations are advertised; this response does not prove workflow execution.
+
+        Parameters
+        ----------
+        workflow_id : str
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        GetPublicWorkflowFlowApiV2PublicWorkflowsWorkflowIdFlowGet200Envelope
+            Successful Response
+
+        Examples
+        --------
+        from sanka_sdk import SankaClient
+
+        client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+        client.workflows.get_public_workflow_flow_api(
+            workflow_id="workflow_id",
+        )
+        """
+        _response = self._raw_client.get_public_workflow_flow_api(
+            workflow_id, workspace_id=workspace_id, request_options=request_options
+        )
+        return _response.data
+
+    def construct_public_workflow_flow_api(
+        self,
+        workflow_id: str,
+        *,
+        plan_digest: str,
+        attempt_id: str,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> ConstructPublicWorkflowFlowApiV2PublicWorkflowsWorkflowIdFlowConstructPost200Envelope:
+        """
+        Apply an approved update while preserving native workflow and node IDs.
+
+        Stale definitions, conflicting independent edits and unsupported active
+        updates are rejected. Retry the original plan and attempt after uncertainty.
+
+        Parameters
+        ----------
+        workflow_id : str
+
+        plan_digest : str
+
+        attempt_id : str
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        ConstructPublicWorkflowFlowApiV2PublicWorkflowsWorkflowIdFlowConstructPost200Envelope
+            Successful Response
+
+        Examples
+        --------
+        from sanka_sdk import SankaClient
+
+        client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+        client.workflows.construct_public_workflow_flow_api(
+            workflow_id="workflow_id",
+            plan_digest="plan_digest",
+            attempt_id="attempt_id",
+        )
+        """
+        _response = self._raw_client.construct_public_workflow_flow_api(
+            workflow_id,
+            plan_digest=plan_digest,
+            attempt_id=attempt_id,
+            workspace_id=workspace_id,
+            request_options=request_options,
         )
         return _response.data
 
@@ -897,5 +1129,256 @@ class AsyncWorkflowsClient:
         """
         _response = await self._raw_client.run_public_workflow_api(
             workflow_id, workspace_id=workspace_id, request=request, request_options=request_options
+        )
+        return _response.data
+
+    async def plan_public_workflow_template_api(
+        self,
+        *,
+        request_id: str,
+        template_id: str,
+        template_version: int,
+        workspace_id: typing.Optional[str] = None,
+        parameters: typing.Optional[
+            typing.Dict[str, typing.Optional[PublicFlowTemplatePlanRequestParametersValue]]
+        ] = OMIT,
+        workflow_id: typing.Optional[str] = OMIT,
+        expected_definition_digest: typing.Optional[str] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> PlanPublicWorkflowTemplateApiV2PublicWorkflowsTemplatesPlanPost200Envelope:
+        """
+        Review a template without writing a workflow definition.
+
+        The request UUID binds immutable input and one plan digest. Reusing that UUID
+        with changed input conflicts. Existing workflows require their current full
+        definition digest. Only advertised shared templates can be planned.
+
+        Parameters
+        ----------
+        request_id : str
+
+        template_id : str
+
+        template_version : int
+
+        workspace_id : typing.Optional[str]
+
+        parameters : typing.Optional[typing.Dict[str, typing.Optional[PublicFlowTemplatePlanRequestParametersValue]]]
+
+        workflow_id : typing.Optional[str]
+
+        expected_definition_digest : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        PlanPublicWorkflowTemplateApiV2PublicWorkflowsTemplatesPlanPost200Envelope
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sanka_sdk import AsyncSankaClient
+
+        client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.workflows.plan_public_workflow_template_api(
+                request_id="request_id",
+                template_id="template_id",
+                template_version=1,
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.plan_public_workflow_template_api(
+            request_id=request_id,
+            template_id=template_id,
+            template_version=template_version,
+            workspace_id=workspace_id,
+            parameters=parameters,
+            workflow_id=workflow_id,
+            expected_definition_digest=expected_definition_digest,
+            request_options=request_options,
+        )
+        return _response.data
+
+    async def use_public_workflow_template_api(
+        self,
+        *,
+        request_id: str,
+        plan_digest: str,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> UsePublicWorkflowTemplateApiV2PublicWorkflowsTemplatesUsePost200Envelope:
+        """
+        Construct the exact approved plan as one inactive native workflow.
+
+        Retry the same UUID and digest after a lost response. The receipt retains the
+        original committed definition digest even if a later native edit changed it.
+
+        Parameters
+        ----------
+        request_id : str
+
+        plan_digest : str
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        UsePublicWorkflowTemplateApiV2PublicWorkflowsTemplatesUsePost200Envelope
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sanka_sdk import AsyncSankaClient
+
+        client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.workflows.use_public_workflow_template_api(
+                request_id="request_id",
+                plan_digest="plan_digest",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.use_public_workflow_template_api(
+            request_id=request_id, plan_digest=plan_digest, workspace_id=workspace_id, request_options=request_options
+        )
+        return _response.data
+
+    async def get_public_workflow_flow_api(
+        self,
+        workflow_id: str,
+        *,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> GetPublicWorkflowFlowApiV2PublicWorkflowsWorkflowIdFlowGet200Envelope:
+        """
+        Read managed settings and the current native definition digest.
+
+        Current values and the last template baseline are separate. Only implemented
+        operations are advertised; this response does not prove workflow execution.
+
+        Parameters
+        ----------
+        workflow_id : str
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        GetPublicWorkflowFlowApiV2PublicWorkflowsWorkflowIdFlowGet200Envelope
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sanka_sdk import AsyncSankaClient
+
+        client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.workflows.get_public_workflow_flow_api(
+                workflow_id="workflow_id",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.get_public_workflow_flow_api(
+            workflow_id, workspace_id=workspace_id, request_options=request_options
+        )
+        return _response.data
+
+    async def construct_public_workflow_flow_api(
+        self,
+        workflow_id: str,
+        *,
+        plan_digest: str,
+        attempt_id: str,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> ConstructPublicWorkflowFlowApiV2PublicWorkflowsWorkflowIdFlowConstructPost200Envelope:
+        """
+        Apply an approved update while preserving native workflow and node IDs.
+
+        Stale definitions, conflicting independent edits and unsupported active
+        updates are rejected. Retry the original plan and attempt after uncertainty.
+
+        Parameters
+        ----------
+        workflow_id : str
+
+        plan_digest : str
+
+        attempt_id : str
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        ConstructPublicWorkflowFlowApiV2PublicWorkflowsWorkflowIdFlowConstructPost200Envelope
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sanka_sdk import AsyncSankaClient
+
+        client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.workflows.construct_public_workflow_flow_api(
+                workflow_id="workflow_id",
+                plan_digest="plan_digest",
+                attempt_id="attempt_id",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.construct_public_workflow_flow_api(
+            workflow_id,
+            plan_digest=plan_digest,
+            attempt_id=attempt_id,
+            workspace_id=workspace_id,
+            request_options=request_options,
         )
         return _response.data
