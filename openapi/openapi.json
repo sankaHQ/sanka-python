@@ -37422,6 +37422,316 @@
         "x-speakeasy-group": "developerCloud",
         "x-speakeasy-name-override": "get_artifact"
       }
+    },
+    "/v2/public/workflows/templates/plan": {
+      "post": {
+        "tags": [
+          "workflows"
+        ],
+        "summary": "Plan Public Workflow Template",
+        "description": "Review a template without writing a workflow definition.\n\nThe request UUID binds immutable input and one plan digest. Reusing that UUID\nwith changed input conflicts. Existing workflows require their current full\ndefinition digest. Only advertised shared templates can be planned.",
+        "operationId": "plan_public_workflow_template_api_v2_public_workflows_templates_plan_post",
+        "parameters": [
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Workspace Id"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/XWorkspaceCode"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PublicFlowTemplatePlanRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlanPublicWorkflowTemplateApiV2PublicWorkflowsTemplatesPlanPost200Envelope"
+                }
+              }
+            },
+            "headers": {
+              "x-ctx-id": {
+                "$ref": "#/components/headers/XCtxId"
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "403": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        },
+        "x-sanka-surface": "public_developer",
+        "x-sanka-api-version": "v2",
+        "x-sanka-auth": "developer_bearer",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/v2/public/workflows/templates/use": {
+      "post": {
+        "tags": [
+          "workflows"
+        ],
+        "summary": "Use Public Workflow Template",
+        "description": "Construct the exact approved plan as one inactive native workflow.\n\nRetry the same UUID and digest after a lost response. The receipt retains the\noriginal committed definition digest even if a later native edit changed it.",
+        "operationId": "use_public_workflow_template_api_v2_public_workflows_templates_use_post",
+        "parameters": [
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Workspace Id"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/XWorkspaceCode"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PublicFlowTemplateUseRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UsePublicWorkflowTemplateApiV2PublicWorkflowsTemplatesUsePost200Envelope"
+                }
+              }
+            },
+            "headers": {
+              "x-ctx-id": {
+                "$ref": "#/components/headers/XCtxId"
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "403": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        },
+        "x-sanka-surface": "public_developer",
+        "x-sanka-api-version": "v2",
+        "x-sanka-auth": "developer_bearer",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/v2/public/workflows/{workflow_id}/flow": {
+      "get": {
+        "tags": [
+          "workflows"
+        ],
+        "summary": "Get Public Workflow Flow",
+        "description": "Read managed settings and the current native definition digest.\n\nCurrent values and the last template baseline are separate. Only implemented\noperations are advertised; this response does not prove workflow execution.",
+        "operationId": "get_public_workflow_flow_api_v2_public_workflows__workflow_id__flow_get",
+        "parameters": [
+          {
+            "name": "workflow_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Workflow Id"
+            }
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Workspace Id"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/XWorkspaceCode"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetPublicWorkflowFlowApiV2PublicWorkflowsWorkflowIdFlowGet200Envelope"
+                }
+              }
+            },
+            "headers": {
+              "x-ctx-id": {
+                "$ref": "#/components/headers/XCtxId"
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "403": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        },
+        "x-sanka-surface": "public_developer",
+        "x-sanka-api-version": "v2",
+        "x-sanka-auth": "developer_bearer",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/v2/public/workflows/{workflow_id}/flow/construct": {
+      "post": {
+        "tags": [
+          "workflows"
+        ],
+        "summary": "Construct Public Workflow Flow",
+        "description": "Apply an approved update while preserving native workflow and node IDs.\n\nStale definitions, conflicting independent edits and unsupported active\nupdates are rejected. Retry the original plan and attempt after uncertainty.",
+        "operationId": "construct_public_workflow_flow_api_v2_public_workflows__workflow_id__flow_construct_post",
+        "parameters": [
+          {
+            "name": "workflow_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Workflow Id"
+            }
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Workspace Id"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/XWorkspaceCode"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PublicFlowConstructRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConstructPublicWorkflowFlowApiV2PublicWorkflowsWorkflowIdFlowConstructPost200Envelope"
+                }
+              }
+            },
+            "headers": {
+              "x-ctx-id": {
+                "$ref": "#/components/headers/XCtxId"
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "403": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        },
+        "x-sanka-surface": "public_developer",
+        "x-sanka-api-version": "v2",
+        "x-sanka-auth": "developer_bearer",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
     }
   },
   "components": {
@@ -58173,6 +58483,630 @@
           "fleets"
         ],
         "title": "FleetListData"
+      },
+      "PublicFlowTemplatePlanRequest": {
+        "properties": {
+          "request_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Request Id"
+          },
+          "template_id": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 1,
+            "title": "Template Id"
+          },
+          "template_version": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Template Version"
+          },
+          "parameters": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "object",
+            "maxProperties": 32,
+            "title": "Parameters"
+          },
+          "workflow_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Workflow Id"
+          },
+          "expected_definition_digest": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^sha256:[0-9a-f]{64}$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Expected Definition Digest"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "request_id",
+          "template_id",
+          "template_version"
+        ],
+        "title": "PublicFlowTemplatePlanRequest"
+      },
+      "PlanPublicWorkflowTemplateApiV2PublicWorkflowsTemplatesPlanPost200Envelope": {
+        "type": "object",
+        "required": [
+          "success",
+          "data",
+          "meta"
+        ],
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "const": true
+          },
+          "data": {
+            "$ref": "#/components/schemas/PublicFlowPlanData"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/EnvelopeMeta"
+          }
+        }
+      },
+      "PublicFlowPlanData": {
+        "properties": {
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Workspace Id"
+          },
+          "request_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Request Id"
+          },
+          "workflow_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Workflow Id"
+          },
+          "plan_digest": {
+            "type": "string",
+            "pattern": "^sha256:[0-9a-f]{64}$",
+            "title": "Plan Digest"
+          },
+          "template_id": {
+            "type": "string",
+            "title": "Template Id"
+          },
+          "template_version": {
+            "type": "integer",
+            "title": "Template Version"
+          },
+          "operation": {
+            "type": "string",
+            "enum": [
+              "create",
+              "update"
+            ],
+            "title": "Operation"
+          },
+          "applicable": {
+            "type": "boolean",
+            "title": "Applicable"
+          },
+          "parameters": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "object",
+            "title": "Parameters"
+          },
+          "changes": {
+            "items": {
+              "$ref": "#/components/schemas/PublicFlowFieldChange"
+            },
+            "type": "array",
+            "title": "Changes"
+          },
+          "conflicts": {
+            "items": {
+              "$ref": "#/components/schemas/PublicFlowConflict"
+            },
+            "type": "array",
+            "title": "Conflicts"
+          },
+          "preserved_fields": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Preserved Fields"
+          },
+          "blocker_codes": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Blocker Codes"
+          },
+          "required_capabilities": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Required Capabilities"
+          },
+          "construction": {
+            "type": "string",
+            "const": "inactive",
+            "title": "Construction",
+            "default": "inactive"
+          }
+        },
+        "type": "object",
+        "required": [
+          "workspace_id",
+          "request_id",
+          "plan_digest",
+          "template_id",
+          "template_version",
+          "operation",
+          "applicable",
+          "parameters"
+        ],
+        "title": "PublicFlowPlanData"
+      },
+      "PublicFlowFieldChange": {
+        "properties": {
+          "key": {
+            "type": "string",
+            "title": "Key"
+          },
+          "before": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "boolean"
+              },
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Before"
+          },
+          "after": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "boolean"
+              },
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "After"
+          }
+        },
+        "type": "object",
+        "required": [
+          "key"
+        ],
+        "title": "PublicFlowFieldChange"
+      },
+      "PublicFlowConflict": {
+        "properties": {
+          "key": {
+            "type": "string",
+            "title": "Key"
+          },
+          "previous": {
+            "$ref": "#/components/schemas/PublicFlowFieldState"
+          },
+          "current": {
+            "$ref": "#/components/schemas/PublicFlowFieldState"
+          },
+          "desired": {
+            "$ref": "#/components/schemas/PublicFlowFieldState"
+          }
+        },
+        "type": "object",
+        "required": [
+          "key",
+          "previous",
+          "current",
+          "desired"
+        ],
+        "title": "PublicFlowConflict"
+      },
+      "PublicFlowFieldState": {
+        "properties": {
+          "present": {
+            "type": "boolean",
+            "title": "Present"
+          },
+          "value": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "boolean"
+              },
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Value"
+          }
+        },
+        "type": "object",
+        "required": [
+          "present"
+        ],
+        "title": "PublicFlowFieldState"
+      },
+      "PublicFlowTemplateUseRequest": {
+        "properties": {
+          "request_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Request Id"
+          },
+          "plan_digest": {
+            "type": "string",
+            "pattern": "^sha256:[0-9a-f]{64}$",
+            "title": "Plan Digest"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "request_id",
+          "plan_digest"
+        ],
+        "title": "PublicFlowTemplateUseRequest"
+      },
+      "UsePublicWorkflowTemplateApiV2PublicWorkflowsTemplatesUsePost200Envelope": {
+        "type": "object",
+        "required": [
+          "success",
+          "data",
+          "meta"
+        ],
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "const": true
+          },
+          "data": {
+            "$ref": "#/components/schemas/PublicFlowConstructData"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/EnvelopeMeta"
+          }
+        }
+      },
+      "PublicFlowConstructData": {
+        "properties": {
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Workspace Id"
+          },
+          "workflow_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Workflow Id"
+          },
+          "request_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Request Id"
+          },
+          "plan_digest": {
+            "type": "string",
+            "pattern": "^sha256:[0-9a-f]{64}$",
+            "title": "Plan Digest"
+          },
+          "definition_digest": {
+            "type": "string",
+            "pattern": "^sha256:[0-9a-f]{64}$",
+            "title": "Definition Digest"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "constructed",
+              "already_constructed"
+            ],
+            "title": "Status"
+          }
+        },
+        "type": "object",
+        "required": [
+          "workspace_id",
+          "workflow_id",
+          "request_id",
+          "plan_digest",
+          "definition_digest",
+          "status"
+        ],
+        "title": "PublicFlowConstructData"
+      },
+      "GetPublicWorkflowFlowApiV2PublicWorkflowsWorkflowIdFlowGet200Envelope": {
+        "type": "object",
+        "required": [
+          "success",
+          "data",
+          "meta"
+        ],
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "const": true
+          },
+          "data": {
+            "$ref": "#/components/schemas/PublicFlowStateData"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/EnvelopeMeta"
+          }
+        }
+      },
+      "PublicFlowStateData": {
+        "properties": {
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Workspace Id"
+          },
+          "workflow_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Workflow Id"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "managed",
+              "unmanaged"
+            ],
+            "title": "Status"
+          },
+          "definition_digest": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^sha256:[0-9a-f]{64}$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Definition Digest"
+          },
+          "active": {
+            "type": "boolean",
+            "title": "Active",
+            "default": false
+          },
+          "parameters": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "object",
+            "title": "Parameters"
+          },
+          "template_parameters": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "object",
+            "title": "Template Parameters"
+          },
+          "available_operations": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Available Operations"
+          }
+        },
+        "type": "object",
+        "required": [
+          "workspace_id",
+          "workflow_id",
+          "status"
+        ],
+        "title": "PublicFlowStateData"
+      },
+      "PublicFlowConstructRequest": {
+        "properties": {
+          "plan_digest": {
+            "type": "string",
+            "pattern": "^sha256:[0-9a-f]{64}$",
+            "title": "Plan Digest"
+          },
+          "attempt_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Attempt Id"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "plan_digest",
+          "attempt_id"
+        ],
+        "title": "PublicFlowConstructRequest"
+      },
+      "ConstructPublicWorkflowFlowApiV2PublicWorkflowsWorkflowIdFlowConstructPost200Envelope": {
+        "type": "object",
+        "required": [
+          "success",
+          "data",
+          "meta"
+        ],
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "const": true
+          },
+          "data": {
+            "$ref": "#/components/schemas/PublicFlowConstructData"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/EnvelopeMeta"
+          }
+        }
       }
     },
     "securitySchemes": {

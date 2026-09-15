@@ -13,6 +13,9 @@ from ..core.unchecked_base_model import construct_type
 from ..errors.forbidden_error import ForbiddenError
 from ..errors.unauthorized_error import UnauthorizedError
 from ..errors.unprocessable_entity_error import UnprocessableEntityError
+from ..types.construct_public_workflow_flow_api_v_2_public_workflows_workflow_id_flow_construct_post_200_envelope import (
+    ConstructPublicWorkflowFlowApiV2PublicWorkflowsWorkflowIdFlowConstructPost200Envelope,
+)
 from ..types.create_public_workflow_api_v_2_public_workflows_post_200_envelope import (
     CreatePublicWorkflowApiV2PublicWorkflowsPost200Envelope,
 )
@@ -23,8 +26,14 @@ from ..types.error_envelope import ErrorEnvelope
 from ..types.get_public_workflow_api_v_2_public_workflows_workflow_id_get_200_envelope import (
     GetPublicWorkflowApiV2PublicWorkflowsWorkflowIdGet200Envelope,
 )
+from ..types.get_public_workflow_flow_api_v_2_public_workflows_workflow_id_flow_get_200_envelope import (
+    GetPublicWorkflowFlowApiV2PublicWorkflowsWorkflowIdFlowGet200Envelope,
+)
 from ..types.list_public_workflows_api_v_2_public_workflows_get_200_envelope import (
     ListPublicWorkflowsApiV2PublicWorkflowsGet200Envelope,
+)
+from ..types.plan_public_workflow_template_api_v_2_public_workflows_templates_plan_post_200_envelope import (
+    PlanPublicWorkflowTemplateApiV2PublicWorkflowsTemplatesPlanPost200Envelope,
 )
 from ..types.public_workflow_run_request import PublicWorkflowRunRequest
 from ..types.run_public_workflow_api_v_2_public_workflows_workflow_id_run_post_200_envelope import (
@@ -33,6 +42,10 @@ from ..types.run_public_workflow_api_v_2_public_workflows_workflow_id_run_post_2
 from ..types.update_public_workflow_api_v_2_public_workflows_workflow_id_patch_200_envelope import (
     UpdatePublicWorkflowApiV2PublicWorkflowsWorkflowIdPatch200Envelope,
 )
+from ..types.use_public_workflow_template_api_v_2_public_workflows_templates_use_post_200_envelope import (
+    UsePublicWorkflowTemplateApiV2PublicWorkflowsTemplatesUsePost200Envelope,
+)
+from .types.public_flow_template_plan_request_parameters_value import PublicFlowTemplatePlanRequestParametersValue
 
 # this is used as the default value for optional parameters
 OMIT = typing.cast(typing.Any, ...)
@@ -690,6 +703,397 @@ class RawWorkflowsClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
+    def plan_public_workflow_template_api(
+        self,
+        *,
+        request_id: str,
+        template_id: str,
+        template_version: int,
+        workspace_id: typing.Optional[str] = None,
+        parameters: typing.Optional[
+            typing.Dict[str, typing.Optional[PublicFlowTemplatePlanRequestParametersValue]]
+        ] = OMIT,
+        workflow_id: typing.Optional[str] = OMIT,
+        expected_definition_digest: typing.Optional[str] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> HttpResponse[PlanPublicWorkflowTemplateApiV2PublicWorkflowsTemplatesPlanPost200Envelope]:
+        """
+        Review a template without writing a workflow definition.
+
+        The request UUID binds immutable input and one plan digest. Reusing that UUID
+        with changed input conflicts. Existing workflows require their current full
+        definition digest. Only advertised shared templates can be planned.
+
+        Parameters
+        ----------
+        request_id : str
+
+        template_id : str
+
+        template_version : int
+
+        workspace_id : typing.Optional[str]
+
+        parameters : typing.Optional[typing.Dict[str, typing.Optional[PublicFlowTemplatePlanRequestParametersValue]]]
+
+        workflow_id : typing.Optional[str]
+
+        expected_definition_digest : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[PlanPublicWorkflowTemplateApiV2PublicWorkflowsTemplatesPlanPost200Envelope]
+            Successful Response
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            "v2/public/workflows/templates/plan",
+            method="POST",
+            params={
+                "workspace_id": workspace_id,
+            },
+            json={
+                "request_id": request_id,
+                "template_id": template_id,
+                "template_version": template_version,
+                "parameters": convert_and_respect_annotation_metadata(
+                    object_=parameters,
+                    annotation=typing.Dict[str, typing.Optional[PublicFlowTemplatePlanRequestParametersValue]],
+                    direction="write",
+                ),
+                "workflow_id": workflow_id,
+                "expected_definition_digest": expected_definition_digest,
+            },
+            headers={
+                "content-type": "application/json",
+            },
+            request_options=request_options,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    PlanPublicWorkflowTemplateApiV2PublicWorkflowsTemplatesPlanPost200Envelope,
+                    construct_type(
+                        type_=PlanPublicWorkflowTemplateApiV2PublicWorkflowsTemplatesPlanPost200Envelope,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    def use_public_workflow_template_api(
+        self,
+        *,
+        request_id: str,
+        plan_digest: str,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> HttpResponse[UsePublicWorkflowTemplateApiV2PublicWorkflowsTemplatesUsePost200Envelope]:
+        """
+        Construct the exact approved plan as one inactive native workflow.
+
+        Retry the same UUID and digest after a lost response. The receipt retains the
+        original committed definition digest even if a later native edit changed it.
+
+        Parameters
+        ----------
+        request_id : str
+
+        plan_digest : str
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[UsePublicWorkflowTemplateApiV2PublicWorkflowsTemplatesUsePost200Envelope]
+            Successful Response
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            "v2/public/workflows/templates/use",
+            method="POST",
+            params={
+                "workspace_id": workspace_id,
+            },
+            json={
+                "request_id": request_id,
+                "plan_digest": plan_digest,
+            },
+            headers={
+                "content-type": "application/json",
+            },
+            request_options=request_options,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    UsePublicWorkflowTemplateApiV2PublicWorkflowsTemplatesUsePost200Envelope,
+                    construct_type(
+                        type_=UsePublicWorkflowTemplateApiV2PublicWorkflowsTemplatesUsePost200Envelope,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    def get_public_workflow_flow_api(
+        self,
+        workflow_id: str,
+        *,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> HttpResponse[GetPublicWorkflowFlowApiV2PublicWorkflowsWorkflowIdFlowGet200Envelope]:
+        """
+        Read managed settings and the current native definition digest.
+
+        Current values and the last template baseline are separate. Only implemented
+        operations are advertised; this response does not prove workflow execution.
+
+        Parameters
+        ----------
+        workflow_id : str
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[GetPublicWorkflowFlowApiV2PublicWorkflowsWorkflowIdFlowGet200Envelope]
+            Successful Response
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            f"v2/public/workflows/{jsonable_encoder(workflow_id)}/flow",
+            method="GET",
+            params={
+                "workspace_id": workspace_id,
+            },
+            request_options=request_options,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    GetPublicWorkflowFlowApiV2PublicWorkflowsWorkflowIdFlowGet200Envelope,
+                    construct_type(
+                        type_=GetPublicWorkflowFlowApiV2PublicWorkflowsWorkflowIdFlowGet200Envelope,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    def construct_public_workflow_flow_api(
+        self,
+        workflow_id: str,
+        *,
+        plan_digest: str,
+        attempt_id: str,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> HttpResponse[ConstructPublicWorkflowFlowApiV2PublicWorkflowsWorkflowIdFlowConstructPost200Envelope]:
+        """
+        Apply an approved update while preserving native workflow and node IDs.
+
+        Stale definitions, conflicting independent edits and unsupported active
+        updates are rejected. Retry the original plan and attempt after uncertainty.
+
+        Parameters
+        ----------
+        workflow_id : str
+
+        plan_digest : str
+
+        attempt_id : str
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[ConstructPublicWorkflowFlowApiV2PublicWorkflowsWorkflowIdFlowConstructPost200Envelope]
+            Successful Response
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            f"v2/public/workflows/{jsonable_encoder(workflow_id)}/flow/construct",
+            method="POST",
+            params={
+                "workspace_id": workspace_id,
+            },
+            json={
+                "plan_digest": plan_digest,
+                "attempt_id": attempt_id,
+            },
+            headers={
+                "content-type": "application/json",
+            },
+            request_options=request_options,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    ConstructPublicWorkflowFlowApiV2PublicWorkflowsWorkflowIdFlowConstructPost200Envelope,
+                    construct_type(
+                        type_=ConstructPublicWorkflowFlowApiV2PublicWorkflowsWorkflowIdFlowConstructPost200Envelope,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
 
 class AsyncRawWorkflowsClient:
     def __init__(self, *, client_wrapper: AsyncClientWrapper):
@@ -1301,6 +1705,397 @@ class AsyncRawWorkflowsClient:
                     RunPublicWorkflowApiV2PublicWorkflowsWorkflowIdRunPost200Envelope,
                     construct_type(
                         type_=RunPublicWorkflowApiV2PublicWorkflowsWorkflowIdRunPost200Envelope,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    async def plan_public_workflow_template_api(
+        self,
+        *,
+        request_id: str,
+        template_id: str,
+        template_version: int,
+        workspace_id: typing.Optional[str] = None,
+        parameters: typing.Optional[
+            typing.Dict[str, typing.Optional[PublicFlowTemplatePlanRequestParametersValue]]
+        ] = OMIT,
+        workflow_id: typing.Optional[str] = OMIT,
+        expected_definition_digest: typing.Optional[str] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> AsyncHttpResponse[PlanPublicWorkflowTemplateApiV2PublicWorkflowsTemplatesPlanPost200Envelope]:
+        """
+        Review a template without writing a workflow definition.
+
+        The request UUID binds immutable input and one plan digest. Reusing that UUID
+        with changed input conflicts. Existing workflows require their current full
+        definition digest. Only advertised shared templates can be planned.
+
+        Parameters
+        ----------
+        request_id : str
+
+        template_id : str
+
+        template_version : int
+
+        workspace_id : typing.Optional[str]
+
+        parameters : typing.Optional[typing.Dict[str, typing.Optional[PublicFlowTemplatePlanRequestParametersValue]]]
+
+        workflow_id : typing.Optional[str]
+
+        expected_definition_digest : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[PlanPublicWorkflowTemplateApiV2PublicWorkflowsTemplatesPlanPost200Envelope]
+            Successful Response
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            "v2/public/workflows/templates/plan",
+            method="POST",
+            params={
+                "workspace_id": workspace_id,
+            },
+            json={
+                "request_id": request_id,
+                "template_id": template_id,
+                "template_version": template_version,
+                "parameters": convert_and_respect_annotation_metadata(
+                    object_=parameters,
+                    annotation=typing.Dict[str, typing.Optional[PublicFlowTemplatePlanRequestParametersValue]],
+                    direction="write",
+                ),
+                "workflow_id": workflow_id,
+                "expected_definition_digest": expected_definition_digest,
+            },
+            headers={
+                "content-type": "application/json",
+            },
+            request_options=request_options,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    PlanPublicWorkflowTemplateApiV2PublicWorkflowsTemplatesPlanPost200Envelope,
+                    construct_type(
+                        type_=PlanPublicWorkflowTemplateApiV2PublicWorkflowsTemplatesPlanPost200Envelope,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    async def use_public_workflow_template_api(
+        self,
+        *,
+        request_id: str,
+        plan_digest: str,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> AsyncHttpResponse[UsePublicWorkflowTemplateApiV2PublicWorkflowsTemplatesUsePost200Envelope]:
+        """
+        Construct the exact approved plan as one inactive native workflow.
+
+        Retry the same UUID and digest after a lost response. The receipt retains the
+        original committed definition digest even if a later native edit changed it.
+
+        Parameters
+        ----------
+        request_id : str
+
+        plan_digest : str
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[UsePublicWorkflowTemplateApiV2PublicWorkflowsTemplatesUsePost200Envelope]
+            Successful Response
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            "v2/public/workflows/templates/use",
+            method="POST",
+            params={
+                "workspace_id": workspace_id,
+            },
+            json={
+                "request_id": request_id,
+                "plan_digest": plan_digest,
+            },
+            headers={
+                "content-type": "application/json",
+            },
+            request_options=request_options,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    UsePublicWorkflowTemplateApiV2PublicWorkflowsTemplatesUsePost200Envelope,
+                    construct_type(
+                        type_=UsePublicWorkflowTemplateApiV2PublicWorkflowsTemplatesUsePost200Envelope,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    async def get_public_workflow_flow_api(
+        self,
+        workflow_id: str,
+        *,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> AsyncHttpResponse[GetPublicWorkflowFlowApiV2PublicWorkflowsWorkflowIdFlowGet200Envelope]:
+        """
+        Read managed settings and the current native definition digest.
+
+        Current values and the last template baseline are separate. Only implemented
+        operations are advertised; this response does not prove workflow execution.
+
+        Parameters
+        ----------
+        workflow_id : str
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[GetPublicWorkflowFlowApiV2PublicWorkflowsWorkflowIdFlowGet200Envelope]
+            Successful Response
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            f"v2/public/workflows/{jsonable_encoder(workflow_id)}/flow",
+            method="GET",
+            params={
+                "workspace_id": workspace_id,
+            },
+            request_options=request_options,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    GetPublicWorkflowFlowApiV2PublicWorkflowsWorkflowIdFlowGet200Envelope,
+                    construct_type(
+                        type_=GetPublicWorkflowFlowApiV2PublicWorkflowsWorkflowIdFlowGet200Envelope,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    async def construct_public_workflow_flow_api(
+        self,
+        workflow_id: str,
+        *,
+        plan_digest: str,
+        attempt_id: str,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> AsyncHttpResponse[ConstructPublicWorkflowFlowApiV2PublicWorkflowsWorkflowIdFlowConstructPost200Envelope]:
+        """
+        Apply an approved update while preserving native workflow and node IDs.
+
+        Stale definitions, conflicting independent edits and unsupported active
+        updates are rejected. Retry the original plan and attempt after uncertainty.
+
+        Parameters
+        ----------
+        workflow_id : str
+
+        plan_digest : str
+
+        attempt_id : str
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[ConstructPublicWorkflowFlowApiV2PublicWorkflowsWorkflowIdFlowConstructPost200Envelope]
+            Successful Response
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            f"v2/public/workflows/{jsonable_encoder(workflow_id)}/flow/construct",
+            method="POST",
+            params={
+                "workspace_id": workspace_id,
+            },
+            json={
+                "plan_digest": plan_digest,
+                "attempt_id": attempt_id,
+            },
+            headers={
+                "content-type": "application/json",
+            },
+            request_options=request_options,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    ConstructPublicWorkflowFlowApiV2PublicWorkflowsWorkflowIdFlowConstructPost200Envelope,
+                    construct_type(
+                        type_=ConstructPublicWorkflowFlowApiV2PublicWorkflowsWorkflowIdFlowConstructPost200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
