@@ -6,7 +6,8 @@ This package is generated from Sanka's OpenAPI spec using Fern, then packaged lo
 
 ## Install
 
-Python 3.9 or newer is required. CI tests every minor from Python 3.9 through Python 3.14.
+Python 3.10 or newer is required. CI tests every minor from Python 3.10 through Python 3.14.
+Python 3.9 is no longer supported because the patched AnyIO TLS dependency requires Python 3.10+.
 
 ```bash
 uv add sanka-sdk
