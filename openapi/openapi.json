@@ -7711,6 +7711,155 @@
             "bearerAuth": []
           }
         ]
+      },
+      "post": {
+        "tags": [
+          "deals"
+        ],
+        "summary": "Create Public Deal Pipeline",
+        "operationId": "create_public_deal_pipeline_api_v2_public_deals_pipelines_post",
+        "parameters": [
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Workspace Id"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/XWorkspaceCode"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DealPipelineCreateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreatePublicDealPipelineApiV2PublicDealsPipelinesPost201Envelope"
+                }
+              }
+            },
+            "headers": {
+              "x-ctx-id": {
+                "$ref": "#/components/headers/XCtxId"
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        },
+        "x-sanka-surface": "public_developer",
+        "x-sanka-api-version": "v2",
+        "x-sanka-auth": "developer_bearer",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/v2/public/deals/pipelines/{pipeline_id}": {
+      "patch": {
+        "tags": [
+          "deals"
+        ],
+        "summary": "Update Public Deal Pipeline",
+        "operationId": "update_public_deal_pipeline_api_v2_public_deals_pipelines__pipeline_id__patch",
+        "parameters": [
+          {
+            "name": "pipeline_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Pipeline Id"
+            }
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Workspace Id"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/XWorkspaceCode"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DealPipelineUpdateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdatePublicDealPipelineApiV2PublicDealsPipelinesPipelineIdPatch200Envelope"
+                }
+              }
+            },
+            "headers": {
+              "x-ctx-id": {
+                "$ref": "#/components/headers/XCtxId"
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        },
+        "x-sanka-surface": "public_developer",
+        "x-sanka-api-version": "v2",
+        "x-sanka-auth": "developer_bearer",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
       }
     },
     "/v2/public/deals/{deal_id}": {
@@ -38992,6 +39141,26 @@
           }
         }
       },
+      "CreatePublicDealPipelineApiV2PublicDealsPipelinesPost201Envelope": {
+        "type": "object",
+        "required": [
+          "success",
+          "data",
+          "meta"
+        ],
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "const": true
+          },
+          "data": {
+            "$ref": "#/components/schemas/DealPipelineData"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/EnvelopeMeta"
+          }
+        }
+      },
       "CreatePublicDeveloperPropertyApiV2PublicPropertiesObjectNamePost200Envelope": {
         "type": "object",
         "required": [
@@ -48829,6 +48998,26 @@
           }
         }
       },
+      "UpdatePublicDealPipelineApiV2PublicDealsPipelinesPipelineIdPatch200Envelope": {
+        "type": "object",
+        "required": [
+          "success",
+          "data",
+          "meta"
+        ],
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "const": true
+          },
+          "data": {
+            "$ref": "#/components/schemas/DealPipelineData"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/EnvelopeMeta"
+          }
+        }
+      },
       "UpdatePublicDeveloperPropertyApiV2PublicPropertiesObjectNamePropertyRefPut200Envelope": {
         "type": "object",
         "required": [
@@ -50234,6 +50423,46 @@
         },
         "type": "object",
         "title": "AssociationEdgeMutationData"
+      },
+      "DealPipelineData": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "internal_name": {
+            "type": "string",
+            "title": "Internal Name"
+          },
+          "is_default": {
+            "type": "boolean",
+            "title": "Is Default",
+            "default": false
+          },
+          "order": {
+            "type": "integer",
+            "title": "Order",
+            "default": 0
+          },
+          "stages": {
+            "items": {
+              "$ref": "#/components/schemas/DealPipelineStageData"
+            },
+            "type": "array",
+            "title": "Stages"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "internal_name"
+        ],
+        "title": "DealPipelineData"
       },
       "FerryDiagramData": {
         "properties": {
@@ -53011,6 +53240,49 @@
           "target_ref"
         ],
         "title": "AssociationEdge"
+      },
+      "DealPipelineStageData": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "internal_value": {
+            "type": "string",
+            "title": "Internal Value"
+          },
+          "score": {
+            "type": "integer",
+            "title": "Score",
+            "default": 0
+          },
+          "order": {
+            "type": "integer",
+            "title": "Order",
+            "default": 0
+          },
+          "is_default": {
+            "type": "boolean",
+            "title": "Is Default",
+            "default": false
+          },
+          "is_hidden": {
+            "type": "boolean",
+            "title": "Is Hidden",
+            "default": false
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "internal_value"
+        ],
+        "title": "DealPipelineStageData"
       },
       "FerryProgramEndpoint": {
         "properties": {
@@ -55816,6 +56088,90 @@
           }
         }
       },
+      "DealPipelineCreateRequest": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Name"
+          },
+          "is_default": {
+            "type": "boolean",
+            "title": "Is Default",
+            "description": "Make this the workspace's default Deal pipeline.",
+            "default": false
+          },
+          "stages": {
+            "items": {
+              "$ref": "#/components/schemas/DealPipelineStageCreate"
+            },
+            "type": "array",
+            "title": "Stages",
+            "description": "Ordered stages. When empty the standard default stages are created."
+          }
+        },
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "title": "DealPipelineCreateRequest"
+      },
+      "DealPipelineUpdateRequest": {
+        "properties": {
+          "name": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 200,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "is_default": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Is Default",
+            "description": "Set true to make this the workspace's default Deal pipeline."
+          },
+          "stages": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/DealPipelineStageUpdate"
+                },
+                "type": "array",
+                "minItems": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Stages",
+            "description": "Complete ordered stage list. Every existing stage must appear here by id or in removed_stages. Omit it to keep the current stages and order."
+          },
+          "removed_stages": {
+            "items": {
+              "$ref": "#/components/schemas/DealPipelineStageRemoval"
+            },
+            "type": "array",
+            "title": "Removed Stages",
+            "description": "Stages to delete. A stage is only deleted when listed here."
+          }
+        },
+        "type": "object",
+        "title": "DealPipelineUpdateRequest"
+      },
       "PositionUpdateRequest": {
         "properties": {
           "expected_version": {
@@ -56285,6 +56641,163 @@
           "version"
         ],
         "title": "WorkforcePositionData"
+      },
+      "DealPipelineStageCreate": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Name"
+          },
+          "internal_value": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 100,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Internal Value",
+            "description": "Value stored on Deals in this stage. Derived from the name when omitted; normalized to lowercase letters, digits and underscores."
+          },
+          "score": {
+            "type": "integer",
+            "maximum": 100.0,
+            "minimum": 0.0,
+            "title": "Score",
+            "default": 0
+          },
+          "is_default": {
+            "type": "boolean",
+            "title": "Is Default",
+            "description": "Exactly one stage is the default. The first stage is used when none is.",
+            "default": false
+          },
+          "is_hidden": {
+            "type": "boolean",
+            "title": "Is Hidden",
+            "default": false
+          }
+        },
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "title": "DealPipelineStageCreate"
+      },
+      "DealPipelineStageRemoval": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Id"
+          },
+          "replacement_stage_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Replacement Stage Id",
+            "description": "Kept stage of the same pipeline that receives this stage's Deals. Required when Deals use the removed stage."
+          }
+        },
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "title": "DealPipelineStageRemoval"
+      },
+      "DealPipelineStageUpdate": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Id",
+            "description": "Existing stage id. Omit it to add a new stage at this position."
+          },
+          "name": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 200,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name",
+            "description": "Required for a new stage; an existing stage keeps its name when omitted."
+          },
+          "internal_value": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 100,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Internal Value",
+            "description": "An existing stage keeps its value when omitted. Changing it moves the stage's Deals to the new value."
+          },
+          "score": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 100.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Score"
+          },
+          "is_default": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Is Default",
+            "description": "Set true on one stage to make it the default. Omit it everywhere to keep the current default stage."
+          },
+          "is_hidden": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Is Hidden"
+          }
+        },
+        "type": "object",
+        "title": "DealPipelineStageUpdate"
       },
       "UnassignedJobData": {
         "properties": {

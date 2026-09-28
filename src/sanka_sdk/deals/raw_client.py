@@ -8,12 +8,19 @@ from ..core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ..core.http_response import AsyncHttpResponse, HttpResponse
 from ..core.jsonable_encoder import jsonable_encoder
 from ..core.request_options import RequestOptions
+from ..core.serialization import convert_and_respect_annotation_metadata
 from ..core.unchecked_base_model import construct_type
 from ..errors.unauthorized_error import UnauthorizedError
 from ..errors.unprocessable_entity_error import UnprocessableEntityError
 from ..types.create_public_deal_api_v_2_public_deals_post_200_envelope import (
     CreatePublicDealApiV2PublicDealsPost200Envelope,
 )
+from ..types.create_public_deal_pipeline_api_v_2_public_deals_pipelines_post_201_envelope import (
+    CreatePublicDealPipelineApiV2PublicDealsPipelinesPost201Envelope,
+)
+from ..types.deal_pipeline_stage_create import DealPipelineStageCreate
+from ..types.deal_pipeline_stage_removal import DealPipelineStageRemoval
+from ..types.deal_pipeline_stage_update import DealPipelineStageUpdate
 from ..types.delete_public_deal_api_v_2_public_deals_deal_id_delete_200_envelope import (
     DeletePublicDealApiV2PublicDealsDealIdDelete200Envelope,
 )
@@ -29,6 +36,9 @@ from ..types.list_public_deals_api_v_2_public_deals_get_200_envelope import (
 )
 from ..types.update_public_deal_api_v_2_public_deals_deal_id_put_200_envelope import (
     UpdatePublicDealApiV2PublicDealsDealIdPut200Envelope,
+)
+from ..types.update_public_deal_pipeline_api_v_2_public_deals_pipelines_pipeline_id_patch_200_envelope import (
+    UpdatePublicDealPipelineApiV2PublicDealsPipelinesPipelineIdPatch200Envelope,
 )
 
 # this is used as the default value for optional parameters
@@ -313,6 +323,190 @@ class RawDealsClient:
                     ListPublicDealPipelinesApiV2PublicDealsPipelinesGet200Envelope,
                     construct_type(
                         type_=ListPublicDealPipelinesApiV2PublicDealsPipelinesGet200Envelope,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    def create_public_deal_pipeline_api(
+        self,
+        *,
+        name: str,
+        workspace_id: typing.Optional[str] = None,
+        is_default: typing.Optional[bool] = OMIT,
+        stages: typing.Optional[typing.Sequence[DealPipelineStageCreate]] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> HttpResponse[CreatePublicDealPipelineApiV2PublicDealsPipelinesPost201Envelope]:
+        """
+        Parameters
+        ----------
+        name : str
+
+        workspace_id : typing.Optional[str]
+
+        is_default : typing.Optional[bool]
+            Make this the workspace's default Deal pipeline.
+
+        stages : typing.Optional[typing.Sequence[DealPipelineStageCreate]]
+            Ordered stages. When empty the standard default stages are created.
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[CreatePublicDealPipelineApiV2PublicDealsPipelinesPost201Envelope]
+            Successful Response
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            "v2/public/deals/pipelines",
+            method="POST",
+            params={
+                "workspace_id": workspace_id,
+            },
+            json={
+                "name": name,
+                "is_default": is_default,
+                "stages": convert_and_respect_annotation_metadata(
+                    object_=stages, annotation=typing.Sequence[DealPipelineStageCreate], direction="write"
+                ),
+            },
+            headers={
+                "content-type": "application/json",
+            },
+            request_options=request_options,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    CreatePublicDealPipelineApiV2PublicDealsPipelinesPost201Envelope,
+                    construct_type(
+                        type_=CreatePublicDealPipelineApiV2PublicDealsPipelinesPost201Envelope,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    def update_public_deal_pipeline_api(
+        self,
+        pipeline_id: str,
+        *,
+        workspace_id: typing.Optional[str] = None,
+        name: typing.Optional[str] = OMIT,
+        is_default: typing.Optional[bool] = OMIT,
+        stages: typing.Optional[typing.Sequence[DealPipelineStageUpdate]] = OMIT,
+        removed_stages: typing.Optional[typing.Sequence[DealPipelineStageRemoval]] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> HttpResponse[UpdatePublicDealPipelineApiV2PublicDealsPipelinesPipelineIdPatch200Envelope]:
+        """
+        Parameters
+        ----------
+        pipeline_id : str
+
+        workspace_id : typing.Optional[str]
+
+        name : typing.Optional[str]
+
+        is_default : typing.Optional[bool]
+            Set true to make this the workspace's default Deal pipeline.
+
+        stages : typing.Optional[typing.Sequence[DealPipelineStageUpdate]]
+            Complete ordered stage list. Every existing stage must appear here by id or in removed_stages. Omit it to keep the current stages and order.
+
+        removed_stages : typing.Optional[typing.Sequence[DealPipelineStageRemoval]]
+            Stages to delete. A stage is only deleted when listed here.
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[UpdatePublicDealPipelineApiV2PublicDealsPipelinesPipelineIdPatch200Envelope]
+            Successful Response
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            f"v2/public/deals/pipelines/{jsonable_encoder(pipeline_id)}",
+            method="PATCH",
+            params={
+                "workspace_id": workspace_id,
+            },
+            json={
+                "name": name,
+                "is_default": is_default,
+                "stages": convert_and_respect_annotation_metadata(
+                    object_=stages,
+                    annotation=typing.Optional[typing.Sequence[DealPipelineStageUpdate]],
+                    direction="write",
+                ),
+                "removed_stages": convert_and_respect_annotation_metadata(
+                    object_=removed_stages, annotation=typing.Sequence[DealPipelineStageRemoval], direction="write"
+                ),
+            },
+            headers={
+                "content-type": "application/json",
+            },
+            request_options=request_options,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    UpdatePublicDealPipelineApiV2PublicDealsPipelinesPipelineIdPatch200Envelope,
+                    construct_type(
+                        type_=UpdatePublicDealPipelineApiV2PublicDealsPipelinesPipelineIdPatch200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
@@ -918,6 +1112,190 @@ class AsyncRawDealsClient:
                     ListPublicDealPipelinesApiV2PublicDealsPipelinesGet200Envelope,
                     construct_type(
                         type_=ListPublicDealPipelinesApiV2PublicDealsPipelinesGet200Envelope,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    async def create_public_deal_pipeline_api(
+        self,
+        *,
+        name: str,
+        workspace_id: typing.Optional[str] = None,
+        is_default: typing.Optional[bool] = OMIT,
+        stages: typing.Optional[typing.Sequence[DealPipelineStageCreate]] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> AsyncHttpResponse[CreatePublicDealPipelineApiV2PublicDealsPipelinesPost201Envelope]:
+        """
+        Parameters
+        ----------
+        name : str
+
+        workspace_id : typing.Optional[str]
+
+        is_default : typing.Optional[bool]
+            Make this the workspace's default Deal pipeline.
+
+        stages : typing.Optional[typing.Sequence[DealPipelineStageCreate]]
+            Ordered stages. When empty the standard default stages are created.
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[CreatePublicDealPipelineApiV2PublicDealsPipelinesPost201Envelope]
+            Successful Response
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            "v2/public/deals/pipelines",
+            method="POST",
+            params={
+                "workspace_id": workspace_id,
+            },
+            json={
+                "name": name,
+                "is_default": is_default,
+                "stages": convert_and_respect_annotation_metadata(
+                    object_=stages, annotation=typing.Sequence[DealPipelineStageCreate], direction="write"
+                ),
+            },
+            headers={
+                "content-type": "application/json",
+            },
+            request_options=request_options,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    CreatePublicDealPipelineApiV2PublicDealsPipelinesPost201Envelope,
+                    construct_type(
+                        type_=CreatePublicDealPipelineApiV2PublicDealsPipelinesPost201Envelope,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    async def update_public_deal_pipeline_api(
+        self,
+        pipeline_id: str,
+        *,
+        workspace_id: typing.Optional[str] = None,
+        name: typing.Optional[str] = OMIT,
+        is_default: typing.Optional[bool] = OMIT,
+        stages: typing.Optional[typing.Sequence[DealPipelineStageUpdate]] = OMIT,
+        removed_stages: typing.Optional[typing.Sequence[DealPipelineStageRemoval]] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> AsyncHttpResponse[UpdatePublicDealPipelineApiV2PublicDealsPipelinesPipelineIdPatch200Envelope]:
+        """
+        Parameters
+        ----------
+        pipeline_id : str
+
+        workspace_id : typing.Optional[str]
+
+        name : typing.Optional[str]
+
+        is_default : typing.Optional[bool]
+            Set true to make this the workspace's default Deal pipeline.
+
+        stages : typing.Optional[typing.Sequence[DealPipelineStageUpdate]]
+            Complete ordered stage list. Every existing stage must appear here by id or in removed_stages. Omit it to keep the current stages and order.
+
+        removed_stages : typing.Optional[typing.Sequence[DealPipelineStageRemoval]]
+            Stages to delete. A stage is only deleted when listed here.
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[UpdatePublicDealPipelineApiV2PublicDealsPipelinesPipelineIdPatch200Envelope]
+            Successful Response
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            f"v2/public/deals/pipelines/{jsonable_encoder(pipeline_id)}",
+            method="PATCH",
+            params={
+                "workspace_id": workspace_id,
+            },
+            json={
+                "name": name,
+                "is_default": is_default,
+                "stages": convert_and_respect_annotation_metadata(
+                    object_=stages,
+                    annotation=typing.Optional[typing.Sequence[DealPipelineStageUpdate]],
+                    direction="write",
+                ),
+                "removed_stages": convert_and_respect_annotation_metadata(
+                    object_=removed_stages, annotation=typing.Sequence[DealPipelineStageRemoval], direction="write"
+                ),
+            },
+            headers={
+                "content-type": "application/json",
+            },
+            request_options=request_options,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    UpdatePublicDealPipelineApiV2PublicDealsPipelinesPipelineIdPatch200Envelope,
+                    construct_type(
+                        type_=UpdatePublicDealPipelineApiV2PublicDealsPipelinesPipelineIdPatch200Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
