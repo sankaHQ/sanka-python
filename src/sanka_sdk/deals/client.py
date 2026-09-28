@@ -7,6 +7,12 @@ from ..core.request_options import RequestOptions
 from ..types.create_public_deal_api_v_2_public_deals_post_200_envelope import (
     CreatePublicDealApiV2PublicDealsPost200Envelope,
 )
+from ..types.create_public_deal_pipeline_api_v_2_public_deals_pipelines_post_201_envelope import (
+    CreatePublicDealPipelineApiV2PublicDealsPipelinesPost201Envelope,
+)
+from ..types.deal_pipeline_stage_create import DealPipelineStageCreate
+from ..types.deal_pipeline_stage_removal import DealPipelineStageRemoval
+from ..types.deal_pipeline_stage_update import DealPipelineStageUpdate
 from ..types.delete_public_deal_api_v_2_public_deals_deal_id_delete_200_envelope import (
     DeletePublicDealApiV2PublicDealsDealIdDelete200Envelope,
 )
@@ -21,6 +27,9 @@ from ..types.list_public_deals_api_v_2_public_deals_get_200_envelope import (
 )
 from ..types.update_public_deal_api_v_2_public_deals_deal_id_put_200_envelope import (
     UpdatePublicDealApiV2PublicDealsDealIdPut200Envelope,
+)
+from ..types.update_public_deal_pipeline_api_v_2_public_deals_pipelines_pipeline_id_patch_200_envelope import (
+    UpdatePublicDealPipelineApiV2PublicDealsPipelinesPipelineIdPatch200Envelope,
 )
 from .raw_client import AsyncRawDealsClient, RawDealsClient
 
@@ -249,6 +258,113 @@ class DealsClient:
         """
         _response = self._raw_client.list_public_deal_pipelines_api(
             workspace_id=workspace_id, request_options=request_options
+        )
+        return _response.data
+
+    def create_public_deal_pipeline_api(
+        self,
+        *,
+        name: str,
+        workspace_id: typing.Optional[str] = None,
+        is_default: typing.Optional[bool] = OMIT,
+        stages: typing.Optional[typing.Sequence[DealPipelineStageCreate]] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> CreatePublicDealPipelineApiV2PublicDealsPipelinesPost201Envelope:
+        """
+        Parameters
+        ----------
+        name : str
+
+        workspace_id : typing.Optional[str]
+
+        is_default : typing.Optional[bool]
+            Make this the workspace's default Deal pipeline.
+
+        stages : typing.Optional[typing.Sequence[DealPipelineStageCreate]]
+            Ordered stages. When empty the standard default stages are created.
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        CreatePublicDealPipelineApiV2PublicDealsPipelinesPost201Envelope
+            Successful Response
+
+        Examples
+        --------
+        from sanka_sdk import SankaClient
+
+        client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+        client.deals.create_public_deal_pipeline_api(
+            name="name",
+        )
+        """
+        _response = self._raw_client.create_public_deal_pipeline_api(
+            name=name, workspace_id=workspace_id, is_default=is_default, stages=stages, request_options=request_options
+        )
+        return _response.data
+
+    def update_public_deal_pipeline_api(
+        self,
+        pipeline_id: str,
+        *,
+        workspace_id: typing.Optional[str] = None,
+        name: typing.Optional[str] = OMIT,
+        is_default: typing.Optional[bool] = OMIT,
+        stages: typing.Optional[typing.Sequence[DealPipelineStageUpdate]] = OMIT,
+        removed_stages: typing.Optional[typing.Sequence[DealPipelineStageRemoval]] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> UpdatePublicDealPipelineApiV2PublicDealsPipelinesPipelineIdPatch200Envelope:
+        """
+        Parameters
+        ----------
+        pipeline_id : str
+
+        workspace_id : typing.Optional[str]
+
+        name : typing.Optional[str]
+
+        is_default : typing.Optional[bool]
+            Set true to make this the workspace's default Deal pipeline.
+
+        stages : typing.Optional[typing.Sequence[DealPipelineStageUpdate]]
+            Complete ordered stage list. Every existing stage must appear here by id or in removed_stages. Omit it to keep the current stages and order.
+
+        removed_stages : typing.Optional[typing.Sequence[DealPipelineStageRemoval]]
+            Stages to delete. A stage is only deleted when listed here.
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        UpdatePublicDealPipelineApiV2PublicDealsPipelinesPipelineIdPatch200Envelope
+            Successful Response
+
+        Examples
+        --------
+        from sanka_sdk import SankaClient
+
+        client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+        client.deals.update_public_deal_pipeline_api(
+            pipeline_id="pipeline_id",
+        )
+        """
+        _response = self._raw_client.update_public_deal_pipeline_api(
+            pipeline_id,
+            workspace_id=workspace_id,
+            name=name,
+            is_default=is_default,
+            stages=stages,
+            removed_stages=removed_stages,
+            request_options=request_options,
         )
         return _response.data
 
@@ -709,6 +825,129 @@ class AsyncDealsClient:
         """
         _response = await self._raw_client.list_public_deal_pipelines_api(
             workspace_id=workspace_id, request_options=request_options
+        )
+        return _response.data
+
+    async def create_public_deal_pipeline_api(
+        self,
+        *,
+        name: str,
+        workspace_id: typing.Optional[str] = None,
+        is_default: typing.Optional[bool] = OMIT,
+        stages: typing.Optional[typing.Sequence[DealPipelineStageCreate]] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> CreatePublicDealPipelineApiV2PublicDealsPipelinesPost201Envelope:
+        """
+        Parameters
+        ----------
+        name : str
+
+        workspace_id : typing.Optional[str]
+
+        is_default : typing.Optional[bool]
+            Make this the workspace's default Deal pipeline.
+
+        stages : typing.Optional[typing.Sequence[DealPipelineStageCreate]]
+            Ordered stages. When empty the standard default stages are created.
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        CreatePublicDealPipelineApiV2PublicDealsPipelinesPost201Envelope
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sanka_sdk import AsyncSankaClient
+
+        client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.deals.create_public_deal_pipeline_api(
+                name="name",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.create_public_deal_pipeline_api(
+            name=name, workspace_id=workspace_id, is_default=is_default, stages=stages, request_options=request_options
+        )
+        return _response.data
+
+    async def update_public_deal_pipeline_api(
+        self,
+        pipeline_id: str,
+        *,
+        workspace_id: typing.Optional[str] = None,
+        name: typing.Optional[str] = OMIT,
+        is_default: typing.Optional[bool] = OMIT,
+        stages: typing.Optional[typing.Sequence[DealPipelineStageUpdate]] = OMIT,
+        removed_stages: typing.Optional[typing.Sequence[DealPipelineStageRemoval]] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> UpdatePublicDealPipelineApiV2PublicDealsPipelinesPipelineIdPatch200Envelope:
+        """
+        Parameters
+        ----------
+        pipeline_id : str
+
+        workspace_id : typing.Optional[str]
+
+        name : typing.Optional[str]
+
+        is_default : typing.Optional[bool]
+            Set true to make this the workspace's default Deal pipeline.
+
+        stages : typing.Optional[typing.Sequence[DealPipelineStageUpdate]]
+            Complete ordered stage list. Every existing stage must appear here by id or in removed_stages. Omit it to keep the current stages and order.
+
+        removed_stages : typing.Optional[typing.Sequence[DealPipelineStageRemoval]]
+            Stages to delete. A stage is only deleted when listed here.
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        UpdatePublicDealPipelineApiV2PublicDealsPipelinesPipelineIdPatch200Envelope
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sanka_sdk import AsyncSankaClient
+
+        client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.deals.update_public_deal_pipeline_api(
+                pipeline_id="pipeline_id",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.update_public_deal_pipeline_api(
+            pipeline_id,
+            workspace_id=workspace_id,
+            name=name,
+            is_default=is_default,
+            stages=stages,
+            removed_stages=removed_stages,
+            request_options=request_options,
         )
         return _response.data
 
