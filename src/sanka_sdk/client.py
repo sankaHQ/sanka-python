@@ -30,6 +30,7 @@ if typing.TYPE_CHECKING:
     from .ferry_diagrams.client import AsyncFerryDiagramsClient, FerryDiagramsClient
     from .ferry_programs.client import AsyncFerryProgramsClient, FerryProgramsClient
     from .files.client import AsyncFilesClient, FilesClient
+    from .goals.client import AsyncGoalsClient, GoalsClient
     from .imports.client import AsyncImportsClient, ImportsClient
     from .incentives.client import AsyncIncentivesClient, IncentivesClient
     from .interviews.client import AsyncInterviewsClient, InterviewsClient
@@ -147,6 +148,7 @@ class SankaClient:
         self._companies: typing.Optional[CompaniesClient] = None
         self._contacts: typing.Optional[ContactsClient] = None
         self._custom_objects: typing.Optional[CustomObjectsClient] = None
+        self._goals: typing.Optional[GoalsClient] = None
         self._deals: typing.Optional[DealsClient] = None
         self._disbursements: typing.Optional[DisbursementsClient] = None
         self._employees: typing.Optional[EmployeesClient] = None
@@ -286,6 +288,14 @@ class SankaClient:
 
             self._custom_objects = CustomObjectsClient(client_wrapper=self._client_wrapper)
         return self._custom_objects
+
+    @property
+    def goals(self):
+        if self._goals is None:
+            from .goals.client import GoalsClient  # noqa: E402
+
+            self._goals = GoalsClient(client_wrapper=self._client_wrapper)
+        return self._goals
 
     @property
     def deals(self):
@@ -713,6 +723,7 @@ class AsyncSankaClient:
         self._companies: typing.Optional[AsyncCompaniesClient] = None
         self._contacts: typing.Optional[AsyncContactsClient] = None
         self._custom_objects: typing.Optional[AsyncCustomObjectsClient] = None
+        self._goals: typing.Optional[AsyncGoalsClient] = None
         self._deals: typing.Optional[AsyncDealsClient] = None
         self._disbursements: typing.Optional[AsyncDisbursementsClient] = None
         self._employees: typing.Optional[AsyncEmployeesClient] = None
@@ -852,6 +863,14 @@ class AsyncSankaClient:
 
             self._custom_objects = AsyncCustomObjectsClient(client_wrapper=self._client_wrapper)
         return self._custom_objects
+
+    @property
+    def goals(self):
+        if self._goals is None:
+            from .goals.client import AsyncGoalsClient  # noqa: E402
+
+            self._goals = AsyncGoalsClient(client_wrapper=self._client_wrapper)
+        return self._goals
 
     @property
     def deals(self):
