@@ -69,6 +69,9 @@
       "name": "files"
     },
     {
+      "name": "goals"
+    },
+    {
       "name": "imports"
     },
     {
@@ -7242,6 +7245,811 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ArchivePublicCustomObjectRecordCompatibilityApiV2PublicRecordsCustomObjectsRecordsRecordIdArchivePost200Envelope"
+                }
+              }
+            },
+            "headers": {
+              "x-ctx-id": {
+                "$ref": "#/components/headers/XCtxId"
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        },
+        "x-sanka-surface": "public_developer",
+        "x-sanka-api-version": "v2",
+        "x-sanka-auth": "developer_bearer",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/v2/public/goals": {
+      "get": {
+        "tags": [
+          "goals"
+        ],
+        "summary": "List Public Goals",
+        "operationId": "list_public_goals",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1,
+              "title": "Page"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "default": 100,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "language",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 8
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Language"
+            }
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Workspace Id"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/XWorkspaceCode"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListPublicGoals200Envelope"
+                }
+              }
+            },
+            "headers": {
+              "x-ctx-id": {
+                "$ref": "#/components/headers/XCtxId"
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        },
+        "x-sanka-surface": "public_developer",
+        "x-sanka-api-version": "v2",
+        "x-sanka-auth": "developer_bearer",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "goals"
+        ],
+        "summary": "Create Public Goal",
+        "operationId": "create_public_goal",
+        "parameters": [
+          {
+            "name": "language",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 8
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Language"
+            }
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Workspace Id"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/XWorkspaceCode"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GoalCreateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreatePublicGoal201Envelope"
+                }
+              }
+            },
+            "headers": {
+              "x-ctx-id": {
+                "$ref": "#/components/headers/XCtxId"
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        },
+        "x-sanka-surface": "public_developer",
+        "x-sanka-api-version": "v2",
+        "x-sanka-auth": "developer_bearer",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/v2/public/goals/metrics": {
+      "get": {
+        "tags": [
+          "goals"
+        ],
+        "summary": "List Public Goal Metrics",
+        "operationId": "list_public_goal_metrics",
+        "parameters": [
+          {
+            "name": "language",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 8
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Language"
+            }
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Workspace Id"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/XWorkspaceCode"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListPublicGoalMetrics200Envelope"
+                }
+              }
+            },
+            "headers": {
+              "x-ctx-id": {
+                "$ref": "#/components/headers/XCtxId"
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        },
+        "x-sanka-surface": "public_developer",
+        "x-sanka-api-version": "v2",
+        "x-sanka-auth": "developer_bearer",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/v2/public/goals/{goal_id}": {
+      "get": {
+        "tags": [
+          "goals"
+        ],
+        "summary": "Get Public Goal",
+        "operationId": "get_public_goal",
+        "parameters": [
+          {
+            "name": "goal_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Goal Id"
+            }
+          },
+          {
+            "name": "fiscal_year",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer",
+                  "maximum": 2100,
+                  "minimum": 2000
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Fiscal Year"
+            }
+          },
+          {
+            "name": "language",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 8
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Language"
+            }
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Workspace Id"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/XWorkspaceCode"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetPublicGoal200Envelope"
+                }
+              }
+            },
+            "headers": {
+              "x-ctx-id": {
+                "$ref": "#/components/headers/XCtxId"
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        },
+        "x-sanka-surface": "public_developer",
+        "x-sanka-api-version": "v2",
+        "x-sanka-auth": "developer_bearer",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "patch": {
+        "tags": [
+          "goals"
+        ],
+        "summary": "Update Public Goal",
+        "operationId": "update_public_goal",
+        "parameters": [
+          {
+            "name": "goal_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Goal Id"
+            }
+          },
+          {
+            "name": "language",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 8
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Language"
+            }
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Workspace Id"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/XWorkspaceCode"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GoalUpdateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdatePublicGoal200Envelope"
+                }
+              }
+            },
+            "headers": {
+              "x-ctx-id": {
+                "$ref": "#/components/headers/XCtxId"
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        },
+        "x-sanka-surface": "public_developer",
+        "x-sanka-api-version": "v2",
+        "x-sanka-auth": "developer_bearer",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "goals"
+        ],
+        "summary": "Delete Public Goal",
+        "operationId": "delete_public_goal",
+        "parameters": [
+          {
+            "name": "goal_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Goal Id"
+            }
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Workspace Id"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/XWorkspaceCode"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeletePublicGoal200Envelope"
+                }
+              }
+            },
+            "headers": {
+              "x-ctx-id": {
+                "$ref": "#/components/headers/XCtxId"
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        },
+        "x-sanka-surface": "public_developer",
+        "x-sanka-api-version": "v2",
+        "x-sanka-auth": "developer_bearer",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/v2/public/goals/{goal_id}/targets": {
+      "put": {
+        "tags": [
+          "goals"
+        ],
+        "summary": "Set Public Goal Targets",
+        "operationId": "set_public_goal_targets",
+        "parameters": [
+          {
+            "name": "goal_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Goal Id"
+            }
+          },
+          {
+            "name": "fiscal_year",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer",
+                  "maximum": 2100,
+                  "minimum": 2000
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Fiscal Year"
+            }
+          },
+          {
+            "name": "language",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 8
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Language"
+            }
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Workspace Id"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/XWorkspaceCode"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GoalTargetsSaveRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SetPublicGoalTargets200Envelope"
+                }
+              }
+            },
+            "headers": {
+              "x-ctx-id": {
+                "$ref": "#/components/headers/XCtxId"
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        },
+        "x-sanka-surface": "public_developer",
+        "x-sanka-api-version": "v2",
+        "x-sanka-auth": "developer_bearer",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/v2/public/goals/{goal_id}/progress": {
+      "get": {
+        "tags": [
+          "goals"
+        ],
+        "summary": "Get Public Goal Progress",
+        "operationId": "get_public_goal_progress",
+        "parameters": [
+          {
+            "name": "goal_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Goal Id"
+            }
+          },
+          {
+            "name": "subject",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "pattern": "^(company|me|owner:[1-9][0-9]{0,18})$",
+              "default": "company",
+              "title": "Subject"
+            }
+          },
+          {
+            "name": "range",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "fiscal_year",
+                "last_12_months"
+              ],
+              "type": "string",
+              "default": "fiscal_year",
+              "title": "Range"
+            }
+          },
+          {
+            "name": "fiscal_year",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer",
+                  "maximum": 2100,
+                  "minimum": 2000
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Fiscal Year"
+            }
+          },
+          {
+            "name": "people_period",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "month",
+                    "quarter",
+                    "half",
+                    "year"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "People Period"
+            }
+          },
+          {
+            "name": "language",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 8
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Language"
+            }
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Workspace Id"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/XWorkspaceCode"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetPublicGoalProgress200Envelope"
                 }
               }
             },
@@ -39375,6 +40183,26 @@
           }
         }
       },
+      "CreatePublicGoal201Envelope": {
+        "type": "object",
+        "required": [
+          "success",
+          "data",
+          "meta"
+        ],
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "const": true
+          },
+          "data": {
+            "$ref": "#/components/schemas/GoalData"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/EnvelopeMeta"
+          }
+        }
+      },
       "CreatePublicImportJobCompatApiV2PublicImportsPost200Envelope": {
         "type": "object",
         "required": [
@@ -40219,6 +41047,26 @@
           },
           "data": {
             "$ref": "#/components/schemas/FerryProgramData"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/EnvelopeMeta"
+          }
+        }
+      },
+      "DeletePublicGoal200Envelope": {
+        "type": "object",
+        "required": [
+          "success",
+          "data",
+          "meta"
+        ],
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "const": true
+          },
+          "data": {
+            "$ref": "#/components/schemas/GoalData"
           },
           "meta": {
             "$ref": "#/components/schemas/EnvelopeMeta"
@@ -42352,6 +43200,46 @@
           }
         }
       },
+      "GetPublicGoal200Envelope": {
+        "type": "object",
+        "required": [
+          "success",
+          "data",
+          "meta"
+        ],
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "const": true
+          },
+          "data": {
+            "$ref": "#/components/schemas/GoalDetailData"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/EnvelopeMeta"
+          }
+        }
+      },
+      "GetPublicGoalProgress200Envelope": {
+        "type": "object",
+        "required": [
+          "success",
+          "data",
+          "meta"
+        ],
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "const": true
+          },
+          "data": {
+            "$ref": "#/components/schemas/GoalProgressData"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/EnvelopeMeta"
+          }
+        }
+      },
       "GetPublicImportJobCompatApiV2PublicImportsJobIdGet200Envelope": {
         "type": "object",
         "required": [
@@ -44309,6 +45197,46 @@
           },
           "data": {
             "$ref": "#/components/schemas/FerryProgramListData"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/EnvelopeMeta"
+          }
+        }
+      },
+      "ListPublicGoalMetrics200Envelope": {
+        "type": "object",
+        "required": [
+          "success",
+          "data",
+          "meta"
+        ],
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "const": true
+          },
+          "data": {
+            "$ref": "#/components/schemas/GoalMetricCatalog"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/EnvelopeMeta"
+          }
+        }
+      },
+      "ListPublicGoals200Envelope": {
+        "type": "object",
+        "required": [
+          "success",
+          "data",
+          "meta"
+        ],
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "const": true
+          },
+          "data": {
+            "$ref": "#/components/schemas/GoalListData"
           },
           "meta": {
             "$ref": "#/components/schemas/EnvelopeMeta"
@@ -48558,6 +49486,26 @@
           }
         }
       },
+      "SetPublicGoalTargets200Envelope": {
+        "type": "object",
+        "required": [
+          "success",
+          "data",
+          "meta"
+        ],
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "const": true
+          },
+          "data": {
+            "$ref": "#/components/schemas/GoalDetailData"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/EnvelopeMeta"
+          }
+        }
+      },
       "StartPublicFreeeInvoiceExportApiV2PublicInvoicesExportsFreeePost200Envelope": {
         "type": "object",
         "required": [
@@ -49182,6 +50130,26 @@
           },
           "data": {
             "$ref": "#/components/schemas/FerryProgramData"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/EnvelopeMeta"
+          }
+        }
+      },
+      "UpdatePublicGoal200Envelope": {
+        "type": "object",
+        "required": [
+          "success",
+          "data",
+          "meta"
+        ],
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "const": true
+          },
+          "data": {
+            "$ref": "#/components/schemas/GoalData"
           },
           "meta": {
             "$ref": "#/components/schemas/EnvelopeMeta"
@@ -50929,6 +51897,122 @@
         ],
         "title": "FerryProgramData"
       },
+      "GoalData": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "metric": {
+            "type": "string",
+            "enum": [
+              "deals_created",
+              "invoice_revenue",
+              "custom"
+            ],
+            "title": "Metric"
+          },
+          "unit": {
+            "type": "string",
+            "enum": [
+              "count",
+              "money",
+              "number"
+            ],
+            "title": "Unit"
+          },
+          "source": {
+            "type": "string",
+            "title": "Source"
+          },
+          "definition": {
+            "$ref": "#/components/schemas/GoalMetricDefinition"
+          },
+          "amount": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "before_tax",
+                  "including_tax"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Amount"
+          },
+          "currency": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Currency"
+          },
+          "assignment": {
+            "type": "string",
+            "enum": [
+              "company",
+              "people",
+              "company_and_people"
+            ],
+            "title": "Assignment"
+          },
+          "assignees": {
+            "items": {
+              "$ref": "#/components/schemas/GoalOwner"
+            },
+            "type": "array",
+            "title": "Assignees"
+          },
+          "version": {
+            "type": "integer",
+            "title": "Version"
+          },
+          "archived": {
+            "type": "boolean",
+            "title": "Archived"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Updated At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "metric",
+          "unit",
+          "source",
+          "definition",
+          "amount",
+          "currency",
+          "assignment",
+          "assignees",
+          "version",
+          "archived",
+          "created_at",
+          "updated_at"
+        ],
+        "title": "GoalData"
+      },
       "PublicProjectMutationData": {
         "properties": {
           "ok": {
@@ -51554,6 +52638,134 @@
           "title"
         ],
         "title": "FerryProgramTodoBatchUpsertItem"
+      },
+      "GoalDetailData": {
+        "properties": {
+          "goal": {
+            "$ref": "#/components/schemas/GoalData"
+          },
+          "fiscal_year": {
+            "type": "integer",
+            "title": "Fiscal Year"
+          },
+          "fiscal_year_start_month": {
+            "type": "integer",
+            "title": "Fiscal Year Start Month"
+          },
+          "months": {
+            "items": {
+              "type": "string",
+              "format": "date"
+            },
+            "type": "array",
+            "title": "Months"
+          },
+          "rows": {
+            "items": {
+              "$ref": "#/components/schemas/GoalTargetRow"
+            },
+            "type": "array",
+            "title": "Rows"
+          },
+          "can_edit": {
+            "type": "boolean",
+            "title": "Can Edit"
+          }
+        },
+        "type": "object",
+        "required": [
+          "goal",
+          "fiscal_year",
+          "fiscal_year_start_month",
+          "months",
+          "rows",
+          "can_edit"
+        ],
+        "title": "GoalDetailData"
+      },
+      "GoalProgressData": {
+        "properties": {
+          "goal": {
+            "$ref": "#/components/schemas/GoalData"
+          },
+          "subject": {
+            "type": "string",
+            "title": "Subject"
+          },
+          "owner": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/GoalOwner"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "as_of": {
+            "type": "string",
+            "format": "date",
+            "title": "As Of"
+          },
+          "fiscal_year": {
+            "type": "integer",
+            "title": "Fiscal Year"
+          },
+          "months": {
+            "items": {
+              "$ref": "#/components/schemas/GoalMonthPoint"
+            },
+            "type": "array",
+            "title": "Months"
+          },
+          "periods": {
+            "items": {
+              "$ref": "#/components/schemas/GoalPeriodProgress"
+            },
+            "type": "array",
+            "title": "Periods"
+          },
+          "people_period": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "month",
+                  "quarter",
+                  "half",
+                  "year"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "People Period"
+          },
+          "people": {
+            "items": {
+              "$ref": "#/components/schemas/GoalPersonProgress"
+            },
+            "type": "array",
+            "title": "People"
+          },
+          "excluded_records": {
+            "type": "integer",
+            "title": "Excluded Records",
+            "default": 0
+          }
+        },
+        "type": "object",
+        "required": [
+          "goal",
+          "subject",
+          "owner",
+          "as_of",
+          "fiscal_year",
+          "months",
+          "periods"
+        ],
+        "title": "GoalProgressData"
       },
       "ObjectRecordData": {
         "properties": {
@@ -52236,6 +53448,66 @@
           "count"
         ],
         "title": "FerryProgramListData"
+      },
+      "GoalMetricCatalog": {
+        "properties": {
+          "templates": {
+            "items": {
+              "$ref": "#/components/schemas/GoalTemplate"
+            },
+            "type": "array",
+            "title": "Templates"
+          },
+          "sources": {
+            "items": {
+              "$ref": "#/components/schemas/GoalSourceOption"
+            },
+            "type": "array",
+            "title": "Sources"
+          }
+        },
+        "type": "object",
+        "required": [
+          "templates",
+          "sources"
+        ],
+        "title": "GoalMetricCatalog"
+      },
+      "GoalListData": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/GoalListItem"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          },
+          "can_edit": {
+            "type": "boolean",
+            "title": "Can Edit"
+          },
+          "fiscal_year_start_month": {
+            "type": "integer",
+            "title": "Fiscal Year Start Month"
+          },
+          "default_currency": {
+            "type": "string",
+            "title": "Default Currency"
+          }
+        },
+        "type": "object",
+        "required": [
+          "items",
+          "total",
+          "can_edit",
+          "fiscal_year_start_month",
+          "default_currency"
+        ],
+        "title": "GoalListData"
       },
       "PublicProjectListData": {
         "properties": {
@@ -53571,6 +54843,24 @@
         ],
         "title": "FerryProgramTodo"
       },
+      "GoalOwner": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "label"
+        ],
+        "title": "GoalOwner"
+      },
       "FerryDiagramNodeData": {
         "properties": {
           "label": {
@@ -53671,6 +54961,195 @@
           "y"
         ],
         "title": "FerryDiagramPosition"
+      },
+      "GoalTargetRow": {
+        "properties": {
+          "owner": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/GoalOwner"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "targets": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Targets"
+          }
+        },
+        "type": "object",
+        "required": [
+          "owner",
+          "targets"
+        ],
+        "title": "GoalTargetRow"
+      },
+      "GoalMonthPoint": {
+        "properties": {
+          "month": {
+            "type": "string",
+            "format": "date",
+            "title": "Month"
+          },
+          "actual": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Actual"
+          },
+          "target": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Target"
+          }
+        },
+        "type": "object",
+        "required": [
+          "month",
+          "actual",
+          "target"
+        ],
+        "title": "GoalMonthPoint"
+      },
+      "GoalPeriodProgress": {
+        "properties": {
+          "key": {
+            "type": "string",
+            "enum": [
+              "month",
+              "quarter",
+              "half",
+              "year"
+            ],
+            "title": "Key"
+          },
+          "start": {
+            "type": "string",
+            "format": "date",
+            "title": "Start"
+          },
+          "end": {
+            "type": "string",
+            "format": "date",
+            "title": "End"
+          },
+          "actual": {
+            "type": "string",
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "title": "Actual"
+          },
+          "target": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Target"
+          },
+          "expected": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Expected"
+          }
+        },
+        "type": "object",
+        "required": [
+          "key",
+          "start",
+          "end",
+          "actual",
+          "target",
+          "expected"
+        ],
+        "title": "GoalPeriodProgress"
+      },
+      "GoalPersonProgress": {
+        "properties": {
+          "owner": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/GoalOwner"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "actual": {
+            "type": "string",
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "title": "Actual"
+          },
+          "target": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Target"
+          },
+          "expected": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Expected"
+          }
+        },
+        "type": "object",
+        "required": [
+          "owner",
+          "actual",
+          "target",
+          "expected"
+        ],
+        "title": "GoalPersonProgress"
       },
       "ObjectRecordDisplayValue": {
         "properties": {
@@ -54684,6 +56163,120 @@
         ],
         "title": "FerryDiagramSummary"
       },
+      "GoalSourceOption": {
+        "properties": {
+          "key": {
+            "type": "string",
+            "title": "Key"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "measures": {
+            "items": {
+              "$ref": "#/components/schemas/GoalMeasureOption"
+            },
+            "type": "array",
+            "title": "Measures"
+          },
+          "date_fields": {
+            "items": {
+              "$ref": "#/components/schemas/GoalOption"
+            },
+            "type": "array",
+            "title": "Date Fields"
+          },
+          "default_date_field": {
+            "type": "string",
+            "title": "Default Date Field"
+          },
+          "has_owner": {
+            "type": "boolean",
+            "title": "Has Owner"
+          },
+          "filter_object_type": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Filter Object Type"
+          }
+        },
+        "type": "object",
+        "required": [
+          "key",
+          "label",
+          "measures",
+          "date_fields",
+          "default_date_field",
+          "has_owner",
+          "filter_object_type"
+        ],
+        "title": "GoalSourceOption"
+      },
+      "GoalTemplate": {
+        "properties": {
+          "key": {
+            "type": "string",
+            "title": "Key"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "metric": {
+            "type": "string",
+            "enum": [
+              "deals_created",
+              "invoice_revenue",
+              "custom"
+            ],
+            "title": "Metric"
+          },
+          "definition": {
+            "$ref": "#/components/schemas/GoalMetricDefinition"
+          },
+          "unit": {
+            "type": "string",
+            "enum": [
+              "count",
+              "money",
+              "number"
+            ],
+            "title": "Unit"
+          }
+        },
+        "type": "object",
+        "required": [
+          "key",
+          "label",
+          "metric",
+          "definition",
+          "unit"
+        ],
+        "title": "GoalTemplate"
+      },
+      "GoalListItem": {
+        "properties": {
+          "goal": {
+            "$ref": "#/components/schemas/GoalData"
+          },
+          "this_month": {
+            "$ref": "#/components/schemas/GoalPeriodProgress"
+          }
+        },
+        "type": "object",
+        "required": [
+          "goal",
+          "this_month"
+        ],
+        "title": "GoalListItem"
+      },
       "WorkflowColumn": {
         "properties": {
           "key": {
@@ -55372,6 +56965,49 @@
         "type": "object",
         "title": "WorkflowUserSummary"
       },
+      "FieldReference": {
+        "properties": {
+          "field_id": {
+            "type": "string",
+            "title": "Field Id"
+          },
+          "source": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "standard_field",
+                  "custom_property",
+                  "association",
+                  "record_display",
+                  "formatted_id",
+                  "system"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source"
+          },
+          "label": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Label"
+          }
+        },
+        "type": "object",
+        "required": [
+          "field_id"
+        ],
+        "title": "FieldReference"
+      },
       "ActivityLogActor": {
         "properties": {
           "name": {
@@ -55548,6 +57184,52 @@
         },
         "type": "object",
         "title": "ActivityLogEnvironment"
+      },
+      "GoalMeasureOption": {
+        "properties": {
+          "key": {
+            "type": "string",
+            "title": "Key"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "unit": {
+            "type": "string",
+            "enum": [
+              "count",
+              "money",
+              "number"
+            ],
+            "title": "Unit"
+          }
+        },
+        "type": "object",
+        "required": [
+          "key",
+          "label",
+          "unit"
+        ],
+        "title": "GoalMeasureOption"
+      },
+      "GoalOption": {
+        "properties": {
+          "key": {
+            "type": "string",
+            "title": "Key"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          }
+        },
+        "type": "object",
+        "required": [
+          "key",
+          "label"
+        ],
+        "title": "GoalOption"
       },
       "ListPublicJobPostings200Envelope": {
         "type": "object",
@@ -55928,6 +57610,191 @@
             "$ref": "#/components/schemas/EnvelopeMeta"
           }
         }
+      },
+      "GoalCreateRequest": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Name"
+          },
+          "metric": {
+            "type": "string",
+            "enum": [
+              "deals_created",
+              "invoice_revenue",
+              "custom"
+            ],
+            "title": "Metric"
+          },
+          "amount": {
+            "type": "string",
+            "enum": [
+              "before_tax",
+              "including_tax"
+            ],
+            "title": "Amount",
+            "default": "before_tax"
+          },
+          "currency": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[A-Za-z]{3}$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Currency"
+          },
+          "definition": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/GoalMetricDefinition"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "assignment": {
+            "type": "string",
+            "enum": [
+              "company",
+              "people",
+              "company_and_people"
+            ],
+            "title": "Assignment",
+            "default": "company"
+          },
+          "assignee_ids": {
+            "items": {
+              "type": "integer",
+              "minimum": 1.0
+            },
+            "type": "array",
+            "maxItems": 200,
+            "title": "Assignee Ids"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "name",
+          "metric"
+        ],
+        "title": "GoalCreateRequest"
+      },
+      "GoalTargetsSaveRequest": {
+        "properties": {
+          "expected_version": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Expected Version"
+          },
+          "cells": {
+            "items": {
+              "$ref": "#/components/schemas/GoalTargetCell"
+            },
+            "type": "array",
+            "maxItems": 5000,
+            "title": "Cells"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "expected_version",
+          "cells"
+        ],
+        "title": "GoalTargetsSaveRequest"
+      },
+      "GoalUpdateRequest": {
+        "properties": {
+          "expected_version": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Expected Version"
+          },
+          "name": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 200,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "amount": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "before_tax",
+                  "including_tax"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Amount"
+          },
+          "definition": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/GoalMetricDefinition"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "assignment": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "company",
+                  "people",
+                  "company_and_people"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Assignment"
+          },
+          "assignee_ids": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "integer",
+                  "minimum": 1.0
+                },
+                "type": "array",
+                "maxItems": 200
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Assignee Ids"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "expected_version"
+        ],
+        "title": "GoalUpdateRequest"
       },
       "PositionCreateRequest": {
         "properties": {
@@ -56488,6 +58355,88 @@
         "type": "object",
         "title": "WorkforceOrganizationData"
       },
+      "GoalMetricDefinition": {
+        "properties": {
+          "source": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "title": "Source"
+          },
+          "measure": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "title": "Measure",
+            "default": "count"
+          },
+          "date_field": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "title": "Date Field",
+            "default": "created_at"
+          },
+          "filters": {
+            "items": {
+              "$ref": "#/components/schemas/SearchFilterExpression"
+            },
+            "type": "array",
+            "maxItems": 20,
+            "title": "Filters"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "source"
+        ],
+        "title": "GoalMetricDefinition",
+        "description": "What a goal counts or sums: one object's active records, by the month of one of their\ndates, narrowed by filters (the same expressions as saved views)."
+      },
+      "GoalTargetCell": {
+        "properties": {
+          "owner_id": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Owner Id"
+          },
+          "month": {
+            "type": "string",
+            "format": "date",
+            "title": "Month"
+          },
+          "target": {
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": 0.0
+              },
+              {
+                "type": "string",
+                "pattern": "^(?!^[-+.]*$)[+-]?0*(?:\\d{0,18}|(?=[\\d.]{1,21}0*$)\\d{0,18}\\.\\d{0,2}0*$)"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Target"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "month"
+        ],
+        "title": "GoalTargetCell"
+      },
       "WorkforcePositionData": {
         "properties": {
           "id": {
@@ -56882,6 +58831,58 @@
         },
         "type": "object",
         "title": "WorkforceOrganizationSummary"
+      },
+      "SearchFilterExpression": {
+        "properties": {
+          "field": {
+            "$ref": "#/components/schemas/FieldReference"
+          },
+          "operator": {
+            "type": "string",
+            "enum": [
+              "equals",
+              "not_equals",
+              "contains",
+              "does_not_contain",
+              "starts_with",
+              "ends_with",
+              "in",
+              "not_in",
+              "is_empty",
+              "is_not_empty",
+              "greater_than",
+              "greater_than_or_equal",
+              "less_than",
+              "less_than_or_equal",
+              "between",
+              "equal_or_after_today",
+              "equal_or_before_today",
+              "last_x_days",
+              "more_than_x_days"
+            ],
+            "title": "Operator"
+          },
+          "value": {
+            "title": "Value"
+          },
+          "selected_label": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Selected Label"
+          }
+        },
+        "type": "object",
+        "required": [
+          "field",
+          "operator"
+        ],
+        "title": "SearchFilterExpression"
       },
       "PositionOccupantData": {
         "properties": {
