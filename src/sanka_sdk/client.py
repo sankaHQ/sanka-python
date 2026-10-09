@@ -47,6 +47,7 @@ if typing.TYPE_CHECKING:
     from .orders.client import AsyncOrdersClient, OrdersClient
     from .payments.client import AsyncPaymentsClient, PaymentsClient
     from .payroll.client import AsyncPayrollClient, PayrollClient
+    from .presentations.client import AsyncPresentationsClient, PresentationsClient
     from .projects.client import AsyncProjectsClient, ProjectsClient
     from .properties.client import AsyncPropertiesClient, PropertiesClient
     from .public_auth.client import AsyncPublicAuthClient, PublicAuthClient
@@ -156,6 +157,7 @@ class SankaClient:
         self._expenses: typing.Optional[ExpensesClient] = None
         self._exports: typing.Optional[ExportsClient] = None
         self._ferry_diagrams: typing.Optional[FerryDiagramsClient] = None
+        self._presentations: typing.Optional[PresentationsClient] = None
         self._ferry_programs: typing.Optional[FerryProgramsClient] = None
         self._files: typing.Optional[FilesClient] = None
         self._inventories: typing.Optional[InventoriesClient] = None
@@ -352,6 +354,14 @@ class SankaClient:
 
             self._ferry_diagrams = FerryDiagramsClient(client_wrapper=self._client_wrapper)
         return self._ferry_diagrams
+
+    @property
+    def presentations(self):
+        if self._presentations is None:
+            from .presentations.client import PresentationsClient  # noqa: E402
+
+            self._presentations = PresentationsClient(client_wrapper=self._client_wrapper)
+        return self._presentations
 
     @property
     def ferry_programs(self):
@@ -731,6 +741,7 @@ class AsyncSankaClient:
         self._expenses: typing.Optional[AsyncExpensesClient] = None
         self._exports: typing.Optional[AsyncExportsClient] = None
         self._ferry_diagrams: typing.Optional[AsyncFerryDiagramsClient] = None
+        self._presentations: typing.Optional[AsyncPresentationsClient] = None
         self._ferry_programs: typing.Optional[AsyncFerryProgramsClient] = None
         self._files: typing.Optional[AsyncFilesClient] = None
         self._inventories: typing.Optional[AsyncInventoriesClient] = None
@@ -927,6 +938,14 @@ class AsyncSankaClient:
 
             self._ferry_diagrams = AsyncFerryDiagramsClient(client_wrapper=self._client_wrapper)
         return self._ferry_diagrams
+
+    @property
+    def presentations(self):
+        if self._presentations is None:
+            from .presentations.client import AsyncPresentationsClient  # noqa: E402
+
+            self._presentations = AsyncPresentationsClient(client_wrapper=self._client_wrapper)
+        return self._presentations
 
     @property
     def ferry_programs(self):
