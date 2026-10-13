@@ -15,6 +15,15 @@ class FerryDiagramNode(UncheckedBaseModel):
     type: FerryDiagramNodeType
     position: FerryDiagramPosition
     data: FerryDiagramNodeData
+    width: typing.Optional[float] = pydantic.Field(default=None)
+    """
+    Frame width in CSS pixels, supplied together with height. Sections require it (up to 8,000); shaped process nodes and notes may set it (up to 1,600).
+    """
+
+    height: typing.Optional[float] = pydantic.Field(default=None)
+    """
+    Frame height in CSS pixels, supplied together with width. Sections require it (up to 8,000); shaped process nodes and notes may set it (up to 1,200).
+    """
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

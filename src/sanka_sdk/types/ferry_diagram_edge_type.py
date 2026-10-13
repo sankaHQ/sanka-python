@@ -2,4 +2,4 @@
 
 import typing
 
-FerryDiagramEdgeType = typing.Union[typing.Literal["default", "smoothstep"], typing.Any]
+FerryDiagramEdgeType = typing.Union[typing.Literal["default", "smoothstep", "straight"], typing.Any]

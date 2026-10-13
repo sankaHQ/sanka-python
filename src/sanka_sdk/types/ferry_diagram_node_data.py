@@ -8,6 +8,7 @@ from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.serialization import FieldMetadata
 from ..core.unchecked_base_model import UncheckedBaseModel
 from .ferry_diagram_node_data_color import FerryDiagramNodeDataColor
+from .ferry_diagram_node_data_shape import FerryDiagramNodeDataShape
 
 
 class FerryDiagramNodeData(UncheckedBaseModel):
@@ -18,6 +19,34 @@ class FerryDiagramNodeData(UncheckedBaseModel):
     object_key: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="objectKey")] = None
     object_slug: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="objectSlug")] = None
     color: typing.Optional[FerryDiagramNodeDataColor] = None
+    shape: typing.Optional[FerryDiagramNodeDataShape] = None
+    font_size: typing_extensions.Annotated[typing.Optional[float], FieldMetadata(alias="fontSize")] = pydantic.Field(
+        default=None
+    )
+    """
+    Label font size in CSS pixels. Omit it to use the node type's default size.
+    """
+
+    fill_color: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="fillColor")] = pydantic.Field(
+        default=None
+    )
+    """
+    Custom fill color as #RRGGBB. It overrides the fill of the `color` preset. Without a custom text color, clients choose a readable dark or light text color.
+    """
+
+    stroke_color: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="strokeColor")] = (
+        pydantic.Field(default=None)
+    )
+    """
+    Custom outline color as #RRGGBB. It overrides the `color` preset outline.
+    """
+
+    text_color: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="textColor")] = pydantic.Field(
+        default=None
+    )
+    """
+    Custom label color as #RRGGBB. Without a custom fill, clients draw a white fill so the text stays readable in light and dark themes.
+    """
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

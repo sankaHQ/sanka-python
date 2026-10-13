@@ -7,6 +7,9 @@ import typing_extensions
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.serialization import FieldMetadata
 from ..core.unchecked_base_model import UncheckedBaseModel
+from .ferry_diagram_edge_source_cardinality import FerryDiagramEdgeSourceCardinality
+from .ferry_diagram_edge_stroke_style import FerryDiagramEdgeStrokeStyle
+from .ferry_diagram_edge_target_cardinality import FerryDiagramEdgeTargetCardinality
 from .ferry_diagram_edge_type import FerryDiagramEdgeType
 
 
@@ -17,7 +20,62 @@ class FerryDiagramEdge(UncheckedBaseModel):
     label: typing.Optional[str] = None
     type: typing.Optional[FerryDiagramEdgeType] = None
     source_handle: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="sourceHandle")] = None
+    stroke_width: typing_extensions.Annotated[typing.Optional[float], FieldMetadata(alias="strokeWidth")] = (
+        pydantic.Field(default=None)
+    )
+    """
+    Connector stroke width in CSS pixels.
+    """
+
     target_handle: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="targetHandle")] = None
+    source_arrow: typing_extensions.Annotated[typing.Optional[bool], FieldMetadata(alias="sourceArrow")] = (
+        pydantic.Field(default=None)
+    )
+    """
+    Render an arrowhead at the connector source endpoint.
+    """
+
+    source_cardinality: typing_extensions.Annotated[
+        typing.Optional[FerryDiagramEdgeSourceCardinality], FieldMetadata(alias="sourceCardinality")
+    ] = pydantic.Field(default=None)
+    """
+    Optional ER cardinality at the connector source endpoint. Clients render it as one bar, circle plus bar, bar plus Crow's Foot, or circle plus Crow's Foot.
+    """
+
+    target_arrow: typing_extensions.Annotated[typing.Optional[bool], FieldMetadata(alias="targetArrow")] = (
+        pydantic.Field(default=None)
+    )
+    """
+    Render an arrowhead at the connector target endpoint.
+    """
+
+    target_cardinality: typing_extensions.Annotated[
+        typing.Optional[FerryDiagramEdgeTargetCardinality], FieldMetadata(alias="targetCardinality")
+    ] = pydantic.Field(default=None)
+    """
+    Optional ER cardinality at the connector target endpoint. Clients render it as one bar, circle plus bar, bar plus Crow's Foot, or circle plus Crow's Foot.
+    """
+
+    stroke_style: typing_extensions.Annotated[
+        typing.Optional[FerryDiagramEdgeStrokeStyle], FieldMetadata(alias="strokeStyle")
+    ] = pydantic.Field(default=None)
+    """
+    Connector line pattern. Omit it for a solid line.
+    """
+
+    stroke_color: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="strokeColor")] = (
+        pydantic.Field(default=None)
+    )
+    """
+    Custom connector and arrowhead color as #RRGGBB.
+    """
+
+    font_size: typing_extensions.Annotated[typing.Optional[float], FieldMetadata(alias="fontSize")] = pydantic.Field(
+        default=None
+    )
+    """
+    Connector label font size in CSS pixels. Labels keep explicit line breaks. Omit it to use the default size.
+    """
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
