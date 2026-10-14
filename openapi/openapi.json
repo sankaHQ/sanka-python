@@ -55477,7 +55477,8 @@
             "type": "string",
             "enum": [
               "default",
-              "smoothstep"
+              "smoothstep",
+              "straight"
             ],
             "title": "Type",
             "default": "smoothstep"
@@ -55494,6 +55495,20 @@
             ],
             "title": "Sourcehandle"
           },
+          "strokeWidth": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 24.0,
+                "minimum": 0.5
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Strokewidth",
+            "description": "Connector stroke width in CSS pixels."
+          },
           "targetHandle": {
             "anyOf": [
               {
@@ -55505,6 +55520,98 @@
               }
             ],
             "title": "Targethandle"
+          },
+          "sourceArrow": {
+            "type": "boolean",
+            "title": "Sourcearrow",
+            "description": "Render an arrowhead at the connector source endpoint.",
+            "default": false
+          },
+          "sourceCardinality": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "one",
+                  "zero_or_one",
+                  "one_or_many",
+                  "zero_or_many"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sourcecardinality",
+            "description": "Optional ER cardinality at the connector source endpoint. Clients render it as one bar, circle plus bar, bar plus Crow's Foot, or circle plus Crow's Foot."
+          },
+          "targetArrow": {
+            "type": "boolean",
+            "title": "Targetarrow",
+            "description": "Render an arrowhead at the connector target endpoint.",
+            "default": false
+          },
+          "targetCardinality": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "one",
+                  "zero_or_one",
+                  "one_or_many",
+                  "zero_or_many"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Targetcardinality",
+            "description": "Optional ER cardinality at the connector target endpoint. Clients render it as one bar, circle plus bar, bar plus Crow's Foot, or circle plus Crow's Foot."
+          },
+          "strokeStyle": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "solid",
+                  "dashed",
+                  "dotted"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Strokestyle",
+            "description": "Connector line pattern. Omit it for a solid line."
+          },
+          "strokeColor": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^#[0-9A-Fa-f]{6}$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Strokecolor",
+            "description": "Custom connector and arrowhead color as #RRGGBB."
+          },
+          "fontSize": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 96.0,
+                "minimum": 8.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fontsize",
+            "description": "Connector label font size in CSS pixels. Labels keep explicit line breaks. Omit it to use the default size."
           }
         },
         "additionalProperties": false,
@@ -55529,7 +55636,8 @@
             "enum": [
               "objectTable",
               "process",
-              "note"
+              "note",
+              "section"
             ],
             "title": "Type"
           },
@@ -55538,6 +55646,34 @@
           },
           "data": {
             "$ref": "#/components/schemas/FerryDiagramNodeData"
+          },
+          "width": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 8000.0,
+                "minimum": 96.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Width",
+            "description": "Frame width in CSS pixels, supplied together with height. Sections require it (up to 8,000); shaped process nodes and notes may set it (up to 1,600)."
+          },
+          "height": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 8000.0,
+                "minimum": 64.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Height",
+            "description": "Frame height in CSS pixels, supplied together with width. Sections require it (up to 8,000); shaped process nodes and notes may set it (up to 1,200)."
           }
         },
         "additionalProperties": false,
@@ -58270,6 +58406,82 @@
             ],
             "title": "Color",
             "default": "default"
+          },
+          "shape": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "rectangle",
+                  "roundedRectangle",
+                  "square",
+                  "circle",
+                  "diamond",
+                  "triangle",
+                  "invertedTriangle",
+                  "oval",
+                  "cylinder",
+                  "pill"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Shape"
+          },
+          "fontSize": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 96.0,
+                "minimum": 8.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fontsize",
+            "description": "Label font size in CSS pixels. Omit it to use the node type's default size."
+          },
+          "fillColor": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^#[0-9A-Fa-f]{6}$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fillcolor",
+            "description": "Custom fill color as #RRGGBB. It overrides the fill of the `color` preset. Without a custom text color, clients choose a readable dark or light text color."
+          },
+          "strokeColor": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^#[0-9A-Fa-f]{6}$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Strokecolor",
+            "description": "Custom outline color as #RRGGBB. It overrides the `color` preset outline."
+          },
+          "textColor": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^#[0-9A-Fa-f]{6}$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Textcolor",
+            "description": "Custom label color as #RRGGBB. Without a custom fill, clients draw a white fill so the text stays readable in light and dark themes."
           }
         },
         "additionalProperties": false,

@@ -2,4 +2,4 @@
 
 import typing
 
-FerryDiagramNodeType = typing.Union[typing.Literal["objectTable", "process", "note"], typing.Any]
+FerryDiagramNodeType = typing.Union[typing.Literal["objectTable", "process", "note", "section"], typing.Any]
