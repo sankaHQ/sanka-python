@@ -276,6 +276,49 @@ class FerryDiagramsClient:
         )
         return _response.data
 
+    def get_public_ferry_diagram_image(
+        self,
+        diagram_id: str,
+        *,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> typing.Iterator[bytes]:
+        """
+        The diagram's latest revision as a PNG at twice its size, exactly as the diagram editor
+        draws it. `X-Sanka-Diagram-Revision` names the revision. 422 `DIAGRAM_EMPTY` for a diagram
+        without nodes; 503 when the renderer is unavailable.
+
+        Parameters
+        ----------
+        diagram_id : str
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration. You can pass in configuration such as `chunk_size`, and more to customize the request and response.
+
+        Returns
+        -------
+        typing.Iterator[bytes]
+            Successful Response
+
+        Examples
+        --------
+        from sanka_sdk import SankaClient
+
+        client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+        client.ferry_diagrams.get_public_ferry_diagram_image(
+            diagram_id="diagram_id",
+        )
+        """
+        with self._raw_client.get_public_ferry_diagram_image(
+            diagram_id, workspace_id=workspace_id, request_options=request_options
+        ) as r:
+            yield from r.data
+
 
 class AsyncFerryDiagramsClient:
     def __init__(self, *, client_wrapper: AsyncClientWrapper):
@@ -564,3 +607,55 @@ class AsyncFerryDiagramsClient:
             diagram_id, workspace_id=workspace_id, request_options=request_options
         )
         return _response.data
+
+    async def get_public_ferry_diagram_image(
+        self,
+        diagram_id: str,
+        *,
+        workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> typing.AsyncIterator[bytes]:
+        """
+        The diagram's latest revision as a PNG at twice its size, exactly as the diagram editor
+        draws it. `X-Sanka-Diagram-Revision` names the revision. 422 `DIAGRAM_EMPTY` for a diagram
+        without nodes; 503 when the renderer is unavailable.
+
+        Parameters
+        ----------
+        diagram_id : str
+
+        workspace_id : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration. You can pass in configuration such as `chunk_size`, and more to customize the request and response.
+
+        Returns
+        -------
+        typing.AsyncIterator[bytes]
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sanka_sdk import AsyncSankaClient
+
+        client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.ferry_diagrams.get_public_ferry_diagram_image(
+                diagram_id="diagram_id",
+            )
+
+
+        asyncio.run(main())
+        """
+        async with self._raw_client.get_public_ferry_diagram_image(
+            diagram_id, workspace_id=workspace_id, request_options=request_options
+        ) as r:
+            async for _chunk in r.data:
+                yield _chunk

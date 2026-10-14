@@ -12928,6 +12928,81 @@
         ]
       }
     },
+    "/v2/public/ferry/diagrams/{diagram_id}/image": {
+      "get": {
+        "tags": [
+          "ferry-diagrams"
+        ],
+        "summary": "Get Public Ferry Diagram Image",
+        "description": "The diagram's latest revision as a PNG at twice its size, exactly as the diagram editor\ndraws it. `X-Sanka-Diagram-Revision` names the revision. 422 `DIAGRAM_EMPTY` for a diagram\nwithout nodes; 503 when the renderer is unavailable.",
+        "operationId": "get_public_ferry_diagram_image",
+        "parameters": [
+          {
+            "name": "diagram_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Diagram Id"
+            }
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Workspace Id"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/XWorkspaceCode"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "image/png": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            },
+            "headers": {
+              "x-ctx-id": {
+                "$ref": "#/components/headers/XCtxId"
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "403": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        },
+        "x-sanka-surface": "public_developer",
+        "x-sanka-api-version": "v2",
+        "x-sanka-auth": "developer_bearer",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
     "/v2/public/presentations/catalog": {
       "get": {
         "tags": [
