@@ -20,7 +20,13 @@ from ..types.get_public_presentation_catalog_200_envelope import GetPublicPresen
 from ..types.get_public_presentation_export_200_envelope import GetPublicPresentationExport200Envelope
 from ..types.get_public_program_presentation_200_envelope import GetPublicProgramPresentation200Envelope
 from ..types.get_public_program_presentation_export_200_envelope import GetPublicProgramPresentationExport200Envelope
+from ..types.import_public_presentation_diagram_image_201_envelope import (
+    ImportPublicPresentationDiagramImage201Envelope,
+)
 from ..types.import_public_presentation_image_201_envelope import ImportPublicPresentationImage201Envelope
+from ..types.import_public_program_presentation_diagram_image_201_envelope import (
+    ImportPublicProgramPresentationDiagramImage201Envelope,
+)
 from ..types.import_public_program_presentation_image_201_envelope import (
     ImportPublicProgramPresentationImage201Envelope,
 )
@@ -511,6 +517,66 @@ class PresentationsClient:
         """
         _response = self._raw_client.import_public_program_presentation_image(
             program_id, presentation_id, url=url, workspace_id=workspace_id, alt=alt, request_options=request_options
+        )
+        return _response.data
+
+    def import_public_program_presentation_diagram_image(
+        self,
+        program_id: str,
+        presentation_id: str,
+        *,
+        diagram_id: str,
+        workspace_id: typing.Optional[str] = None,
+        alt: typing.Optional[str] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> ImportPublicProgramPresentationDiagramImage201Envelope:
+        """
+        Store a Sanka diagram's latest image as an image of the presentation, for an image block
+        or accent. It stays as it is when the diagram changes; a `sankaDiagram` block follows it.
+
+        Parameters
+        ----------
+        program_id : str
+
+        presentation_id : str
+
+        diagram_id : str
+            A Sanka diagram in the same workspace; its latest revision is stored.
+
+        workspace_id : typing.Optional[str]
+
+        alt : typing.Optional[str]
+            Defaults to the diagram's name.
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        ImportPublicProgramPresentationDiagramImage201Envelope
+            Successful Response
+
+        Examples
+        --------
+        from sanka_sdk import SankaClient
+
+        client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+        client.presentations.import_public_program_presentation_diagram_image(
+            program_id="program_id",
+            presentation_id="presentation_id",
+            diagram_id="diagramId",
+        )
+        """
+        _response = self._raw_client.import_public_program_presentation_diagram_image(
+            program_id,
+            presentation_id,
+            diagram_id=diagram_id,
+            workspace_id=workspace_id,
+            alt=alt,
+            request_options=request_options,
         )
         return _response.data
 
@@ -1171,6 +1237,57 @@ class PresentationsClient:
         """
         _response = self._raw_client.import_public_presentation_image(
             presentation_id, url=url, workspace_id=workspace_id, alt=alt, request_options=request_options
+        )
+        return _response.data
+
+    def import_public_presentation_diagram_image(
+        self,
+        presentation_id: str,
+        *,
+        diagram_id: str,
+        workspace_id: typing.Optional[str] = None,
+        alt: typing.Optional[str] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> ImportPublicPresentationDiagramImage201Envelope:
+        """
+        Store a Sanka diagram's latest image as an image of the presentation, for an image block
+        or accent. It stays as it is when the diagram changes; a `sankaDiagram` block follows it.
+
+        Parameters
+        ----------
+        presentation_id : str
+
+        diagram_id : str
+            A Sanka diagram in the same workspace; its latest revision is stored.
+
+        workspace_id : typing.Optional[str]
+
+        alt : typing.Optional[str]
+            Defaults to the diagram's name.
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        ImportPublicPresentationDiagramImage201Envelope
+            Successful Response
+
+        Examples
+        --------
+        from sanka_sdk import SankaClient
+
+        client = SankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+        client.presentations.import_public_presentation_diagram_image(
+            presentation_id="presentation_id",
+            diagram_id="diagramId",
+        )
+        """
+        _response = self._raw_client.import_public_presentation_diagram_image(
+            presentation_id, diagram_id=diagram_id, workspace_id=workspace_id, alt=alt, request_options=request_options
         )
         return _response.data
 
@@ -1961,6 +2078,74 @@ class AsyncPresentationsClient:
         )
         return _response.data
 
+    async def import_public_program_presentation_diagram_image(
+        self,
+        program_id: str,
+        presentation_id: str,
+        *,
+        diagram_id: str,
+        workspace_id: typing.Optional[str] = None,
+        alt: typing.Optional[str] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> ImportPublicProgramPresentationDiagramImage201Envelope:
+        """
+        Store a Sanka diagram's latest image as an image of the presentation, for an image block
+        or accent. It stays as it is when the diagram changes; a `sankaDiagram` block follows it.
+
+        Parameters
+        ----------
+        program_id : str
+
+        presentation_id : str
+
+        diagram_id : str
+            A Sanka diagram in the same workspace; its latest revision is stored.
+
+        workspace_id : typing.Optional[str]
+
+        alt : typing.Optional[str]
+            Defaults to the diagram's name.
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        ImportPublicProgramPresentationDiagramImage201Envelope
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sanka_sdk import AsyncSankaClient
+
+        client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.presentations.import_public_program_presentation_diagram_image(
+                program_id="program_id",
+                presentation_id="presentation_id",
+                diagram_id="diagramId",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.import_public_program_presentation_diagram_image(
+            program_id,
+            presentation_id,
+            diagram_id=diagram_id,
+            workspace_id=workspace_id,
+            alt=alt,
+            request_options=request_options,
+        )
+        return _response.data
+
     async def preview_public_program_presentation(
         self,
         program_id: str,
@@ -2718,6 +2903,65 @@ class AsyncPresentationsClient:
         """
         _response = await self._raw_client.import_public_presentation_image(
             presentation_id, url=url, workspace_id=workspace_id, alt=alt, request_options=request_options
+        )
+        return _response.data
+
+    async def import_public_presentation_diagram_image(
+        self,
+        presentation_id: str,
+        *,
+        diagram_id: str,
+        workspace_id: typing.Optional[str] = None,
+        alt: typing.Optional[str] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> ImportPublicPresentationDiagramImage201Envelope:
+        """
+        Store a Sanka diagram's latest image as an image of the presentation, for an image block
+        or accent. It stays as it is when the diagram changes; a `sankaDiagram` block follows it.
+
+        Parameters
+        ----------
+        presentation_id : str
+
+        diagram_id : str
+            A Sanka diagram in the same workspace; its latest revision is stored.
+
+        workspace_id : typing.Optional[str]
+
+        alt : typing.Optional[str]
+            Defaults to the diagram's name.
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        ImportPublicPresentationDiagramImage201Envelope
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sanka_sdk import AsyncSankaClient
+
+        client = AsyncSankaClient(
+            workspace_code="YOUR_WORKSPACE_CODE",
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.presentations.import_public_presentation_diagram_image(
+                presentation_id="presentation_id",
+                diagram_id="diagramId",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.import_public_presentation_diagram_image(
+            presentation_id, diagram_id=diagram_id, workspace_id=workspace_id, alt=alt, request_options=request_options
         )
         return _response.data
 

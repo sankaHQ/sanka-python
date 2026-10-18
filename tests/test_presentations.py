@@ -19,6 +19,7 @@ WORKSPACE = "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa"
 PRESENTATION = "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb"
 PROGRAM = "cccccccc-cccc-4ccc-8ccc-cccccccccccc"
 EXPORT = "dddddddd-dddd-4ddd-8ddd-dddddddddddd"
+DIAGRAM = "eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee"
 DECK = {
     "schema": "sanka.deck/v1",
     "page": {"size": "16:9"},
@@ -172,6 +173,77 @@ class PresentationsTransportTest(unittest.TestCase):
             (sent["from"], sent["to"], sent["endArrow"]), ({"x": 72, "y": 160}, {"x": 712, "y": 160}, True)
         )
         self.assertNotIn("from_point", sent)
+
+    def test_a_diagram_inside_columns_reads_as_a_typed_block(self):
+        columns = {
+            "type": "columns",
+            "id": "c1",
+            "columns": [
+                {"width": 7, "blocks": [{"type": "sankaDiagram", "id": "d1", "diagramId": DIAGRAM, "fit": "contain"}]},
+                {"width": 5, "blocks": [{"type": "text", "id": "t1", "markdown": "Notes"}]},
+            ],
+        }
+        deck = {**DECK, "slides": [{"id": "s1", "blocks": [columns]}]}
+        self.response = httpx.Response(200, json=envelope({**presentation(), "deck": deck}))
+        read = self.client.presentations.get_public_presentation(PRESENTATION)
+        diagram = read.data.deck.slides[0].blocks[0].columns[0].blocks[0]
+        self.assertEqual((diagram.type, diagram.diagram_id, diagram.fit), ("sankaDiagram", DIAGRAM, "contain"))
+
+    def test_diagram_image_import_posts_the_diagram_to_each_presentation_route(self):
+        image = {
+            "assetId": "asset-diagram",
+            "contentType": "image/png",
+            "sizeBytes": 2048,
+            "width": 1600,
+            "height": 900,
+            "alt": "Order flow",
+        }
+        self.response = httpx.Response(201, json=envelope(image))
+        flow = self.client.presentations.import_public_presentation_diagram_image(
+            PRESENTATION, workspace_id=WORKSPACE, diagram_id=DIAGRAM, alt="Order flow"
+        )
+        program = self.client.presentations.import_public_program_presentation_diagram_image(
+            PROGRAM, PRESENTATION, workspace_id=WORKSPACE, diagram_id=DIAGRAM
+        )
+        self.assertEqual(
+            (flow.data.asset_id, flow.data.width, program.data.asset_id), ("asset-diagram", 1600, "asset-diagram")
+        )
+        self.assertEqual(
+            [(request.method, request.url.path, json.loads(request.content)) for request in self.requests],
+            [
+                (
+                    "POST",
+                    f"/v2/public/documents/presentations/{PRESENTATION}/images/diagram",
+                    {"diagramId": DIAGRAM, "alt": "Order flow"},
+                ),
+                (
+                    "POST",
+                    f"/v2/public/ferry/programs/{PROGRAM}/presentations/{PRESENTATION}/images/diagram",
+                    {"diagramId": DIAGRAM},
+                ),
+            ],
+        )
+
+    def test_a_google_slides_export_reads_back_the_slides_link(self):
+        queued = {
+            "id": EXPORT,
+            "documentId": PRESENTATION,
+            "product": "flow",
+            "revision": 3,
+            "format": "google_slides",
+            "status": "queued",
+        }
+        slides_url = "https://docs.google.com/presentation/d/q4-review/edit"
+        self.response = httpx.Response(202, json=envelope(queued))
+        self.client.presentations.create_public_presentation_export(
+            PRESENTATION, workspace_id=WORKSPACE, format="google_slides"
+        )
+        self.response = httpx.Response(
+            200, json=envelope({**queued, "status": "completed", "progress": 100, "googleSlidesUrl": slides_url})
+        )
+        result = self.client.presentations.get_public_presentation_export(PRESENTATION, EXPORT, workspace_id=WORKSPACE)
+        self.assertEqual(json.loads(self.requests[0].content), {"format": "google_slides"})
+        self.assertEqual((result.data.format, result.data.google_slides_url), ("google_slides", slides_url))
 
     def test_stale_replace_fails_once_with_the_revision_conflict(self):
         conflict = {"code": "PRESENTATION_REVISION_CONFLICT", "message": "Revision 4 is current"}

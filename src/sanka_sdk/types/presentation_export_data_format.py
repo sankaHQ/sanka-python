@@ -2,4 +2,4 @@
 
 import typing
 
-PresentationExportDataFormat = typing.Union[typing.Literal["pptx", "pdf"], typing.Any]
+PresentationExportDataFormat = typing.Union[typing.Literal["pptx", "pdf", "google_slides"], typing.Any]

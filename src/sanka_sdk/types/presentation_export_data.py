@@ -29,6 +29,7 @@ class PresentationExportData(UncheckedBaseModel):
     warnings: typing.Optional[typing.List[typing.Dict[str, typing.Optional[typing.Any]]]] = None
     error_code: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="errorCode")] = None
     error_message: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="errorMessage")] = None
+    google_slides_url: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="googleSlidesUrl")] = None
     download_path: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="downloadPath")] = (
         pydantic.Field(default=None)
     )
