@@ -16,6 +16,7 @@ from .focus import Focus
 from .frame import Frame
 from .image_block_aspect import ImageBlockAspect
 from .image_block_fit import ImageBlockFit
+from .sanka_diagram_block_fit import SankaDiagramBlockFit
 from .stat_item import StatItem
 from .step_item import StepItem
 from .steps_block_direction import StepsBlockDirection
@@ -155,6 +156,25 @@ class ColumnBlocksItem_Quote(UncheckedBaseModel):
             extra = pydantic.Extra.allow
 
 
+class ColumnBlocksItem_SankaDiagram(UncheckedBaseModel):
+    type: typing.Literal["sankaDiagram"] = "sankaDiagram"
+    id: typing.Optional[str] = None
+    diagram_id: typing_extensions.Annotated[str, FieldMetadata(alias="diagramId")]
+    alt: typing.Optional[str] = None
+    caption: typing.Optional[str] = None
+    fit: typing.Optional[SankaDiagramBlockFit] = None
+    frame: typing.Optional[Frame] = None
+
+    if IS_PYDANTIC_V2:
+        model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
+    else:
+
+        class Config:
+            frozen = True
+            smart_union = True
+            extra = pydantic.Extra.allow
+
+
 class ColumnBlocksItem_Stats(UncheckedBaseModel):
     type: typing.Literal["stats"] = "stats"
     id: typing.Optional[str] = None
@@ -258,6 +278,7 @@ ColumnBlocksItem = typing_extensions.Annotated[
         ColumnBlocksItem_Heading,
         ColumnBlocksItem_Image,
         ColumnBlocksItem_Quote,
+        ColumnBlocksItem_SankaDiagram,
         ColumnBlocksItem_Stats,
         ColumnBlocksItem_Steps,
         ColumnBlocksItem_Table,

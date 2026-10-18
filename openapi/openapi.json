@@ -13733,6 +13733,99 @@
         ]
       }
     },
+    "/v2/public/ferry/programs/{program_id}/presentations/{presentation_id}/images/diagram": {
+      "post": {
+        "tags": [
+          "presentations"
+        ],
+        "summary": "Import Public Program Presentation Diagram Image",
+        "description": "Store a Sanka diagram's latest image as an image of the presentation, for an image block\nor accent. It stays as it is when the diagram changes; a `sankaDiagram` block follows it.",
+        "operationId": "import_public_program_presentation_diagram_image",
+        "parameters": [
+          {
+            "name": "program_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Program Id"
+            }
+          },
+          {
+            "name": "presentation_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Presentation Id"
+            }
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Workspace Id"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/XWorkspaceCode"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PresentationDiagramImageRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ImportPublicProgramPresentationDiagramImage201Envelope"
+                }
+              }
+            },
+            "headers": {
+              "x-ctx-id": {
+                "$ref": "#/components/headers/XCtxId"
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "403": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        },
+        "x-sanka-surface": "public_developer",
+        "x-sanka-api-version": "v2",
+        "x-sanka-auth": "developer_bearer",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
     "/v2/public/ferry/programs/{program_id}/presentations/{presentation_id}/previews": {
       "post": {
         "tags": [
@@ -14790,6 +14883,90 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ImportPublicPresentationImage201Envelope"
+                }
+              }
+            },
+            "headers": {
+              "x-ctx-id": {
+                "$ref": "#/components/headers/XCtxId"
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "403": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        },
+        "x-sanka-surface": "public_developer",
+        "x-sanka-api-version": "v2",
+        "x-sanka-auth": "developer_bearer",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/v2/public/documents/presentations/{presentation_id}/images/diagram": {
+      "post": {
+        "tags": [
+          "presentations"
+        ],
+        "summary": "Import Public Flow Presentation Diagram Image",
+        "description": "Store a Sanka diagram's latest image as an image of the presentation, for an image block\nor accent. It stays as it is when the diagram changes; a `sankaDiagram` block follows it.",
+        "operationId": "import_public_presentation_diagram_image",
+        "parameters": [
+          {
+            "name": "presentation_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Presentation Id"
+            }
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Workspace Id"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/XWorkspaceCode"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PresentationDiagramImageRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ImportPublicPresentationDiagramImage201Envelope"
                 }
               }
             },
@@ -46601,7 +46778,47 @@
         ],
         "title": "ImportJobCreateRequest"
       },
+      "ImportPublicPresentationDiagramImage201Envelope": {
+        "type": "object",
+        "required": [
+          "success",
+          "data",
+          "meta"
+        ],
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "const": true
+          },
+          "data": {
+            "$ref": "#/components/schemas/PresentationImageData"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/EnvelopeMeta"
+          }
+        }
+      },
       "ImportPublicPresentationImage201Envelope": {
+        "type": "object",
+        "required": [
+          "success",
+          "data",
+          "meta"
+        ],
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "const": true
+          },
+          "data": {
+            "$ref": "#/components/schemas/PresentationImageData"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/EnvelopeMeta"
+          }
+        }
+      },
+      "ImportPublicProgramPresentationDiagramImage201Envelope": {
         "type": "object",
         "required": [
           "success",
@@ -54071,7 +54288,8 @@
             "type": "string",
             "enum": [
               "pptx",
-              "pdf"
+              "pdf",
+              "google_slides"
             ],
             "title": "Format"
           },
@@ -54144,6 +54362,17 @@
               }
             ],
             "title": "Errormessage"
+          },
+          "googleSlidesUrl": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Googleslidesurl"
           },
           "downloadPath": {
             "anyOf": [
@@ -62366,13 +62595,43 @@
         ],
         "title": "PresentationCreateRequest"
       },
+      "PresentationDiagramImageRequest": {
+        "properties": {
+          "diagramId": {
+            "type": "string",
+            "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+            "title": "Diagramid",
+            "description": "A Sanka diagram in the same workspace; its latest revision is stored."
+          },
+          "alt": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 300
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Alt",
+            "description": "Defaults to the diagram's name."
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "diagramId"
+        ],
+        "title": "PresentationDiagramImageRequest"
+      },
       "PresentationExportRequest": {
         "properties": {
           "format": {
             "type": "string",
             "enum": [
               "pptx",
-              "pdf"
+              "pdf",
+              "google_slides"
             ],
             "title": "Format"
           },
@@ -67988,6 +68247,9 @@
                   "$ref": "#/components/schemas/DiagramBlock"
                 },
                 {
+                  "$ref": "#/components/schemas/SankaDiagramBlock"
+                },
+                {
                   "$ref": "#/components/schemas/DividerBlock"
                 }
               ],
@@ -68001,6 +68263,7 @@
                   "heading": "#/components/schemas/HeadingBlock",
                   "image": "#/components/schemas/ImageBlock",
                   "quote": "#/components/schemas/QuoteBlock",
+                  "sankaDiagram": "#/components/schemas/SankaDiagramBlock",
                   "stats": "#/components/schemas/StatsBlock",
                   "steps": "#/components/schemas/StepsBlock",
                   "table": "#/components/schemas/TableBlock",

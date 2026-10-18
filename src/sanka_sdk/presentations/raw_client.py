@@ -31,7 +31,13 @@ from ..types.get_public_presentation_catalog_200_envelope import GetPublicPresen
 from ..types.get_public_presentation_export_200_envelope import GetPublicPresentationExport200Envelope
 from ..types.get_public_program_presentation_200_envelope import GetPublicProgramPresentation200Envelope
 from ..types.get_public_program_presentation_export_200_envelope import GetPublicProgramPresentationExport200Envelope
+from ..types.import_public_presentation_diagram_image_201_envelope import (
+    ImportPublicPresentationDiagramImage201Envelope,
+)
 from ..types.import_public_presentation_image_201_envelope import ImportPublicPresentationImage201Envelope
+from ..types.import_public_program_presentation_diagram_image_201_envelope import (
+    ImportPublicProgramPresentationDiagramImage201Envelope,
+)
 from ..types.import_public_program_presentation_image_201_envelope import (
     ImportPublicProgramPresentationImage201Envelope,
 )
@@ -797,6 +803,106 @@ class RawPresentationsClient:
                     ImportPublicProgramPresentationImage201Envelope,
                     construct_type(
                         type_=ImportPublicProgramPresentationImage201Envelope,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    def import_public_program_presentation_diagram_image(
+        self,
+        program_id: str,
+        presentation_id: str,
+        *,
+        diagram_id: str,
+        workspace_id: typing.Optional[str] = None,
+        alt: typing.Optional[str] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> HttpResponse[ImportPublicProgramPresentationDiagramImage201Envelope]:
+        """
+        Store a Sanka diagram's latest image as an image of the presentation, for an image block
+        or accent. It stays as it is when the diagram changes; a `sankaDiagram` block follows it.
+
+        Parameters
+        ----------
+        program_id : str
+
+        presentation_id : str
+
+        diagram_id : str
+            A Sanka diagram in the same workspace; its latest revision is stored.
+
+        workspace_id : typing.Optional[str]
+
+        alt : typing.Optional[str]
+            Defaults to the diagram's name.
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[ImportPublicProgramPresentationDiagramImage201Envelope]
+            Successful Response
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            f"v2/public/ferry/programs/{jsonable_encoder(program_id)}/presentations/{jsonable_encoder(presentation_id)}/images/diagram",
+            method="POST",
+            params={
+                "workspace_id": workspace_id,
+            },
+            json={
+                "diagramId": diagram_id,
+                "alt": alt,
+            },
+            headers={
+                "content-type": "application/json",
+            },
+            request_options=request_options,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    ImportPublicProgramPresentationDiagramImage201Envelope,
+                    construct_type(
+                        type_=ImportPublicProgramPresentationDiagramImage201Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
@@ -1950,6 +2056,103 @@ class RawPresentationsClient:
                     ImportPublicPresentationImage201Envelope,
                     construct_type(
                         type_=ImportPublicPresentationImage201Envelope,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    def import_public_presentation_diagram_image(
+        self,
+        presentation_id: str,
+        *,
+        diagram_id: str,
+        workspace_id: typing.Optional[str] = None,
+        alt: typing.Optional[str] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> HttpResponse[ImportPublicPresentationDiagramImage201Envelope]:
+        """
+        Store a Sanka diagram's latest image as an image of the presentation, for an image block
+        or accent. It stays as it is when the diagram changes; a `sankaDiagram` block follows it.
+
+        Parameters
+        ----------
+        presentation_id : str
+
+        diagram_id : str
+            A Sanka diagram in the same workspace; its latest revision is stored.
+
+        workspace_id : typing.Optional[str]
+
+        alt : typing.Optional[str]
+            Defaults to the diagram's name.
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[ImportPublicPresentationDiagramImage201Envelope]
+            Successful Response
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            f"v2/public/documents/presentations/{jsonable_encoder(presentation_id)}/images/diagram",
+            method="POST",
+            params={
+                "workspace_id": workspace_id,
+            },
+            json={
+                "diagramId": diagram_id,
+                "alt": alt,
+            },
+            headers={
+                "content-type": "application/json",
+            },
+            request_options=request_options,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    ImportPublicPresentationDiagramImage201Envelope,
+                    construct_type(
+                        type_=ImportPublicPresentationDiagramImage201Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
@@ -3230,6 +3433,106 @@ class AsyncRawPresentationsClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
+    async def import_public_program_presentation_diagram_image(
+        self,
+        program_id: str,
+        presentation_id: str,
+        *,
+        diagram_id: str,
+        workspace_id: typing.Optional[str] = None,
+        alt: typing.Optional[str] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> AsyncHttpResponse[ImportPublicProgramPresentationDiagramImage201Envelope]:
+        """
+        Store a Sanka diagram's latest image as an image of the presentation, for an image block
+        or accent. It stays as it is when the diagram changes; a `sankaDiagram` block follows it.
+
+        Parameters
+        ----------
+        program_id : str
+
+        presentation_id : str
+
+        diagram_id : str
+            A Sanka diagram in the same workspace; its latest revision is stored.
+
+        workspace_id : typing.Optional[str]
+
+        alt : typing.Optional[str]
+            Defaults to the diagram's name.
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[ImportPublicProgramPresentationDiagramImage201Envelope]
+            Successful Response
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            f"v2/public/ferry/programs/{jsonable_encoder(program_id)}/presentations/{jsonable_encoder(presentation_id)}/images/diagram",
+            method="POST",
+            params={
+                "workspace_id": workspace_id,
+            },
+            json={
+                "diagramId": diagram_id,
+                "alt": alt,
+            },
+            headers={
+                "content-type": "application/json",
+            },
+            request_options=request_options,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    ImportPublicProgramPresentationDiagramImage201Envelope,
+                    construct_type(
+                        type_=ImportPublicProgramPresentationDiagramImage201Envelope,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
     async def preview_public_program_presentation(
         self,
         program_id: str,
@@ -4342,6 +4645,103 @@ class AsyncRawPresentationsClient:
                     ImportPublicPresentationImage201Envelope,
                     construct_type(
                         type_=ImportPublicPresentationImage201Envelope,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorEnvelope,
+                        construct_type(
+                            type_=ErrorEnvelope,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    async def import_public_presentation_diagram_image(
+        self,
+        presentation_id: str,
+        *,
+        diagram_id: str,
+        workspace_id: typing.Optional[str] = None,
+        alt: typing.Optional[str] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> AsyncHttpResponse[ImportPublicPresentationDiagramImage201Envelope]:
+        """
+        Store a Sanka diagram's latest image as an image of the presentation, for an image block
+        or accent. It stays as it is when the diagram changes; a `sankaDiagram` block follows it.
+
+        Parameters
+        ----------
+        presentation_id : str
+
+        diagram_id : str
+            A Sanka diagram in the same workspace; its latest revision is stored.
+
+        workspace_id : typing.Optional[str]
+
+        alt : typing.Optional[str]
+            Defaults to the diagram's name.
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[ImportPublicPresentationDiagramImage201Envelope]
+            Successful Response
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            f"v2/public/documents/presentations/{jsonable_encoder(presentation_id)}/images/diagram",
+            method="POST",
+            params={
+                "workspace_id": workspace_id,
+            },
+            json={
+                "diagramId": diagram_id,
+                "alt": alt,
+            },
+            headers={
+                "content-type": "application/json",
+            },
+            request_options=request_options,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    ImportPublicPresentationDiagramImage201Envelope,
+                    construct_type(
+                        type_=ImportPublicPresentationDiagramImage201Envelope,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
