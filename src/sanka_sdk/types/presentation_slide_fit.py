@@ -6,6 +6,7 @@ import pydantic
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.unchecked_base_model import UncheckedBaseModel
 from .presentation_fit_overflow import PresentationFitOverflow
+from .presentation_frame_fit import PresentationFrameFit
 
 
 class PresentationSlideFit(UncheckedBaseModel):
@@ -13,6 +14,11 @@ class PresentationSlideFit(UncheckedBaseModel):
     overflow: typing.Optional[PresentationFitOverflow] = pydantic.Field(default=None)
     """
     Set when content does not fit even at the theme's minimum.
+    """
+
+    frames: typing.Optional[typing.List[PresentationFrameFit]] = pydantic.Field(default=None)
+    """
+    Free slides: each box's own fit scale and overflow.
     """
 
     if IS_PYDANTIC_V2:

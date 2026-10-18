@@ -11,6 +11,11 @@ from ..core.unchecked_base_model import UncheckedBaseModel
 
 class PresentationCatalogData(UncheckedBaseModel):
     schema_versions: typing_extensions.Annotated[typing.List[str], FieldMetadata(alias="schemaVersions")]
+    features: typing.Optional[typing.List[str]] = pydantic.Field(default=None)
+    """
+    Optional capabilities this workspace may use, e.g. `freeform`.
+    """
+
     page_sizes: typing_extensions.Annotated[
         typing.List[typing.Dict[str, typing.Optional[typing.Any]]], FieldMetadata(alias="pageSizes")
     ]
@@ -29,6 +34,10 @@ class PresentationCatalogData(UncheckedBaseModel):
         typing.Dict[str, typing.Optional[typing.Any]], FieldMetadata(alias="deckJsonSchema")
     ]
     example: typing.Dict[str, typing.Optional[typing.Any]]
+    freeform: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = pydantic.Field(default=None)
+    """
+    Free placement (`positioning: free` slides): units, safe areas, grid, minimum and default frames, text sizes, shape tones and guidance.
+    """
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

@@ -8,6 +8,7 @@ from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.serialization import FieldMetadata
 from ..core.unchecked_base_model import UncheckedBaseModel
 from .focus import Focus
+from .frame import Frame
 from .image_block_aspect import ImageBlockAspect
 from .image_block_fit import ImageBlockFit
 
@@ -21,6 +22,7 @@ class ImageBlock(UncheckedBaseModel):
     focus: typing.Optional[Focus] = None
     aspect: typing.Optional[ImageBlockAspect] = None
     rounded: typing.Optional[bool] = None
+    frame: typing.Optional[Frame] = None
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

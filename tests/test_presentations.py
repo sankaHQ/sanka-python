@@ -10,6 +10,8 @@ from sanka_sdk import AsyncSankaClient, SankaClient
 from sanka_sdk.types.presentation_patch_request_ops_item import (
     PresentationPatchRequestOpsItem_DeleteSlides,
     PresentationPatchRequestOpsItem_InsertBlocks,
+    PresentationPatchRequestOpsItem_SetPageSize,
+    PresentationPatchRequestOpsItem_SetSlidePositioning,
     PresentationPatchRequestOpsItem_SetTitle,
 )
 
@@ -95,6 +97,10 @@ class PresentationsTransportTest(unittest.TestCase):
                     slide_id="s1", after="h1", blocks=[{"type": "callout", "markdown": "Ship it"}]
                 ),
                 PresentationPatchRequestOpsItem_DeleteSlides(slide_ids=["s9"]),
+                PresentationPatchRequestOpsItem_SetPageSize(size="a4-landscape"),
+                PresentationPatchRequestOpsItem_SetSlidePositioning(
+                    slide_id="s1", positioning="free", frames={"h1": {"x": 72, "y": 56, "w": 640, "h": 80}}
+                ),
             ],
         )
         self.assertEqual(result.data.revision, 4)
@@ -115,9 +121,57 @@ class PresentationsTransportTest(unittest.TestCase):
                         "blocks": [{"type": "callout", "markdown": "Ship it"}],
                     },
                     {"op": "delete_slides", "slideIds": ["s9"]},
+                    {"op": "set_page_size", "size": "a4-landscape"},
+                    {
+                        "op": "set_slide_positioning",
+                        "slideId": "s1",
+                        "positioning": "free",
+                        "frames": {"h1": {"x": 72, "y": 56, "w": 640, "h": 80}},
+                    },
                 ],
             },
         )
+
+    def test_a_free_slide_reads_typed_and_goes_back_with_its_wire_names(self):
+        free = {
+            **DECK,
+            "slides": [
+                {
+                    "id": "s1",
+                    "positioning": "free",
+                    "blocks": [
+                        {
+                            "type": "heading",
+                            "id": "h1",
+                            "level": 1,
+                            "text": "Q4",
+                            "frame": {"x": 72, "y": 56, "w": 640, "h": 80},
+                        },
+                        {
+                            "type": "line",
+                            "id": "l1",
+                            "from": {"x": 72, "y": 160},
+                            "to": {"x": 712, "y": 160},
+                            "stroke": {"tone": "accent", "width": 2},
+                            "endArrow": True,
+                        },
+                    ],
+                }
+            ],
+        }
+        self.response = httpx.Response(200, json=envelope({**presentation(), "deck": free}))
+        read = self.client.presentations.get_public_presentation(PRESENTATION)
+        slide = read.data.deck.slides[0]
+        heading, line = slide.blocks
+        self.assertEqual(
+            (slide.positioning, heading.frame.x, line.from_point.x, line.to_point.x), ("free", 72, 72, 712)
+        )
+        self.client.presentations.replace_public_presentation(PRESENTATION, expected_revision=3, deck=read.data.deck)
+        sent = json.loads(self.requests[1].content)["deck"]["slides"][0]["blocks"][1]
+        self.assertEqual(
+            (sent["from"], sent["to"], sent["endArrow"]), ({"x": 72, "y": 160}, {"x": 712, "y": 160}, True)
+        )
+        self.assertNotIn("from_point", sent)
 
     def test_stale_replace_fails_once_with_the_revision_conflict(self):
         conflict = {"code": "PRESENTATION_REVISION_CONFLICT", "message": "Revision 4 is current"}

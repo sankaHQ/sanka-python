@@ -14,10 +14,16 @@ from .slide_background import SlideBackground
 from .slide_blocks_item import SlideBlocksItem
 from .slide_layout import SlideLayout
 from .slide_overlay import SlideOverlay
+from .slide_positioning import SlidePositioning
 
 
 class Slide(UncheckedBaseModel):
     id: typing.Optional[str] = None
+    positioning: typing.Optional[SlidePositioning] = pydantic.Field(default=None)
+    """
+    `flow` stacks blocks in the layout's body; `free` places every top-level block in its `frame` (array order is stacking order, bottom first).
+    """
+
     layout: typing.Optional[SlideLayout] = None
     accent: typing.Optional[SlideAccent] = None
     accent_size: typing_extensions.Annotated[typing.Optional[SlideAccentSize], FieldMetadata(alias="accentSize")] = None

@@ -5,6 +5,7 @@ import typing
 import pydantic
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.unchecked_base_model import UncheckedBaseModel
+from .frame import Frame
 
 
 class DiagramBlock(UncheckedBaseModel):
@@ -12,6 +13,7 @@ class DiagramBlock(UncheckedBaseModel):
     mermaid: str
     alt: typing.Optional[str] = None
     caption: typing.Optional[str] = None
+    frame: typing.Optional[Frame] = None
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
