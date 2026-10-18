@@ -1,0 +1,10 @@
+# SDK-only names; the wire format is unchanged.
+components:
+  schemas:
+    LineBlock:
+      properties:
+        # `from` is a Python keyword, so both endpoints get attribute names.
+        from:
+          x-fern-property-name: fromPoint
+        to:
+          x-fern-property-name: toPoint

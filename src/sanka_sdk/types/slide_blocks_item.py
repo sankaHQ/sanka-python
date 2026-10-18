@@ -14,11 +14,18 @@ from .card_item import CardItem
 from .cards_block_style import CardsBlockStyle
 from .column import Column
 from .focus import Focus
+from .frame import Frame
 from .image_block_aspect import ImageBlockAspect
 from .image_block_fit import ImageBlockFit
+from .point import Point
+from .sanka_diagram_block_fit import SankaDiagramBlockFit
+from .shape_block_fill import ShapeBlockFill
+from .shape_block_shape import ShapeBlockShape
+from .shape_block_text_align import ShapeBlockTextAlign
 from .stat_item import StatItem
 from .step_item import StepItem
 from .steps_block_direction import StepsBlockDirection
+from .stroke_style import StrokeStyle
 from .table_column import TableColumn
 from .text_block_size import TextBlockSize
 from .text_block_tone import TextBlockTone
@@ -31,6 +38,8 @@ class SlideBlocksItem_Callout(UncheckedBaseModel):
     id: typing.Optional[str] = None
     tone: typing.Optional[CalloutBlockTone] = None
     markdown: str
+    font_size: typing_extensions.Annotated[typing.Optional[float], FieldMetadata(alias="fontSize")] = None
+    frame: typing.Optional[Frame] = None
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
@@ -48,6 +57,8 @@ class SlideBlocksItem_Cards(UncheckedBaseModel):
     items: typing.List[CardItem]
     columns: typing.Optional[str] = None
     style: typing.Optional[CardsBlockStyle] = None
+    text_scale: typing_extensions.Annotated[typing.Optional[float], FieldMetadata(alias="textScale")] = None
+    frame: typing.Optional[Frame] = None
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
@@ -80,6 +91,7 @@ class SlideBlocksItem_Diagram(UncheckedBaseModel):
     mermaid: str
     alt: typing.Optional[str] = None
     caption: typing.Optional[str] = None
+    frame: typing.Optional[Frame] = None
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
@@ -94,6 +106,7 @@ class SlideBlocksItem_Diagram(UncheckedBaseModel):
 class SlideBlocksItem_Divider(UncheckedBaseModel):
     type: typing.Literal["divider"] = "divider"
     id: typing.Optional[str] = None
+    frame: typing.Optional[Frame] = None
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
@@ -111,6 +124,8 @@ class SlideBlocksItem_Heading(UncheckedBaseModel):
     level: typing.Optional[int] = None
     text: str
     kicker: typing.Optional[str] = None
+    font_size: typing_extensions.Annotated[typing.Optional[float], FieldMetadata(alias="fontSize")] = None
+    frame: typing.Optional[Frame] = None
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
@@ -132,6 +147,26 @@ class SlideBlocksItem_Image(UncheckedBaseModel):
     focus: typing.Optional[Focus] = None
     aspect: typing.Optional[ImageBlockAspect] = None
     rounded: typing.Optional[bool] = None
+    frame: typing.Optional[Frame] = None
+
+    if IS_PYDANTIC_V2:
+        model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
+    else:
+
+        class Config:
+            frozen = True
+            smart_union = True
+            extra = pydantic.Extra.allow
+
+
+class SlideBlocksItem_Line(UncheckedBaseModel):
+    type: typing.Literal["line"] = "line"
+    id: typing.Optional[str] = None
+    from_point: typing_extensions.Annotated[Point, FieldMetadata(alias="from")]
+    to_point: typing_extensions.Annotated[Point, FieldMetadata(alias="to")]
+    stroke: StrokeStyle
+    start_arrow: typing_extensions.Annotated[typing.Optional[bool], FieldMetadata(alias="startArrow")] = None
+    end_arrow: typing_extensions.Annotated[typing.Optional[bool], FieldMetadata(alias="endArrow")] = None
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
@@ -148,6 +183,50 @@ class SlideBlocksItem_Quote(UncheckedBaseModel):
     id: typing.Optional[str] = None
     text: str
     attribution: typing.Optional[str] = None
+    font_size: typing_extensions.Annotated[typing.Optional[float], FieldMetadata(alias="fontSize")] = None
+    frame: typing.Optional[Frame] = None
+
+    if IS_PYDANTIC_V2:
+        model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
+    else:
+
+        class Config:
+            frozen = True
+            smart_union = True
+            extra = pydantic.Extra.allow
+
+
+class SlideBlocksItem_SankaDiagram(UncheckedBaseModel):
+    type: typing.Literal["sankaDiagram"] = "sankaDiagram"
+    id: typing.Optional[str] = None
+    diagram_id: typing_extensions.Annotated[str, FieldMetadata(alias="diagramId")]
+    alt: typing.Optional[str] = None
+    caption: typing.Optional[str] = None
+    fit: typing.Optional[SankaDiagramBlockFit] = None
+    frame: typing.Optional[Frame] = None
+
+    if IS_PYDANTIC_V2:
+        model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
+    else:
+
+        class Config:
+            frozen = True
+            smart_union = True
+            extra = pydantic.Extra.allow
+
+
+class SlideBlocksItem_Shape(UncheckedBaseModel):
+    type: typing.Literal["shape"] = "shape"
+    id: typing.Optional[str] = None
+    shape: ShapeBlockShape
+    fill: typing.Optional[ShapeBlockFill] = None
+    stroke: typing.Optional[StrokeStyle] = None
+    text: typing.Optional[str] = None
+    text_align: typing_extensions.Annotated[typing.Optional[ShapeBlockTextAlign], FieldMetadata(alias="textAlign")] = (
+        None
+    )
+    font_size: typing_extensions.Annotated[typing.Optional[float], FieldMetadata(alias="fontSize")] = None
+    frame: typing.Optional[Frame] = None
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
@@ -163,6 +242,8 @@ class SlideBlocksItem_Stats(UncheckedBaseModel):
     type: typing.Literal["stats"] = "stats"
     id: typing.Optional[str] = None
     items: typing.List[StatItem]
+    text_scale: typing_extensions.Annotated[typing.Optional[float], FieldMetadata(alias="textScale")] = None
+    frame: typing.Optional[Frame] = None
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
@@ -179,6 +260,8 @@ class SlideBlocksItem_Steps(UncheckedBaseModel):
     id: typing.Optional[str] = None
     items: typing.List[StepItem]
     direction: typing.Optional[StepsBlockDirection] = None
+    text_scale: typing_extensions.Annotated[typing.Optional[float], FieldMetadata(alias="textScale")] = None
+    frame: typing.Optional[Frame] = None
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
@@ -199,6 +282,8 @@ class SlideBlocksItem_Table(UncheckedBaseModel):
     emphasize_first_column: typing_extensions.Annotated[
         typing.Optional[bool], FieldMetadata(alias="emphasizeFirstColumn")
     ] = None
+    text_scale: typing_extensions.Annotated[typing.Optional[float], FieldMetadata(alias="textScale")] = None
+    frame: typing.Optional[Frame] = None
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
@@ -216,6 +301,8 @@ class SlideBlocksItem_Text(UncheckedBaseModel):
     markdown: str
     size: typing.Optional[TextBlockSize] = None
     tone: typing.Optional[TextBlockTone] = None
+    font_size: typing_extensions.Annotated[typing.Optional[float], FieldMetadata(alias="fontSize")] = None
+    frame: typing.Optional[Frame] = None
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
@@ -232,6 +319,8 @@ class SlideBlocksItem_Timeline(UncheckedBaseModel):
     id: typing.Optional[str] = None
     items: typing.List[TimelineItem]
     direction: typing.Optional[TimelineBlockDirection] = None
+    text_scale: typing_extensions.Annotated[typing.Optional[float], FieldMetadata(alias="textScale")] = None
+    frame: typing.Optional[Frame] = None
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
@@ -252,7 +341,10 @@ SlideBlocksItem = typing_extensions.Annotated[
         SlideBlocksItem_Divider,
         SlideBlocksItem_Heading,
         SlideBlocksItem_Image,
+        SlideBlocksItem_Line,
         SlideBlocksItem_Quote,
+        SlideBlocksItem_SankaDiagram,
+        SlideBlocksItem_Shape,
         SlideBlocksItem_Stats,
         SlideBlocksItem_Steps,
         SlideBlocksItem_Table,

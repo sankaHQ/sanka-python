@@ -3,14 +3,25 @@
 import typing
 
 import pydantic
+import typing_extensions
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
+from ..core.serialization import FieldMetadata
 from ..core.unchecked_base_model import UncheckedBaseModel
+from .frame import Frame
 
 
 class QuoteBlock(UncheckedBaseModel):
     id: typing.Optional[str] = None
     text: str
     attribution: typing.Optional[str] = None
+    font_size: typing_extensions.Annotated[typing.Optional[float], FieldMetadata(alias="fontSize")] = pydantic.Field(
+        default=None
+    )
+    """
+    Main text size in stage px (free slides only); 1 px = 0.75 pt.
+    """
+
+    frame: typing.Optional[Frame] = None
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

@@ -13,6 +13,7 @@ from .callout_block_tone import CalloutBlockTone
 from .card_item import CardItem
 from .cards_block_style import CardsBlockStyle
 from .focus import Focus
+from .frame import Frame
 from .image_block_aspect import ImageBlockAspect
 from .image_block_fit import ImageBlockFit
 from .stat_item import StatItem
@@ -30,6 +31,8 @@ class ColumnBlocksItem_Callout(UncheckedBaseModel):
     id: typing.Optional[str] = None
     tone: typing.Optional[CalloutBlockTone] = None
     markdown: str
+    font_size: typing_extensions.Annotated[typing.Optional[float], FieldMetadata(alias="fontSize")] = None
+    frame: typing.Optional[Frame] = None
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
@@ -47,6 +50,8 @@ class ColumnBlocksItem_Cards(UncheckedBaseModel):
     items: typing.List[CardItem]
     columns: typing.Optional[str] = None
     style: typing.Optional[CardsBlockStyle] = None
+    text_scale: typing_extensions.Annotated[typing.Optional[float], FieldMetadata(alias="textScale")] = None
+    frame: typing.Optional[Frame] = None
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
@@ -64,6 +69,7 @@ class ColumnBlocksItem_Diagram(UncheckedBaseModel):
     mermaid: str
     alt: typing.Optional[str] = None
     caption: typing.Optional[str] = None
+    frame: typing.Optional[Frame] = None
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
@@ -78,6 +84,7 @@ class ColumnBlocksItem_Diagram(UncheckedBaseModel):
 class ColumnBlocksItem_Divider(UncheckedBaseModel):
     type: typing.Literal["divider"] = "divider"
     id: typing.Optional[str] = None
+    frame: typing.Optional[Frame] = None
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
@@ -95,6 +102,8 @@ class ColumnBlocksItem_Heading(UncheckedBaseModel):
     level: typing.Optional[int] = None
     text: str
     kicker: typing.Optional[str] = None
+    font_size: typing_extensions.Annotated[typing.Optional[float], FieldMetadata(alias="fontSize")] = None
+    frame: typing.Optional[Frame] = None
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
@@ -116,6 +125,7 @@ class ColumnBlocksItem_Image(UncheckedBaseModel):
     focus: typing.Optional[Focus] = None
     aspect: typing.Optional[ImageBlockAspect] = None
     rounded: typing.Optional[bool] = None
+    frame: typing.Optional[Frame] = None
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
@@ -132,6 +142,8 @@ class ColumnBlocksItem_Quote(UncheckedBaseModel):
     id: typing.Optional[str] = None
     text: str
     attribution: typing.Optional[str] = None
+    font_size: typing_extensions.Annotated[typing.Optional[float], FieldMetadata(alias="fontSize")] = None
+    frame: typing.Optional[Frame] = None
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
@@ -147,6 +159,8 @@ class ColumnBlocksItem_Stats(UncheckedBaseModel):
     type: typing.Literal["stats"] = "stats"
     id: typing.Optional[str] = None
     items: typing.List[StatItem]
+    text_scale: typing_extensions.Annotated[typing.Optional[float], FieldMetadata(alias="textScale")] = None
+    frame: typing.Optional[Frame] = None
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
@@ -163,6 +177,8 @@ class ColumnBlocksItem_Steps(UncheckedBaseModel):
     id: typing.Optional[str] = None
     items: typing.List[StepItem]
     direction: typing.Optional[StepsBlockDirection] = None
+    text_scale: typing_extensions.Annotated[typing.Optional[float], FieldMetadata(alias="textScale")] = None
+    frame: typing.Optional[Frame] = None
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
@@ -183,6 +199,8 @@ class ColumnBlocksItem_Table(UncheckedBaseModel):
     emphasize_first_column: typing_extensions.Annotated[
         typing.Optional[bool], FieldMetadata(alias="emphasizeFirstColumn")
     ] = None
+    text_scale: typing_extensions.Annotated[typing.Optional[float], FieldMetadata(alias="textScale")] = None
+    frame: typing.Optional[Frame] = None
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
@@ -200,6 +218,8 @@ class ColumnBlocksItem_Text(UncheckedBaseModel):
     markdown: str
     size: typing.Optional[TextBlockSize] = None
     tone: typing.Optional[TextBlockTone] = None
+    font_size: typing_extensions.Annotated[typing.Optional[float], FieldMetadata(alias="fontSize")] = None
+    frame: typing.Optional[Frame] = None
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
@@ -216,6 +236,8 @@ class ColumnBlocksItem_Timeline(UncheckedBaseModel):
     id: typing.Optional[str] = None
     items: typing.List[TimelineItem]
     direction: typing.Optional[TimelineBlockDirection] = None
+    text_scale: typing_extensions.Annotated[typing.Optional[float], FieldMetadata(alias="textScale")] = None
+    frame: typing.Optional[Frame] = None
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

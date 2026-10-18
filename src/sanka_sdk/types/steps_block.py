@@ -3,8 +3,11 @@
 import typing
 
 import pydantic
+import typing_extensions
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
+from ..core.serialization import FieldMetadata
 from ..core.unchecked_base_model import UncheckedBaseModel
+from .frame import Frame
 from .step_item import StepItem
 from .steps_block_direction import StepsBlockDirection
 
@@ -13,6 +16,14 @@ class StepsBlock(UncheckedBaseModel):
     id: typing.Optional[str] = None
     items: typing.List[StepItem]
     direction: typing.Optional[StepsBlockDirection] = None
+    text_scale: typing_extensions.Annotated[typing.Optional[float], FieldMetadata(alias="textScale")] = pydantic.Field(
+        default=None
+    )
+    """
+    Multiplier on the block's whole type scale (free slides only).
+    """
+
+    frame: typing.Optional[Frame] = None
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

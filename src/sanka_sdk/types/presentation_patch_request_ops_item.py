@@ -10,6 +10,8 @@ from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.serialization import FieldMetadata
 from ..core.unchecked_base_model import UncheckedBaseModel, UnionMetadata
 from .block_parent import BlockParent
+from .set_page_size_op_size import SetPageSizeOpSize
+from .set_slide_positioning_op_positioning import SetSlidePositioningOpPositioning
 
 
 class PresentationPatchRequestOpsItem_DeleteBlocks(UncheckedBaseModel):
@@ -79,6 +81,7 @@ class PresentationPatchRequestOpsItem_MoveBlock(UncheckedBaseModel):
     to_slide_id: typing_extensions.Annotated[str, FieldMetadata(alias="toSlideId")]
     parent: typing.Optional[BlockParent] = None
     after: typing.Optional[str] = None
+    frame: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = None
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
@@ -139,6 +142,39 @@ class PresentationPatchRequestOpsItem_ReplaceSlide(UncheckedBaseModel):
 class PresentationPatchRequestOpsItem_SetFooter(UncheckedBaseModel):
     op: typing.Literal["set_footer"] = "set_footer"
     footer: typing.Dict[str, typing.Optional[typing.Any]]
+
+    if IS_PYDANTIC_V2:
+        model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
+    else:
+
+        class Config:
+            frozen = True
+            smart_union = True
+            extra = pydantic.Extra.allow
+
+
+class PresentationPatchRequestOpsItem_SetPageSize(UncheckedBaseModel):
+    op: typing.Literal["set_page_size"] = "set_page_size"
+    size: SetPageSizeOpSize
+
+    if IS_PYDANTIC_V2:
+        model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
+    else:
+
+        class Config:
+            frozen = True
+            smart_union = True
+            extra = pydantic.Extra.allow
+
+
+class PresentationPatchRequestOpsItem_SetSlidePositioning(UncheckedBaseModel):
+    op: typing.Literal["set_slide_positioning"] = "set_slide_positioning"
+    slide_id: typing_extensions.Annotated[str, FieldMetadata(alias="slideId")]
+    positioning: SetSlidePositioningOpPositioning
+    frames: typing.Optional[typing.Dict[str, typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]]] = None
+    drop_shapes_and_lines: typing_extensions.Annotated[
+        typing.Optional[bool], FieldMetadata(alias="dropShapesAndLines")
+    ] = None
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
@@ -220,6 +256,8 @@ PresentationPatchRequestOpsItem = typing_extensions.Annotated[
         PresentationPatchRequestOpsItem_ReplaceBlock,
         PresentationPatchRequestOpsItem_ReplaceSlide,
         PresentationPatchRequestOpsItem_SetFooter,
+        PresentationPatchRequestOpsItem_SetPageSize,
+        PresentationPatchRequestOpsItem_SetSlidePositioning,
         PresentationPatchRequestOpsItem_SetTheme,
         PresentationPatchRequestOpsItem_SetTitle,
         PresentationPatchRequestOpsItem_UpdateBlock,

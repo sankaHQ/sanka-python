@@ -62,13 +62,15 @@ class RawPresentationsClient:
         self._client_wrapper = client_wrapper
 
     def get_public_presentation_catalog(
-        self, *, request_options: typing.Optional[RequestOptions] = None
+        self, *, workspace_id: typing.Optional[str] = None, request_options: typing.Optional[RequestOptions] = None
     ) -> HttpResponse[GetPublicPresentationCatalog200Envelope]:
         """
-        Layouts, blocks with JSON Schemas and limits, themes, icons and authoring guidance.
+        Layouts, blocks with JSON Schemas and limits, themes, icons, guidance and features.
 
         Parameters
         ----------
+        workspace_id : typing.Optional[str]
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
@@ -80,6 +82,9 @@ class RawPresentationsClient:
         _response = self._client_wrapper.httpx_client.request(
             "v2/public/presentations/catalog",
             method="GET",
+            params={
+                "workspace_id": workspace_id,
+            },
             request_options=request_options,
         )
         try:
@@ -2448,13 +2453,15 @@ class AsyncRawPresentationsClient:
         self._client_wrapper = client_wrapper
 
     async def get_public_presentation_catalog(
-        self, *, request_options: typing.Optional[RequestOptions] = None
+        self, *, workspace_id: typing.Optional[str] = None, request_options: typing.Optional[RequestOptions] = None
     ) -> AsyncHttpResponse[GetPublicPresentationCatalog200Envelope]:
         """
-        Layouts, blocks with JSON Schemas and limits, themes, icons and authoring guidance.
+        Layouts, blocks with JSON Schemas and limits, themes, icons, guidance and features.
 
         Parameters
         ----------
+        workspace_id : typing.Optional[str]
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
@@ -2466,6 +2473,9 @@ class AsyncRawPresentationsClient:
         _response = await self._client_wrapper.httpx_client.request(
             "v2/public/presentations/catalog",
             method="GET",
+            params={
+                "workspace_id": workspace_id,
+            },
             request_options=request_options,
         )
         try:

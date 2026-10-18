@@ -13009,9 +13009,29 @@
           "presentations"
         ],
         "summary": "Get Public Presentation Catalog",
-        "description": "Layouts, blocks with JSON Schemas and limits, themes, icons and authoring guidance.",
+        "description": "Layouts, blocks with JSON Schemas and limits, themes, icons, guidance and features.",
         "operationId": "get_public_presentation_catalog",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Workspace Id"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/XWorkspaceCode"
+          }
+        ],
         "responses": {
           "200": {
             "description": "Successful Response",
@@ -56099,6 +56119,14 @@
             "type": "array",
             "title": "Schemaversions"
           },
+          "features": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Features",
+            "description": "Optional capabilities this workspace may use, e.g. `freeform`."
+          },
           "pageSizes": {
             "items": {
               "additionalProperties": true,
@@ -56170,6 +56198,12 @@
             "additionalProperties": true,
             "type": "object",
             "title": "Example"
+          },
+          "freeform": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Freeform",
+            "description": "Free placement (`positioning: free` slides): units, safe areas, grid, minimum and default frames, text sizes, shape tones and guidance."
           }
         },
         "type": "object",
@@ -60734,6 +60768,16 @@
             ],
             "title": "Id"
           },
+          "positioning": {
+            "type": "string",
+            "enum": [
+              "flow",
+              "free"
+            ],
+            "title": "Positioning",
+            "description": "`flow` stacks blocks in the layout's body; `free` places every top-level block in its `frame` (array order is stacking order, bottom first).",
+            "default": "flow"
+          },
           "layout": {
             "type": "string",
             "enum": [
@@ -60849,10 +60893,19 @@
                   "$ref": "#/components/schemas/DiagramBlock"
                 },
                 {
+                  "$ref": "#/components/schemas/SankaDiagramBlock"
+                },
+                {
                   "$ref": "#/components/schemas/DividerBlock"
                 },
                 {
                   "$ref": "#/components/schemas/ColumnsBlock"
+                },
+                {
+                  "$ref": "#/components/schemas/ShapeBlock"
+                },
+                {
+                  "$ref": "#/components/schemas/LineBlock"
                 }
               ],
               "discriminator": {
@@ -60865,7 +60918,10 @@
                   "divider": "#/components/schemas/DividerBlock",
                   "heading": "#/components/schemas/HeadingBlock",
                   "image": "#/components/schemas/ImageBlock",
+                  "line": "#/components/schemas/LineBlock",
                   "quote": "#/components/schemas/QuoteBlock",
+                  "sankaDiagram": "#/components/schemas/SankaDiagramBlock",
+                  "shape": "#/components/schemas/ShapeBlock",
                   "stats": "#/components/schemas/StatsBlock",
                   "steps": "#/components/schemas/StepsBlock",
                   "table": "#/components/schemas/TableBlock",
@@ -62423,6 +62479,12 @@
                   "$ref": "#/components/schemas/MoveBlockOp"
                 },
                 {
+                  "$ref": "#/components/schemas/SetSlidePositioningOp"
+                },
+                {
+                  "$ref": "#/components/schemas/SetPageSizeOp"
+                },
+                {
                   "$ref": "#/components/schemas/SetThemeOp"
                 },
                 {
@@ -62444,6 +62506,8 @@
                   "replace_block": "#/components/schemas/ReplaceBlockOp",
                   "replace_slide": "#/components/schemas/ReplaceSlideOp",
                   "set_footer": "#/components/schemas/SetFooterOp",
+                  "set_page_size": "#/components/schemas/SetPageSizeOp",
+                  "set_slide_positioning": "#/components/schemas/SetSlidePositioningOp",
                   "set_theme": "#/components/schemas/SetThemeOp",
                   "set_title": "#/components/schemas/SetTitleOp",
                   "update_block": "#/components/schemas/UpdateBlockOp",
@@ -65790,7 +65854,20 @@
               }
             ],
             "title": "After",
-            "description": "Block to move after; null moves first; omit to move last."
+            "description": "Block to move after; null moves first; omit to move last. On a free slide the order is the stacking order (bottom first)."
+          },
+          "frame": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Frame",
+            "description": "Where the block goes on a free target slide (required when it moves to another free slide; a line keeps its endpoints). Not allowed for a flow target."
           }
         },
         "additionalProperties": false,
@@ -65916,6 +65993,82 @@
           "footer"
         ],
         "title": "SetFooterOp"
+      },
+      "SetPageSizeOp": {
+        "properties": {
+          "op": {
+            "type": "string",
+            "const": "set_page_size",
+            "title": "Op"
+          },
+          "size": {
+            "type": "string",
+            "enum": [
+              "16:9",
+              "a4-landscape"
+            ],
+            "title": "Size",
+            "description": "Free slides scale uniformly about the stage centre to fit the new size."
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "op",
+          "size"
+        ],
+        "title": "SetPageSizeOp"
+      },
+      "SetSlidePositioningOp": {
+        "properties": {
+          "op": {
+            "type": "string",
+            "const": "set_slide_positioning",
+            "title": "Op"
+          },
+          "slideId": {
+            "type": "string",
+            "title": "Slideid"
+          },
+          "positioning": {
+            "type": "string",
+            "enum": [
+              "flow",
+              "free"
+            ],
+            "title": "Positioning"
+          },
+          "frames": {
+            "anyOf": [
+              {
+                "additionalProperties": {
+                  "additionalProperties": true,
+                  "type": "object"
+                },
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Frames",
+            "description": "To free: a frame per block ID (blocks in columns become top-level boxes; sizing defaults to fixed). Omit to keep every block where the renderer draws it now."
+          },
+          "dropShapesAndLines": {
+            "type": "boolean",
+            "title": "Dropshapesandlines",
+            "description": "To flow: delete the slide's shape and line blocks, which a stack cannot hold.",
+            "default": false
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "op",
+          "slideId",
+          "positioning"
+        ],
+        "title": "SetSlidePositioningOp"
       },
       "SetThemeOp": {
         "properties": {
@@ -66254,6 +66407,21 @@
               }
             ],
             "description": "Set when content does not fit even at the theme's minimum."
+          },
+          "frames": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/PresentationFrameFit"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Frames",
+            "description": "Free slides: each box's own fit scale and overflow."
           }
         },
         "type": "object",
@@ -66292,6 +66460,30 @@
             "type": "string",
             "maxLength": 1000,
             "title": "Markdown"
+          },
+          "fontSize": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 160.0,
+                "minimum": 8.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fontsize",
+            "description": "Main text size in stage px (free slides only); 1 px = 0.75 pt."
+          },
+          "frame": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Frame"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "additionalProperties": false,
@@ -66361,6 +66553,30 @@
               }
             ],
             "title": "Style"
+          },
+          "textScale": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 2.0,
+                "minimum": 0.5
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Textscale",
+            "description": "Multiplier on the block's whole type scale (free slides only)."
+          },
+          "frame": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Frame"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "additionalProperties": false,
@@ -66451,6 +66667,16 @@
               }
             ],
             "title": "Caption"
+          },
+          "frame": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Frame"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "additionalProperties": false,
@@ -66479,6 +66705,16 @@
               }
             ],
             "title": "Id"
+          },
+          "frame": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Frame"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "additionalProperties": false,
@@ -66533,6 +66769,30 @@
               }
             ],
             "title": "Kicker"
+          },
+          "fontSize": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 160.0,
+                "minimum": 8.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fontsize",
+            "description": "Main text size in stage px (free slides only); 1 px = 0.75 pt."
+          },
+          "frame": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Frame"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "additionalProperties": false,
@@ -66684,6 +66944,16 @@
               }
             ],
             "title": "Rounded"
+          },
+          "frame": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Frame"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "additionalProperties": false,
@@ -66693,6 +66963,68 @@
           "assetId"
         ],
         "title": "ImageBlock"
+      },
+      "LineBlock": {
+        "properties": {
+          "type": {
+            "type": "string",
+            "const": "line",
+            "title": "Type"
+          },
+          "id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^b_[A-Za-z0-9]{12}$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Id"
+          },
+          "from": {
+            "$ref": "#/components/schemas/Point"
+          },
+          "to": {
+            "$ref": "#/components/schemas/Point"
+          },
+          "stroke": {
+            "$ref": "#/components/schemas/StrokeStyle"
+          },
+          "startArrow": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Startarrow"
+          },
+          "endArrow": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Endarrow"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "type",
+          "from",
+          "to",
+          "stroke"
+        ],
+        "title": "LineBlock",
+        "description": "A straight line or arrow between two stage points (free slides only)."
       },
       "QuoteBlock": {
         "properties": {
@@ -66729,6 +67061,30 @@
               }
             ],
             "title": "Attribution"
+          },
+          "fontSize": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 160.0,
+                "minimum": 8.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fontsize",
+            "description": "Main text size in stage px (free slides only); 1 px = 0.75 pt."
+          },
+          "frame": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Frame"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "additionalProperties": false,
@@ -66738,6 +67094,209 @@
           "text"
         ],
         "title": "QuoteBlock"
+      },
+      "SankaDiagramBlock": {
+        "properties": {
+          "type": {
+            "type": "string",
+            "const": "sankaDiagram",
+            "title": "Type"
+          },
+          "id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^b_[A-Za-z0-9]{12}$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Id"
+          },
+          "diagramId": {
+            "type": "string",
+            "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+            "title": "Diagramid",
+            "description": "ID of a Sanka diagram in the same workspace."
+          },
+          "alt": {
+            "type": "string",
+            "maxLength": 300,
+            "title": "Alt",
+            "default": ""
+          },
+          "caption": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 300
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Caption"
+          },
+          "fit": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "contain",
+                  "cover"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fit",
+            "description": "How the image fills its box; `contain` (the default) or `cover`."
+          },
+          "frame": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Frame"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "type",
+          "diagramId"
+        ],
+        "title": "SankaDiagramBlock",
+        "description": "A saved Sanka diagram. Every view shows its latest revision as an image, so edits to\nthe diagram appear in the deck, its slideshow, share links and new exports."
+      },
+      "ShapeBlock": {
+        "properties": {
+          "type": {
+            "type": "string",
+            "const": "shape",
+            "title": "Type"
+          },
+          "id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^b_[A-Za-z0-9]{12}$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Id"
+          },
+          "shape": {
+            "type": "string",
+            "enum": [
+              "rect",
+              "roundRect",
+              "ellipse",
+              "triangle",
+              "rightArrow"
+            ],
+            "title": "Shape"
+          },
+          "fill": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "accent",
+                  "accent-soft",
+                  "surface",
+                  "inverse",
+                  "background",
+                  "none"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fill",
+            "description": "Theme tone; defaults to accent-soft."
+          },
+          "stroke": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/StrokeStyle"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "text": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 1000
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Text",
+            "description": "Slide Markdown (block subset)."
+          },
+          "textAlign": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "start",
+                  "center",
+                  "end"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Textalign",
+            "description": "Defaults to center."
+          },
+          "fontSize": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 160.0,
+                "minimum": 8.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fontsize",
+            "description": "Main text size in stage px (free slides only); 1 px = 0.75 pt."
+          },
+          "frame": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Frame"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "type",
+          "shape"
+        ],
+        "title": "ShapeBlock",
+        "description": "A filled theme-colored shape with optional text (free slides only)."
       },
       "SlideAlign": {
         "properties": {
@@ -66792,6 +67351,30 @@
             "maxItems": 4,
             "minItems": 1,
             "title": "Items"
+          },
+          "textScale": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 2.0,
+                "minimum": 0.5
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Textscale",
+            "description": "Multiplier on the block's whole type scale (free slides only)."
+          },
+          "frame": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Frame"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "additionalProperties": false,
@@ -66844,6 +67427,30 @@
               }
             ],
             "title": "Direction"
+          },
+          "textScale": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 2.0,
+                "minimum": 0.5
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Textscale",
+            "description": "Multiplier on the block's whole type scale (free slides only)."
+          },
+          "frame": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Frame"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "additionalProperties": false,
@@ -66910,6 +67517,30 @@
               }
             ],
             "title": "Emphasizefirstcolumn"
+          },
+          "textScale": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 2.0,
+                "minimum": 0.5
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Textscale",
+            "description": "Multiplier on the block's whole type scale (free slides only)."
+          },
+          "frame": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Frame"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "additionalProperties": false,
@@ -66975,6 +67606,30 @@
               }
             ],
             "title": "Tone"
+          },
+          "fontSize": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 160.0,
+                "minimum": 8.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fontsize",
+            "description": "Main text size in stage px (free slides only); 1 px = 0.75 pt."
+          },
+          "frame": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Frame"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "additionalProperties": false,
@@ -67027,6 +67682,30 @@
               }
             ],
             "title": "Direction"
+          },
+          "textScale": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 2.0,
+                "minimum": 0.5
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Textscale",
+            "description": "Multiplier on the block's whole type scale (free slides only)."
+          },
+          "frame": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Frame"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "additionalProperties": false,
@@ -67080,6 +67759,117 @@
         },
         "type": "object",
         "title": "PresentationFitOverflow"
+      },
+      "PresentationFrameFit": {
+        "properties": {
+          "blockId": {
+            "type": "string",
+            "title": "Blockid"
+          },
+          "scale": {
+            "type": "number",
+            "title": "Scale",
+            "default": 1
+          },
+          "overflowPx": {
+            "type": "number",
+            "title": "Overflowpx",
+            "default": 0
+          }
+        },
+        "type": "object",
+        "required": [
+          "blockId"
+        ],
+        "title": "PresentationFrameFit"
+      },
+      "Frame": {
+        "properties": {
+          "x": {
+            "type": "number",
+            "maximum": 100000.0,
+            "minimum": -100000.0,
+            "title": "X",
+            "description": "Left edge of the unrotated box."
+          },
+          "y": {
+            "type": "number",
+            "maximum": 100000.0,
+            "minimum": -100000.0,
+            "title": "Y",
+            "description": "Top edge of the unrotated box."
+          },
+          "w": {
+            "type": "number",
+            "maximum": 100000.0,
+            "exclusiveMinimum": 0.0,
+            "title": "W"
+          },
+          "h": {
+            "type": "number",
+            "maximum": 100000.0,
+            "exclusiveMinimum": 0.0,
+            "title": "H",
+            "description": "Box height; for `sizing: auto` the last measured height."
+          },
+          "sizing": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "fixed",
+                  "auto"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sizing",
+            "description": "`fixed`: the box is `h` tall and its content shrinks to fit. `auto`: the box grows with its content (text-bearing blocks only). Defaults to auto for text-bearing blocks and fixed for the others."
+          },
+          "anchor": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "top",
+                  "middle",
+                  "bottom"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Anchor",
+            "description": "Where content sits in a fixed box; top (middle for shapes)."
+          },
+          "rotation": {
+            "anyOf": [
+              {
+                "type": "number",
+                "exclusiveMaximum": 360.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Rotation",
+            "description": "Clockwise degrees about the box centre; not on tables."
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "x",
+          "y",
+          "w",
+          "h"
+        ],
+        "title": "Frame",
+        "description": "Where a block sits on a free slide, in stage px of the deck's page size."
       },
       "CardItem": {
         "properties": {
@@ -67253,6 +68043,73 @@
           "y"
         ],
         "title": "Focus"
+      },
+      "Point": {
+        "properties": {
+          "x": {
+            "type": "number",
+            "maximum": 100000.0,
+            "minimum": -100000.0,
+            "title": "X"
+          },
+          "y": {
+            "type": "number",
+            "maximum": 100000.0,
+            "minimum": -100000.0,
+            "title": "Y"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "x",
+          "y"
+        ],
+        "title": "Point"
+      },
+      "StrokeStyle": {
+        "properties": {
+          "tone": {
+            "type": "string",
+            "enum": [
+              "border",
+              "line",
+              "accent",
+              "text",
+              "none"
+            ],
+            "title": "Tone"
+          },
+          "width": {
+            "type": "number",
+            "maximum": 12.0,
+            "minimum": 0.5,
+            "title": "Width",
+            "default": 1
+          },
+          "dash": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "solid",
+                  "dash",
+                  "dot"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Dash"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "tone"
+        ],
+        "title": "StrokeStyle"
       },
       "StatItem": {
         "properties": {

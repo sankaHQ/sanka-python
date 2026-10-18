@@ -63,13 +63,15 @@ class PresentationsClient:
         return self._raw_client
 
     def get_public_presentation_catalog(
-        self, *, request_options: typing.Optional[RequestOptions] = None
+        self, *, workspace_id: typing.Optional[str] = None, request_options: typing.Optional[RequestOptions] = None
     ) -> GetPublicPresentationCatalog200Envelope:
         """
-        Layouts, blocks with JSON Schemas and limits, themes, icons and authoring guidance.
+        Layouts, blocks with JSON Schemas and limits, themes, icons, guidance and features.
 
         Parameters
         ----------
+        workspace_id : typing.Optional[str]
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
@@ -88,7 +90,9 @@ class PresentationsClient:
         )
         client.presentations.get_public_presentation_catalog()
         """
-        _response = self._raw_client.get_public_presentation_catalog(request_options=request_options)
+        _response = self._raw_client.get_public_presentation_catalog(
+            workspace_id=workspace_id, request_options=request_options
+        )
         return _response.data
 
     def list_public_program_presentations(
@@ -1439,13 +1443,15 @@ class AsyncPresentationsClient:
         return self._raw_client
 
     async def get_public_presentation_catalog(
-        self, *, request_options: typing.Optional[RequestOptions] = None
+        self, *, workspace_id: typing.Optional[str] = None, request_options: typing.Optional[RequestOptions] = None
     ) -> GetPublicPresentationCatalog200Envelope:
         """
-        Layouts, blocks with JSON Schemas and limits, themes, icons and authoring guidance.
+        Layouts, blocks with JSON Schemas and limits, themes, icons, guidance and features.
 
         Parameters
         ----------
+        workspace_id : typing.Optional[str]
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
@@ -1472,7 +1478,9 @@ class AsyncPresentationsClient:
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.get_public_presentation_catalog(request_options=request_options)
+        _response = await self._raw_client.get_public_presentation_catalog(
+            workspace_id=workspace_id, request_options=request_options
+        )
         return _response.data
 
     async def list_public_program_presentations(

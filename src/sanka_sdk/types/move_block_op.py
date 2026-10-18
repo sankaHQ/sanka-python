@@ -20,7 +20,12 @@ class MoveBlockOp(UncheckedBaseModel):
 
     after: typing.Optional[str] = pydantic.Field(default=None)
     """
-    Block to move after; null moves first; omit to move last.
+    Block to move after; null moves first; omit to move last. On a free slide the order is the stacking order (bottom first).
+    """
+
+    frame: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = pydantic.Field(default=None)
+    """
+    Where the block goes on a free target slide (required when it moves to another free slide; a line keeps its endpoints). Not allowed for a flow target.
     """
 
     if IS_PYDANTIC_V2:
