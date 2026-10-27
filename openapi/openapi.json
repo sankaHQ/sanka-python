@@ -41199,6 +41199,2677 @@
           }
         ]
       }
+    },
+    "/v2/migrate/connectors": {
+      "get": {
+        "tags": [
+          "sanka-migrate"
+        ],
+        "summary": "List Sanka Connectors",
+        "operationId": "list_sanka_migrate_connectors_api_v2_migrate_connectors_get",
+        "parameters": [
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Workspace Id"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/XWorkspaceCode"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MigrationApiListSankaMigrateConnectorsApiV2MigrateConnectorsGet200Envelope"
+                }
+              }
+            },
+            "headers": {
+              "x-ctx-id": {
+                "$ref": "#/components/headers/XCtxId"
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "403": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        },
+        "x-sanka-api-version": "v2",
+        "x-sanka-auth": "developer_bearer",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/v2/migrate/migrations": {
+      "get": {
+        "tags": [
+          "sanka-migrate"
+        ],
+        "summary": "List Sanka Migrations",
+        "operationId": "list_sanka_migrate_migrations_api_v2_migrate_migrations_get",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1,
+              "title": "Page"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "default": 20,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Workspace Id"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/XWorkspaceCode"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MigrationApiListSankaMigrateMigrationsApiV2MigrateMigrationsGet200Envelope"
+                }
+              }
+            },
+            "headers": {
+              "x-ctx-id": {
+                "$ref": "#/components/headers/XCtxId"
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "403": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        },
+        "x-sanka-api-version": "v2",
+        "x-sanka-auth": "developer_bearer",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "sanka-migrate"
+        ],
+        "summary": "Create Sanka Migration",
+        "operationId": "create_sanka_migrate_migration_api_v2_migrate_migrations_post",
+        "parameters": [
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Workspace Id"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 8,
+                  "maxLength": 200
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Idempotency-Key"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/XWorkspaceCode"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MigrationApiSankaMigrateMigrationCreateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MigrationApiCreateSankaMigrateMigrationApiV2MigrateMigrationsPost201Envelope"
+                }
+              }
+            },
+            "headers": {
+              "x-ctx-id": {
+                "$ref": "#/components/headers/XCtxId"
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "403": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        },
+        "x-sanka-api-version": "v2",
+        "x-sanka-auth": "developer_bearer",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/v2/migrate/migrations/{migration_id}": {
+      "get": {
+        "tags": [
+          "sanka-migrate"
+        ],
+        "summary": "Get Sanka Migration",
+        "operationId": "get_sanka_migrate_migration_api_v2_migrate_migrations__migration_id__get",
+        "parameters": [
+          {
+            "name": "migration_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Migration Id"
+            }
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Workspace Id"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/XWorkspaceCode"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MigrationApiGetSankaMigrateMigrationApiV2MigrateMigrationsMigrationIdGet200Envelope"
+                }
+              }
+            },
+            "headers": {
+              "x-ctx-id": {
+                "$ref": "#/components/headers/XCtxId"
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "403": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        },
+        "x-sanka-api-version": "v2",
+        "x-sanka-auth": "developer_bearer",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/v2/migrate/migrations/{migration_id}/plan": {
+      "get": {
+        "tags": [
+          "sanka-migrate"
+        ],
+        "summary": "Get Sanka Migration Plan",
+        "description": "§5.3: the reviewable plan; 409 ``FERRY_PLAN_NOT_READY`` until assembled.",
+        "operationId": "get_sanka_migrate_migration_plan_api_v2_migrate_migrations__migration_id__plan_get",
+        "parameters": [
+          {
+            "name": "migration_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Migration Id"
+            }
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Workspace Id"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/XWorkspaceCode"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MigrationApiGetSankaMigrateMigrationPlanApiV2MigrateMigrationsMigrationIdPlanGet200Envelope"
+                }
+              }
+            },
+            "headers": {
+              "x-ctx-id": {
+                "$ref": "#/components/headers/XCtxId"
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "403": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        },
+        "x-sanka-api-version": "v2",
+        "x-sanka-auth": "developer_bearer",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "sanka-migrate"
+        ],
+        "summary": "Start Sanka Migration Plan",
+        "description": "§5.2: inspect + plan for free, async — 202 with the\nmigration resource; poll ``GET /migrations/{migration_id}`` or fetch\n``GET …/plan``.",
+        "operationId": "start_sanka_migrate_migration_plan_api_v2_migrate_migrations__migration_id__plan_post",
+        "parameters": [
+          {
+            "name": "migration_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Migration Id"
+            }
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Workspace Id"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/XWorkspaceCode"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "anyOf": [
+                  {
+                    "$ref": "#/components/schemas/MigrationApiSankaMigratePlanRequest"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "title": "Payload"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MigrationApiStartSankaMigrateMigrationPlanApiV2MigrateMigrationsMigrationIdPlanPost202Envelope"
+                }
+              }
+            },
+            "headers": {
+              "x-ctx-id": {
+                "$ref": "#/components/headers/XCtxId"
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "403": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        },
+        "x-sanka-api-version": "v2",
+        "x-sanka-auth": "developer_bearer",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/v2/migrate/migrations/{migration_id}/apply": {
+      "post": {
+        "tags": [
+          "sanka-migrate"
+        ],
+        "summary": "Apply Sanka Migration",
+        "description": "§5.4: hash-bound execution — ``plan_hash`` is the approval token;\nmismatch is 409 ``FERRY_PLAN_HASH_MISMATCH``. Successful destination\ncreates and updates use 2 Sanka Credits per record, with a per-route\nhigh-water mark for re-runs. 202 with the migration.",
+        "operationId": "apply_sanka_migrate_migration_api_v2_migrate_migrations__migration_id__apply_post",
+        "parameters": [
+          {
+            "name": "migration_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Migration Id"
+            }
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Workspace Id"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 8,
+                  "maxLength": 200
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Idempotency-Key"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/XWorkspaceCode"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MigrationApiSankaMigrateApplyRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MigrationApiApplySankaMigrateMigrationApiV2MigrateMigrationsMigrationIdApplyPost202Envelope"
+                }
+              }
+            },
+            "headers": {
+              "x-ctx-id": {
+                "$ref": "#/components/headers/XCtxId"
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "403": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        },
+        "x-sanka-api-version": "v2",
+        "x-sanka-auth": "developer_bearer",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/v2/migrate/migrations/{migration_id}/repair": {
+      "post": {
+        "tags": [
+          "sanka-migrate"
+        ],
+        "summary": "Repair Sanka Migration",
+        "description": "Retry failed records/relationships without changing the approved plan.\nA completed repair uses 300 Sanka Credits; failure or cancellation releases\nthe hold. Re-applied records follow the normal per-route high-water mark.",
+        "operationId": "repair_sanka_migrate_migration_api_v2_migrate_migrations__migration_id__repair_post",
+        "parameters": [
+          {
+            "name": "migration_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Migration Id"
+            }
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Workspace Id"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 8,
+                  "maxLength": 200
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Idempotency-Key"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/XWorkspaceCode"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MigrationApiSankaMigrateRepairRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MigrationApiRepairSankaMigrateMigrationApiV2MigrateMigrationsMigrationIdRepairPost202Envelope"
+                }
+              }
+            },
+            "headers": {
+              "x-ctx-id": {
+                "$ref": "#/components/headers/XCtxId"
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "403": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        },
+        "x-sanka-api-version": "v2",
+        "x-sanka-auth": "developer_bearer",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/v2/migrate/migrations/{migration_id}/pause": {
+      "post": {
+        "tags": [
+          "sanka-migrate"
+        ],
+        "summary": "Pause Sanka Migration",
+        "description": "§5.7: cancel the active job, checkpoints preserved — the migration\nreads ``paused`` and stays resumable.",
+        "operationId": "pause_sanka_migrate_migration_api_v2_migrate_migrations__migration_id__pause_post",
+        "parameters": [
+          {
+            "name": "migration_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Migration Id"
+            }
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Workspace Id"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/XWorkspaceCode"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MigrationApiPauseSankaMigrateMigrationApiV2MigrateMigrationsMigrationIdPausePost200Envelope"
+                }
+              }
+            },
+            "headers": {
+              "x-ctx-id": {
+                "$ref": "#/components/headers/XCtxId"
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "403": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        },
+        "x-sanka-api-version": "v2",
+        "x-sanka-auth": "developer_bearer",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/v2/migrate/migrations/{migration_id}/resume": {
+      "post": {
+        "tags": [
+          "sanka-migrate"
+        ],
+        "summary": "Resume Sanka Migration",
+        "description": "§5.7: re-validate ``plan_hash`` + credit availability, then resume from\nthe last durable markers. 202 with the migration.",
+        "operationId": "resume_sanka_migrate_migration_api_v2_migrate_migrations__migration_id__resume_post",
+        "parameters": [
+          {
+            "name": "migration_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Migration Id"
+            }
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Workspace Id"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/XWorkspaceCode"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MigrationApiSankaMigrateResumeRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MigrationApiResumeSankaMigrateMigrationApiV2MigrateMigrationsMigrationIdResumePost202Envelope"
+                }
+              }
+            },
+            "headers": {
+              "x-ctx-id": {
+                "$ref": "#/components/headers/XCtxId"
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "403": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        },
+        "x-sanka-api-version": "v2",
+        "x-sanka-auth": "developer_bearer",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/v2/migrate/migrations/{migration_id}/cancel": {
+      "post": {
+        "tags": [
+          "sanka-migrate"
+        ],
+        "summary": "Cancel Sanka Migration",
+        "description": "§5.7: pause semantics if a job is active, then the run is terminally\n``cancelled``. No destination rollback — the report records what was\nwritten.",
+        "operationId": "cancel_sanka_migrate_migration_api_v2_migrate_migrations__migration_id__cancel_post",
+        "parameters": [
+          {
+            "name": "migration_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Migration Id"
+            }
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Workspace Id"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/XWorkspaceCode"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MigrationApiCancelSankaMigrateMigrationApiV2MigrateMigrationsMigrationIdCancelPost200Envelope"
+                }
+              }
+            },
+            "headers": {
+              "x-ctx-id": {
+                "$ref": "#/components/headers/XCtxId"
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "403": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        },
+        "x-sanka-api-version": "v2",
+        "x-sanka-auth": "developer_bearer",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/v2/migrate/migrations/{migration_id}/verify": {
+      "post": {
+        "tags": [
+          "sanka-migrate"
+        ],
+        "summary": "Verify Sanka Migration",
+        "description": "§5.8: reconcile the completed transfer from durable evidence. A\ncompleted verification uses 250 Sanka Credits; failures use none.",
+        "operationId": "verify_sanka_migrate_migration_api_v2_migrate_migrations__migration_id__verify_post",
+        "parameters": [
+          {
+            "name": "migration_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Migration Id"
+            }
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Workspace Id"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 8,
+                  "maxLength": 200
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Idempotency-Key"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/XWorkspaceCode"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MigrationApiVerifySankaMigrateMigrationApiV2MigrateMigrationsMigrationIdVerifyPost200Envelope"
+                }
+              }
+            },
+            "headers": {
+              "x-ctx-id": {
+                "$ref": "#/components/headers/XCtxId"
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "403": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        },
+        "x-sanka-api-version": "v2",
+        "x-sanka-auth": "developer_bearer",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/v2/migrate/migrations/{migration_id}/verification": {
+      "get": {
+        "tags": [
+          "sanka-migrate"
+        ],
+        "summary": "Get Sanka Migration Verification",
+        "description": "§5.8: return current verification or 404 before one exists.",
+        "operationId": "get_sanka_migrate_migration_verification_api_v2_migrate_migrations__migration_id__verification_get",
+        "parameters": [
+          {
+            "name": "migration_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Migration Id"
+            }
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Workspace Id"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/XWorkspaceCode"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MigrationApiGetSankaMigrateMigrationVerificationApiV2MigrateMigrationsMigrationIdVerificationGet200Envelope"
+                }
+              }
+            },
+            "headers": {
+              "x-ctx-id": {
+                "$ref": "#/components/headers/XCtxId"
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "403": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        },
+        "x-sanka-api-version": "v2",
+        "x-sanka-auth": "developer_bearer",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/v2/migrate/migrations/{migration_id}/review": {
+      "get": {
+        "tags": [
+          "sanka-migrate"
+        ],
+        "summary": "Get Sanka Migration Review",
+        "operationId": "get_sanka_migrate_migration_review_api_v2_migrate_migrations__migration_id__review_get",
+        "parameters": [
+          {
+            "name": "migration_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Migration Id"
+            }
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Workspace Id"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/XWorkspaceCode"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MigrationApiGetSankaMigrateMigrationReviewApiV2MigrateMigrationsMigrationIdReviewGet200Envelope"
+                }
+              }
+            },
+            "headers": {
+              "x-ctx-id": {
+                "$ref": "#/components/headers/XCtxId"
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "403": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        },
+        "x-sanka-api-version": "v2",
+        "x-sanka-auth": "developer_bearer",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "sanka-migrate"
+        ],
+        "summary": "Review Sanka Migration",
+        "description": "Read the destination and issue an evidence-bound signed attestation for\n250 Sanka Credits. Failures release the credit hold.",
+        "operationId": "review_sanka_migrate_migration_api_v2_migrate_migrations__migration_id__review_post",
+        "parameters": [
+          {
+            "name": "migration_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Migration Id"
+            }
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Workspace Id"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 8,
+                  "maxLength": 200
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Idempotency-Key"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/XWorkspaceCode"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MigrationApiReviewSankaMigrateMigrationApiV2MigrateMigrationsMigrationIdReviewPost200Envelope"
+                }
+              }
+            },
+            "headers": {
+              "x-ctx-id": {
+                "$ref": "#/components/headers/XCtxId"
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "403": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        },
+        "x-sanka-api-version": "v2",
+        "x-sanka-auth": "developer_bearer",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/v2/migrate/connections": {
+      "get": {
+        "tags": [
+          "sanka-migrate"
+        ],
+        "summary": "List Sanka Connections",
+        "operationId": "list_sanka_migrate_connections_api_v2_migrate_connections_get",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1,
+              "title": "Page"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "default": 20,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Workspace Id"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/XWorkspaceCode"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MigrationApiListSankaMigrateConnectionsApiV2MigrateConnectionsGet200Envelope"
+                }
+              }
+            },
+            "headers": {
+              "x-ctx-id": {
+                "$ref": "#/components/headers/XCtxId"
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "403": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        },
+        "x-sanka-api-version": "v2",
+        "x-sanka-auth": "developer_bearer",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "sanka-migrate"
+        ],
+        "summary": "Create Sanka Connection",
+        "operationId": "create_sanka_migrate_connection_api_v2_migrate_connections_post",
+        "parameters": [
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Workspace Id"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/XWorkspaceCode"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MigrationApiSankaMigrateConnectionCreateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MigrationApiCreateSankaMigrateConnectionApiV2MigrateConnectionsPost201Envelope"
+                }
+              }
+            },
+            "headers": {
+              "x-ctx-id": {
+                "$ref": "#/components/headers/XCtxId"
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "403": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        },
+        "x-sanka-api-version": "v2",
+        "x-sanka-auth": "developer_bearer",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/v2/migrate/connections/{connection_id}": {
+      "get": {
+        "tags": [
+          "sanka-migrate"
+        ],
+        "summary": "Get Sanka Connection",
+        "operationId": "get_sanka_migrate_connection_api_v2_migrate_connections__connection_id__get",
+        "parameters": [
+          {
+            "name": "connection_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Connection Id"
+            }
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Workspace Id"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/XWorkspaceCode"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MigrationApiGetSankaMigrateConnectionApiV2MigrateConnectionsConnectionIdGet200Envelope"
+                }
+              }
+            },
+            "headers": {
+              "x-ctx-id": {
+                "$ref": "#/components/headers/XCtxId"
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "403": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        },
+        "x-sanka-api-version": "v2",
+        "x-sanka-auth": "developer_bearer",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "sanka-migrate"
+        ],
+        "summary": "Delete Sanka Connection",
+        "operationId": "delete_sanka_migrate_connection_api_v2_migrate_connections__connection_id__delete",
+        "parameters": [
+          {
+            "name": "connection_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Connection Id"
+            }
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Workspace Id"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/XWorkspaceCode"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MigrationApiDeleteSankaMigrateConnectionApiV2MigrateConnectionsConnectionIdDelete200Envelope"
+                }
+              }
+            },
+            "headers": {
+              "x-ctx-id": {
+                "$ref": "#/components/headers/XCtxId"
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "403": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        },
+        "x-sanka-api-version": "v2",
+        "x-sanka-auth": "developer_bearer",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/v2/migrate/migrations/{migration_id}/inspection": {
+      "get": {
+        "tags": [
+          "sanka-migrate",
+          "sanka-migrate-inspection"
+        ],
+        "summary": "Inspect Migration",
+        "operationId": "inspect_migration_api_v2_migrate_migrations__migration_id__inspection_get",
+        "parameters": [
+          {
+            "name": "migration_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Migration Id"
+            }
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Workspace Id"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/XWorkspaceCode"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MigrationApiInspectMigrationApiV2MigrateMigrationsMigrationIdInspectionGet200Envelope"
+                }
+              }
+            },
+            "headers": {
+              "x-ctx-id": {
+                "$ref": "#/components/headers/XCtxId"
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "403": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        },
+        "x-sanka-api-version": "v2",
+        "x-sanka-auth": "developer_bearer",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/v2/migrate/migrations/{migration_id}/source-objects": {
+      "get": {
+        "tags": [
+          "sanka-migrate",
+          "sanka-migrate-inspection"
+        ],
+        "summary": "Discover Migration Source Objects",
+        "operationId": "discover_migration_source_objects_api_v2_migrate_migrations__migration_id__source_objects_get",
+        "parameters": [
+          {
+            "name": "migration_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Migration Id"
+            }
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Workspace Id"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/XWorkspaceCode"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MigrationApiDiscoverMigrationSourceObjectsApiV2MigrateMigrationsMigrationIdSourceObjectsGet200Envelope"
+                }
+              }
+            },
+            "headers": {
+              "x-ctx-id": {
+                "$ref": "#/components/headers/XCtxId"
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "403": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        },
+        "x-sanka-api-version": "v2",
+        "x-sanka-auth": "developer_bearer",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/v2/migrate/migrations/{migration_id}/scan": {
+      "post": {
+        "tags": [
+          "sanka-migrate",
+          "sanka-migrate-inspection"
+        ],
+        "summary": "Scan Migration",
+        "operationId": "scan_migration_api_v2_migrate_migrations__migration_id__scan_post",
+        "parameters": [
+          {
+            "name": "migration_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Migration Id"
+            }
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Workspace Id"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/XWorkspaceCode"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MigrationApiSankaMigrateScanRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MigrationApiScanMigrationApiV2MigrateMigrationsMigrationIdScanPost202Envelope"
+                }
+              }
+            },
+            "headers": {
+              "x-ctx-id": {
+                "$ref": "#/components/headers/XCtxId"
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "403": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        },
+        "x-sanka-api-version": "v2",
+        "x-sanka-auth": "developer_bearer",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/v2/migrate/migrations/{migration_id}/mapping": {
+      "get": {
+        "tags": [
+          "sanka-migrate",
+          "sanka-migrate-inspection"
+        ],
+        "summary": "Get Migration Mapping",
+        "operationId": "get_migration_mapping_api_v2_migrate_migrations__migration_id__mapping_get",
+        "parameters": [
+          {
+            "name": "migration_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Migration Id"
+            }
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Workspace Id"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/XWorkspaceCode"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MigrationApiGetMigrationMappingApiV2MigrateMigrationsMigrationIdMappingGet200Envelope"
+                }
+              }
+            },
+            "headers": {
+              "x-ctx-id": {
+                "$ref": "#/components/headers/XCtxId"
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "403": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        },
+        "x-sanka-api-version": "v2",
+        "x-sanka-auth": "developer_bearer",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "sanka-migrate",
+          "sanka-migrate-inspection"
+        ],
+        "summary": "Save Migration Mapping",
+        "operationId": "save_migration_mapping_api_v2_migrate_migrations__migration_id__mapping_put",
+        "parameters": [
+          {
+            "name": "migration_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Migration Id"
+            }
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Workspace Id"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/XWorkspaceCode"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MigrationApiSankaMigrateMappingSaveRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MigrationApiSaveMigrationMappingApiV2MigrateMigrationsMigrationIdMappingPut200Envelope"
+                }
+              }
+            },
+            "headers": {
+              "x-ctx-id": {
+                "$ref": "#/components/headers/XCtxId"
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "403": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        },
+        "x-sanka-api-version": "v2",
+        "x-sanka-auth": "developer_bearer",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/v2/migrate/migrations/{migration_id}/validate": {
+      "post": {
+        "tags": [
+          "sanka-migrate",
+          "sanka-migrate-inspection"
+        ],
+        "summary": "Validate Migration Mapping",
+        "operationId": "validate_migration_mapping_api_v2_migrate_migrations__migration_id__validate_post",
+        "parameters": [
+          {
+            "name": "migration_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Migration Id"
+            }
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Workspace Id"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/XWorkspaceCode"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MigrationApiSankaMigrateValidateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MigrationApiValidateMigrationMappingApiV2MigrateMigrationsMigrationIdValidatePost200Envelope"
+                }
+              }
+            },
+            "headers": {
+              "x-ctx-id": {
+                "$ref": "#/components/headers/XCtxId"
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "403": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        },
+        "x-sanka-api-version": "v2",
+        "x-sanka-auth": "developer_bearer",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/v2/migrate/migrations/{migration_id}/reports/{stage}": {
+      "get": {
+        "tags": [
+          "sanka-migrate",
+          "sanka-migrate-inspection"
+        ],
+        "summary": "Get Migration Report",
+        "operationId": "get_migration_report_api_v2_migrate_migrations__migration_id__reports__stage__get",
+        "parameters": [
+          {
+            "name": "migration_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Migration Id"
+            }
+          },
+          {
+            "name": "stage",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "enum": [
+                "inventory",
+                "map",
+                "validate",
+                "transfer",
+                "parallel_run_diff",
+                "cutover"
+              ],
+              "type": "string",
+              "title": "Stage"
+            }
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Workspace Id"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/XWorkspaceCode"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MigrationApiGetMigrationReportApiV2MigrateMigrationsMigrationIdReportsStageGet200Envelope"
+                }
+              }
+            },
+            "headers": {
+              "x-ctx-id": {
+                "$ref": "#/components/headers/XCtxId"
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "403": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        },
+        "x-sanka-api-version": "v2",
+        "x-sanka-auth": "developer_bearer",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/v2/migrate/migrations/{migration_id}/native-review": {
+      "get": {
+        "tags": [
+          "sanka-migrate",
+          "sanka-migrate-native"
+        ],
+        "summary": "Get Native Review",
+        "operationId": "get_native_review_api_v2_migrate_migrations__migration_id__native_review_get",
+        "parameters": [
+          {
+            "name": "migration_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Migration Id"
+            }
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Workspace Id"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/XWorkspaceCode"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MigrationApiGetNativeReviewApiV2MigrateMigrationsMigrationIdNativeReviewGet200Envelope"
+                }
+              }
+            },
+            "headers": {
+              "x-ctx-id": {
+                "$ref": "#/components/headers/XCtxId"
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "403": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        },
+        "x-sanka-api-version": "v2",
+        "x-sanka-auth": "developer_bearer",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "sanka-migrate",
+          "sanka-migrate-native"
+        ],
+        "summary": "Save Native Review",
+        "operationId": "save_native_review_api_v2_migrate_migrations__migration_id__native_review_put",
+        "parameters": [
+          {
+            "name": "migration_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Migration Id"
+            }
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Workspace Id"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 8,
+                  "maxLength": 200
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Idempotency-Key"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/XWorkspaceCode"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MigrationApiNativeReviewRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MigrationApiSaveNativeReviewApiV2MigrateMigrationsMigrationIdNativeReviewPut200Envelope"
+                }
+              }
+            },
+            "headers": {
+              "x-ctx-id": {
+                "$ref": "#/components/headers/XCtxId"
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "403": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        },
+        "x-sanka-api-version": "v2",
+        "x-sanka-auth": "developer_bearer",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/v2/migrate/migrations/{migration_id}/native-prepare": {
+      "post": {
+        "tags": [
+          "sanka-migrate",
+          "sanka-migrate-native"
+        ],
+        "summary": "Prepare Native Migration",
+        "operationId": "prepare_native_migration_api_v2_migrate_migrations__migration_id__native_prepare_post",
+        "parameters": [
+          {
+            "name": "migration_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Migration Id"
+            }
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Workspace Id"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 8,
+                  "maxLength": 200
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Idempotency-Key"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/XWorkspaceCode"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MigrationApiNativePrepareRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MigrationApiPrepareNativeMigrationApiV2MigrateMigrationsMigrationIdNativePreparePost202Envelope"
+                }
+              }
+            },
+            "headers": {
+              "x-ctx-id": {
+                "$ref": "#/components/headers/XCtxId"
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "403": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        },
+        "x-sanka-api-version": "v2",
+        "x-sanka-auth": "developer_bearer",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/v2/migrate/migrations/{migration_id}/native-recovery": {
+      "post": {
+        "tags": [
+          "sanka-migrate",
+          "sanka-migrate-native"
+        ],
+        "summary": "Recover Native Migration",
+        "operationId": "recover_native_migration_api_v2_migrate_migrations__migration_id__native_recovery_post",
+        "parameters": [
+          {
+            "name": "migration_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Migration Id"
+            }
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Workspace Id"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 8,
+                  "maxLength": 200
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Idempotency-Key"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/XWorkspaceCode"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MigrationApiNativeRecoveryRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MigrationApiRecoverNativeMigrationApiV2MigrateMigrationsMigrationIdNativeRecoveryPost200Envelope"
+                }
+              }
+            },
+            "headers": {
+              "x-ctx-id": {
+                "$ref": "#/components/headers/XCtxId"
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "403": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        },
+        "x-sanka-api-version": "v2",
+        "x-sanka-auth": "developer_bearer",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/v2/migrate/migrations/{migration_id}/journey": {
+      "get": {
+        "tags": [
+          "sanka-migrate",
+          "sanka-migrate"
+        ],
+        "summary": "Get Sanka Journey",
+        "operationId": "get_sanka_migrate_journey_api_v2_migrate_migrations__migration_id__journey_get",
+        "parameters": [
+          {
+            "name": "migration_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Migration Id"
+            }
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Workspace Id"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/XWorkspaceCode"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MigrationApiGetSankaMigrateJourneyApiV2MigrateMigrationsMigrationIdJourneyGet200Envelope"
+                }
+              }
+            },
+            "headers": {
+              "x-ctx-id": {
+                "$ref": "#/components/headers/XCtxId"
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "403": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        },
+        "x-sanka-api-version": "v2",
+        "x-sanka-auth": "developer_bearer",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/v2/migrate/migrations/{migration_id}/results/{stage}": {
+      "get": {
+        "tags": [
+          "sanka-migrate",
+          "sanka-migrate"
+        ],
+        "summary": "Get Sanka Result",
+        "description": "Navigate persisted evidence by JSON pointer; oversized entries are references.\n\nArrays/objects page by entries; string leaves page by 2000 characters.\nPin expected_result_version across pages. The full plan remains the review\nand approval source; result_version never authorizes transfer.",
+        "operationId": "get_sanka_migrate_result_api_v2_migrate_migrations__migration_id__results__stage__get",
+        "parameters": [
+          {
+            "name": "migration_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Migration Id"
+            }
+          },
+          {
+            "name": "stage",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "enum": [
+                "plan",
+                "inventory",
+                "map",
+                "validate",
+                "transfer",
+                "verification",
+                "cutover"
+              ],
+              "type": "string",
+              "title": "Stage"
+            }
+          },
+          {
+            "name": "path",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "maxLength": 4096,
+              "default": "",
+              "title": "Path"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0,
+              "title": "Offset"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "default": 20,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "expected_result_version",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Expected Result Version"
+            }
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Workspace Id"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/XWorkspaceCode"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MigrationApiGetSankaMigrateResultApiV2MigrateMigrationsMigrationIdResultsStageGet200Envelope"
+                }
+              }
+            },
+            "headers": {
+              "x-ctx-id": {
+                "$ref": "#/components/headers/XCtxId"
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "403": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        },
+        "x-sanka-api-version": "v2",
+        "x-sanka-auth": "developer_bearer",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
     }
   },
   "components": {
@@ -68826,6 +71497,3746 @@
           },
           "data": {
             "$ref": "#/components/schemas/PublicFlowConstructData"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/EnvelopeMeta"
+          }
+        }
+      },
+      "MigrationApiApplySankaMigrateMigrationApiV2MigrateMigrationsMigrationIdApplyPost202Envelope": {
+        "type": "object",
+        "required": [
+          "success",
+          "data",
+          "meta"
+        ],
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "const": true
+          },
+          "data": {
+            "$ref": "#/components/schemas/MigrationApiSankaMigrateMigrationData"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/EnvelopeMeta"
+          }
+        }
+      },
+      "MigrationApiCancelSankaMigrateMigrationApiV2MigrateMigrationsMigrationIdCancelPost200Envelope": {
+        "type": "object",
+        "required": [
+          "success",
+          "data",
+          "meta"
+        ],
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "const": true
+          },
+          "data": {
+            "$ref": "#/components/schemas/MigrationApiSankaMigrateMigrationData"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/EnvelopeMeta"
+          }
+        }
+      },
+      "MigrationApiCreateSankaMigrateConnectionApiV2MigrateConnectionsPost201Envelope": {
+        "type": "object",
+        "required": [
+          "success",
+          "data",
+          "meta"
+        ],
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "const": true
+          },
+          "data": {
+            "$ref": "#/components/schemas/MigrationApiSankaMigrateConnectionData"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/EnvelopeMeta"
+          }
+        }
+      },
+      "MigrationApiCreateSankaMigrateMigrationApiV2MigrateMigrationsPost201Envelope": {
+        "type": "object",
+        "required": [
+          "success",
+          "data",
+          "meta"
+        ],
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "const": true
+          },
+          "data": {
+            "$ref": "#/components/schemas/MigrationApiSankaMigrateMigrationData"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/EnvelopeMeta"
+          }
+        }
+      },
+      "MigrationApiDeleteSankaMigrateConnectionApiV2MigrateConnectionsConnectionIdDelete200Envelope": {
+        "type": "object",
+        "required": [
+          "success",
+          "data",
+          "meta"
+        ],
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "const": true
+          },
+          "data": {
+            "$ref": "#/components/schemas/MigrationApiSankaMigrateConnectionDeleteData"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/EnvelopeMeta"
+          }
+        }
+      },
+      "MigrationApiDiscoverMigrationSourceObjectsApiV2MigrateMigrationsMigrationIdSourceObjectsGet200Envelope": {
+        "type": "object",
+        "required": [
+          "success",
+          "data",
+          "meta"
+        ],
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "const": true
+          },
+          "data": {
+            "$ref": "#/components/schemas/MigrationApiFerrySourceObjectCatalogData"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/EnvelopeMeta"
+          }
+        }
+      },
+      "MigrationApiFerrySourceObjectCatalogData": {
+        "properties": {
+          "sourceProvider": {
+            "type": "string",
+            "title": "Sourceprovider"
+          },
+          "destinationProvider": {
+            "type": "string",
+            "title": "Destinationprovider"
+          },
+          "objects": {
+            "items": {
+              "$ref": "#/components/schemas/MigrationApiFerrySourceObjectOption"
+            },
+            "type": "array",
+            "title": "Objects"
+          }
+        },
+        "type": "object",
+        "required": [
+          "sourceProvider",
+          "destinationProvider"
+        ],
+        "title": "FerrySourceObjectCatalogData"
+      },
+      "MigrationApiFerrySourceObjectOption": {
+        "properties": {
+          "key": {
+            "type": "string",
+            "title": "Key"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "canonicalType": {
+            "type": "string",
+            "title": "Canonicaltype"
+          },
+          "defaultSelected": {
+            "type": "boolean",
+            "title": "Defaultselected",
+            "default": false
+          },
+          "custom": {
+            "type": "boolean",
+            "title": "Custom",
+            "default": false
+          },
+          "queryable": {
+            "type": "boolean",
+            "title": "Queryable",
+            "default": true
+          },
+          "automaticTargetObject": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Automatictargetobject"
+          },
+          "managedMappingRequired": {
+            "type": "boolean",
+            "title": "Managedmappingrequired",
+            "default": false
+          }
+        },
+        "type": "object",
+        "required": [
+          "key",
+          "label",
+          "canonicalType"
+        ],
+        "title": "FerrySourceObjectOption"
+      },
+      "MigrationApiGetMigrationMappingApiV2MigrateMigrationsMigrationIdMappingGet200Envelope": {
+        "type": "object",
+        "required": [
+          "success",
+          "data",
+          "meta"
+        ],
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "const": true
+          },
+          "data": {
+            "$ref": "#/components/schemas/MigrationApiSankaMigrateInspectionData"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/EnvelopeMeta"
+          }
+        }
+      },
+      "MigrationApiGetMigrationReportApiV2MigrateMigrationsMigrationIdReportsStageGet200Envelope": {
+        "type": "object",
+        "required": [
+          "success",
+          "data",
+          "meta"
+        ],
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "const": true
+          },
+          "data": {
+            "$ref": "#/components/schemas/MigrationApiStageReportData"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/EnvelopeMeta"
+          }
+        }
+      },
+      "MigrationApiGetNativeReviewApiV2MigrateMigrationsMigrationIdNativeReviewGet200Envelope": {
+        "type": "object",
+        "required": [
+          "success",
+          "data",
+          "meta"
+        ],
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "const": true
+          },
+          "data": {
+            "$ref": "#/components/schemas/MigrationApiNativeStatus"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/EnvelopeMeta"
+          }
+        }
+      },
+      "MigrationApiGetSankaMigrateConnectionApiV2MigrateConnectionsConnectionIdGet200Envelope": {
+        "type": "object",
+        "required": [
+          "success",
+          "data",
+          "meta"
+        ],
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "const": true
+          },
+          "data": {
+            "$ref": "#/components/schemas/MigrationApiSankaMigrateConnectionData"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/EnvelopeMeta"
+          }
+        }
+      },
+      "MigrationApiGetSankaMigrateJourneyApiV2MigrateMigrationsMigrationIdJourneyGet200Envelope": {
+        "type": "object",
+        "required": [
+          "success",
+          "data",
+          "meta"
+        ],
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "const": true
+          },
+          "data": {
+            "$ref": "#/components/schemas/MigrationApiSankaMigrateJourneyData"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/EnvelopeMeta"
+          }
+        }
+      },
+      "MigrationApiGetSankaMigrateMigrationApiV2MigrateMigrationsMigrationIdGet200Envelope": {
+        "type": "object",
+        "required": [
+          "success",
+          "data",
+          "meta"
+        ],
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "const": true
+          },
+          "data": {
+            "$ref": "#/components/schemas/MigrationApiSankaMigrateMigrationData"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/EnvelopeMeta"
+          }
+        }
+      },
+      "MigrationApiGetSankaMigrateMigrationPlanApiV2MigrateMigrationsMigrationIdPlanGet200Envelope": {
+        "type": "object",
+        "required": [
+          "success",
+          "data",
+          "meta"
+        ],
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "const": true
+          },
+          "data": {
+            "$ref": "#/components/schemas/MigrationApiSankaMigratePlanData"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/EnvelopeMeta"
+          }
+        }
+      },
+      "MigrationApiGetSankaMigrateMigrationReviewApiV2MigrateMigrationsMigrationIdReviewGet200Envelope": {
+        "type": "object",
+        "required": [
+          "success",
+          "data",
+          "meta"
+        ],
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "const": true
+          },
+          "data": {
+            "$ref": "#/components/schemas/MigrationApiSankaMigrateReviewData"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/EnvelopeMeta"
+          }
+        }
+      },
+      "MigrationApiGetSankaMigrateMigrationVerificationApiV2MigrateMigrationsMigrationIdVerificationGet200Envelope": {
+        "type": "object",
+        "required": [
+          "success",
+          "data",
+          "meta"
+        ],
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "const": true
+          },
+          "data": {
+            "$ref": "#/components/schemas/MigrationApiSankaMigrateVerificationData"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/EnvelopeMeta"
+          }
+        }
+      },
+      "MigrationApiGetSankaMigrateResultApiV2MigrateMigrationsMigrationIdResultsStageGet200Envelope": {
+        "type": "object",
+        "required": [
+          "success",
+          "data",
+          "meta"
+        ],
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "const": true
+          },
+          "data": {
+            "$ref": "#/components/schemas/MigrationApiSankaMigrateResultData"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/EnvelopeMeta"
+          }
+        }
+      },
+      "MigrationApiInspectMigrationApiV2MigrateMigrationsMigrationIdInspectionGet200Envelope": {
+        "type": "object",
+        "required": [
+          "success",
+          "data",
+          "meta"
+        ],
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "const": true
+          },
+          "data": {
+            "$ref": "#/components/schemas/MigrationApiSankaMigrateInspectionData"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/EnvelopeMeta"
+          }
+        }
+      },
+      "MigrationApiListSankaMigrateConnectionsApiV2MigrateConnectionsGet200Envelope": {
+        "type": "object",
+        "required": [
+          "success",
+          "data",
+          "meta"
+        ],
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "const": true
+          },
+          "data": {
+            "$ref": "#/components/schemas/MigrationApiSankaMigrateConnectionListData"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/EnvelopeMeta"
+          }
+        }
+      },
+      "MigrationApiListSankaMigrateConnectorsApiV2MigrateConnectorsGet200Envelope": {
+        "type": "object",
+        "required": [
+          "success",
+          "data",
+          "meta"
+        ],
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "const": true
+          },
+          "data": {
+            "$ref": "#/components/schemas/MigrationApiSankaMigrateConnectorListData"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/EnvelopeMeta"
+          }
+        }
+      },
+      "MigrationApiListSankaMigrateMigrationsApiV2MigrateMigrationsGet200Envelope": {
+        "type": "object",
+        "required": [
+          "success",
+          "data",
+          "meta"
+        ],
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "const": true
+          },
+          "data": {
+            "$ref": "#/components/schemas/MigrationApiSankaMigrateMigrationListData"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/EnvelopeMeta"
+          }
+        }
+      },
+      "MigrationApiNativePrepareRequest": {
+        "properties": {
+          "expected_binding_hash": {
+            "type": "string",
+            "pattern": "^sha256:[0-9a-f]{64}$",
+            "title": "Expected Binding Hash"
+          },
+          "expected_revision": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Expected Revision"
+          },
+          "expected_review_hash": {
+            "type": "string",
+            "pattern": "^sha256:[0-9a-f]{64}$",
+            "title": "Expected Review Hash"
+          },
+          "confirm_source_content_read": {
+            "type": "boolean",
+            "const": true,
+            "title": "Confirm Source Content Read"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "expected_binding_hash",
+          "expected_revision",
+          "expected_review_hash",
+          "confirm_source_content_read"
+        ],
+        "title": "NativePrepareRequest"
+      },
+      "MigrationApiNativeRecoveryRequest": {
+        "properties": {
+          "expected_binding_hash": {
+            "type": "string",
+            "pattern": "^sha256:[0-9a-f]{64}$",
+            "title": "Expected Binding Hash"
+          },
+          "operation_id": {
+            "type": "string",
+            "maxLength": 1024,
+            "minLength": 1,
+            "title": "Operation Id"
+          },
+          "expected_operation_revision": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Expected Operation Revision"
+          },
+          "action": {
+            "type": "string",
+            "enum": [
+              "adopt",
+              "resume_staging"
+            ],
+            "title": "Action",
+            "default": "adopt"
+          },
+          "destination_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 2048,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Destination Id"
+          },
+          "evidence": {
+            "type": "string",
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Evidence"
+          },
+          "confirm": {
+            "type": "boolean",
+            "const": true,
+            "title": "Confirm"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "expected_binding_hash",
+          "operation_id",
+          "expected_operation_revision",
+          "evidence",
+          "confirm"
+        ],
+        "title": "NativeRecoveryRequest"
+      },
+      "MigrationApiNativeReviewRequest": {
+        "properties": {
+          "expected_binding_hash": {
+            "type": "string",
+            "pattern": "^sha256:[0-9a-f]{64}$",
+            "title": "Expected Binding Hash"
+          },
+          "expected_revision": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Expected Revision"
+          },
+          "resources": {
+            "items": {
+              "$ref": "#/components/schemas/MigrationApiNativeResource"
+            },
+            "type": "array",
+            "maxItems": 1000,
+            "minItems": 1,
+            "title": "Resources"
+          },
+          "users": {
+            "items": {
+              "$ref": "#/components/schemas/MigrationApiNativeUser"
+            },
+            "type": "array",
+            "maxItems": 10000,
+            "minItems": 1,
+            "title": "Users"
+          },
+          "source_frozen": {
+            "type": "boolean",
+            "const": true,
+            "title": "Source Frozen"
+          },
+          "preserve_versions": {
+            "type": "boolean",
+            "const": true,
+            "title": "Preserve Versions"
+          },
+          "preserve_permissions": {
+            "type": "boolean",
+            "const": true,
+            "title": "Preserve Permissions"
+          },
+          "acknowledged_limitations": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "maxItems": 100,
+            "title": "Acknowledged Limitations"
+          },
+          "excluded_items": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "maxProperties": 100000,
+            "title": "Excluded Items"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "expected_binding_hash",
+          "expected_revision",
+          "resources",
+          "users",
+          "source_frozen",
+          "preserve_versions",
+          "preserve_permissions",
+          "acknowledged_limitations"
+        ],
+        "title": "NativeReviewRequest"
+      },
+      "MigrationApiNativeResource": {
+        "properties": {
+          "workload": {
+            "type": "string",
+            "enum": [
+              "groups",
+              "mailboxes",
+              "calendars",
+              "contacts",
+              "onedrive",
+              "sharepoint",
+              "teams",
+              "chats"
+            ],
+            "title": "Workload"
+          },
+          "source_id": {
+            "type": "string",
+            "maxLength": 1024,
+            "minLength": 1,
+            "title": "Source Id"
+          },
+          "destination_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 1024,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Destination Id"
+          },
+          "destination_site_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 1024,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Destination Site Id"
+          },
+          "libraries": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "maxProperties": 1000,
+            "title": "Libraries"
+          },
+          "owner_source_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Owner Source Id"
+          },
+          "evidence": {
+            "type": "string",
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Evidence"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "workload",
+          "source_id",
+          "evidence"
+        ],
+        "title": "NativeResource"
+      },
+      "MigrationApiNativeStatus": {
+        "properties": {
+          "mode": {
+            "type": "string",
+            "const": "native",
+            "title": "Mode",
+            "default": "native"
+          },
+          "binding_hash": {
+            "type": "string",
+            "title": "Binding Hash"
+          },
+          "revision": {
+            "type": "integer",
+            "title": "Revision",
+            "default": 0
+          },
+          "review_hash": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Review Hash"
+          },
+          "review": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Review"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "preparation": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Preparation"
+          },
+          "resources": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Resources"
+          },
+          "destination_resources": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Destination Resources"
+          },
+          "users": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Users"
+          },
+          "prerequisites": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Prerequisites"
+          },
+          "operations": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Operations"
+          },
+          "limitations": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Limitations"
+          }
+        },
+        "type": "object",
+        "required": [
+          "binding_hash",
+          "status"
+        ],
+        "title": "NativeStatus"
+      },
+      "MigrationApiNativeUser": {
+        "properties": {
+          "source_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Source Id"
+          },
+          "destination_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Destination Id"
+          },
+          "evidence": {
+            "type": "string",
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Evidence"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "source_id",
+          "destination_id",
+          "evidence"
+        ],
+        "title": "NativeUser"
+      },
+      "MigrationApiPauseSankaMigrateMigrationApiV2MigrateMigrationsMigrationIdPausePost200Envelope": {
+        "type": "object",
+        "required": [
+          "success",
+          "data",
+          "meta"
+        ],
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "const": true
+          },
+          "data": {
+            "$ref": "#/components/schemas/MigrationApiSankaMigrateMigrationData"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/EnvelopeMeta"
+          }
+        }
+      },
+      "MigrationApiPrepareNativeMigrationApiV2MigrateMigrationsMigrationIdNativePreparePost202Envelope": {
+        "type": "object",
+        "required": [
+          "success",
+          "data",
+          "meta"
+        ],
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "const": true
+          },
+          "data": {
+            "$ref": "#/components/schemas/MigrationApiNativeStatus"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/EnvelopeMeta"
+          }
+        }
+      },
+      "MigrationApiRecoverNativeMigrationApiV2MigrateMigrationsMigrationIdNativeRecoveryPost200Envelope": {
+        "type": "object",
+        "required": [
+          "success",
+          "data",
+          "meta"
+        ],
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "const": true
+          },
+          "data": {
+            "$ref": "#/components/schemas/MigrationApiNativeStatus"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/EnvelopeMeta"
+          }
+        }
+      },
+      "MigrationApiRepairSankaMigrateMigrationApiV2MigrateMigrationsMigrationIdRepairPost202Envelope": {
+        "type": "object",
+        "required": [
+          "success",
+          "data",
+          "meta"
+        ],
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "const": true
+          },
+          "data": {
+            "$ref": "#/components/schemas/MigrationApiSankaMigrateMigrationData"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/EnvelopeMeta"
+          }
+        }
+      },
+      "MigrationApiResumeSankaMigrateMigrationApiV2MigrateMigrationsMigrationIdResumePost202Envelope": {
+        "type": "object",
+        "required": [
+          "success",
+          "data",
+          "meta"
+        ],
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "const": true
+          },
+          "data": {
+            "$ref": "#/components/schemas/MigrationApiSankaMigrateMigrationData"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/EnvelopeMeta"
+          }
+        }
+      },
+      "MigrationApiReviewSankaMigrateMigrationApiV2MigrateMigrationsMigrationIdReviewPost200Envelope": {
+        "type": "object",
+        "required": [
+          "success",
+          "data",
+          "meta"
+        ],
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "const": true
+          },
+          "data": {
+            "$ref": "#/components/schemas/MigrationApiSankaMigrateReviewData"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/EnvelopeMeta"
+          }
+        }
+      },
+      "MigrationApiSankaMigrateApplyRequest": {
+        "properties": {
+          "plan_hash": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Plan Hash"
+          },
+          "routes": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array",
+                "maxItems": 100
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Routes"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "plan_hash"
+        ],
+        "title": "SankaMigrateApplyRequest",
+        "description": "`POST …/apply` body (§5.4): the reviewed ``plan_hash`` is the approval\ntoken; ``routes`` optionally restricts the apply to planned route keys."
+      },
+      "MigrationApiSankaMigrateConnectionCreateRequest": {
+        "properties": {
+          "provider": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Provider"
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "title": "Name"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "provider",
+          "name"
+        ],
+        "title": "SankaMigrateConnectionCreateRequest"
+      },
+      "MigrationApiSankaMigrateConnectionData": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "object": {
+            "type": "string",
+            "const": "connection",
+            "title": "Object",
+            "default": "connection"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "provider": {
+            "type": "string",
+            "title": "Provider"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending_authorization",
+              "active",
+              "failed"
+            ],
+            "title": "Status"
+          },
+          "identity": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "title": "Identity"
+          },
+          "created_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Created At"
+          },
+          "last_verified_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Verified At"
+          },
+          "authorize_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Authorize Url"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "provider",
+          "status"
+        ],
+        "title": "SankaMigrateConnectionData"
+      },
+      "MigrationApiSankaMigrateConnectionDeleteData": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "object": {
+            "type": "string",
+            "const": "connection",
+            "title": "Object",
+            "default": "connection"
+          },
+          "deleted": {
+            "type": "boolean",
+            "const": true,
+            "title": "Deleted",
+            "default": true
+          }
+        },
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "title": "SankaMigrateConnectionDeleteData"
+      },
+      "MigrationApiSankaMigrateConnectionListData": {
+        "properties": {
+          "connections": {
+            "items": {
+              "$ref": "#/components/schemas/MigrationApiSankaMigrateConnectionData"
+            },
+            "type": "array",
+            "title": "Connections"
+          }
+        },
+        "type": "object",
+        "title": "SankaMigrateConnectionListData"
+      },
+      "MigrationApiSankaMigrateConnectorListData": {
+        "properties": {
+          "connectors": {
+            "items": {
+              "$ref": "#/components/schemas/MigrationApiSankaMigrateConnectorData"
+            },
+            "type": "array",
+            "title": "Connectors"
+          },
+          "pairs": {
+            "items": {
+              "$ref": "#/components/schemas/MigrationApiSankaMigrateConnectorPairData"
+            },
+            "type": "array",
+            "title": "Pairs"
+          }
+        },
+        "type": "object",
+        "title": "SankaMigrateConnectorListData"
+      },
+      "MigrationApiSankaMigrateConnectorData": {
+        "properties": {
+          "type": {
+            "type": "string",
+            "title": "Type"
+          },
+          "roles": {
+            "items": {
+              "type": "string",
+              "enum": [
+                "source",
+                "destination"
+              ]
+            },
+            "type": "array",
+            "title": "Roles"
+          },
+          "binding": {
+            "type": "string",
+            "title": "Binding"
+          }
+        },
+        "type": "object",
+        "required": [
+          "type",
+          "binding"
+        ],
+        "title": "SankaMigrateConnectorData",
+        "description": "Public connector projection (§5.9); binding ``channel`` reads ``oauth_connection``."
+      },
+      "MigrationApiSankaMigrateConnectorPairData": {
+        "properties": {
+          "source": {
+            "type": "string",
+            "title": "Source"
+          },
+          "target": {
+            "type": "string",
+            "title": "Target"
+          }
+        },
+        "type": "object",
+        "required": [
+          "source",
+          "target"
+        ],
+        "title": "SankaMigrateConnectorPairData"
+      },
+      "MigrationApiSankaMigrateInspectionData": {
+        "properties": {
+          "migration_id": {
+            "type": "string",
+            "title": "Migration Id"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "binding": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Binding"
+          },
+          "binding_hash": {
+            "type": "string",
+            "title": "Binding Hash"
+          },
+          "mapping_hash": {
+            "type": "string",
+            "title": "Mapping Hash"
+          },
+          "fields": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Fields"
+          },
+          "reports": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Reports"
+          },
+          "approval": {
+            "type": "string",
+            "const": "caller_authorized_only",
+            "title": "Approval",
+            "default": "caller_authorized_only"
+          }
+        },
+        "type": "object",
+        "required": [
+          "migration_id",
+          "status",
+          "binding",
+          "binding_hash",
+          "mapping_hash",
+          "fields",
+          "reports"
+        ],
+        "title": "SankaMigrateInspectionData"
+      },
+      "MigrationApiSankaMigrateJourneyData": {
+        "properties": {
+          "workspace_id": {
+            "type": "string",
+            "title": "Workspace Id"
+          },
+          "result_version": {
+            "type": "string",
+            "title": "Result Version"
+          },
+          "migration_id": {
+            "type": "string",
+            "title": "Migration Id"
+          },
+          "current_stage": {
+            "type": "string",
+            "enum": [
+              "assessment",
+              "plan",
+              "scan_mapping",
+              "transfer_cutover"
+            ],
+            "title": "Current Stage"
+          },
+          "stages": {
+            "items": {
+              "$ref": "#/components/schemas/MigrationApiFerryJourneyStage"
+            },
+            "type": "array",
+            "maxItems": 4,
+            "minItems": 4,
+            "title": "Stages"
+          },
+          "next_action": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/MigrationApiFerryJourneyAction"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "workspace_id",
+          "result_version",
+          "migration_id",
+          "current_stage",
+          "stages"
+        ],
+        "title": "SankaMigrateJourneyData"
+      },
+      "MigrationApiFerryJourneyAction": {
+        "properties": {
+          "code": {
+            "type": "string",
+            "title": "Code"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Url"
+          },
+          "prerequisites": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "maxItems": 4,
+            "title": "Prerequisites"
+          }
+        },
+        "type": "object",
+        "required": [
+          "code",
+          "label"
+        ],
+        "title": "FerryJourneyAction"
+      },
+      "MigrationApiFerryJourneyStage": {
+        "properties": {
+          "key": {
+            "type": "string",
+            "enum": [
+              "assessment",
+              "plan",
+              "scan_mapping",
+              "transfer_cutover"
+            ],
+            "title": "Key"
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "unknown",
+              "not_done",
+              "queued",
+              "in_progress",
+              "blocked",
+              "failed",
+              "ready",
+              "completed",
+              "skipped"
+            ],
+            "title": "State"
+          },
+          "optional": {
+            "type": "boolean",
+            "title": "Optional",
+            "default": false
+          },
+          "outputs": {
+            "items": {
+              "$ref": "#/components/schemas/MigrationApiFerryJourneyOutput"
+            },
+            "type": "array",
+            "maxItems": 3,
+            "title": "Outputs"
+          },
+          "blockers": {
+            "items": {
+              "$ref": "#/components/schemas/MigrationApiFerryJourneyBlocker"
+            },
+            "type": "array",
+            "maxItems": 8,
+            "title": "Blockers"
+          },
+          "next_action": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/MigrationApiFerryJourneyAction"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "operation_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Operation Id"
+          },
+          "decisions_needed": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "maxItems": 4,
+            "title": "Decisions Needed"
+          },
+          "eligible_controls": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "maxItems": 4,
+            "title": "Eligible Controls"
+          },
+          "summary": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "object",
+            "maxProperties": 24,
+            "title": "Summary"
+          },
+          "scope_limits": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "maxItems": 4,
+            "title": "Scope Limits"
+          },
+          "blocker_total": {
+            "type": "integer",
+            "title": "Blocker Total",
+            "default": 0
+          },
+          "blockers_truncated": {
+            "type": "boolean",
+            "title": "Blockers Truncated",
+            "default": false
+          }
+        },
+        "type": "object",
+        "required": [
+          "key",
+          "state"
+        ],
+        "title": "FerryJourneyStage"
+      },
+      "MigrationApiFerryJourneyBlocker": {
+        "properties": {
+          "code": {
+            "type": "string",
+            "title": "Code"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "count": {
+            "type": "integer",
+            "title": "Count",
+            "default": 1
+          },
+          "detail_path": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Detail Path"
+          }
+        },
+        "type": "object",
+        "required": [
+          "code",
+          "message"
+        ],
+        "title": "FerryJourneyBlocker"
+      },
+      "MigrationApiFerryJourneyOutput": {
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "plan",
+              "inventory",
+              "mapping",
+              "validation",
+              "transfer",
+              "verification",
+              "cutover"
+            ],
+            "title": "Kind"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Url"
+          },
+          "unavailable_reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Unavailable Reason"
+          },
+          "result_path": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Result Path"
+          }
+        },
+        "type": "object",
+        "required": [
+          "kind",
+          "label",
+          "url"
+        ],
+        "title": "FerryJourneyOutput"
+      },
+      "MigrationApiSankaMigrateMappingSaveRequest": {
+        "properties": {
+          "expected_binding_hash": {
+            "type": "string",
+            "pattern": "^sha256:[0-9a-f]{64}$",
+            "title": "Expected Binding Hash"
+          },
+          "expected_mapping_hash": {
+            "type": "string",
+            "pattern": "^sha256:[0-9a-f]{64}$",
+            "title": "Expected Mapping Hash"
+          },
+          "fields": {
+            "items": {
+              "$ref": "#/components/schemas/MigrationApiPublicMappingField"
+            },
+            "type": "array",
+            "maxItems": 5000,
+            "title": "Fields"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "expected_binding_hash",
+          "expected_mapping_hash",
+          "fields"
+        ],
+        "title": "SankaMigrateMappingSaveRequest"
+      },
+      "MigrationApiPublicMappingField": {
+        "properties": {
+          "sourceField": {
+            "type": "string",
+            "title": "Sourcefield"
+          },
+          "targetObject": {
+            "type": "string",
+            "title": "Targetobject"
+          },
+          "targetField": {
+            "type": "string",
+            "title": "Targetfield"
+          },
+          "sourceType": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sourcetype"
+          },
+          "targetType": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Targettype"
+          },
+          "transformRule": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Transformrule"
+          },
+          "required": {
+            "type": "boolean",
+            "title": "Required",
+            "default": false
+          },
+          "identity": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Identity"
+          },
+          "mappingKind": {
+            "type": "string",
+            "enum": [
+              "scalar",
+              "owner",
+              "relationship",
+              "reference"
+            ],
+            "title": "Mappingkind",
+            "default": "scalar"
+          },
+          "sourceReferenceObject": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sourcereferenceobject"
+          },
+          "targetReferenceObject": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Targetreferenceobject"
+          },
+          "relationshipMode": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "default",
+                  "single",
+                  "collection"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Relationshipmode"
+          },
+          "associationCategory": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "HUBSPOT_DEFINED",
+                  "USER_DEFINED",
+                  "INTEGRATOR_DEFINED"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Associationcategory"
+          },
+          "associationTypeId": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "exclusiveMinimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Associationtypeid"
+          },
+          "associationSourceLabel": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 255
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Associationsourcelabel"
+          },
+          "associationTargetLabel": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 255
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Associationtargetlabel"
+          },
+          "associationCardinality": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "one_to_one",
+                  "one_to_many",
+                  "many_to_one",
+                  "many_to_many"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Associationcardinality"
+          },
+          "sourceFilter": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/MigrationApiFerrySourceFilter"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "valueMap": {
+            "items": {
+              "$ref": "#/components/schemas/MigrationApiFerryValueMapEntry"
+            },
+            "type": "array",
+            "maxItems": 2000,
+            "title": "Valuemap"
+          },
+          "unmappedValuePolicy": {
+            "type": "string",
+            "enum": [
+              "error",
+              "preserve",
+              "omit"
+            ],
+            "title": "Unmappedvaluepolicy",
+            "default": "error"
+          },
+          "origin": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "candidate",
+                  "operator",
+                  "ai"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Origin"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "sourceField",
+          "targetObject",
+          "targetField"
+        ],
+        "title": "PublicMappingField"
+      },
+      "MigrationApiFerrySourceFilter": {
+        "properties": {
+          "field": {
+            "type": "string",
+            "title": "Field"
+          },
+          "operator": {
+            "type": "string",
+            "const": "equals",
+            "title": "Operator",
+            "default": "equals"
+          },
+          "value": {
+            "type": "boolean",
+            "title": "Value"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "field",
+          "value"
+        ],
+        "title": "FerrySourceFilter",
+        "description": "A reviewed source-side predicate that defines one migration route."
+      },
+      "MigrationApiFerryValueMapEntry": {
+        "properties": {
+          "when": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                }
+              ]
+            },
+            "type": "object",
+            "maxProperties": 20,
+            "minProperties": 1,
+            "title": "When"
+          },
+          "value": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "boolean"
+              }
+            ],
+            "title": "Value"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "when",
+          "value"
+        ],
+        "title": "FerryValueMapEntry",
+        "description": "One reviewed source-record predicate and its destination scalar value."
+      },
+      "MigrationApiSankaMigrateMigrationCreateRequest": {
+        "properties": {
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "source": {
+            "$ref": "#/components/schemas/MigrationApiSankaMigrateEndpointSpec"
+          },
+          "target": {
+            "$ref": "#/components/schemas/MigrationApiSankaMigrateEndpointSpec"
+          },
+          "strategy": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Strategy"
+          },
+          "verify": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Verify"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "source",
+          "target"
+        ],
+        "title": "SankaMigrateMigrationCreateRequest",
+        "description": "MigrationSpec-compatible create body (§5.1; OSS ``MigrationSpec`` parity).\n\n``strategy`` / ``verify`` stay free-form mappings exactly like the OSS\nspec, so a committed OSS YAML posts to the cloud unchanged; known keys\n(``strategy.conflict_policy``) are validated by the service. Unknown\ntop-level keys (e.g. ``migration_mode``) are rejected — the public\nsurface pins ``runtime_kind=\"record\"`` structurally (§5.1, §9)."
+      },
+      "MigrationApiSankaMigrateEndpointSpec": {
+        "properties": {
+          "type": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Type"
+          },
+          "connection": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Connection"
+          },
+          "options": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Options"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "type"
+        ],
+        "title": "SankaMigrateEndpointSpec",
+        "description": "One side of a migration: connector type plus how to reach it (§5.1).\n\nShape-compatible with the OSS ``EndpointSpec``; ``connection`` is a\nworkspace connection reference. C-6 resolves a public name or raw channel\nid to an active provider-matching channel while this unresolved value stays\nin the persisted public spec and its hash."
+      },
+      "MigrationApiSankaMigrateMigrationData": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "object": {
+            "type": "string",
+            "const": "migration",
+            "title": "Object",
+            "default": "migration"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name",
+            "default": ""
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "created",
+              "inspecting",
+              "planning",
+              "requires_approval",
+              "applying",
+              "paused",
+              "applied",
+              "verified",
+              "failed",
+              "cancelled"
+            ],
+            "title": "Status"
+          },
+          "source": {
+            "$ref": "#/components/schemas/MigrationApiSankaMigrateMigrationEndpointData"
+          },
+          "target": {
+            "$ref": "#/components/schemas/MigrationApiSankaMigrateMigrationEndpointData"
+          },
+          "strategy": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Strategy"
+          },
+          "verify": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Verify"
+          },
+          "spec_hash": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Spec Hash"
+          },
+          "plan_hash": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Plan Hash"
+          },
+          "risk_level": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "low",
+                  "medium",
+                  "high"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Risk Level"
+          },
+          "issues": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Issues"
+          },
+          "auto_remediable": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Auto Remediable"
+          },
+          "manual_review": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Manual Review"
+          },
+          "progress": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/MigrationApiSankaMigrateProgressData"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "sequence_number": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sequence Number"
+          },
+          "console_url": {
+            "type": "string",
+            "title": "Console Url"
+          },
+          "created_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Created At"
+          },
+          "updated_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Updated At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "status",
+          "source",
+          "target",
+          "console_url"
+        ],
+        "title": "SankaMigrateMigrationData",
+        "description": "The public migration resource (§5.1 create/read + §5.5 status shape).\n\n``plan_hash`` and the flat §7.1 quintet counters (``risk_level`` /\n``issues`` / ``auto_remediable`` / ``manual_review``) are ``null`` until a\nplan is assembled and are derived from the run's persisted stage reports\non every read (C-3; ``app/model/domain/ferry/cloud_plan.py``). §5.5\n``progress`` (C-4) is ``null`` until the transfer stage carries execution\nevidence, then projects the persisted heartbeat report\n(``app/model/domain/ferry/cloud_progress.py``)."
+      },
+      "MigrationApiSankaMigrateMigrationEndpointData": {
+        "properties": {
+          "type": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Type"
+          },
+          "connection": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Connection"
+          }
+        },
+        "type": "object",
+        "title": "SankaMigrateMigrationEndpointData",
+        "description": "The resource echo of one spec side: type + connection reference only (§5.1)."
+      },
+      "MigrationApiSankaMigrateMigrationListData": {
+        "properties": {
+          "migrations": {
+            "items": {
+              "$ref": "#/components/schemas/MigrationApiSankaMigrateMigrationData"
+            },
+            "type": "array",
+            "title": "Migrations"
+          }
+        },
+        "type": "object",
+        "title": "SankaMigrateMigrationListData"
+      },
+      "MigrationApiSankaMigratePlanData": {
+        "properties": {
+          "migration_id": {
+            "type": "string",
+            "title": "Migration Id"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "plan_hash": {
+            "type": "string",
+            "title": "Plan Hash"
+          },
+          "generated_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Generated At"
+          },
+          "ready": {
+            "type": "number",
+            "title": "Ready",
+            "default": 0.0
+          },
+          "risk_level": {
+            "type": "string",
+            "enum": [
+              "low",
+              "medium",
+              "high"
+            ],
+            "title": "Risk Level",
+            "default": "low"
+          },
+          "issues": {
+            "items": {
+              "$ref": "#/components/schemas/MigrationApiSankaMigratePlanIssueData"
+            },
+            "type": "array",
+            "title": "Issues"
+          },
+          "summary": {
+            "$ref": "#/components/schemas/MigrationApiSankaMigratePlanSummaryData"
+          },
+          "document": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Document"
+          },
+          "scope_evidence": {
+            "$ref": "#/components/schemas/MigrationApiSankaMigratePlanScopeData"
+          }
+        },
+        "type": "object",
+        "required": [
+          "migration_id",
+          "status",
+          "plan_hash",
+          "scope_evidence"
+        ],
+        "title": "SankaMigratePlanData",
+        "description": "The §5.3 reviewable, hashable plan artifact."
+      },
+      "MigrationApiSankaMigratePlanIssueData": {
+        "properties": {
+          "code": {
+            "type": "string",
+            "title": "Code"
+          },
+          "severity": {
+            "type": "string",
+            "enum": [
+              "error",
+              "warning",
+              "info"
+            ],
+            "title": "Severity",
+            "default": "warning"
+          },
+          "route_key": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Route Key"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message",
+            "default": ""
+          },
+          "count": {
+            "type": "integer",
+            "title": "Count",
+            "default": 1
+          },
+          "auto_remediable": {
+            "type": "boolean",
+            "title": "Auto Remediable",
+            "default": false
+          },
+          "manual_review": {
+            "type": "boolean",
+            "title": "Manual Review",
+            "default": false
+          },
+          "remediation_level": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Remediation Level"
+          },
+          "source_field": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Field"
+          },
+          "target_field": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Target Field"
+          }
+        },
+        "type": "object",
+        "required": [
+          "code"
+        ],
+        "title": "SankaMigratePlanIssueData",
+        "description": "One §5.3 structured issue; counts feed the flat §7.1 quintet."
+      },
+      "MigrationApiSankaMigratePlanRequest": {
+        "properties": {
+          "sample_size": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Sample Size",
+            "default": 10
+          },
+          "force": {
+            "type": "boolean",
+            "title": "Force",
+            "default": false
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "SankaMigratePlanRequest",
+        "description": "`POST …/plan` body (§5.2) — all fields optional."
+      },
+      "MigrationApiSankaMigratePlanScopeData": {
+        "properties": {
+          "workspace_id": {
+            "type": "string",
+            "title": "Workspace Id"
+          },
+          "binding_hash": {
+            "type": "string",
+            "title": "Binding Hash"
+          },
+          "mapping_hash": {
+            "type": "string",
+            "title": "Mapping Hash"
+          },
+          "route_manifest": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Route Manifest"
+          },
+          "source_counts": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "object",
+            "title": "Source Counts"
+          },
+          "scope_limit": {
+            "type": "string",
+            "title": "Scope Limit",
+            "default": "Inventory counts cover inspected source objects, not necessarily filtered routes; unknown counts are null. Execution options require separate explicit apply authorization."
+          }
+        },
+        "type": "object",
+        "required": [
+          "workspace_id",
+          "binding_hash",
+          "mapping_hash"
+        ],
+        "title": "SankaMigratePlanScopeData"
+      },
+      "MigrationApiSankaMigratePlanSummaryData": {
+        "properties": {
+          "routes": {
+            "type": "integer",
+            "title": "Routes",
+            "default": 0
+          },
+          "records_estimated": {
+            "type": "integer",
+            "title": "Records Estimated",
+            "default": 0
+          },
+          "fields_mapped": {
+            "type": "integer",
+            "title": "Fields Mapped",
+            "default": 0
+          },
+          "fields_unmapped": {
+            "type": "integer",
+            "title": "Fields Unmapped",
+            "default": 0
+          },
+          "coverage": {
+            "$ref": "#/components/schemas/MigrationApiSankaMigratePlanCoverageData"
+          }
+        },
+        "type": "object",
+        "title": "SankaMigratePlanSummaryData"
+      },
+      "MigrationApiSankaMigratePlanCoverageData": {
+        "properties": {
+          "mapped": {
+            "type": "integer",
+            "title": "Mapped",
+            "default": 0
+          },
+          "required": {
+            "type": "integer",
+            "title": "Required",
+            "default": 0
+          },
+          "incompatible": {
+            "type": "integer",
+            "title": "Incompatible",
+            "default": 0
+          }
+        },
+        "type": "object",
+        "title": "SankaMigratePlanCoverageData",
+        "description": "§5.3 summary coverage: required destination fields vs mapped rows."
+      },
+      "MigrationApiSankaMigrateProgressData": {
+        "properties": {
+          "records_processed": {
+            "type": "integer",
+            "title": "Records Processed",
+            "default": 0
+          },
+          "records_total": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Records Total"
+          },
+          "percent": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Percent"
+          },
+          "eta_seconds": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Eta Seconds"
+          },
+          "last_heartbeat_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Heartbeat At"
+          },
+          "routes": {
+            "items": {
+              "$ref": "#/components/schemas/MigrationApiSankaMigrateProgressRouteData"
+            },
+            "type": "array",
+            "title": "Routes"
+          }
+        },
+        "type": "object",
+        "title": "SankaMigrateProgressData",
+        "description": "The §5.5 ``progress`` block on the public migration resource."
+      },
+      "MigrationApiSankaMigrateProgressRouteData": {
+        "properties": {
+          "route_key": {
+            "type": "string",
+            "title": "Route Key"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "created": {
+            "type": "integer",
+            "title": "Created",
+            "default": 0
+          },
+          "updated": {
+            "type": "integer",
+            "title": "Updated",
+            "default": 0
+          },
+          "skipped": {
+            "type": "integer",
+            "title": "Skipped",
+            "default": 0
+          },
+          "failed": {
+            "type": "integer",
+            "title": "Failed",
+            "default": 0
+          },
+          "remaining": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Remaining"
+          },
+          "percent": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Percent"
+          }
+        },
+        "type": "object",
+        "required": [
+          "route_key",
+          "status"
+        ],
+        "title": "SankaMigrateProgressRouteData",
+        "description": "One §5.5 per-route progress row, projected from ``routeProgress``."
+      },
+      "MigrationApiSankaMigrateRepairRequest": {
+        "properties": {
+          "plan_hash": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Plan Hash"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "plan_hash"
+        ],
+        "title": "SankaMigrateRepairRequest",
+        "description": "Retry the failed records/relationships bound to an approved plan.\n\nThis is deliberately an operational repair: it resumes the durable\nexecution journal and never mutates the reviewed mapping or plan."
+      },
+      "MigrationApiSankaMigrateResultData": {
+        "properties": {
+          "workspace_id": {
+            "type": "string",
+            "title": "Workspace Id"
+          },
+          "migration_id": {
+            "type": "string",
+            "title": "Migration Id"
+          },
+          "stage": {
+            "type": "string",
+            "enum": [
+              "plan",
+              "inventory",
+              "map",
+              "validate",
+              "transfer",
+              "verification",
+              "cutover"
+            ],
+            "title": "Stage"
+          },
+          "operation_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Operation Id"
+          },
+          "result_version": {
+            "type": "string",
+            "title": "Result Version"
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "queued",
+              "running",
+              "blocked",
+              "failed",
+              "completed",
+              "unknown"
+            ],
+            "title": "State"
+          },
+          "path": {
+            "type": "string",
+            "title": "Path"
+          },
+          "value_type": {
+            "type": "string",
+            "enum": [
+              "object",
+              "array",
+              "string",
+              "number",
+              "boolean",
+              "null"
+            ],
+            "title": "Value Type"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          },
+          "offset": {
+            "type": "integer",
+            "title": "Offset"
+          },
+          "next_offset": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next Offset"
+          },
+          "entries": {
+            "items": {
+              "$ref": "#/components/schemas/MigrationApiFerryResultEntry"
+            },
+            "type": "array",
+            "maxItems": 100,
+            "title": "Entries"
+          },
+          "text": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Text"
+          }
+        },
+        "type": "object",
+        "required": [
+          "workspace_id",
+          "migration_id",
+          "stage",
+          "result_version",
+          "state",
+          "path",
+          "value_type",
+          "total",
+          "offset"
+        ],
+        "title": "SankaMigrateResultData"
+      },
+      "MigrationApiFerryResultEntry": {
+        "properties": {
+          "key": {
+            "type": "string",
+            "title": "Key"
+          },
+          "path": {
+            "type": "string",
+            "title": "Path"
+          },
+          "value_type": {
+            "type": "string",
+            "enum": [
+              "object",
+              "array",
+              "string",
+              "number",
+              "boolean",
+              "null"
+            ],
+            "title": "Value Type"
+          },
+          "value": {
+            "title": "Value"
+          },
+          "item_count": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Item Count"
+          }
+        },
+        "type": "object",
+        "required": [
+          "key",
+          "path",
+          "value_type"
+        ],
+        "title": "FerryResultEntry"
+      },
+      "MigrationApiSankaMigrateResumeRequest": {
+        "properties": {
+          "plan_hash": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Plan Hash"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "plan_hash"
+        ],
+        "title": "SankaMigrateResumeRequest",
+        "description": "`POST …/resume` body (§5.7): re-validates the approval binding only."
+      },
+      "MigrationApiSankaMigrateReviewData": {
+        "properties": {
+          "migration_id": {
+            "type": "string",
+            "title": "Migration Id"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "verified",
+              "failed"
+            ],
+            "title": "Status"
+          },
+          "ok": {
+            "type": "boolean",
+            "title": "Ok"
+          },
+          "reviewed_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Reviewed At"
+          },
+          "verification": {
+            "$ref": "#/components/schemas/MigrationApiSankaMigrateVerificationData"
+          },
+          "attestation": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/MigrationApiSankaMigrateReviewAttestationData"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "migration_id",
+          "status",
+          "ok",
+          "reviewed_at",
+          "verification"
+        ],
+        "title": "SankaMigrateReviewData"
+      },
+      "MigrationApiSankaMigrateReviewAttestationData": {
+        "properties": {
+          "key_id": {
+            "type": "string",
+            "title": "Key Id"
+          },
+          "algorithm": {
+            "type": "string",
+            "const": "Ed25519",
+            "title": "Algorithm",
+            "default": "Ed25519"
+          },
+          "payload": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Payload"
+          },
+          "signature": {
+            "type": "string",
+            "maxLength": 86,
+            "minLength": 86,
+            "pattern": "^[A-Za-z0-9_-]{86}$",
+            "title": "Signature"
+          }
+        },
+        "type": "object",
+        "required": [
+          "key_id",
+          "payload",
+          "signature"
+        ],
+        "title": "SankaMigrateReviewAttestationData"
+      },
+      "MigrationApiSankaMigrateScanRequest": {
+        "properties": {
+          "expected_binding_hash": {
+            "type": "string",
+            "pattern": "^sha256:[0-9a-f]{64}$",
+            "title": "Expected Binding Hash"
+          },
+          "object_types": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "maxItems": 200,
+            "minItems": 1,
+            "title": "Object Types"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "expected_binding_hash",
+          "object_types"
+        ],
+        "title": "SankaMigrateScanRequest"
+      },
+      "MigrationApiSankaMigrateValidateRequest": {
+        "properties": {
+          "expected_binding_hash": {
+            "type": "string",
+            "pattern": "^sha256:[0-9a-f]{64}$",
+            "title": "Expected Binding Hash"
+          },
+          "expected_mapping_hash": {
+            "type": "string",
+            "pattern": "^sha256:[0-9a-f]{64}$",
+            "title": "Expected Mapping Hash"
+          },
+          "sample_size": {
+            "type": "integer",
+            "maximum": 1000.0,
+            "minimum": 1.0,
+            "title": "Sample Size",
+            "default": 10
+          },
+          "routes": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "maxItems": 100,
+            "title": "Routes"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "expected_binding_hash",
+          "expected_mapping_hash"
+        ],
+        "title": "SankaMigrateValidateRequest"
+      },
+      "MigrationApiSankaMigrateVerificationData": {
+        "properties": {
+          "migration_id": {
+            "type": "string",
+            "title": "Migration Id"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "verified",
+              "failed"
+            ],
+            "title": "Status"
+          },
+          "ok": {
+            "type": "boolean",
+            "title": "Ok"
+          },
+          "verified_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Verified At"
+          },
+          "native_reconciliation": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Native Reconciliation"
+          },
+          "routes": {
+            "items": {
+              "$ref": "#/components/schemas/MigrationApiSankaMigrateVerificationRouteData"
+            },
+            "type": "array",
+            "title": "Routes"
+          },
+          "checks": {
+            "$ref": "#/components/schemas/MigrationApiSankaMigrateVerificationChecksData"
+          }
+        },
+        "type": "object",
+        "required": [
+          "migration_id",
+          "status",
+          "ok",
+          "verified_at"
+        ],
+        "title": "SankaMigrateVerificationData"
+      },
+      "MigrationApiSankaMigrateVerificationChecksData": {
+        "properties": {
+          "counts": {
+            "type": "string",
+            "enum": [
+              "passed",
+              "failed",
+              "not_run"
+            ],
+            "title": "Counts",
+            "default": "not_run"
+          },
+          "relationships": {
+            "type": "string",
+            "enum": [
+              "passed",
+              "failed",
+              "not_run"
+            ],
+            "title": "Relationships",
+            "default": "not_run"
+          },
+          "field_sampling": {
+            "type": "string",
+            "enum": [
+              "passed",
+              "failed",
+              "not_run"
+            ],
+            "title": "Field Sampling",
+            "default": "not_run"
+          }
+        },
+        "type": "object",
+        "title": "SankaMigrateVerificationChecksData"
+      },
+      "MigrationApiSankaMigrateVerificationRouteData": {
+        "properties": {
+          "route_key": {
+            "type": "string",
+            "title": "Route Key"
+          },
+          "source_count": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Count"
+          },
+          "migrated": {
+            "type": "integer",
+            "title": "Migrated",
+            "default": 0
+          },
+          "failed": {
+            "type": "integer",
+            "title": "Failed",
+            "default": 0
+          },
+          "destination_count": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Destination Count"
+          },
+          "associations_pending": {
+            "type": "integer",
+            "title": "Associations Pending",
+            "default": 0
+          },
+          "ok": {
+            "type": "boolean",
+            "title": "Ok",
+            "default": false
+          }
+        },
+        "type": "object",
+        "required": [
+          "route_key"
+        ],
+        "title": "SankaMigrateVerificationRouteData"
+      },
+      "MigrationApiSaveMigrationMappingApiV2MigrateMigrationsMigrationIdMappingPut200Envelope": {
+        "type": "object",
+        "required": [
+          "success",
+          "data",
+          "meta"
+        ],
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "const": true
+          },
+          "data": {
+            "$ref": "#/components/schemas/MigrationApiSankaMigrateInspectionData"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/EnvelopeMeta"
+          }
+        }
+      },
+      "MigrationApiSaveNativeReviewApiV2MigrateMigrationsMigrationIdNativeReviewPut200Envelope": {
+        "type": "object",
+        "required": [
+          "success",
+          "data",
+          "meta"
+        ],
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "const": true
+          },
+          "data": {
+            "$ref": "#/components/schemas/MigrationApiNativeStatus"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/EnvelopeMeta"
+          }
+        }
+      },
+      "MigrationApiScanMigrationApiV2MigrateMigrationsMigrationIdScanPost202Envelope": {
+        "type": "object",
+        "required": [
+          "success",
+          "data",
+          "meta"
+        ],
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "const": true
+          },
+          "data": {
+            "$ref": "#/components/schemas/MigrationApiStageTriggerData"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/EnvelopeMeta"
+          }
+        }
+      },
+      "MigrationApiStageReportData": {
+        "properties": {
+          "runId": {
+            "type": "string",
+            "title": "Runid"
+          },
+          "stage": {
+            "$ref": "#/components/schemas/MigrationApiRunStageData"
+          }
+        },
+        "type": "object",
+        "required": [
+          "runId",
+          "stage"
+        ],
+        "title": "StageReportData"
+      },
+      "MigrationApiRunStageData": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "runId": {
+            "type": "string",
+            "title": "Runid"
+          },
+          "key": {
+            "type": "string",
+            "enum": [
+              "connect",
+              "inventory",
+              "map",
+              "validate",
+              "transfer",
+              "parallel_run_diff",
+              "cutover"
+            ],
+            "title": "Key"
+          },
+          "slug": {
+            "type": "string",
+            "title": "Slug"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "not_applicable",
+              "queued",
+              "running",
+              "cancelled",
+              "ready_for_review",
+              "approved",
+              "blocked",
+              "completed",
+              "failed"
+            ],
+            "title": "Status"
+          },
+          "report": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Report"
+          },
+          "reportVersion": {
+            "type": "integer",
+            "title": "Reportversion",
+            "default": 1
+          },
+          "jobId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Jobid"
+          },
+          "transferHistoryId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Transferhistoryid"
+          },
+          "reviewedById": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reviewedbyid"
+          },
+          "reviewedAt": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reviewedat"
+          },
+          "createdAt": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Createdat"
+          },
+          "updatedAt": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Updatedat"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "runId",
+          "key",
+          "slug",
+          "status"
+        ],
+        "title": "RunStageData"
+      },
+      "MigrationApiStageTriggerData": {
+        "properties": {
+          "run": {
+            "$ref": "#/components/schemas/MigrationApiMigrationRunData"
+          },
+          "stage": {
+            "$ref": "#/components/schemas/MigrationApiRunStageData"
+          },
+          "queued": {
+            "type": "boolean",
+            "title": "Queued",
+            "default": false
+          }
+        },
+        "type": "object",
+        "required": [
+          "run",
+          "stage"
+        ],
+        "title": "StageTriggerData"
+      },
+      "MigrationApiMigrationRunData": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "workspaceId": {
+            "type": "string",
+            "title": "Workspaceid"
+          },
+          "sequenceNumber": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sequencenumber"
+          },
+          "programId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Programid"
+          },
+          "sourceType": {
+            "type": "string",
+            "title": "Sourcetype"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "draft",
+              "ready",
+              "running",
+              "needs_review",
+              "approved",
+              "completed",
+              "failed",
+              "cancelled"
+            ],
+            "title": "Status"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name",
+            "default": ""
+          },
+          "createdById": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Createdbyid"
+          },
+          "sourceFileId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sourcefileid"
+          },
+          "sourceChannelId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sourcechannelid"
+          },
+          "sourceLabel": {
+            "type": "string",
+            "title": "Sourcelabel",
+            "default": ""
+          },
+          "sourceMetadata": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Sourcemetadata"
+          },
+          "destinationType": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Destinationtype"
+          },
+          "destinationChannelId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Destinationchannelid"
+          },
+          "destinationLabel": {
+            "type": "string",
+            "title": "Destinationlabel",
+            "default": ""
+          },
+          "destinationMetadata": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Destinationmetadata"
+          },
+          "runtimeKind": {
+            "type": "string",
+            "enum": [
+              "record",
+              "data_platform"
+            ],
+            "title": "Runtimekind",
+            "default": "record"
+          },
+          "migrationMode": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "snapshot",
+                  "snapshot_and_cdc",
+                  "federated",
+                  "platform_portability"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Migrationmode"
+          },
+          "runtimeConfig": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Runtimeconfig"
+          },
+          "runtimeConfigHash": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Runtimeconfighash"
+          },
+          "mappingTemplateId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Mappingtemplateid"
+          },
+          "initialLoadTransferHistoryId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Initialloadtransferhistoryid"
+          },
+          "cutoverApprovalRequestId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cutoverapprovalrequestid"
+          },
+          "creditHoldId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Creditholdid"
+          },
+          "creditsEstimated": {
+            "type": "integer",
+            "title": "Creditsestimated",
+            "default": 0
+          },
+          "creditsSettled": {
+            "type": "integer",
+            "title": "Creditssettled",
+            "default": 0
+          },
+          "recordsWrittenBillable": {
+            "type": "integer",
+            "title": "Recordswrittenbillable",
+            "default": 0
+          },
+          "stages": {
+            "items": {
+              "$ref": "#/components/schemas/MigrationApiRunStageData"
+            },
+            "type": "array",
+            "title": "Stages"
+          },
+          "createdAt": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Createdat"
+          },
+          "updatedAt": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Updatedat"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "workspaceId",
+          "sourceType",
+          "status"
+        ],
+        "title": "MigrationRunData"
+      },
+      "MigrationApiStartSankaMigrateMigrationPlanApiV2MigrateMigrationsMigrationIdPlanPost202Envelope": {
+        "type": "object",
+        "required": [
+          "success",
+          "data",
+          "meta"
+        ],
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "const": true
+          },
+          "data": {
+            "$ref": "#/components/schemas/MigrationApiSankaMigrateMigrationData"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/EnvelopeMeta"
+          }
+        }
+      },
+      "MigrationApiValidateMigrationMappingApiV2MigrateMigrationsMigrationIdValidatePost200Envelope": {
+        "type": "object",
+        "required": [
+          "success",
+          "data",
+          "meta"
+        ],
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "const": true
+          },
+          "data": {
+            "$ref": "#/components/schemas/MigrationApiStageTriggerData"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/EnvelopeMeta"
+          }
+        }
+      },
+      "MigrationApiVerifySankaMigrateMigrationApiV2MigrateMigrationsMigrationIdVerifyPost200Envelope": {
+        "type": "object",
+        "required": [
+          "success",
+          "data",
+          "meta"
+        ],
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "const": true
+          },
+          "data": {
+            "$ref": "#/components/schemas/MigrationApiSankaMigrateVerificationData"
           },
           "meta": {
             "$ref": "#/components/schemas/EnvelopeMeta"

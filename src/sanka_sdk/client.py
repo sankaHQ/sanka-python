@@ -57,6 +57,7 @@ if typing.TYPE_CHECKING:
     from .revenues.client import AsyncRevenuesClient, RevenuesClient
     from .rule_settings.client import AsyncRuleSettingsClient, RuleSettingsClient
     from .sanka_buy.client import AsyncSankaBuyClient, SankaBuyClient
+    from .sanka_migrate.client import AsyncSankaMigrateClient, SankaMigrateClient
     from .subscriptions.client import AsyncSubscriptionsClient, SubscriptionsClient
     from .tasks.client import AsyncTasksClient, TasksClient
     from .tickets.client import AsyncTicketsClient, TicketsClient
@@ -194,6 +195,7 @@ class SankaClient:
         self._interviews: typing.Optional[InterviewsClient] = None
         self._workforce_planning: typing.Optional[WorkforcePlanningClient] = None
         self._developer_cloud: typing.Optional[DeveloperCloudClient] = None
+        self._sanka_migrate: typing.Optional[SankaMigrateClient] = None
 
     @property
     def absences(self):
@@ -651,6 +653,14 @@ class SankaClient:
             self._developer_cloud = DeveloperCloudClient(client_wrapper=self._client_wrapper)
         return self._developer_cloud
 
+    @property
+    def sanka_migrate(self):
+        if self._sanka_migrate is None:
+            from .sanka_migrate.client import SankaMigrateClient  # noqa: E402
+
+            self._sanka_migrate = SankaMigrateClient(client_wrapper=self._client_wrapper)
+        return self._sanka_migrate
+
 
 class AsyncSankaClient:
     """
@@ -778,6 +788,7 @@ class AsyncSankaClient:
         self._interviews: typing.Optional[AsyncInterviewsClient] = None
         self._workforce_planning: typing.Optional[AsyncWorkforcePlanningClient] = None
         self._developer_cloud: typing.Optional[AsyncDeveloperCloudClient] = None
+        self._sanka_migrate: typing.Optional[AsyncSankaMigrateClient] = None
 
     @property
     def absences(self):
@@ -1234,6 +1245,14 @@ class AsyncSankaClient:
 
             self._developer_cloud = AsyncDeveloperCloudClient(client_wrapper=self._client_wrapper)
         return self._developer_cloud
+
+    @property
+    def sanka_migrate(self):
+        if self._sanka_migrate is None:
+            from .sanka_migrate.client import AsyncSankaMigrateClient  # noqa: E402
+
+            self._sanka_migrate = AsyncSankaMigrateClient(client_wrapper=self._client_wrapper)
+        return self._sanka_migrate
 
 
 def _get_base_url(*, base_url: typing.Optional[str] = None, environment: SankaClientEnvironment) -> str:
