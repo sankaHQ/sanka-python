@@ -6,6 +6,11 @@ import typing
 from importlib import import_module
 
 if typing.TYPE_CHECKING:
+    from .types.error_envelope import ErrorEnvelope
+    from .errors.unprocessable_entity_error import UnprocessableEntityError
+    from .errors.unauthorized_error import UnauthorizedError
+    from .errors.forbidden_error import ForbiddenError
+    from .errors.bad_request_error import BadRequestError
     from . import (
         absences,
         activity_logs,
@@ -66,9 +71,16 @@ if typing.TYPE_CHECKING:
         workforce_planning,
     )
     from .client import AsyncSankaClient, SankaClient
+    from .core.api_error import ApiError
 _dynamic_imports: typing.Dict[str, str] = {
+    "ApiError": ".core.api_error",
     "AsyncSankaClient": ".client",
+    "BadRequestError": ".errors.bad_request_error",
+    "ErrorEnvelope": ".types.error_envelope",
+    "ForbiddenError": ".errors.forbidden_error",
     "SankaClient": ".client",
+    "UnauthorizedError": ".errors.unauthorized_error",
+    "UnprocessableEntityError": ".errors.unprocessable_entity_error",
     "absences": ".absences",
     "activity_logs": ".activity_logs",
     "ai": ".ai",
@@ -151,8 +163,14 @@ def __dir__():
 
 
 __all__ = [
+    "ApiError",
     "AsyncSankaClient",
+    "BadRequestError",
+    "ErrorEnvelope",
+    "ForbiddenError",
     "SankaClient",
+    "UnauthorizedError",
+    "UnprocessableEntityError",
     "absences",
     "activity_logs",
     "ai",
