@@ -20,7 +20,9 @@ dependencies = [
 
 [project.urls]
 Homepage = "https://sanka.com"
+Documentation = "https://sanka.com/docs/developers/sdk-python/"
 Repository = "https://github.com/sankaHQ/sanka-python"
+Issues = "https://github.com/sankaHQ/sanka-python/issues"
 
 [dependency-groups]
 dev = [

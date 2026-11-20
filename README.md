@@ -2,6 +2,8 @@
 
 Python SDK for Sanka's hosted API and local migration lifecycle.
 
+[Python SDK guide](https://sanka.com/docs/developers/sdk-python/) · [Authentication](https://sanka.com/docs/developers/authentication/) · [Developer documentation](https://sanka.com/docs/developers/) · API base URL `https://api.sanka.com`
+
 This package is generated from Sanka's OpenAPI spec using Fern, then packaged locally for `uv` and PyPI.
 
 ## Install
@@ -15,17 +17,29 @@ uv add sanka-sdk
 
 ## Hosted API
 
+Create an API key as described in [Authentication](https://sanka.com/docs/developers/authentication/)
+and store it as `SANKA_API_KEY`.
+
 ```python
+import os
+
 from sanka_sdk import SankaClient
 
-client = SankaClient(token="YOUR_TOKEN")
-response = client.public_auth.whoami()
-print(response)
+client = SankaClient(token=os.environ["SANKA_API_KEY"])
+identity = client.public_auth.get_public_auth_whoami_api()  # GET /v2/public/auth/whoami
+print(identity.data)
 ```
 
-`SankaClient` calls Sanka's hosted HTTP API and requires a token. Extension
-management is part of the local migration runtime described below; it is not a
-hosted API resource.
+`SankaClient` calls Sanka's hosted HTTP API at `https://api.sanka.com` (pass
+`base_url` to use another server). Without `token`, it uses `SANKA_API_KEY`
+as read when `sanka_sdk` first loads `SankaClient`, so set the variable before
+that import (for example, call `load_dotenv()` first); with neither, the
+constructor raises `ApiError`. A missing or invalid key fails with HTTP 401 as
+`UnauthorizedError`, a subclass of `sanka_sdk.core.api_error.ApiError`.
+`AsyncSankaClient` takes the same arguments.
+
+Extension management is part of the local migration runtime described below;
+it is not a hosted API resource.
 
 ## Local migration runtime
 
@@ -215,7 +229,7 @@ and [Sanka developer documentation](https://sanka.com/docs/developers/).
 
 ## Publish
 
-This repo includes a GitHub Actions workflow for PyPI Trusted Publishing at [.github/workflows/publish.yml](.github/workflows/publish.yml).
+This repo includes a GitHub Actions workflow for PyPI Trusted Publishing at [.github/workflows/publish.yml](https://github.com/sankaHQ/sanka-python/blob/main/.github/workflows/publish.yml).
 
 Configure a Trusted Publisher on PyPI for:
 
@@ -227,6 +241,6 @@ Configure a Trusted Publisher on PyPI for:
 Then publish by pushing a tag like `vX.Y.Z` or running the workflow manually.
 
 
-[Developer Cloud release candidate](docs/developer-cloud.md): bounded execution, Repair, certificates and Fleet.
+[Developer Cloud release candidate](https://github.com/sankaHQ/sanka-python/blob/main/docs/developer-cloud.md): bounded execution, Repair, certificates and Fleet.
 
 For a worktree or pinned SDK contract, regenerate with `SANKA_API_SPEC_SOURCE=/path/to/openapi.json ./scripts/generate_sdk.sh`. The committed V2 input is `openapi/openapi.json`; no legacy runtime export runs.
