@@ -57,9 +57,9 @@ models for the complete profile. An issued certificate covers only the recorded
 scenarios and limitations. Verify its signature offline using the CLI and public
 key, and read revocation status before relying on it.
 
-Compute is 100 credits per active worker-minute, rounded once per run. A successful
-Repair adds 1,000 credits and durable certificate issuance adds 2,000; both also
-use compute. Failed gates earn no premium. The entire compute/premium reservation
+Compute is 25 credits per active worker-minute (1 credit = ¥1 or 1 cent since
+2026-11-20), rounded once per run. A successful Repair adds 250 credits and durable
+certificate issuance adds 500; both also use compute. Failed gates earn no premium. The entire compute/premium reservation
 fits within `max_credits`; unused credits are released. Re-reading evidence is free.
 
 A Fleet contains 1–20 explicitly selected repository labels, full revisions and
