@@ -92,6 +92,14 @@ cat > "$TMP_DIR/config.manual.json" <<'EOF'
       "exported_filename": "client.py"
     },
     "exclude_types_from_init_exports": true,
+    "additional_init_exports": [
+      { "from": "core.api_error", "imports": ["ApiError"] },
+      { "from": "errors.bad_request_error", "imports": ["BadRequestError"] },
+      { "from": "errors.forbidden_error", "imports": ["ForbiddenError"] },
+      { "from": "errors.unauthorized_error", "imports": ["UnauthorizedError"] },
+      { "from": "errors.unprocessable_entity_error", "imports": ["UnprocessableEntityError"] },
+      { "from": "types.error_envelope", "imports": ["ErrorEnvelope"] }
+    ],
     "pydantic_config": {
       "skip_validation": true
     }

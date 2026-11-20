@@ -23,20 +23,35 @@ and store it as `SANKA_API_KEY`.
 ```python
 import os
 
-from sanka_sdk import SankaClient
+from sanka_sdk import SankaClient, UnauthorizedError
 
 client = SankaClient(token=os.environ["SANKA_API_KEY"])
-identity = client.public_auth.get_public_auth_whoami_api()  # GET /v2/public/auth/whoami
-print(identity.data)
+try:
+    identity = client.public_auth.get_public_auth_whoami_api()  # GET /v2/public/auth/whoami
+except UnauthorizedError as error:
+    print("Sanka rejected the key:", error.body.error.code)
+    raise
+
+print(identity.data.workspace_name)    # workspace the key belongs to
+print(identity.data.permission_level)  # the key's permission level
 ```
+
+`identity.data` also carries `workspace_id`, `token_name`, `permissions` and
+`scopes`.
 
 `SankaClient` calls Sanka's hosted HTTP API at `https://api.sanka.com` (pass
 `base_url` to use another server). Without `token`, it uses `SANKA_API_KEY`
 as read when `sanka_sdk` first loads `SankaClient`, so set the variable before
 that import (for example, call `load_dotenv()` first); with neither, the
 constructor raises `ApiError`. A missing or invalid key fails with HTTP 401 as
-`UnauthorizedError`, a subclass of `sanka_sdk.core.api_error.ApiError`.
-`AsyncSankaClient` takes the same arguments.
+`UnauthorizedError`. Import the error classes from the package itself:
+`from sanka_sdk import ApiError, BadRequestError, ForbiddenError, UnauthorizedError,
+UnprocessableEntityError, ErrorEnvelope`. `BadRequestError` (400),
+`UnauthorizedError` (401), `ForbiddenError` (403) and `UnprocessableEntityError`
+(422) subclass `ApiError` and carry `status_code`, `headers` and `body`, an
+`ErrorEnvelope` whose `body.error.code` and `body.error.message` explain the
+failure; other HTTP errors raise `ApiError` itself. `AsyncSankaClient` takes the
+same arguments.
 
 Extension management is part of the local migration runtime described below;
 it is not a hosted API resource.
