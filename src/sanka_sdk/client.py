@@ -2,9 +2,11 @@
 
 from __future__ import annotations
 
+import os
 import typing
 
 import httpx
+from .core.api_error import ApiError
 from .core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from .environment import SankaClientEnvironment
 
@@ -87,7 +89,7 @@ class SankaClient:
 
 
     workspace_code : typing.Optional[str]
-    token : typing.Union[str, typing.Callable[[], str]]
+    token : typing.Optional[typing.Union[str, typing.Callable[[], str]]]
     headers : typing.Optional[typing.Dict[str, str]]
         Additional headers to send with every request.
 
@@ -116,7 +118,7 @@ class SankaClient:
         base_url: typing.Optional[str] = None,
         environment: SankaClientEnvironment = SankaClientEnvironment.DEFAULT,
         workspace_code: typing.Optional[str] = None,
-        token: typing.Union[str, typing.Callable[[], str]],
+        token: typing.Optional[typing.Union[str, typing.Callable[[], str]]] = os.getenv("SANKA_API_KEY"),
         headers: typing.Optional[typing.Dict[str, str]] = None,
         timeout: typing.Optional[float] = None,
         follow_redirects: typing.Optional[bool] = True,
@@ -125,6 +127,8 @@ class SankaClient:
         _defaulted_timeout = (
             timeout if timeout is not None else 60 if httpx_client is None else httpx_client.timeout.read
         )
+        if token is None:
+            raise ApiError(body="The client must be instantiated be either passing in token or setting SANKA_API_KEY")
         self._client_wrapper = SyncClientWrapper(
             base_url=_get_base_url(base_url=base_url, environment=environment),
             workspace_code=workspace_code,
@@ -671,7 +675,7 @@ class AsyncSankaClient:
 
 
     workspace_code : typing.Optional[str]
-    token : typing.Union[str, typing.Callable[[], str]]
+    token : typing.Optional[typing.Union[str, typing.Callable[[], str]]]
     headers : typing.Optional[typing.Dict[str, str]]
         Additional headers to send with every request.
 
@@ -700,7 +704,7 @@ class AsyncSankaClient:
         base_url: typing.Optional[str] = None,
         environment: SankaClientEnvironment = SankaClientEnvironment.DEFAULT,
         workspace_code: typing.Optional[str] = None,
-        token: typing.Union[str, typing.Callable[[], str]],
+        token: typing.Optional[typing.Union[str, typing.Callable[[], str]]] = os.getenv("SANKA_API_KEY"),
         headers: typing.Optional[typing.Dict[str, str]] = None,
         timeout: typing.Optional[float] = None,
         follow_redirects: typing.Optional[bool] = True,
@@ -709,6 +713,8 @@ class AsyncSankaClient:
         _defaulted_timeout = (
             timeout if timeout is not None else 60 if httpx_client is None else httpx_client.timeout.read
         )
+        if token is None:
+            raise ApiError(body="The client must be instantiated be either passing in token or setting SANKA_API_KEY")
         self._client_wrapper = AsyncClientWrapper(
             base_url=_get_base_url(base_url=base_url, environment=environment),
             workspace_code=workspace_code,

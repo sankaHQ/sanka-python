@@ -1,5 +1,12 @@
 # SDK-only names; the wire format is unchanged.
 components:
+  securitySchemes:
+    bearerAuth:
+      # Keep the `token` argument and read SANKA_API_KEY when it is omitted,
+      # the variable every Sanka doc and the Node SDK use.
+      x-fern-bearer:
+        name: token
+        env: SANKA_API_KEY
   schemas:
     LineBlock:
       properties:

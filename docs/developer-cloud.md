@@ -8,7 +8,7 @@ starting a run. Free local migration continues through `sanka_sdk.migrate`.
 import os
 from sanka_sdk import SankaClient
 
-client = SankaClient(token=os.environ["SANKA_API_TOKEN"])
+client = SankaClient(token=os.environ["SANKA_API_KEY"])
 workspace_id = "YOUR_INTERNAL_WORKSPACE_UUID"
 availability = client.developer_cloud.get_availability(workspace_id=workspace_id)
 print(availability.data)
